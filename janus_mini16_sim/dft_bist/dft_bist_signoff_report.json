@@ -1,0 +1,20 @@
+{
+  "photonic_bist": {
+    "wafer_yield_pct": 100.0,
+    "mean_wg_loss_db_cm": 0.1498721688458715,
+    "pcm_switches_converged": true,
+    "pcm_max_phase_error_rad": 0.007276504652551363,
+    "pcm_calibration_time_us": 1.4000000000000001,
+    "apd_gain_stability_pass": true,
+    "apd_max_gain_error": 0.16042043243874815
+  },
+  "digital_ams_bist": {
+    "prbs31_bits_tested": 250000,
+    "prbs31_detection_fidelity_pct": 100.0,
+    "ieee1500_scan_cells": 4096,
+    "ieee1500_stuck_at_coverage_pct": 99.85000000000001,
+    "rrns_single_error_correction_pct": 100.0,
+    "rrns_recovery_latency_ps": 320.0
+  },
+  "signoff_verdict": "PASSED - FULL ELECTRO-PHOTONIC TESTABILITY COMPLIANCE"
+}

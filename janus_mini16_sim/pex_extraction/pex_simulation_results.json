@@ -1,0 +1,30 @@
+{
+  "pre_layout": {
+    "c_load_ff": 28.5,
+    "f_3db_ghz": 175.0,
+    "eye_height_inner_mv": 349.1388629955524,
+    "eye_opening_pct": 87.2847157488881,
+    "t_regen_ps": 0.9038591987977789,
+    "rj_sigma_fs": 50.0,
+    "q_factor": 54.01740911225634,
+    "log10_ber": -635.7413209063114
+  },
+  "post_layout_pex": {
+    "c_load_ff": 31.99,
+    "f_3db_ghz": 166.14000000000001,
+    "eye_height_inner_mv": 336.83891296265404,
+    "eye_opening_pct": 84.20972824066351,
+    "t_regen_ps": 1.0384447813858788,
+    "rj_sigma_fs": 62.0,
+    "q_factor": 53.14035399014662,
+    "log10_ber": -615.3260049085565
+  },
+  "delta": {
+    "delta_c_load_ff": 3.4899999999999984,
+    "delta_eye_height_mv": -12.29995003289838,
+    "delta_eye_opening_pct": -3.074987508224595,
+    "delta_t_regen_ps": 0.13458558258809994,
+    "eye_opening_retention_pct": 96.47706075245624,
+    "pass_signoff": true
+  }
+}

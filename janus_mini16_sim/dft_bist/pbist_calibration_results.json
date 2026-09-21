@@ -1,0 +1,280 @@
+{
+  "wafer_loopback_screening": {
+    "total_dies_tested": 640,
+    "passing_dies": 640,
+    "wafer_yield_pct": 100.0,
+    "mean_wg_loss_db_cm": 0.1498721688458715,
+    "max_wg_loss_db_cm": 0.24631828726636804,
+    "mean_gc_loss_db": 2.1151981072440043,
+    "mean_mmi_imbalance_db": 0.043659401624418594
+  },
+  "pcm_phase_calibration": {
+    "n_switches": 16,
+    "all_converged": true,
+    "max_residual_phase_error_rad": 0.007276504652551363,
+    "mean_residual_phase_error_rad": 0.0034004834826865116,
+    "total_core_calibration_time_us": 1.4000000000000001,
+    "cell_results": [
+      {
+        "initial_error_rad": -0.2081300380518089,
+        "final_phase_rad": 3.1346787197954433,
+        "final_error_rad": 0.006913933794349791,
+        "calibration_steps": 3,
+        "total_calibration_time_us": 1.05,
+        "converged": true,
+        "phase_history": [
+          2.933462615537984,
+          3.067635867311371,
+          3.1138064797672427,
+          3.1346787197954433
+        ]
+      },
+      {
+        "initial_error_rad": -0.0832468537604995,
+        "final_phase_rad": 3.138291943955721,
+        "final_error_rad": 0.003300709634072252,
+        "calibration_steps": 3,
+        "total_calibration_time_us": 1.05,
+        "converged": true,
+        "phase_history": [
+          3.0583457998292936,
+          3.1096156108917206,
+          3.132974477236591,
+          3.138291943955721
+        ]
+      },
+      {
+        "initial_error_rad": 0.17967787254432355,
+        "final_phase_rad": 3.1448164345681358,
+        "final_error_rad": 0.0032237809783426385,
+        "calibration_steps": 4,
+        "total_calibration_time_us": 1.4000000000000001,
+        "converged": true,
+        "phase_history": [
+          3.321270526134117,
+          3.203100275419876,
+          3.1637248776600564,
+          3.1524890930341365,
+          3.1448164345681358
+        ]
+      },
+      {
+        "initial_error_rad": -0.19715658234045774,
+        "final_phase_rad": 3.1343161489372418,
+        "final_error_rad": 0.007276504652551363,
+        "calibration_steps": 3,
+        "total_calibration_time_us": 1.05,
+        "converged": true,
+        "phase_history": [
+          2.9444360712493354,
+          3.0707984941745017,
+          3.12027548987956,
+          3.1343161489372418
+        ]
+      },
+      {
+        "initial_error_rad": 0.017820022010876957,
+        "final_phase_rad": 3.144937197358747,
+        "final_error_rad": 0.0033445437689541,
+        "calibration_steps": 1,
+        "total_calibration_time_us": 0.35000000000000003,
+        "converged": true,
+        "phase_history": [
+          3.15941267560067,
+          3.144937197358747
+        ]
+      },
+      {
+        "initial_error_rad": -0.21815521512487202,
+        "final_phase_rad": 3.136027432140605,
+        "final_error_rad": 0.00556522144918814,
+        "calibration_steps": 4,
+        "total_calibration_time_us": 1.4000000000000001,
+        "converged": true,
+        "phase_history": [
+          2.923437438464921,
+          3.061567833050451,
+          3.110480781223066,
+          3.1294692294547932,
+          3.136027432140605
+        ]
+      },
+      {
+        "initial_error_rad": -0.10158271066498226,
+        "final_phase_rad": 3.138314029166363,
+        "final_error_rad": 0.0032786244234301876,
+        "calibration_steps": 3,
+        "total_calibration_time_us": 1.05,
+        "converged": true,
+        "phase_history": [
+          3.0400099429248106,
+          3.105757203265139,
+          3.124871228992135,
+          3.138314029166363
+        ]
+      },
+      {
+        "initial_error_rad": -0.24887738158994155,
+        "final_phase_rad": 3.140177223310523,
+        "final_error_rad": 0.0014154302792701579,
+        "calibration_steps": 4,
+        "total_calibration_time_us": 1.4000000000000001,
+        "converged": true,
+        "phase_history": [
+          2.8927152719998515,
+          3.0541992207416646,
+          3.1097433870849036,
+          3.1299022045851403,
+          3.140177223310523
+        ]
+      },
+      {
+        "initial_error_rad": -0.024442045295378856,
+        "final_phase_rad": 3.138196999316326,
+        "final_error_rad": 0.003395654273467219,
+        "calibration_steps": 2,
+        "total_calibration_time_us": 0.7000000000000001,
+        "converged": true,
+        "phase_history": [
+          3.1171506082944145,
+          3.1327371854767643,
+          3.138196999316326
+        ]
+      },
+      {
+        "initial_error_rad": 0.1918098031643798,
+        "final_phase_rad": 3.145757107054821,
+        "final_error_rad": 0.0041644534650280285,
+        "calibration_steps": 4,
+        "total_calibration_time_us": 1.4000000000000001,
+        "converged": true,
+        "phase_history": [
+          3.3334024567541727,
+          3.2104296941605273,
+          3.1663812822769404,
+          3.149609801775902,
+          3.145757107054821
+        ]
+      },
+      {
+        "initial_error_rad": 0.03852880011120918,
+        "final_phase_rad": 3.142240907379514,
+        "final_error_rad": 0.0006482537897207763,
+        "calibration_steps": 2,
+        "total_calibration_time_us": 0.7000000000000001,
+        "converged": true,
+        "phase_history": [
+          3.1801214537010023,
+          3.154549488000115,
+          3.142240907379514
+        ]
+      },
+      {
+        "initial_error_rad": -0.1255611405917023,
+        "final_phase_rad": 3.1406592007848357,
+        "final_error_rad": 0.0009334528049573798,
+        "calibration_steps": 4,
+        "total_calibration_time_us": 1.4000000000000001,
+        "converged": true,
+        "phase_history": [
+          3.016031512998091,
+          3.0998065786037494,
+          3.1272750495974524,
+          3.1334730932991466,
+          3.1406592007848357
+        ]
+      },
+      {
+        "initial_error_rad": -0.07922347292151671,
+        "final_phase_rad": 3.138983971834679,
+        "final_error_rad": 0.002608681755114084,
+        "calibration_steps": 3,
+        "total_calibration_time_us": 1.05,
+        "converged": true,
+        "phase_history": [
+          3.0623691806682762,
+          3.1155355859185034,
+          3.1319985129409895,
+          3.138983971834679
+        ]
+      },
+      {
+        "initial_error_rad": -0.2149008568800258,
+        "final_phase_rad": 3.140589649184466,
+        "final_error_rad": 0.0010030044053270792,
+        "calibration_steps": 4,
+        "total_calibration_time_us": 1.4000000000000001,
+        "converged": true,
+        "phase_history": [
+          2.9266917967097674,
+          3.0635474451453764,
+          3.1140398781043626,
+          3.13008006909465,
+          3.140589649184466
+        ]
+      },
+      {
+        "initial_error_rad": 0.019237626000537134,
+        "final_phase_rad": 3.143224190493716,
+        "final_error_rad": 0.0016315369039228145,
+        "calibration_steps": 2,
+        "total_calibration_time_us": 0.7000000000000001,
+        "converged": true,
+        "phase_history": [
+          3.1608302795903302,
+          3.1530694261160392,
+          3.143224190493716
+        ]
+      },
+      {
+        "initial_error_rad": 0.01274186405630684,
+        "final_phase_rad": 3.1472966029350813,
+        "final_error_rad": 0.005703949345288173,
+        "calibration_steps": 1,
+        "total_calibration_time_us": 0.35000000000000003,
+        "converged": true,
+        "phase_history": [
+          3.1543345176460997,
+          3.1472966029350813
+        ]
+      }
+    ]
+  },
+  "apd_bias_calibration": {
+    "calibration_points": [
+      {
+        "temp_c": -40.0,
+        "v_br_actual_v": 23.07,
+        "v_bias_calibrated_v": 22.23,
+        "avalanche_gain_M": 10.137651045187772
+      },
+      {
+        "temp_c": -10.0,
+        "v_br_actual_v": 23.73,
+        "v_bias_calibrated_v": 22.86,
+        "avalanche_gain_M": 10.070409999574885
+      },
+      {
+        "temp_c": 25.0,
+        "v_br_actual_v": 24.5,
+        "v_bias_calibrated_v": 23.61,
+        "avalanche_gain_M": 10.160420432438748
+      },
+      {
+        "temp_c": 50.0,
+        "v_br_actual_v": 25.05,
+        "v_bias_calibrated_v": 24.119999999999997,
+        "avalanche_gain_M": 9.948944223023842
+      },
+      {
+        "temp_c": 85.0,
+        "v_br_actual_v": 25.82,
+        "v_bias_calibrated_v": 24.869999999999997,
+        "avalanche_gain_M": 10.035825217234963
+      }
+    ],
+    "max_gain_error": 0.16042043243874815,
+    "pass_gain_spec": true
+  },
+  "overall_pass": true
+}

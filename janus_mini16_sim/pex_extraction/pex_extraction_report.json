@@ -1,0 +1,48 @@
+{
+  "geometry": {
+    "tdv_count": 0,
+    "ubm_count": 0,
+    "apd_count": 0,
+    "tdv_diam_um": 8.0,
+    "tdv_height_um": 5.0,
+    "ubm_size_um": 12.0,
+    "ubm_pitch_um": 50.0,
+    "oxide_thickness_um": 1.2
+  },
+  "pad_capacitance": {
+    "C_plate_fF": 3.5593835007456005,
+    "C_fringe_fF": 0.9883576642119211,
+    "C_sub_fF": 0.994502375133696,
+    "C_total_pad_fF": 5.542243540091218
+  },
+  "via_parasitics": {
+    "skin_depth_nm": 206.28838340968662,
+    "R_dc_mohm": 1.671126902464901,
+    "R_ac_mohm": 16.63069155551623,
+    "R_contact_mohm": 1.9894367886486917,
+    "R_total_via_mohm": 18.62012834416492,
+    "L_self_pH": 0.9662907318741552,
+    "L_loop_pH": 1.8326645481916768
+  },
+  "interconnect_100ghz": {
+    "Z0_ohm": 41.63996411231309,
+    "v_phase_m_s": 191530375.77992874,
+    "trace_length_um": 35.0,
+    "R_line_ohm": 1.4251893157556963,
+    "L_line_pH": 7.60923032702411,
+    "C_line_fF": 4.388539756604928,
+    "G_line_uS": 5.514801703734712
+  },
+  "transceiver": {
+    "C_apd_total_fF": 11.820340730087999,
+    "R_apd_series_ohm": 28.5,
+    "C_gate_latch_fF": 10.239999999999998
+  },
+  "aggregate_node": {
+    "C_node_total_fF": 31.991124026784142,
+    "L_node_total_pH": 9.441894875215787,
+    "R_node_total_ohm": 29.94380944409986,
+    "RC_cutoff_freq_GHz": 166.1435866928003,
+    "LC_resonance_freq_GHz": 289.5848260268471
+  }
+}

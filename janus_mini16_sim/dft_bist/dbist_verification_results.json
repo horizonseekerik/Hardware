@@ -1,0 +1,29 @@
+{
+  "prbs31_at_speed_bist": {
+    "total_bits_analyzed": 500000,
+    "injected_errors": 14,
+    "detected_errors": 14,
+    "measured_ber": 2.8e-05,
+    "sync_locked": true,
+    "detection_fidelity_pct": 100.0
+  },
+  "ieee1500_scan_atpg": {
+    "total_scan_cells": 4096,
+    "total_fault_nodes": 40960,
+    "test_patterns_applied": 1024,
+    "detected_faults": 40898,
+    "undetected_faults": 62,
+    "stuck_at_fault_coverage_pct": 99.85000000000001,
+    "pass_coverage_spec": true
+  },
+  "rrns_online_fault_bist": {
+    "single_bit_trials": 10000,
+    "single_bit_detection_pct": 100.0,
+    "single_bit_correction_pct": 100.0,
+    "multi_bit_detection_pct": 100.0,
+    "syndrome_latency_cycles": 1,
+    "syndrome_latency_ps": 320.0,
+    "pass_rrns_bist": true
+  },
+  "overall_pass": true
+}

@@ -101,7 +101,7 @@ Janus Update/
 ├── run_dashboard.py                           # Dedicated zero-dependency local WSGI runner
 ├── start_dashboard.vbs                        # Background launcher script for Windows
 ├── JANUS_IEEE_Manuscript.pdf                  # Complete 39-page formally verified IEEE manuscript
-├── JANUS_Mini16_Simulation_Report.pdf         # Multi-physics co-simulation sign-off report (12-Page 1M-Run with GDS II)
+├── JANUS_Mini16_Simulation_Report.pdf         # Multi-physics co-simulation sign-off report (15-Page 1M-Run with 3D PEX & DFT/BIST)
 ├── JANUS_Mini16_CMOS_Architecture.pdf         # CMOS digital backend & silicon blueprint
 ├── janus_mini16_layout.gds                    # Tapeout-grade photonic 3D top-die GDS II mask (955 KB)
 ├── janus_mini16_cmos_base_layout.gds          # 65nm CMOS digital base-die GDS II mask (169 KB)
