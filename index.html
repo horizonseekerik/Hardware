@@ -2279,7 +2279,7 @@
   </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
-  <link rel="prefetch" href="/JANUS_Mini16_Simulation_Report.pdf" as="fetch" crossorigin>
+  <link rel="prefetch" href="/JANUS_Mini16_Simulation_Report.pdf?v=20260921_1m" as="fetch" crossorigin>
   <link rel="prefetch" href="/JANUS_Mini16_CMOS_Architecture.pdf" as="fetch" crossorigin>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0284c7">
@@ -5633,7 +5633,7 @@
         <h4>📄 Manuscripts & Docs</h4>
         <ul class="footer-links">
           <li><button onclick="switchPage('paper'); switchPaper('manuscript');">Architectural Treatise (39-Page)</button></li>
-          <li><button onclick="switchPage('paper'); switchPaper('simulation');">Co-Simulation Report (9-Page with GDS II)</button></li>
+          <li><button onclick="switchPage('paper'); switchPaper('simulation');">Co-Simulation Report (12-Page 1M-Run with GDS II)</button></li>
           <li><button onclick="switchPage('paper'); switchPaper('cmos');">CMOS Digital Backend Spec</button></li>
           <li><button onclick="switchPage('roadmap');">Strategic Hardware Roadmap</button></li>
           <li><a href="/documentation_reports/JANUS_MINI_16T_CO_SIMULATION_SPEC.html" target="_blank">Full 5-Tier Co-Sim Spec ↗</a></li>
@@ -9842,11 +9842,11 @@
       const btnCmos = document.getElementById('btn-paper-cmos');
 
       if (type === 'simulation') {
-        iframe.src = '/JANUS_Mini16_Simulation_Report.pdf?v=20260913#toolbar=1&navpanes=1&scrollbar=1';
+        iframe.src = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_1m#toolbar=1&navpanes=1&scrollbar=1';
         title.innerHTML = '📊 Multi-Physics Co-Simulation & Modeling Report: JANUS Mini 16-Tile Monolithic Planar Processor (IEEEtran Format)';
-        desc.innerHTML = '9-Page Multi-Physics Co-Simulation, Physical Component Modeling, GDS II Mask Floorplan & 16-Point Target Verification';
-        openBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260913';
-        dlBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260913';
+        desc.innerHTML = '12-Page Multi-Physics Co-Simulation, 1,000,000-Run Monte Carlo & SPICE, Physical Component Modeling, GDS II Mask Floorplan & 16-Point Target Sign-Off';
+        openBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_1m';
+        dlBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_1m';
         dlBtn.setAttribute('download', 'JANUS_Mini16_Simulation_Report.pdf');
         dlBtn.innerHTML = '⬇️ Download Simulation Report (PDF)';
         btnSim.className = 'btn-primary';
