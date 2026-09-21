@@ -2279,7 +2279,7 @@
   </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
-  <link rel="prefetch" href="/JANUS_Mini16_Simulation_Report.pdf?v=20260921_pex_dft" as="fetch" crossorigin>
+  <link rel="prefetch" href="/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb" as="fetch" crossorigin>
   <link rel="prefetch" href="/JANUS_Mini16_CMOS_Architecture.pdf" as="fetch" crossorigin>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0284c7">
@@ -9842,11 +9842,11 @@
       const btnCmos = document.getElementById('btn-paper-cmos');
 
       if (type === 'simulation') {
-        iframe.src = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_pex_dft#toolbar=1&navpanes=1&scrollbar=1';
+        iframe.src = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb#toolbar=1&navpanes=1&scrollbar=1';
         title.innerHTML = '📊 Multi-Physics Co-Simulation & Modeling Report: JANUS Mini 16-Tile Monolithic Planar Processor (IEEEtran Format)';
         desc.innerHTML = '15-Page Multi-Physics Co-Simulation, 1,000,000-Run Sign-Off, 3D PEX Interconnect Closure, GDS II Mask Floorplan & Electro-Photonic DFT/BIST Architecture';
-        openBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_pex_dft';
-        dlBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_pex_dft';
+        openBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb';
+        dlBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb';
         dlBtn.setAttribute('download', 'JANUS_Mini16_Simulation_Report.pdf');
         dlBtn.innerHTML = '⬇️ Download Simulation Report (PDF)';
         btnSim.className = 'btn-primary';

@@ -233,48 +233,69 @@ def main():
     print("=" * 75)
 
     # Plot 1: Dual-Panel Side-by-Side Eye Diagrams & Overlay
-    fig = plt.figure(figsize=(13.5, 6.2), dpi=300)
+    fig = plt.figure(figsize=(13.5, 6.2), dpi=250)
     gs = gridspec.GridSpec(1, 2, figure=fig, wspace=0.22)
 
     # Left: Pre-Layout Nominal Eye Diagram
     ax1 = fig.add_subplot(gs[0, 0])
+    ax1.set_facecolor("#0a0f1d")
     t_ps = res_pre["time_axis_ps"]
-    for tr in res_pre["eye_traces"][:450]:
-        ax1.plot(t_ps, tr, color="#0284c7", alpha=0.07, lw=0.9)
-    ax1.axhline(res_pre["eye_height_inner_mv"] / 2.0, color="#f59e0b", ls="--", lw=1.5, label=f"Inner Eye Height: {res_pre['eye_height_inner_mv']:.1f} mV")
-    ax1.axhline(-res_pre["eye_height_inner_mv"] / 2.0, color="#f59e0b", ls="--", lw=1.5)
-    ax1.set_title("Pre-Layout Nominal Budget (100 GHz)\n" + rf"$C_{{\mathrm{{load}}}} = {res_pre['c_load_ff']:.1f}\,\mathrm{{fF}} \quad f_{{\mathrm{{3dB}}}} = {res_pre['f_3db_ghz']:.1f}\,\mathrm{{GHz}} \quad \mathrm{{Opening}} = {res_pre['eye_opening_pct']:.1f}\%$", pad=10)
-    ax1.set_xlabel("Time (ps) [2.0 UI @ 100 GHz]")
-    ax1.set_ylabel("Differential Voltage (mV)")
+    
+    # Generate 2D persistence density grid for Pre-Layout
+    traces_pre = res_pre["eye_traces"][:600]
+    t_grid_pre = np.tile(t_ps, len(traces_pre))
+    v_grid_pre = traces_pre.flatten()
+    hb1 = ax1.hexbin(t_grid_pre, v_grid_pre, gridsize=(130, 75), cmap='Blues_r', mincnt=1, bins='log', rasterized=True, zorder=0)
+    
+    # Overlay representative traces
+    for tr in traces_pre[::8]:
+        ax1.plot(t_ps, tr, color="#38bdf8", alpha=0.35, lw=0.9, rasterized=True, zorder=1)
+
+    ax1.axhline(res_pre["eye_height_inner_mv"] / 2.0, color="#f59e0b", ls="--", lw=1.8, zorder=3, label=f"Inner Eye Height: {res_pre['eye_height_inner_mv']:.1f} mV")
+    ax1.axhline(-res_pre["eye_height_inner_mv"] / 2.0, color="#f59e0b", ls="--", lw=1.8, zorder=3)
+    ax1.set_title("Pre-Layout Nominal Budget (100 GHz)\n" + rf"$C_{{\mathrm{{load}}}} = {res_pre['c_load_ff']:.1f}\,\mathrm{{fF}} \quad f_{{\mathrm{{3dB}}}} = {res_pre['f_3db_ghz']:.1f}\,\mathrm{{GHz}} \quad \mathrm{{Opening}} = {res_pre['eye_opening_pct']:.1f}\%$", pad=10, color='white')
+    ax1.set_xlabel("Time (ps) [2.0 UI @ 100 GHz]", color='white')
+    ax1.set_ylabel("Differential Voltage (mV)", color='white')
+    ax1.tick_params(colors='white')
     ax1.set_xlim(0, 20.0)
     ax1.set_ylim(-260, 260)
-    ax1.grid(True)
-    ax1.legend(loc="upper right", framealpha=0.9)
+    ax1.grid(True, color='#1e293b', linestyle=':', alpha=0.7, zorder=2)
+    leg1 = ax1.legend(loc="upper right", framealpha=0.9)
+    plt.setp(leg1.get_texts(), color='black')
 
     # Right: Post-Layout Extracted (PEX) Eye Diagram with Overlay Comparison
     ax2 = fig.add_subplot(gs[0, 1])
-    for tr in res_pex["eye_traces"][:450]:
-        ax2.plot(t_ps, tr, color="#dc2626", alpha=0.07, lw=0.9)
-    ax2.axhline(res_pex["eye_height_inner_mv"] / 2.0, color="#10b981", ls="--", lw=1.5, label=f"PEX Extracted Eye Height: {res_pex['eye_height_inner_mv']:.1f} mV")
-    ax2.axhline(-res_pex["eye_height_inner_mv"] / 2.0, color="#10b981", ls="--", lw=1.5)
+    ax2.set_facecolor("#0a0f1d")
+    traces_pex = res_pex["eye_traces"][:600]
+    t_grid_pex = np.tile(t_ps, len(traces_pex))
+    v_grid_pex = traces_pex.flatten()
+    hb2 = ax2.hexbin(t_grid_pex, v_grid_pex, gridsize=(130, 75), cmap='YlOrRd_r', mincnt=1, bins='log', rasterized=True, zorder=0)
+
+    for tr in traces_pex[::8]:
+        ax2.plot(t_ps, tr, color="#f87171", alpha=0.35, lw=0.9, rasterized=True, zorder=1)
+
+    ax2.axhline(res_pex["eye_height_inner_mv"] / 2.0, color="#10b981", ls="--", lw=1.8, zorder=3, label=f"PEX Extracted Eye Height: {res_pex['eye_height_inner_mv']:.1f} mV")
+    ax2.axhline(-res_pex["eye_height_inner_mv"] / 2.0, color="#10b981", ls="--", lw=1.8, zorder=3)
     # Overlay Pre-Layout boundary for visual delta
-    ax2.axhline(res_pre["eye_height_inner_mv"] / 2.0, color="#94a3b8", ls=":", lw=1.2, label=f"Pre-Layout Baseline ({res_pre['eye_height_inner_mv']:.1f} mV)")
-    ax2.axhline(-res_pre["eye_height_inner_mv"] / 2.0, color="#94a3b8", ls=":", lw=1.2)
-    ax2.set_title("Post-Layout 3D PEX Extracted (100 GHz)\n" + rf"$C_{{\mathrm{{load}}}} = {res_pex['c_load_ff']:.2f}\,\mathrm{{fF}} \quad f_{{\mathrm{{3dB}}}} = {res_pex['f_3db_ghz']:.1f}\,\mathrm{{GHz}} \quad \Delta\mathrm{{Loss}} = -{abs(delta_eh_pct):.2f}\%$", pad=10)
-    ax2.set_xlabel("Time (ps) [2.0 UI @ 100 GHz]")
-    ax2.set_ylabel("Differential Voltage (mV)")
+    ax2.axhline(res_pre["eye_height_inner_mv"] / 2.0, color="#cbd5e1", ls=":", lw=1.6, zorder=3, label=f"Pre-Layout Baseline ({res_pre['eye_height_inner_mv']:.1f} mV)")
+    ax2.axhline(-res_pre["eye_height_inner_mv"] / 2.0, color="#cbd5e1", ls=":", lw=1.6, zorder=3)
+    ax2.set_title("Post-Layout 3D PEX Extracted (100 GHz)\n" + rf"$C_{{\mathrm{{load}}}} = {res_pex['c_load_ff']:.2f}\,\mathrm{{fF}} \quad f_{{\mathrm{{3dB}}}} = {res_pex['f_3db_ghz']:.1f}\,\mathrm{{GHz}} \quad \Delta\mathrm{{Loss}} = -{abs(delta_eh_pct):.2f}\%$", pad=10, color='white')
+    ax2.set_xlabel("Time (ps) [2.0 UI @ 100 GHz]", color='white')
+    ax2.set_ylabel("Differential Voltage (mV)", color='white')
+    ax2.tick_params(colors='white')
     ax2.set_xlim(0, 20.0)
     ax2.set_ylim(-260, 260)
-    ax2.grid(True)
-    ax2.legend(loc="upper right", framealpha=0.9)
+    ax2.grid(True, color='#1e293b', linestyle=':', alpha=0.7, zorder=2)
+    leg2 = ax2.legend(loc="upper right", framealpha=0.9)
+    plt.setp(leg2.get_texts(), color='black')
 
     fig.suptitle("PROJECT JANUS MINI-16: 3D ELECTRO-PHOTONIC PEX EXTRACTION SIGN-OFF OVERLAY\n" +
                  r"Physical Cu-Cu Hybrid Pad ($5.5\,\mathrm{fF}$) + TDV Via ($1.8\,\mathrm{pH}$) + 35 $\mu$m CPW Line vs Nominal Budget", fontsize=12, fontweight='bold', y=0.98)
 
     plot_png = os.path.join(output_dir, "fig_pex_pre_vs_post_eye_overlay.png")
     plot_pdf = os.path.join(output_dir, "fig_pex_pre_vs_post_eye_overlay.pdf")
-    plt.savefig(plot_png, dpi=300, bbox_inches='tight')
-    plt.savefig(plot_pdf, dpi=300, bbox_inches='tight')
+    plt.savefig(plot_png, dpi=250, bbox_inches='tight', facecolor='white')
+    plt.savefig(plot_pdf, dpi=250, bbox_inches='tight', facecolor='white')
     plt.close()
     print(f"\n[+] High-Res PEX Comparison Plot saved to:")
     print(f"    - PNG: {plot_png}")

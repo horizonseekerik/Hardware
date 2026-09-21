@@ -517,7 +517,7 @@ class CloudGraphGenerator:
                 jitter = np.random.normal(0, 0.05)
                 v = 0.4 if bit == 1 else -0.4
                 ax.plot(time_ps, v * np.cos(time_ps * math.pi / 10.0) + np.random.normal(0, 0.03, len(time_ps)),
-                        color='#38bdf8', alpha=0.04, lw=1.0)
+                        color='#38bdf8', alpha=0.04, lw=1.0, rasterized=True)
             ax.set_title(f"Checkpoint: {cp//1000}k Cycles ({n_display} Traces)", color='white', fontsize=10, weight='bold')
             ax.tick_params(colors='white')
             ax.grid(True, color='#1e293b', linestyle=':', alpha=0.6)
