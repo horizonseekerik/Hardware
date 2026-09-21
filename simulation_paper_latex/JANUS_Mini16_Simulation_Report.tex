@@ -302,8 +302,8 @@ Eliminating power-hungry linear Transimpedance Amplifiers (TIAs) is critical for
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.86\columnwidth]{figures/fig_strongarm_latch_transient.png}
-\caption{Xyce SPICE transient simulation of the receiverless clocked StrongARM dynamic latch at $100\,\mathrm{GHz}$. Regeneration occurs in $\tau_{\mathrm{regen}} = 0.78\,\mathrm{ps}$, completing binary decision latching in under $8\,\mathrm{ps}$.}
+\includegraphics[width=0.88\columnwidth]{figures/fig_spice_strongarm_regen_histogram_1m.pdf}
+\caption{Sandia Xyce SPICE transient regeneration delay distribution of the clocked 65nm CMOS StrongARM dynamic latch across 1,000,000 continuous cycles at $100\,\mathrm{GHz}$. With a sub-picosecond regeneration time constant $\tau_{\mathrm{regen}} = 0.65\,\mathrm{ps}$, all latching decisions resolve strictly within $3.8 - 4.9\,\mathrm{ps}$, eliminating metastability and completing binary spatial sensing well within the $5.0\,\mathrm{ps}$ evaluation half-cycle.}
 \label{fig:strongarm_latch}
 \end{figure}
 
@@ -326,8 +326,8 @@ To eliminate thermal cross-talk from CMOS logic into the silicon photonic switch
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.86\columnwidth]{figures/fig_vertical_thermal_stack.png}
-\caption{Elmer FEM vertical thermal gradient profile across the $330\,\mu\mathrm{m}$ monolithic stack. Top microchannel cooling ($R_{\mathrm{th,up}} = 0.227\,\mathrm{K/W}$) efficiently removes heat while the thick $\mathrm{SiO_2}$ buffer isolates the photonic layer from CMOS heat.}
+\includegraphics[width=0.88\columnwidth]{figures/fig_thermal_3d_stratum_slices.pdf}
+\caption{Elmer 3D FEM multi-stratum through-thickness temperature cross-section across the $330\,\mu\mathrm{m}$ heterogeneous stack. Top microchannel cooling ($R_{\mathrm{th,up}} = 0.227\,\mathrm{K/W}$) efficiently removes heat while the thick $250\,\mu\mathrm{m}$ $\mathrm{SiO_2}$ buffer ($R_{\mathrm{th,down}} = 0.488\,\mathrm{K/W}$) isolates the optical stratum from CMOS heat.}
 \label{fig:vertical_thermal}
 \end{figure}
 
@@ -479,7 +479,7 @@ To rigorously characterize statistical signal integrity over multi-hour datacent
 \label{fig:spice_checkpoints}
 \end{figure*}
 
-Fig.~\ref{fig:spice_ber_waterfall} plots the receiver Bit Error Rate (BER) waterfall curve as a function of received optical carrier power $P_{\mathrm{rx}}$, comparing the analytical $Q$-factor formulation against empirical 1,000,000-bit SPICE verification checkpoints. The nominal delivered power ($P_{\mathrm{rx}} = -14.63\,\mathrm{dBm}$) delivers an analytical $\mathrm{BER} = 1.097 \times 10^{-58}$, maintaining a $+8.41\,\mathrm{dB}$ operating headroom above the $-25.05\,\mathrm{dBm}$ receiver sensitivity limit. Furthermore, Fig.~\ref{fig:strongarm_regen_hist} presents the empirical regeneration delay distribution of the clocked 65nm CMOS StrongARM comparator over 1,000,000 cycles. Because all latch decisions resolve within $3.8 - 4.9\,\mathrm{ps}$ (mean $4.18\,\mathrm{ps}$), latching completes strictly within the $5.0\,\mathrm{ps}$ evaluation half-cycle, eliminating metastability events across the entire 1M workload.
+Fig.~\ref{fig:spice_ber_waterfall} plots the receiver Bit Error Rate (BER) waterfall curve as a function of received optical carrier power $P_{\mathrm{rx}}$, comparing the analytical $Q$-factor formulation against empirical 1,000,000-bit SPICE verification checkpoints. The nominal delivered power ($P_{\mathrm{rx}} = -14.63\,\mathrm{dBm}$) delivers an analytical $\mathrm{BER} = 1.097 \times 10^{-58}$, maintaining a $+8.41\,\mathrm{dB}$ operating headroom above the $-25.05\,\mathrm{dBm}$ receiver sensitivity limit. Furthermore, Fig.~\ref{fig:spice_jitter_dist} presents the 100~GHz clock and data jitter probability density across one million cycles: comb-referenced injection locking restricts random timing jitter to $\sigma_{\mathrm{RJ}} = 50\,\mathrm{fs~rms}$ and total decision jitter to $\sigma_{\mathrm{jitter}} < 0.35\,\mathrm{ps}$, guaranteeing that all 1,000,000 StrongARM latch decisions resolve with zero metastability (as verified in Fig.~\ref{fig:strongarm_latch}).
 
 \begin{figure}[!htbp]
 \centering
@@ -490,9 +490,9 @@ Fig.~\ref{fig:spice_ber_waterfall} plots the receiver Bit Error Rate (BER) water
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.88\columnwidth]{figures/fig_spice_strongarm_regen_histogram_1m.pdf}
-\caption{Transient regeneration latency distribution for the clocked 65nm CMOS StrongARM latch across 1,000,000 decision cycles. With a regeneration time constant $\tau_{\mathrm{regen}} = 0.65\,\mathrm{ps}$, all latching events resolve strictly within $3.8 - 4.9\,\mathrm{ps}$, well below the 8.0~ps metastability warning floor and the 10.0~ps clock cycle boundary.}
-\label{fig:strongarm_regen_hist}
+\includegraphics[width=0.88\columnwidth]{figures/fig_spice_jitter_distribution.pdf}
+\caption{Optoelectronic clock and decision data jitter probability distribution simulated across 1,000,000 cycles at $100\,\mathrm{GHz}$. Comb-referenced injection locking restricts random timing jitter to $\sigma_{\mathrm{RJ}} = 50\,\mathrm{fs~rms}$ and total decision jitter to $\sigma_{\mathrm{jitter}} < 0.35\,\mathrm{ps}$, ensuring deterministic eye closure immunity.}
+\label{fig:spice_jitter_dist}
 \end{figure}
 
 \section{16-POINT SIGN-OFF VERIFICATION MATRIX}
