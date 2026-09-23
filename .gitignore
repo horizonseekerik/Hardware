@@ -57,6 +57,9 @@ ehthumbs.db
 .vscode/
 .idea/
 .vercel
+node_modules/
+.next/
+out/
 
 # Exclude heavy simulation outputs and artifacts
 janus_mini16_sim/output/

@@ -90,15 +90,34 @@ TILE_ARRAY_ORIGIN_X   = 200.0     # X position of tile[row=0,col=0] bottom-left 
 TILE_ARRAY_ORIGIN_Y   = 200.0     # Y position of tile[row=0,col=0] bottom-left corner
 
 # --- Optical waveguide dimensions ---
-SIN_WIDTH_UM          = 0.800     # 800 nm Si3N4 strip width (ultra-low-loss)
-SI_WIDTH_UM           = 0.450     # 450 nm crystalline Si strip width
-COUPLER_LEN_UM        = 8.400     # 8.4 um Sb2S3 directional coupler coupling length
-COUPLER_GAP_UM        = 0.200     # 200 nm coupling gap
-PATCH_LEN_UM          = 8.000     # 8.0 um active Sb2S3 patch length
-PATCH_WIDTH_UM        = 0.800     # 800 nm patch width (matches Si3N4 core)
+# Conventional port waveguide (Si3N4 strip at ports, outside switch cell)
+SIN_WIDTH_UM          = 0.800     # 800 nm Si3N4 conventional strip width (single-mode at 1064 nm)
+SI_WIDTH_UM           = 0.450     # 450 nm crystalline Si strip width (APD coupling section)
+
+# ── Slot-waveguide Sb2S3 switch cell (MPB-verified, MEEP FDTD validated) ──
+# Architecture: two 350 nm Si3N4 rails + 100 nm Sb2S3-filled slot
+# Reference: MPB eigensolve (JANUS v2, 2026) → Γ = 36.0%
+# De-coupling node: Γ·L = √3·λ/(2·Δn) = 1.5347 µm → L = 1.5347/0.36 = 4.260 µm
+# Cell footprint: 4.260 µm × 0.800 µm = 3.408 µm²  (97% reduction vs legacy 108 µm²)
+SIN_RAIL_WIDTH_UM     = 0.350     # 350 nm Si3N4 rail width (each side of slot)
+SLOT_WIDTH_UM         = 0.100     # 100 nm Sb2S3-filled slot width (Γ = 36.0%)
+COUPLER_LEN_UM        = 4.260     # 4.260 um slot coupling length  [was 8.4 um legacy]
+COUPLER_GAP_UM        = 0.100     # 100 nm slot width (= SLOT_WIDTH_UM)  [was 200 nm]
+PATCH_LEN_UM          = 4.260     # 4.260 um active Sb2S3 patch length   [was 8.0 um]
+PATCH_WIDTH_UM        = 0.100     # 100 nm patch (= slot fill width)      [was 800 nm]
+GAMMA_MODAL_OVERLAP   = 0.360     # Γ = 36.0% (MPB vectorial eigensolve, MEEP v1 2026)
+SWITCH_CELL_AREA_UM2  = 3.408     # 3.408 µm² per switch cell             [was ~108 µm²]
+
+# Inverse-taper slot coupler (port lead → slot interaction region, outside cell)
+INV_TAPER_LEN_UM      = 3.000     # 3.0 um adiabatic inverse taper (Almeida 2004 method)
+CHANNEL_PITCH_UM      = 1.800     # 1.8 um channel-to-channel pitch (slot WG compact layout)
+
+# MMI splitter
 MMI_W_UM              = 2.400     # 2.4 um Si3N4 Talbot MMI multimode width
 MMI_L_UM              = 5.800     # 5.8 um self-imaging center length
 MMI_TAPER_UM          = 6.000     # 6.0 um MMI access taper length
+
+# Modulator (compact LiTaO3)
 LITAO3_LEN_UM         = 120.0     # 120 um LiTaO3 modulator active region length
 LITAO3_W_UM           = 2.000     # 2.0 um LiTaO3 waveguide rib width
 

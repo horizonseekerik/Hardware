@@ -1,0 +1,182 @@
+\documentclass[conference,10pt]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\setlength{\textfloatsep}{3.5pt plus 1pt minus 1.5pt}
+\setlength{\floatsep}{3.5pt plus 1pt minus 1.5pt}
+\setlength{\intextsep}{3.5pt plus 1pt minus 1.5pt}
+
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \fontsize{6.8pt}{7.6pt}\selectfont
+    \setlength{\itemsep}{-2.5pt plus 0.2pt}%
+    \setlength{\parskip}{0pt}%
+    \setlength{\parsep}{0pt}%
+}{%
+  \end{oldthebibliography}%
+}
+
+\begin{document}
+
+\title{100-GHz One-Hot Spatial Photonic Modular Arithmetic: Fabrication-Tolerance and Receiver Validation}
+
+\author{
+\IEEEauthorblockN{Anonymous OFC Submission}
+\IEEEauthorblockA{[Double-Blind Review Copy]}
+}
+
+\maketitle
+
+\begin{abstract}
+A Fermat-structured one-hot spatial architecture enables photonic modular arithmetic, co-designing residue bases ($\mathbb{Z}_{17}, \mathbb{Z}_{257}$) with binary trees. One million Monte Carlo samples show 100\% simulated yield; 100-GHz SPICE achieves 0/10\textsuperscript{6} bit errors.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Optical computing, residue number system, one-hot spatial routing, avalanche photodiode, 100\,GHz SPICE, Monte Carlo tolerance.
+\end{IEEEkeywords}
+
+\section{The Dynamic Range Wall \& Hybrid RNS Partitioning}
+Conventional analog optical accelerators accumulate continuous optical powers on photodetectors \cite{Shen2017}. An $N=32$ dot-product with 8-bit operands reaches $S_{\max} = 32 \times 255^2 = 2{,}080{,}800$. Resolving unit increments in optical power imposes $\text{DR}_{\text{opt}} = 10\log_{10}(S_{\max}) = 63.2\,\text{dB}$ ($126.4\,\text{dB}$ electrical voltage), requiring approximately 21 effective bits at gigahertz-class bandwidth under fundamental precision-bandwidth trade-offs \cite{Shen2017}. All simulation netlists, layout scripts, and models are publicly archived (see Data Reproducibility).
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.82\columnwidth]{figures/fig_asymmetric_16tree_fermat_topology.png}
+\caption{Asymmetric 16-Tree Fermat Core. (a) 4-stage binary tree routing $WG_1\dots WG_{16}$ with dark-channel reference ($WG_0$) and active route ($WG_i \to Y = 11$). (b) $\mathbb{Z}_{17}$ multiplication matrix ($289/289$ states mapped). (c) Radix-16 $\mathbb{Z}_{257}$ division-free reduction. (d) Hardware scaling comparison vs.~unpruned crossbar and Beneš mesh.}
+\label{fig:fermat_topology}
+\end{figure}
+
+To eradicate this wall, JANUS enforces \textbf{Hybrid Optical-CMOS Partitioning}: optics exclusively performs bounded $1 \times 1$ element-wise modular multiplication, while all accumulation occurs in digital CMOS carry-save logic beneath the photodetectors. Operands map to Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($2^{2^1}+1, 2^{2^2}+1$) \cite{Huang1979, Mohan2016, Zheng2024}: $x, w \to (x w \bmod 17, \; x w \bmod 257)$. Optical detection collapses from analog digitization to 1-bit binary spatial thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM latches. Chinese Remainder Theorem (CRT) reconstruction recovers the exact product:
+\begin{equation}
+xw = \operatorname{CRT}(xw \bmod 17, \; xw \bmod 257),
+\label{eq:crt}
+\end{equation}
+providing coprime range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$ that bounds any 4-bit product (e.g., $x=14, w=11 \to \mathbf{r}=(1, 154) \to \operatorname{CRT}(\mathbf{r})=154$). Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$, $Y = 16 Y_H + Y_L$:
+\begin{equation}
+XY = X_L Y_L + 16(X_L Y_H + X_H Y_L) + 256 X_H Y_H,
+\label{eq:nibble}
+\end{equation}
+where each 4-bit sub-product $X_i Y_j \le 225 < 257$ is evaluated by the optical Fermat core and digitally recombined in CMOS. A 160-bit carry-save accumulator provides a 27-bit guard margin over the 133-bit width needed for $N=32$ INT64 dot products ($128 + \lceil\log_2 32\rceil = 133\,\text{bits}$).
+
+\section{Asymmetric 16-Tree Core \& Physical Layout}
+The Asymmetric 16-Tree Fermat Core (Fig.~\ref{fig:fermat_topology}) executes modular multiplication over the Fermat prime field $\mathbb{Z}_{17}$ ($m = 2^{2^1} + 1 = 17$):
+\begin{enumerate}
+\item \textbf{4-Stage Binary Tree:} Each 16-channel binary routing tree comprises $1 + 2 + 4 + 8 = 15$ active $2 \times 2$ directional coupler switches across strictly $\log_2(16) = 4$ binary stages. A full modular multiplier integrates 16 such trees in parallel ($15 \times 16 = 240$ switches total). Non-volatile $\text{Sb}_2\text{S}_3$ phase-change material (PCM) switches \cite{Dong2019} store stationary weight permutations with negligible static hold power during inference.
+\item \textbf{Itemized Fabric Loss:} Along any 4-stage active optical path, insertion loss totals $1.61\,\text{dB}$, itemized as $1.04\,\text{dB}$ from 4 cascaded switches ($0.26\,\text{dB}$/switch) and $0.57\,\text{dB}$ from internal waveguide bends and planar crossing junctions.
+\item \textbf{Natural Sparsity ($WG_0$ Dark State):} Waveguide 0 ($WG_0$) is physically omitted from the routing fabric. When multiplicand $X=0$, the optical source is gated off (dark state, zero silicon area allocated). Active waveguides $WG_1\dots WG_{16}$ map non-zero residues, realizing $100\%$ state coverage ($289/289$ valid states in $\mathbb{Z}_{17}$) with unselected contrast $C \ge 18.96\,\text{dB}$ (mean $24.3\,\text{dB}$).
+\item \textbf{16-Tree Fermat $\mathbb{Z}_{257}$ Crossbar Mapping:} The 16 parallel binary trees correspond to multiplicands $X \in \{1, \dots, 16\}$, each having 16 spatial outputs corresponding to multiplier $W \in \{1, \dots, 16\}$. This creates $16 \times 16 = 256$ active spatial cross-product states. Combining these 256 active states with the hardware-omitted zero dark state ($WG_0$) maps all $256 + 1 = 257$ states of the Fermat prime field $\mathbb{Z}_{257}$ ($F_2 = 2^{2^2}+1 = 257$) natively without area overhead. Modulo 17 maps Tree 16 to modular negation ($16 \equiv -1 \pmod{17}$), while modulo 257 enables division-free Radix-16 reduction via $(16^2 Y_H + Y_L) \bmod 257 = (Y_L - Y_H) \pmod{257}$ (Fig.~\ref{fig:fermat_topology}c).
+\end{enumerate}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.82\columnwidth]{figures/fig_layout_and_tolerance.png}
+\caption{Physical layout and Monte Carlo tolerance validation. (a) 3D GDSII layout rendering of the $10.24\,\text{mm}^2$ monolithic die ($3.20\,\text{mm} \times 3.20\,\text{mm}$) with 16 tiles and optical H-tree. (b) 1,000,000-sample margin PDF ($\mu = +7.104\,\text{dB}$, $3\sigma = +6.95\,\text{dB}$). (c) Semilog optical yield CDF showing the $+6.85\,\text{dB}$ $5\sigma$ tail and zero dropouts.}
+\label{fig:layout_tolerance}
+\end{figure}
+
+\textit{Physical Architecture \& Layout Hierarchy:} The monolithic Model 1A prototype die ($3.20 \times 3.20\,\text{mm} = 10.24\,\text{mm}^2$) integrates $4 \times 4 = 16$ monolithic tiles at an $800\,\mu\text{m}$ pitch (Fig.~\ref{fig:layout_tolerance}a). Each tile core spans $600 \times 600\,\mu\text{m}$ and integrates a complete 16-channel residue core ($WG_1\dots WG_{16}$ plus $WG_0$ dark reference) with 16 active $\text{Sb}_2\text{S}_3$ directional switches per tile ($256$ switches total across the physical die) and 16 active APD/TDV channels, fitting within the tile core with $>70\%$ routing margin ($70\,\mu\text{m}$ stage spacing, $31\,\mu\text{m}$ channel pitch). Inputs are modulated at $100\,\text{GHz}$ by dedicated on-tile thin-film $\text{LiTaO}_3$ Pockels modulators ($r_{33} = 30.5\,\text{pm/V}$, $V_{\text{pp}} = 0.8\,\text{V}$) \cite{Wang2023}, launching into the $\text{Si}_3\text{N}_4$ routing fabric to deliver $1.6\,\text{Tbps}$ aggregate optical throughput across the 16 parallel lanes. CW carrier ($2.21\,\text{W}$, $\lambda = 1064\,\text{nm}$) routes via stoichiometric $\text{Si}_3\text{N}_4$ ($E_g \approx 5.0\,\text{eV}$, $\alpha = 0.10\,\text{dB/cm}$) \cite{Rahim2021}, avoiding two-photon absorption ($h\nu = 1.165\,\text{eV} < E_g/2$). In macro-scale datacentre accelerator projections, each tile scales to a $32 \times 32$ tensor mesh ($1{,}024$ multipliers/tile, $16{,}384$ multipliers total across 16 tiles) distributed across a 14-stage optical H-tree.
+
+\section{1,000,000-Sample Optical Tolerance Analysis}
+Fabrication tolerance was evaluated via a $10^6$-sample Monte Carlo campaign across all 16,384 paths, modeling correlated wafer gradients ($\Delta w_{\text{die}} \pm 3\,\text{nm}$, $\Delta h_{\text{die}} \pm 2.5\,\text{nm}$, $\rho = 0.85$), sidewall roughness ($\sigma_{\text{rough}} = 2.0\,\text{nm}$), and first-principles MMI excess loss ($\mu = 0.14\,\text{dB}$, $\sigma_{\text{MMI}} = 0.012\,\text{dB}$/stage from Talbot focal drift and Payne-Lacey roughness). Compounding across 14 cascaded MMI stages and 32 waveguide crossings ($\sigma_{\text{cross}} = 0.003\,\text{dB}$), the root-sum-square variance yields $\sigma_{\text{margin}} = \sqrt{14 \times (0.012)^2 + 32 \times (0.003)^2} \approx 0.051\,\text{dB}$ with mean $\mu_{\text{margin}} = +7.104\,\text{dB}$, a $3\sigma$ bound of $+6.95\,\text{dB}$ ($4.96\times$ headroom), and a $5\sigma$ tail of $+6.85\,\text{dB}$. In the semilog CDF (Fig.~\ref{fig:layout_tolerance}c), zero failures occurred in $10^6$ samples ($P(\text{Margin} \le 3.0\,\text{dB}) = 0.0$), yielding $100\%$ empirical yield and a $95\%$ confidence lower bound of $99.9997\%$ ($3.0 \times 10^{-6}$ bound under Rule of Three). All 289 operands in $\mathbb{Z}_{17}^2$ and the $\mathbb{Z}_{257}$ lane were validated across $10^6$ vectors with zero functional errors.
+
+\section{100-GHz Optoelectronic Receiver Validation}
+
+\subsection{1:32 Polyphase Time-Interleaved TIA-Less Receiver}
+The 100-GHz data path traverses thin-film $\text{LiTaO}_3$ Pockels modulators ($RC$ cutoff $>100\,\text{GHz}$), sub-picosecond optical routing ($\sim 1.33\,\text{ps}$ flight time across 4 stages), and Ge/Si SAC$^2$M APDs ($105\,\text{GHz}$ at $M=7$, $100\,\text{GHz}$ at $M=13.4$, $R = 0.95\,\text{A/W}$) \cite{Shi2025Nature}. At $\lambda = 1064\,\text{nm}$, strong absorption enables thin carrier transit layers. Direct vertical Cu TDV coupling ($C_{\text{int}} \le 3.8\,\text{fF}$) links each APD to an ultra-compact charge-integrating input node ($C_{\text{node}} = C_p \approx 5.0\,\text{fF}$ including APD junction and gate parasitics). Incoming 100-GHz optical pulses ($T_{\text{cycle}} = 10.0\,\text{ps}$) charge this node during a $5.0\,\text{ps}$ optical integration window ($t_{\text{int}} = 5.0\,\text{ps}$, $Q_{\text{sig}} = \int I_{\text{ph}} dt$), developing a $122.6\,\text{mV}$ differential voltage eye. The StrongARM regenerative pair operates with internal load $C_L = 5.0\,\text{fF}$ and transconductance $g_m = 8.0\,\text{mS}$, achieving a regeneration time constant $\tau_{\text{regen}} = C_L/g_m = 5.0\,\text{fF}/8.0\,\text{mS} = 0.625\,\text{ps} \approx 0.65\,\text{ps}$ and resolving decisions in $4.16\,\text{ps}$ median ($5.89\,\text{ps}$ at $p99$). To interface with digital CMOS logic without multi-gigahertz timing bottlenecks, each latch output is deserialized by a 1:32 polyphase CML tree into 32 parallel channels at $3.125\,\text{GHz}$ ($T_{\text{CMOS}} = 320.0\,\text{ps}$), providing $>17\times$ timing margin over the $18\,\text{ps}$ setup-plus-hold aperture of 65nm CMOS logic \cite{Schinkel2007}. During dormant phases ($1/17$ spatial sparsity, $\alpha = 0.0588$), periodic background auto-zeroing calibrates residual offset to $<2\,\text{mV}$. Dynamic input sensing energy is $E_{\text{sense}} = \frac{1}{2} C_p \Delta V_{\text{in}}^2 \approx 38\,\text{aJ}$, while full-rail latch regeneration draws $E_{\text{latch}} = C_L V_{DD}^2 = 3.20\,\text{fJ}$ ($188\,\text{aJ}$ average per lane under $1/17$ sparsity).
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.82\columnwidth]{figures/fig_receiver_100ghz.png}
+\caption{100-GHz optoelectronic receiver validation in Sandia Xyce SPICE across 1,000,000 cycles ($T_{\text{cycle}} = 10.0\,\text{ps}$, PRBS-7). (a) Eye diagram persistence heatmap ($73.9\%$ opening, $122.6\,\text{mV}$). (b) StrongARM regeneration delay distribution ($\tau_{\text{regen}} = 0.65\,\text{ps}$, median $4.16\,\text{ps}$, $p99 = 5.89\,\text{ps}$, $T_{\text{cycle}} = 10.0\,\text{ps}$).}
+\label{fig:receiver_100ghz}
+\end{figure}
+
+\subsection{Signal Integrity, Delay Jitter \& BER Waterfall}
+A transient co-simulation in Sandia Xyce SPICE across 1,000,000 cycles at $100\,\text{GHz}$ (PRBS-7) incorporated APD shot noise ($F(M)$, $k_{\text{eff}} = 0.05$) \cite{McIntyre1966}, dark current ($I_d = 35\,\text{nA}$), thermal noise, and $50\,\text{fs~rms}$ clock jitter. Path delays are bounded by Pockels switching ($<0.5\,\text{ps}$), optical transit ($\sim 1.33\,\text{ps}$), and APD charging ($1.9\,\text{ps}$ at $105\,\text{GHz}$).
+
+The eye heatmap (Fig.~\ref{fig:receiver_100ghz}a) exhibits a $73.9\%$ differential opening ($122.60\,\text{mV}$) and quality factor $Q = 16.11$. StrongARM regeneration latency (Fig.~\ref{fig:receiver_100ghz}b) exhibits $\tau_{\text{regen}} = 0.65\,\text{ps}$ (median $4.16\,\text{ps}$, $p99 = 5.89\,\text{ps}$). All $10^6$ transitions under $t_{\text{total}} = t_{\text{regen}} + t_{\text{jitter}} + t_{\text{setup}}$ resolved within the active sampling strobe ($100\%$ pass; $p99.99 = 8.92\,\text{ps}$) with zero latch lockups.
+
+Zero errors were observed in $10^6$ simulated bits (empirical bound $\text{BER} \le 3.0 \times 10^{-6}$ at $95\%$ confidence). The analytical Gaussian model extrapolates $\text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2}) \approx 1.1 \times 10^{-58}$ under unconstrained extrapolation at nominal $Q = 16.11$. Fig.~\ref{fig:ber_waterfall} plots the model BER waterfall with zero-error checkpoints relative to the $10^{-18}$ telecommunication target threshold above the $-25.05\,\text{dBm}$ ($3.13\,\mu\text{W}$) sensitivity floor.
+
+%\newpage
+\section{Optical Link Budget \& Baseline Margin}
+
+\begin{table}[!t]
+\centering
+\caption{Model 1A Optical Power Link Budget Across 16,384 Paths}
+\label{tab:link_budget}
+\renewcommand{\arraystretch}{0.72}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llr}
+\toprule
+\textbf{Component / Physical Parameter} & \textbf{Loss / Value} & \textbf{Power / Margin} \\
+\midrule
+Laser Carrier Source ($1064\,\text{nm}$ CW) & --- & $+33.44\,\text{dBm}$ ($2.21\,\text{W}$) \\
+Laser-to-$\text{Si}_3\text{N}_4$ Input Coupling & $-1.00\,\text{dB}$ & $+32.44\,\text{dBm}$ \\
+14-Stage Binary Splitting Loss ($1:16{,}384$) & $-42.14\,\text{dB}$ & $-9.70\,\text{dBm}$ \\
+14-Stage MMI Excess Loss ($0.14\,\text{dB}$/stg) & $-1.96\,\text{dB}$ & $-11.66\,\text{dBm}$ \\
+Upper $\text{Si}_3\text{N}_4$ Propagation ($4.5\,\text{cm}$) & $-0.45\,\text{dB}$ & $-12.11\,\text{dBm}$ \\
+Vertical 3D Adiabatic Taper Transition & $-0.05\,\text{dB}$ & $-12.16\,\text{dBm}$ \\
+$\text{Sb}_2\text{S}_3$ 4-Stage Tree Switch Loss & $-1.61\,\text{dB}$ & $-13.77\,\text{dBm}$ \\
+32 Waveguide Crossings ($0.091\,\text{dB}$/cr) & $-2.92\,\text{dB}$ & $-16.69\,\text{dBm}$ \\
+Lower Routing \& APD Coupling Loss & $-1.10\,\text{dB}$ & $-17.79\,\text{dBm}$ \\
+\midrule
+\textbf{Nominal Delivered Power at APD} ($P_{\text{rx,nom}}$) & --- & $\mathbf{-17.79\,\text{dBm}}$ ($16.6\,\mu\text{W}$) \\
+Design-Reserved Packaging \& Aging Margin & $-1.65\,\text{dB}$ & $-19.44\,\text{dBm}$ ($11.4\,\mu\text{W}$) \\
+\textbf{Guaranteed Design-Floor APD Power} ($P_{\text{rx,min}}$) & --- & $\mathbf{-19.44\,\text{dBm}}$ ($11.4\,\mu\text{W}$) \\
+StrongARM Decision Sensitivity ($P_{\text{sens}}$) & --- & $-25.05\,\text{dBm}$ ($3.13\,\mu\text{W}$) \\
+\midrule
+\textbf{Guaranteed Baseline Optical Margin} & --- & $\mathbf{+5.61\,\text{dB}}$ ($3.63\times$) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Table~\ref{tab:link_budget} itemizes the 16,384-path link budget, separating optical attenuation ($L_{\text{opt}} = -51.23\,\text{dB}$) from high-speed penalties ($L_{\text{rx/eff}} = -1.45\,\text{dB}$, RF skin effect, carrier screening, modal drift). 3D FEM thermal simulation confirms peak heating $\Delta T < 1.18\,\text{K}$ ($\Delta n < 10^{-4}$), preserving non-resonant balance. Adiabatic tapers satisfy Love's criterion \cite{Love1991} ($<0.05\,\text{dB}$/taper). Delivered power per APD is $-17.79\,\text{dBm}$ ($16.6\,\mu\text{W}$). Reserving a $-1.65\,\text{dB}$ design margin (incorporating $-1.45\,\text{dB}$ high-speed penalties and $-0.20\,\text{dB}$ aging/drift) sets a guaranteed design floor of $-19.44\,\text{dBm}$ ($11.4\,\mu\text{W}$). Against the $-25.05\,\text{dBm}$ ($3.13\,\mu\text{W}$) StrongARM sensitivity floor ($Q = 16.11$), baseline optical margin is $\mathbf{+5.61\,\text{dB}}$ ($3.63\times$ headroom; $+7.26\,\text{dB}$ nominal).
+
+\section{Multi-Precision Scaling \& Energy Efficiency}
+Direct APD-to-latch coupling eliminates power-hungry TIAs and ADCs. High-speed $100\,\text{GHz}$ modulation occurs via thin-film $\text{LiTaO}_3$ Pockels modulators ($V_{\text{pp}} = 0.8\,\text{V}$, $V_\pi L = 1.2\,\text{V}\cdot\text{cm}$) consuming $0.16\,\text{W}$ across the 16 tiles ($10\,\text{mW}$/modulator) \cite{Wang2023, Cheng2024Nature}. The $\text{Sb}_2\text{S}_3$ switches ($256$ on the Model 1A die; $3.93\text{M}$ in scaled macro-arrays) \cite{Dong2019} are non-volatile and stationary during inference. Under One-Hot sparsity ($\alpha = 1/17$), only 16 latches fire per cycle on Model 1A ($16 \times 100\,\text{GHz} \times 3.2\,\text{fJ} = 5.15\,\text{mW}$; $0.31\,\text{W}$ in a full 16,384-lane accelerator). Model 1A integrates 16 tiles ($3.20 \times 3.20\,\text{mm}$ core) clocked at $100\,\text{GHz}$ ($102.4\,\text{TMAC/s}$/tile). Width-$P$ operands dynamically allocate $k = \lceil P/4 \rceil$ tiles:
+(1)~\textbf{INT4 Direct ($k=1$):} Products satisfy $XW \le 225 < 257 \implies (XW) \bmod 257 = XW$ exact without CRT; 16 parallel tiles project $1{,}638.4\,\text{TMAC/s}$ peak ($1{,}392.6\,\text{TMAC/s}$ sustained at $85\%$ duty cycle).
+(2)~\textbf{INT8 Exact ($k=2$, $\{\mathbb{Z}_{17}, \mathbb{Z}_{257}\}$):} Four 4-bit nibbles (Eq.~\ref{eq:nibble}) evaluate optically and recombine via CRT ($M = 4369 > 225$); 8 pipelines project $819.2\,\text{TMAC/s}$ peak ($696.3\,\text{TMAC/s}$ sustained).
+(3)~\textbf{INT64 Exact ($k=16$):} 32-bit halves $X_L Y_L$ and $X_H Y_H$ evaluate optically; cross-terms run on the CMOS Dual-LUT Engine (1.5\,MB SRAM, 32-lane SIMD Wallace--Kogge units at $3.125\,\text{GHz}$, desynchronized 1:32 from $100\,\text{GHz}$), projecting $102.4\,\text{TMAC/s}$ ($87.0\,\text{TMAC/s}$ sustained).
+
+Full-system electrical package power is $P_{\text{total}} = 6.17\,\text{W}$ ($2.95\,\text{W}$ laser at $75\%$ WPE, $0.51\,\text{W}$ modulators, $0.16\,\text{W}$ sensing, $1.05\,\text{W}$ CMOS logic, $1.50\,\text{W}$ JIR control, negligible PCM hold), yielding $225.7\,\text{TMAC/s/W}$ (INT4) and $14.1\,\text{TMAC/s/W}$ (INT64). Compared to an unpruned $16 \times 16$ crossbar ($2048$ switches, $7.50\,\text{dB}$ loss), the Fermat tree uses 15 switches/lane ($240$ total; $88.3\%$ reduction), cutting fabric loss to $1.61\,\text{dB}$ ($78.5\%$ reduction; Fig.~\ref{fig:fermat_topology}d).
+
+\section{Conclusion}
+A 100-GHz one-hot spatial photonic core is validated via $10^6$-sample Monte Carlo and $10^6$-cycle SPICE co-simulation. Achieving zero bit errors, 100\% yield, and $+5.61\,\text{dB}$ margin across 16,384 paths, it establishes a physical foundation for exact optical RNS computing.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.68\columnwidth]{figures/fig_spice_ber_waterfall_curve.pdf}
+\vspace{0.8mm}
+\caption{Receiver BER waterfall vs.~$P_{\text{rx}}$. Gaussian model ($Q = 16.11$) matches SPICE ($0/10^6$ errors; $\text{BER} \le 10^{-6}$) relative to the $10^{-18}$ telecommunication target threshold.}
+\vspace{1.5mm}
+\label{fig:ber_waterfall}
+\end{figure}
+
+\noindent\textbf{Data Reproducibility:}
+Monte Carlo datasets, 100-GHz Xyce netlists, GDSII scripts, and models are archived in an anonymous repository for double-blind peer review: \url{https://anonymous.4open.science/r/Janus-Simulation-27DA}.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
+
+
+

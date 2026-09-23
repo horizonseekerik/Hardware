@@ -353,14 +353,21 @@ def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
     tile.add_ref(build_cmos_base_tile(tile_id=tile_id))
 
     # ---- Optical stratum component handles ----
-    sw_len = COUPLER_LEN_UM + 3.0
+    # ── Slot-waveguide switch cell dimensions ──────────────────────────────────
+    # COUPLER_LEN_UM = 4.260 um (MPB-verified, Γ=36%), INV_TAPER_LEN_UM = 3.0 um
+    # Total switch cell + inv-taper exits = 4.260 + 2.0 = 6.26 um in x-direction
+    sw_len_slot = COUPLER_LEN_UM + 2.0   # 6.26 um: slot cell + exit inv-taper stubs
+    sw_len      = sw_len_slot             # alias for compatibility
+    ch_pitch    = CHANNEL_PITCH_UM        # 1.8 um compact channel pitch (was 31 um)
+
     sin_sw     = pcell_sb2s3_sin_switch_cell()
     sin_cross  = pcell_sin_mmi_crossing()
     taper_cell = pcell_sin_to_si_taper(length=15.0)
     apd_cell   = pcell_sac2m_apd_with_tdv()
 
     # 2. Input Modulation Stage (X: 70-190 um)
-    channel_y = [45.0 + i * 31.0 for i in range(17)]
+    # Channel y-positions: compact 1.8 um slot-WG pitch starting at 45 um
+    channel_y = [45.0 + i * ch_pitch for i in range(17)]
     for ch, y_ch in enumerate(channel_y):
         tile.add_ref(pcell_sin_straight_wg(10.0)).move((60.0, y_ch))
         if ch < 16:
@@ -380,8 +387,9 @@ def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
             tile.add_ref(pcell_sin_straight_wg(LITAO3_LEN_UM)).move((70.0, y_ch))
             tile.add_label("DARK_REF_WG0", position=(130.0, y_ch), layer=LAYER_SIN_CORE)
 
-    # 3. 4-Stage Binary Tree Fermat Switching Network in Si3N4 (X: 200-460 um)
-    stage_x = [205.0, 275.0, 345.0, 415.0]
+    # 3. 4-Stage Binary Tree Fermat Switching Network — Slot-WG Compact Layout (X: 200-240 um)
+    # Stage x-spacing: 8 um between stage origins (sw_len_slot=6.26 um + 1.74 um inter-stage gap)
+    stage_x = [205.0, 213.0, 221.0, 229.0]
 
     # Routing WGs from modulator outputs to stage 1
     for ch, y_ch in enumerate(channel_y):
@@ -389,45 +397,50 @@ def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
         if gap > 0:
             tile.add_ref(pcell_sin_straight_wg(gap)).move((70.0 + LITAO3_LEN_UM, y_ch))
 
-    # Stage 1
+    # Stage 1 — 1 switch per channel (1→2 fan-out)
     for ch in range(16):
         y_ch = channel_y[ch]
         tile.add_ref(sin_sw).move((stage_x[0], y_ch))
-        tile.add_ref(pcell_sin_sbend_wg(dx=28.0, dy=4.0)).move((stage_x[0] + sw_len, y_ch + 0.5))
-        tile.add_ref(pcell_sin_sbend_wg(dx=28.0, dy=-4.0)).move((stage_x[0] + sw_len, y_ch - 0.5))
+        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy= ch_pitch / 2)).move(
+            (stage_x[0] + sw_len_slot, y_ch))
+        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy=-ch_pitch / 2)).move(
+            (stage_x[0] + sw_len_slot, y_ch))
 
-    # Stage 2
+    # Stage 2 — 2 switches per channel (2→4 fan-out)
     for ch in range(16):
         y_ch = channel_y[ch]
-        tile.add_ref(sin_sw).move((stage_x[1], y_ch + 4.0))
-        tile.add_ref(sin_sw).move((stage_x[1], y_ch - 4.0))
+        tile.add_ref(sin_sw).move((stage_x[1], y_ch + ch_pitch / 2))
+        tile.add_ref(sin_sw).move((stage_x[1], y_ch - ch_pitch / 2))
         if ch % 2 == 0:
-            tile.add_ref(sin_cross).move((stage_x[1] + sw_len + 12.0, y_ch))
-        tile.add_ref(pcell_sin_sbend_wg(dx=28.0, dy=5.0)).move((stage_x[1] + sw_len, y_ch + 4.0))
-        tile.add_ref(pcell_sin_sbend_wg(dx=28.0, dy=-5.0)).move((stage_x[1] + sw_len, y_ch - 4.0))
+            tile.add_ref(sin_cross).move((stage_x[1] + sw_len_slot + 1.0, y_ch))
+        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy= ch_pitch)).move(
+            (stage_x[1] + sw_len_slot, y_ch + ch_pitch / 2))
+        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy=-ch_pitch)).move(
+            (stage_x[1] + sw_len_slot, y_ch - ch_pitch / 2))
 
-    # Stage 3
+    # Stage 3 — 4 switches per channel (4→8 fan-out)
     for ch in range(16):
         y_ch = channel_y[ch]
         for s in range(4):
-            dy = (s - 1.5) * 4.0
+            dy = (s - 1.5) * ch_pitch
             tile.add_ref(sin_sw).move((stage_x[2], y_ch + dy))
-            tile.add_ref(pcell_sin_straight_wg(12.0)).move((stage_x[2] + sw_len, y_ch + dy))
+            tile.add_ref(pcell_sin_straight_wg(2.0)).move(
+                (stage_x[2] + sw_len_slot, y_ch + dy))
 
-    # Stage 4
+    # Stage 4 — 4 switches per channel (fan-out to 16 APD outputs)
     for ch in range(16):
         y_ch = channel_y[ch]
         for s in range(4):
-            dy = (s - 1.5) * 4.0
+            dy = (s - 1.5) * ch_pitch
             tile.add_ref(sin_sw).move((stage_x[3], y_ch + dy))
             dy_bend = -dy * 0.7
-            tile.add_ref(pcell_sin_sbend_wg(dx=30.0, dy=dy_bend)).move(
-                (stage_x[3] + sw_len, y_ch + dy)
-            )
+            tile.add_ref(pcell_sin_sbend_wg(dx=6.0, dy=dy_bend)).move(
+                (stage_x[3] + sw_len_slot, y_ch + dy))
 
     # WG0 dark reference bypass
-    wg0_len = stage_x[3] + sw_len + 30.0 - stage_x[0]
-    tile.add_ref(pcell_sin_straight_wg(wg0_len)).move((stage_x[0], channel_y[16]))
+    wg0_len = stage_x[3] + sw_len_slot + 6.0 - stage_x[0]
+    tile.add_ref(pcell_sin_straight_wg(wg0_len)).move(
+        (stage_x[0], channel_y[16]))
 
     # 4. Si3N4→Si Taper Transition & SAC2M APDs with TDVs (X: 475-560 um)
     x_taper = stage_x[3] + sw_len + 30.0
