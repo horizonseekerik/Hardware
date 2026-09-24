@@ -1,6 +1,4 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "next build",
   "functions": {
     "api/index.py": {
       "includeFiles": "{janus_mini16_sim/**/*.py,janus_mini16_sim/configs/*.json,janus_mini16_sim/orchestrator/artifacts/*.json}"
