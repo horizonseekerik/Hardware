@@ -58,6 +58,8 @@
   <!-- Three.js & OrbitControls for Interactive 3D WebGL Strata Model -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Lenis Smooth Scrolling Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.9/dist/lenis.min.js"></script>
   <script>
     // Set theme immediately to avoid flash of dark content
     (function () {
@@ -2276,6 +2278,209 @@
       }
     }
 
+    /* =========================================================
+       8-BIT RETRO EDITORIAL ANIMATIONS & EFFECTS (ENHANCEMENT)
+       ========================================================= */
+
+    /* 1. Word-by-Word Reveal Headline */
+    .hero-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .hero-word.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 2. Clipped Slide-Up Counters for KPI & Stat Boxes */
+    .kpi-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-val {
+      display: inline-block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    }
+
+    .kpi-val.slide-enter {
+      animation: clipSlideUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes clipSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 3. 8-Bit Pixel Notched Corners Utility */
+    .pixel-corners {
+      clip-path: polygon(
+        0 4px,
+        4px 4px,
+        4px 0,
+        calc(100% - 4px) 0,
+        calc(100% - 4px) 4px,
+        100% 4px,
+        100% calc(100% - 4px),
+        calc(100% - 4px) calc(100% - 4px),
+        calc(100% - 4px) 100%,
+        4px 100%,
+        4px calc(100% - 4px),
+        0 calc(100% - 4px)
+      );
+    }
+
+    .pixel-corners-lg {
+      clip-path: polygon(
+        0 8px,
+        8px 8px,
+        8px 0,
+        calc(100% - 8px) 0,
+        calc(100% - 8px) 8px,
+        100% 8px,
+        100% calc(100% - 8px),
+        calc(100% - 8px) calc(100% - 8px),
+        calc(100% - 8px) 100%,
+        8px 100%,
+        8px calc(100% - 8px),
+        0 calc(100% - 8px)
+      );
+    }
+
+    /* 4. Retro Dotted Borders */
+    .retro-border-dotted {
+      border: 2px dotted var(--card-border) !important;
+    }
+
+    .retro-border-cyan {
+      border: 2px dotted var(--accent-cyan) !important;
+    }
+
+    /* 5. Subtle CRT Scanline Utility */
+    .scanline-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.16) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.45;
+    }
+
+    /* 6. Smooth Page & Tab Transitions */
+    .page-section {
+      animation: pageGlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-content {
+      animation: pageGlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes pageGlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 7. 8-Bit WebGL Flame Shader Backdrop */
+    .flame-cta-banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      margin-top: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    #flame-shader-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.75;
+      image-rendering: pixelated;
+    }
+
+    .flame-cta-content {
+      position: relative;
+      z-index: 3;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* 8. 3D WebGL Globe Container in Creator Section */
+    .globe-container-box {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: var(--card-sub-bg);
+      box-shadow: var(--card-shadow);
+      margin-top: 1.5rem;
+      overflow: hidden;
+    }
+
+    #creator-globe-canvas {
+      width: 100%;
+      max-width: 380px;
+      height: 380px;
+      cursor: grab;
+      touch-action: none;
+      display: block;
+      border-radius: 50%;
+    }
+
+    #creator-globe-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* 9. Accessibility: Reduced Motion Fallbacks */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-word {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .kpi-val.slide-enter {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .page-section, .tab-content {
+        animation: none !important;
+      }
+      #flame-shader-canvas {
+        display: none !important;
+      }
+    }
+
   </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
@@ -2459,6 +2664,33 @@
               Vertical thermal isolation (<i>R</i><sub>th,up</sub> = 0.227 K/W vs <i>R</i><sub>th,down</sub> = 0.488
               K/W) pulls photonic heat upward while routing CMOS heat laterally.
             </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8-BIT PROCEDURAL WEBGL FLAME CTA BANNER -->
+      <div class="flame-cta-banner pixel-corners-lg">
+        <canvas id="flame-shader-canvas"></canvas>
+        <div class="flame-cta-content">
+          <div style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px; border-radius: 9999px; background: rgba(2, 132, 199, 0.12); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.1rem;">
+            <span>⚡ DETERMINISTIC SPATIAL OPTICAL ARITHMETIC</span>
+          </div>
+          <h3 style="font-family: 'Cinzel', serif; font-size: 2.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.9rem; letter-spacing: -0.02em;">
+            Pioneering the Post-Analog Photonic Era
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; max-width: 680px; margin: 0 auto 1.8rem auto;">
+            Explore the multi-physics co-simulation suite (FDTD, FEM thermal, SPICE, Verilog), inspect the 39-page IEEE treatise, or run live hardware benchmarks across 12 architecture models.
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-primary" onclick="switchPage('simulation')" style="padding: 10px 22px; font-weight: 700; cursor: pointer;">
+              Launch Co-Simulation Suite →
+            </button>
+            <button class="btn-outline" onclick="switchPage('paper'); switchPaper('manuscript');" style="padding: 10px 22px; font-weight: 700; cursor: pointer;">
+              Read IEEE Manuscript
+            </button>
+            <button class="btn-outline" onclick="switchPage('hardware')" style="padding: 10px 22px; font-weight: 700; cursor: pointer;">
+              Explore 3D CMOS Stack
+            </button>
           </div>
         </div>
       </div>
@@ -5276,6 +5508,34 @@
         </div>
       </div>
 
+      <!-- 3D WEBGL GLOBAL RESEARCH & COLLABORATION GLOBE -->
+      <div class="globe-container-box pixel-corners" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.1rem;">🌐</span>
+            <span style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">Global Research & Hardware Deployment Footprint</span>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); background: var(--card-bg); border: 1px solid var(--border-color); padding: 2px 8px; border-radius: 6px;">
+            Interactive 3D WebGL • Drag to Rotate
+          </span>
+        </div>
+        <canvas id="creator-globe-canvas"></canvas>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 1rem;">
+          <span style="font-size: 0.78rem; background: var(--card-bg); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; color: var(--text-muted);">
+            📍 <strong style="color: var(--accent-cyan);">New Delhi / Mohali</strong> (HQ & Primary IP Filing)
+          </span>
+          <span style="font-size: 0.78rem; background: var(--card-bg); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; color: var(--text-muted);">
+            📍 <strong style="color: var(--accent-blue);">Silicon Valley</strong> (Architecture & CMOS Tapeout)
+          </span>
+          <span style="font-size: 0.78rem; background: var(--card-bg); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; color: var(--text-muted);">
+            📍 <strong style="color: #8b5cf6;">Cambridge / Oxford</strong> (SiPh Benchmarks)
+          </span>
+          <span style="font-size: 0.78rem; background: var(--card-bg); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; color: var(--text-muted);">
+            📍 <strong style="color: var(--accent-cyan);">Tokyo / Zurich</strong> (Microfluidics & Thermal)
+          </span>
+        </div>
+      </div>
+
       <!-- ARCHITECTURAL PHILOSOPHY & VISION -->
       <div class="card" style="margin-bottom: 2rem;">
         <div class="card-title">💡 The Architectural Philosophy Behind JANUS</div>
@@ -5737,6 +5997,12 @@
         const isDark = theme === 'dark';
         webglScene.background = new THREE.Color(isDark ? 0x030712 : 0xf8fafc);
       }
+      if (typeof updateFlameTheme === 'function') {
+        updateFlameTheme(theme);
+      }
+      if (typeof updateGlobeTheme === 'function') {
+        updateGlobeTheme(theme);
+      }
     }
 
     // Initialize theme state on DOM load
@@ -5775,7 +6041,17 @@
       if (targetPage) targetPage.classList.add('active');
       if (targetNav) targetNav.classList.add('active');
 
-      if (pageId === 'simulation') {
+      if (pageId === 'home') {
+        setTimeout(() => {
+          if (typeof initHeroReveal === 'function') initHeroReveal();
+          if (typeof initKPIAnimation === 'function') initKPIAnimation();
+          if (typeof resizeFlameCanvas === 'function') resizeFlameCanvas();
+        }, 50);
+      } else if (pageId === 'about') {
+        setTimeout(() => {
+          if (typeof resizeGlobeCanvas === 'function') resizeGlobeCanvas();
+        }, 50);
+      } else if (pageId === 'simulation') {
         setTimeout(() => {
           if (typeof resizeArchCanvas === 'function') resizeArchCanvas();
           if (typeof renderThermalGrid === 'function') renderThermalGrid(currentTileTemps, currentTileStates);
@@ -10094,6 +10370,462 @@
       }
     });
 
+    // =========================================================
+    // 8-BIT RETRO EDITORIAL EFFECTS, SHADERS & 3D GLOBE ENGINE
+    // =========================================================
+
+    // --- 1. LENIS SMOOTH SCROLLING ENGINE ---
+    let lenisInstance = null;
+    function initLenis() {
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced || typeof Lenis === 'undefined') return;
+      try {
+        lenisInstance = new Lenis({
+          duration: 1.05,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 1.0,
+          touchMultiplier: 1.5,
+        });
+        function raf(time) {
+          if (lenisInstance) {
+            lenisInstance.raf(time);
+            requestAnimationFrame(raf);
+          }
+        }
+        requestAnimationFrame(raf);
+      } catch (e) {
+        console.warn('Lenis init bypassed:', e);
+      }
+    }
+
+    // --- 2. RETRO EDITORIAL HEADLINE WORD-BY-WORD REVEAL ---
+    function initHeroReveal() {
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const headline = document.querySelector('.hero-headline');
+      if (!headline) return;
+
+      if (!headline.dataset.rawText) {
+        headline.dataset.rawText = headline.innerText.trim();
+      }
+
+      if (prefersReduced) {
+        headline.textContent = headline.dataset.rawText;
+        return;
+      }
+
+      const words = headline.dataset.rawText.split(/\s+/);
+      headline.innerHTML = words.map(w => `<span class="hero-word">${w}</span>`).join(' ');
+      const wordEls = headline.querySelectorAll('.hero-word');
+      wordEls.forEach((el, idx) => {
+        setTimeout(() => {
+          el.classList.add('revealed');
+        }, 60 + idx * 75);
+      });
+    }
+
+    // --- 3. CLIPPED SLIDE-UP ENTRANCE FOR STAT COUNTERS ---
+    function initKPIAnimation() {
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const kpiVals = document.querySelectorAll('.kpi-val, .stat-value');
+      kpiVals.forEach((val, idx) => {
+        if (prefersReduced) {
+          val.classList.remove('slide-enter');
+          return;
+        }
+        val.classList.remove('slide-enter');
+        void val.offsetWidth; // trigger reflow
+        setTimeout(() => {
+          val.classList.add('slide-enter');
+        }, 100 + idx * 55);
+      });
+    }
+
+    // --- 4. 8-BIT RETRO PROCEDURAL WEBGL FLAME SHADER ---
+    let flameGl = null;
+    let flameProgram = null;
+    let flameUniforms = {};
+    let flameAnimId = null;
+    let flameStartTime = Date.now();
+    let flameCanvas = null;
+
+    function initWebGLFlameShader() {
+      flameCanvas = document.getElementById('flame-shader-canvas');
+      if (!flameCanvas) return;
+
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      try {
+        flameGl = flameCanvas.getContext('webgl', { alpha: true, antialias: false, depth: false }) ||
+                  flameCanvas.getContext('experimental-webgl', { alpha: true, antialias: false, depth: false });
+        if (!flameGl) return;
+
+        const vsSource = `
+          attribute vec2 a_pos;
+          void main() {
+            gl_Position = vec4(a_pos, 0.0, 1.0);
+          }
+        `;
+
+        const fsSource = `
+          precision mediump float;
+          uniform vec2 u_resolution;
+          uniform float u_time;
+          uniform vec3 u_color1;
+          uniform vec3 u_color2;
+          uniform float u_alpha;
+
+          float hash(vec2 p) {
+            return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+          }
+
+          float noise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
+            f = f * f * (3.0 - 2.0 * f);
+            return mix(
+              mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), f.x),
+              mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x),
+              f.y
+            );
+          }
+
+          void main() {
+            float pixelSize = 4.0;
+            vec2 coord = floor(gl_FragCoord.xy / pixelSize) * pixelSize;
+            vec2 uv = coord / u_resolution.xy;
+            float t = u_time * 0.75;
+
+            float n1 = noise(uv * 3.2 + vec2(0.0, t * 0.65));
+            float n2 = noise(uv * 6.5 - vec2(t * 0.45, t * 0.9));
+            float n3 = noise(uv * 13.0 + vec2(t * 0.8, -t * 0.35));
+            float flame = (n1 * 0.55 + n2 * 0.30 + n3 * 0.15);
+
+            float yGrad = smoothstep(1.15, -0.05, uv.y);
+            float intensity = pow(flame * yGrad * 1.3, 1.4);
+
+            float dither = (hash(coord) - 0.5) * 0.09;
+            intensity = clamp(intensity + dither, 0.0, 1.0);
+
+            vec3 col = mix(u_color1, u_color2, uv.x + sin(t + uv.y * 2.8) * 0.22);
+            gl_FragColor = vec4(col * intensity, intensity * u_alpha);
+          }
+        `;
+
+        function compileShader(gl, source, type) {
+          const s = gl.createShader(type);
+          gl.shaderSource(s, source);
+          gl.compileShader(s);
+          if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+            console.warn(gl.getShaderInfoLog(s));
+            return null;
+          }
+          return s;
+        }
+
+        const vs = compileShader(flameGl, vsSource, flameGl.VERTEX_SHADER);
+        const fs = compileShader(flameGl, fsSource, flameGl.FRAGMENT_SHADER);
+        if (!vs || !fs) return;
+
+        flameProgram = flameGl.createProgram();
+        flameGl.attachShader(flameProgram, vs);
+        flameGl.attachShader(flameProgram, fs);
+        flameGl.linkProgram(flameProgram);
+        if (!flameGl.getProgramParameter(flameProgram, flameGl.LINK_STATUS)) return;
+
+        flameGl.useProgram(flameProgram);
+
+        const posBuffer = flameGl.createBuffer();
+        flameGl.bindBuffer(flameGl.ARRAY_BUFFER, posBuffer);
+        flameGl.bufferData(flameGl.ARRAY_BUFFER, new Float32Array([
+          -1, -1,
+           1, -1,
+          -1,  1,
+          -1,  1,
+           1, -1,
+           1,  1
+        ]), flameGl.STATIC_DRAW);
+
+        const aPos = flameGl.getAttribLocation(flameProgram, 'a_pos');
+        flameGl.enableVertexAttribArray(aPos);
+        flameGl.vertexAttribPointer(aPos, 2, flameGl.FLOAT, false, 0, 0);
+
+        flameUniforms = {
+          resolution: flameGl.getUniformLocation(flameProgram, 'u_resolution'),
+          time: flameGl.getUniformLocation(flameProgram, 'u_time'),
+          color1: flameGl.getUniformLocation(flameProgram, 'u_color1'),
+          color2: flameGl.getUniformLocation(flameProgram, 'u_color2'),
+          alpha: flameGl.getUniformLocation(flameProgram, 'u_alpha'),
+        };
+
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        updateFlameTheme(currentTheme);
+        resizeFlameCanvas();
+
+        let flameVisible = true;
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries) => {
+            flameVisible = entries[0].isIntersecting;
+          });
+          observer.observe(flameCanvas);
+        }
+
+        function renderFlame() {
+          if (flameVisible && flameGl && flameProgram) {
+            const elapsed = (Date.now() - flameStartTime) * 0.001;
+            flameGl.useProgram(flameProgram);
+            flameGl.uniform1f(flameUniforms.time, elapsed);
+            flameGl.drawArrays(flameGl.TRIANGLES, 0, 6);
+          }
+          flameAnimId = requestAnimationFrame(renderFlame);
+        }
+        renderFlame();
+
+        window.addEventListener('resize', resizeFlameCanvas);
+      } catch (err) {
+        console.warn('WebGL flame shader bypassed:', err);
+      }
+    }
+
+    function resizeFlameCanvas() {
+      if (!flameCanvas || !flameGl) return;
+      const rect = flameCanvas.getBoundingClientRect();
+      const scale = 0.35; // Authentic pixelation resolution scale
+      const w = Math.max(1, Math.floor(rect.width * scale));
+      const h = Math.max(1, Math.floor(rect.height * scale));
+      if (flameCanvas.width !== w || flameCanvas.height !== h) {
+        flameCanvas.width = w;
+        flameCanvas.height = h;
+        flameGl.viewport(0, 0, w, h);
+        if (flameProgram && flameUniforms.resolution) {
+          flameGl.useProgram(flameProgram);
+          flameGl.uniform2f(flameUniforms.resolution, w, h);
+        }
+      }
+    }
+
+    function updateFlameTheme(theme) {
+      if (!flameGl || !flameProgram || !flameUniforms.color1) return;
+      flameGl.useProgram(flameProgram);
+      const isDark = theme === 'dark';
+      if (isDark) {
+        // Vibrant Electric Cyan to Neon Purple
+        flameGl.uniform3f(flameUniforms.color1, 0.0, 0.95, 0.99);
+        flameGl.uniform3f(flameUniforms.color2, 0.55, 0.36, 0.96);
+        flameGl.uniform1f(flameUniforms.alpha, 0.38);
+      } else {
+        // Deep Cerulean / Cyan to Royal Purple for Light Theme readability
+        flameGl.uniform3f(flameUniforms.color1, 0.01, 0.52, 0.78);
+        flameGl.uniform3f(flameUniforms.color2, 0.49, 0.23, 0.93);
+        flameGl.uniform1f(flameUniforms.alpha, 0.16);
+      }
+    }
+
+    // --- 5. INTERACTIVE 3D WEBGL RESEARCH & FABRICATION GLOBE (THREE.JS) ---
+    let globeRenderer = null;
+    let globeScene = null;
+    let globeCamera = null;
+    let globeControls = null;
+    let globeMeshGroup = null;
+    let globeLinesMat = null;
+    let globeArcsMat = null;
+    let globePinMat = null;
+    let globeCoreMat = null;
+    let globeAnimId = null;
+    let globeCanvas = null;
+
+    function initCreatorGlobe() {
+      globeCanvas = document.getElementById('creator-globe-canvas');
+      if (!globeCanvas || typeof THREE === 'undefined') return;
+
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      try {
+        const width = globeCanvas.clientWidth || 360;
+        const height = globeCanvas.clientHeight || 360;
+
+        globeRenderer = new THREE.WebGLRenderer({
+          canvas: globeCanvas,
+          antialias: true,
+          alpha: true
+        });
+        globeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        globeRenderer.setSize(width, height, false);
+
+        globeScene = new THREE.Scene();
+        globeCamera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+        globeCamera.position.set(0, 30, 230);
+
+        if (typeof THREE.OrbitControls !== 'undefined') {
+          globeControls = new THREE.OrbitControls(globeCamera, globeCanvas);
+          globeControls.enableDamping = true;
+          globeControls.dampingFactor = 0.06;
+          globeControls.enableZoom = false;
+          globeControls.enablePan = false;
+          globeControls.autoRotate = !prefersReduced;
+          globeControls.autoRotateSpeed = 1.0;
+        }
+
+        globeMeshGroup = new THREE.Group();
+        globeScene.add(globeMeshGroup);
+
+        const radius = 72;
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const isDark = currentTheme === 'dark';
+
+        // Materials
+        globeLinesMat = new THREE.LineBasicMaterial({
+          color: isDark ? 0x0e7490 : 0x0284c7,
+          transparent: true,
+          opacity: isDark ? 0.32 : 0.22,
+        });
+
+        globeArcsMat = new THREE.LineBasicMaterial({
+          color: isDark ? 0x00f2fe : 0x2563eb,
+          transparent: true,
+          opacity: 0.85,
+        });
+
+        globePinMat = new THREE.MeshBasicMaterial({
+          color: isDark ? 0x00f2fe : 0x0284c7,
+        });
+
+        // 1. Globe Latitude & Longitude Wireframe Rings
+        const segments = 64;
+        for (let i = 0; i < 12; i++) {
+          const circleGeom = new THREE.BufferGeometry();
+          const pts = [];
+          const angle = (i / 12) * Math.PI;
+          for (let j = 0; j <= segments; j++) {
+            const theta = (j / segments) * Math.PI * 2;
+            const x = radius * Math.sin(theta) * Math.cos(angle);
+            const y = radius * Math.cos(theta);
+            const z = radius * Math.sin(theta) * Math.sin(angle);
+            pts.push(new THREE.Vector3(x, y, z));
+          }
+          circleGeom.setFromPoints(pts);
+          const circleLine = new THREE.Line(circleGeom, globeLinesMat);
+          globeMeshGroup.add(circleLine);
+        }
+
+        for (let i = -4; i <= 4; i++) {
+          const lat = (i / 5) * (Math.PI / 2.3);
+          const rLat = radius * Math.cos(lat);
+          const y = radius * Math.sin(lat);
+          const circleGeom = new THREE.BufferGeometry();
+          const pts = [];
+          for (let j = 0; j <= segments; j++) {
+            const theta = (j / segments) * Math.PI * 2;
+            const x = rLat * Math.cos(theta);
+            const z = rLat * Math.sin(theta);
+            pts.push(new THREE.Vector3(x, y, z));
+          }
+          circleGeom.setFromPoints(pts);
+          const circleLine = new THREE.Line(circleGeom, globeLinesMat);
+          globeMeshGroup.add(circleLine);
+        }
+
+        // Inner translucent core sphere
+        const coreGeom = new THREE.SphereGeometry(radius * 0.98, 32, 32);
+        globeCoreMat = new THREE.MeshBasicMaterial({
+          color: isDark ? 0x030712 : 0xf1f5f9,
+          transparent: true,
+          opacity: 0.85,
+        });
+        const coreMesh = new THREE.Mesh(coreGeom, globeCoreMat);
+        globeMeshGroup.add(coreMesh);
+
+        // Helper: Convert Lat/Lon to 3D Coordinates
+        function latLonToVec3(lat, lon, r) {
+          const phi = (90 - lat) * (Math.PI / 180);
+          const theta = (lon + 180) * (Math.PI / 180);
+          const x = -(r * Math.sin(phi) * Math.cos(theta));
+          const z = r * Math.sin(phi) * Math.sin(theta);
+          const y = r * Math.cos(phi);
+          return new THREE.Vector3(x, y, z);
+        }
+
+        // Research nodes
+        const nodes = [
+          { name: 'HQ / New Delhi', lat: 28.61, lon: 77.20, isHQ: true },
+          { name: 'Silicon Valley', lat: 37.38, lon: -122.08 },
+          { name: 'Cambridge UK', lat: 52.20, lon: 0.12 },
+          { name: 'Tokyo', lat: 35.68, lon: 139.76 },
+          { name: 'Zurich', lat: 47.37, lon: 8.54 },
+        ];
+
+        const hqPos = latLonToVec3(nodes[0].lat, nodes[0].lon, radius);
+
+        nodes.forEach(node => {
+          const pos = latLonToVec3(node.lat, node.lon, radius);
+          const pinGeom = new THREE.SphereGeometry(node.isHQ ? 3.0 : 2.0, 16, 16);
+          const pinMesh = new THREE.Mesh(pinGeom, globePinMat);
+          pinMesh.position.copy(pos);
+          globeMeshGroup.add(pinMesh);
+
+          if (!node.isHQ) {
+            const mid = hqPos.clone().add(pos).multiplyScalar(0.5);
+            const dist = hqPos.distanceTo(pos);
+            mid.normalize().multiplyScalar(radius + dist * 0.22);
+
+            const curve = new THREE.QuadraticBezierCurve3(hqPos, mid, pos);
+            const curvePts = curve.getPoints(40);
+            const arcGeom = new THREE.BufferGeometry().setFromPoints(curvePts);
+            const arcLine = new THREE.Line(arcGeom, globeArcsMat);
+            globeMeshGroup.add(arcLine);
+          }
+        });
+
+        globeMeshGroup.rotation.x = 0.25;
+
+        let globeVisible = true;
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries) => {
+            globeVisible = entries[0].isIntersecting;
+          });
+          observer.observe(globeCanvas);
+        }
+
+        function animateGlobe() {
+          globeAnimId = requestAnimationFrame(animateGlobe);
+          if (!globeVisible) return;
+          if (globeControls) globeControls.update();
+          if (globeRenderer && globeScene && globeCamera) {
+            globeRenderer.render(globeScene, globeCamera);
+          }
+        }
+        animateGlobe();
+
+        window.addEventListener('resize', resizeGlobeCanvas);
+      } catch (err) {
+        console.warn('3D Globe init bypassed:', err);
+      }
+    }
+
+    function resizeGlobeCanvas() {
+      if (!globeCanvas || !globeRenderer || !globeCamera) return;
+      const rect = globeCanvas.getBoundingClientRect();
+      const w = rect.width || 360;
+      const h = rect.height || 360;
+      globeCamera.aspect = w / h;
+      globeCamera.updateProjectionMatrix();
+      globeRenderer.setSize(w, h, false);
+    }
+
+    function updateGlobeTheme(theme) {
+      if (!globeLinesMat || !globeArcsMat || !globePinMat) return;
+      const isDark = theme === 'dark';
+      globeLinesMat.color.setHex(isDark ? 0x0e7490 : 0x0284c7);
+      globeLinesMat.opacity = isDark ? 0.32 : 0.22;
+      globeArcsMat.color.setHex(isDark ? 0x00f2fe : 0x2563eb);
+      globePinMat.color.setHex(isDark ? 0x00f2fe : 0x0284c7);
+      if (globeCoreMat) {
+        globeCoreMat.color.setHex(isDark ? 0x030712 : 0xf1f5f9);
+      }
+    }
+
     // --- AUTO-INITIALIZE ON DOM LOAD ---
     document.addEventListener('DOMContentLoaded', () => {
       initCookieConsent();
@@ -10107,6 +10839,13 @@
       setTimeout(() => {
         if (typeof initWebGLStrata === 'function') initWebGLStrata();
       }, 50);
+
+      // Initialize New Retro Editorial Enhancements
+      initLenis();
+      initHeroReveal();
+      initKPIAnimation();
+      initWebGLFlameShader();
+      initCreatorGlobe();
 
       // Active Heartbeat to keep backend server alive during interactive simulation
       setInterval(() => {
