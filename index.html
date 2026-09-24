@@ -50,7 +50,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Press+Start+2P&display=swap"
     rel="stylesheet">
   <!-- Highlight.js for Codebase Syntax Highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -2276,6 +2276,148 @@
       }
     }
 
+    /* =========================================================
+       8-BIT RETRO EDITORIAL DESIGN SYSTEM OVERLAY
+       Preserves all original theme colors (--accent-cyan: #0284c7, 
+       --accent-blue, --accent-purple, --accent-green, --accent-amber,
+       --bg-color, etc.) while upgrading UI elements to crisp 
+       8-bit pixel-art notched geometry, retro glyphs & scanlines.
+       ========================================================= */
+
+    /* 8-bit Pixel Notched Corners */
+    .card,
+    .hero-banner,
+    .comp-box,
+    .pillar-box,
+    .kpi-card,
+    .stat-box,
+    .pdf-container,
+    .file-tree,
+    .janus-modal-card,
+    .cookie-banner-container,
+    .code-viewer {
+      clip-path: polygon(
+        0 6px,
+        6px 6px,
+        6px 0,
+        calc(100% - 6px) 0,
+        calc(100% - 6px) 6px,
+        100% 6px,
+        100% calc(100% - 6px),
+        calc(100% - 6px) calc(100% - 6px),
+        calc(100% - 6px) 100%,
+        6px 100%,
+        6px calc(100% - 6px),
+        0 calc(100% - 6px)
+      ) !important;
+      border-radius: 0 !important;
+    }
+
+    /* Notched Buttons with 8-bit Pixel Shadow */
+    .btn-primary,
+    .btn-outline,
+    .btn-action,
+    .nav-btn,
+    .sim-tab-btn,
+    .layer-pill-btn,
+    .roadmap-model-btn,
+    .citation-copy-btn {
+      clip-path: polygon(
+        0 4px,
+        4px 4px,
+        4px 0,
+        calc(100% - 4px) 0,
+        calc(100% - 4px) 4px,
+        100% 4px,
+        100% calc(100% - 4px),
+        calc(100% - 4px) calc(100% - 4px),
+        calc(100% - 4px) 100%,
+        4px 100%,
+        4px calc(100% - 4px),
+        0 calc(100% - 4px)
+      ) !important;
+      border-radius: 0 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn-primary:active,
+    .btn-outline:active,
+    .btn-action:active {
+      transform: translate(2px, 2px) !important;
+    }
+
+    /* 8-bit Pixel Badges and Tags */
+    .hero-tag {
+      font-family: 'Press Start 2P', monospace !important;
+      font-size: 0.68rem !important;
+      letter-spacing: 0.12em !important;
+      padding: 0.5rem 1rem !important;
+      clip-path: polygon(0 3px, 3px 3px, 3px 0, calc(100% - 3px) 0, calc(100% - 3px) 3px, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 3px calc(100% - 3px), 0 calc(100% - 3px)) !important;
+      border-radius: 0 !important;
+    }
+
+    /* Editorial Headline Typography */
+    .hero-headline {
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    /* Retro Pixelated Dotted Borders */
+    .card-title {
+      border-bottom: 2px dotted rgba(2, 132, 199, 0.35);
+      padding-bottom: 0.5rem;
+    }
+
+    [data-theme="dark"] .card-title {
+      border-bottom: 2px dotted rgba(0, 242, 254, 0.35);
+    }
+
+    /* Pixel Brand Logo Frame */
+    .brand-logo-img {
+      clip-path: polygon(0 4px, 4px 4px, 4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)) !important;
+      border-radius: 0 !important;
+      image-rendering: pixelated;
+    }
+
+    /* Pixel Art Toggle Switch */
+    .pref-slider,
+    .slider {
+      clip-path: polygon(0 3px, 3px 3px, 3px 0, calc(100% - 3px) 0, calc(100% - 3px) 3px, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 3px calc(100% - 3px), 0 calc(100% - 3px)) !important;
+      border-radius: 0 !important;
+    }
+
+    .pref-slider:before,
+    .slider:before {
+      border-radius: 0 !important;
+      clip-path: polygon(0 2px, 2px 2px, 2px 0, calc(100% - 2px) 0, calc(100% - 2px) 2px, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 2px calc(100% - 2px), 0 calc(100% - 2px)) !important;
+    }
+
+    /* Subtle Retro CRT Scanline Layer */
+    body::after {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%);
+      background-size: 100% 4px;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+
+    /* Accessibility: Disable Scanlines & Animations on prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      body::after {
+        display: none !important;
+      }
+      * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
   </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
