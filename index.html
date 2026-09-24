@@ -58,6 +58,8 @@
   <!-- Three.js & OrbitControls for Interactive 3D WebGL Strata Model -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Lenis Smooth Scrolling -->
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
   <script>
     // Set theme immediately to avoid flash of dark content
     (function () {
@@ -2394,6 +2396,86 @@
       clip-path: polygon(0 2px, 2px 2px, 2px 0, calc(100% - 2px) 0, calc(100% - 2px) 2px, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 2px calc(100% - 2px), 0 calc(100% - 2px)) !important;
     }
 
+    /* Word-by-Word Headline Reveal Animation */
+    .hero-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-right: 0.28em;
+    }
+
+    .hero-word.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Clipped Slide-Up Counters for KPI Cards */
+    .kpi-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-cyan) !important;
+      box-shadow: 0 10px 24px -4px rgba(2, 132, 199, 0.2);
+    }
+
+    .kpi-val {
+      display: inline-block;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+    }
+
+    .kpi-val.slide-up {
+      animation: kpiSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes kpiSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Interactive Card Hover & Section Transitions */
+    .card {
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .pillar-box {
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .pillar-box:hover {
+      transform: translateY(-3px) scale(1.01);
+    }
+
+    /* Page Navigation Fade & Slide Transition */
+    .page-section {
+      animation: pageTransitionIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes pageTransitionIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* Subtle Retro CRT Scanline Layer */
     body::after {
       content: " ";
@@ -2416,6 +2498,10 @@
         animation-duration: 0.001ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.001ms !important;
+      }
+      .hero-word {
+        opacity: 1 !important;
+        transform: none !important;
       }
     }
   </style>
@@ -10249,6 +10335,44 @@
       setTimeout(() => {
         if (typeof initWebGLStrata === 'function') initWebGLStrata();
       }, 50);
+
+      // --- 8-BIT RETRO EDITORIAL ENHANCEMENTS: ANIMATIONS & WORD-BY-WORD REVEAL ---
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const headline = document.querySelector('.hero-headline');
+      if (headline && !prefersReduced) {
+        const text = headline.innerText.trim();
+        const words = text.split(/\s+/);
+        headline.innerHTML = words.map(w => `<span class="hero-word">${w}</span>`).join(' ');
+        const wordEls = headline.querySelectorAll('.hero-word');
+        wordEls.forEach((el, idx) => {
+          setTimeout(() => {
+            el.classList.add('revealed');
+          }, 80 + idx * 85);
+        });
+      }
+
+      // Trigger clipped slide-up entrance on KPI stat counters
+      const kpiVals = document.querySelectorAll('.kpi-val, .stat-value');
+      kpiVals.forEach((val, idx) => {
+        setTimeout(() => {
+          val.classList.add('slide-up');
+        }, 120 + idx * 60);
+      });
+
+      // --- Lenis Smooth Scrolling Integration with prefers-reduced-motion check ---
+      if (!prefersReduced && typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+          duration: 1.05,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: 'vertical',
+          smoothWheel: true,
+        });
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
 
       // Active Heartbeat to keep backend server alive during interactive simulation
       setInterval(() => {
