@@ -8,7 +8,7 @@
 set -euo pipefail
 
 RESOURCE_GROUP="janus-hpc-rg"
-LOCATION="eastus"
+LOCATION="${AZURE_LOCATION:-centralindia}"
 CONTAINER_NAME="results"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
@@ -16,7 +16,7 @@ echo "========================================================================"
 echo "  PROJECT JANUS: AZURE HPC 100,000,000-RUN PRODUCTION CAMPAIGN"
 echo "  Target Budget  : < \$2.00 per 100M run (from \$200 credit)"
 echo "  Workload       : 100M Monte Carlo + 100M SPICE Receiver Cycles"
-echo "  Primary Region : Central India / South India / East US / Central US"
+echo "  Primary Region : Central India (${LOCATION}) -> South India"
 echo "  Strategy       : Auto-fallback across high-speed compute clusters"
 echo "  Timestamp      : ${TIMESTAMP}"
 echo "========================================================================"
@@ -116,11 +116,11 @@ EOF
 echo "[*] Step 3: Launching Azure VM with automatic SKU & region fallback..."
 
 CANDIDATE_SIZES=(
-    "Standard_F16s_v2"
     "Standard_D16s_v5"
     "Standard_D8s_v5"
+    "Standard_F16s_v2"
+    "Standard_D4s_v5"
     "Standard_F8s_v2"
-    "Standard_HB120rs_v3"
     "Standard_D4s_v5"
     "Standard_F4s_v2"
     "Standard_D4s_v4"
