@@ -77,6 +77,14 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
 
         # Universal parameters
         self.num_tiles = 16                   # 16 spatial RNS residue tiles (4x4)
+        self.lanes_per_tile = 32              # 32 parallel SIMD lanes per tile
+        self.total_lanes = self.num_tiles * self.lanes_per_tile  # 512 active lanes
+        self.trees_per_lane = 16              # 16 binary switch trees per lane
+        self.total_trees = self.total_lanes * self.trees_per_lane # 8,192 trees
+        self.switches_per_tree = 15           # 15 Sb2S3 slot switches per tree
+        self.total_switches = self.total_trees * self.switches_per_tree # 122,880 switches
+        self.leaves_per_tree = 16             # 16 spatial output leaves per tree
+        self.total_leaves = self.total_trees * self.leaves_per_tree # 131,072 spatial leaves
         self.moduli_count = 18                # 16 compute + 2 redundant channels
         self.f_clk_optical_GHz = 100.0        # 100 GHz optical clock
         self.f_clk_cmos_GHz = 3.125           # 3.125 GHz CMOS parallel core clock (100 GHz / 32)
@@ -96,8 +104,9 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         # ----------------------------------------------------------------------
         # 1. Optical Source: CW Laser & Wall-Plug Efficiency
         # ----------------------------------------------------------------------
-        # P_laser_opt = 2.21 W feeding 13-stage distribution tree across 16 tiles
-        # Laser Wall-Plug Efficiency (Yb-fiber laser at 1064 nm) = 75%
+        # P_laser_opt = 2.21 W (+33.44 dBm) feeding 13-stage distribution tree (52.03 dB total loss).
+        # Laser Wall-Plug Efficiency (Yb-fiber laser at 1064 nm) = 75%.
+        # Delivers -18.59 dBm (13.82 uW) at APD, providing +6.46 dB margin above StrongARM (-25.05 dBm).
         p_laser_opt_W = 2.21
         laser_wpe = 0.75
         p_laser_elec_W = p_laser_opt_W / laser_wpe
@@ -108,25 +117,26 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             unit_power_mW=p_laser_elec_W * 1e3,
             total_power_mW=p_laser_elec_W * 1e3,
             activity_factor=1.0,  # Laser is continuously active
-            derivation_notes=f"P_elec = P_opt ({p_laser_opt_W} W) / WPE ({laser_wpe*100}%) = {p_laser_elec_W:.3f} W"
+            derivation_notes=f"P_elec = P_opt ({p_laser_opt_W} W) / WPE ({laser_wpe*100}%) = {p_laser_elec_W:.3f} W (52.03 dB loss chain, +6.46 dB link margin)"
         ))
 
         # ----------------------------------------------------------------------
-        # 2. LiTaO3 100-GHz Electro-Optic Pockels Modulators
+        # 2. LiTaO3 100-GHz Electro-Optic Pockels Modulators (Capacitive Lumped Drive)
         # ----------------------------------------------------------------------
-        # 16 modulators (1 per tile).
-        # RF drive: V_pp = 2.0 V, Z0 = 50 Ohm CPW transmission line.
-        # P_rf = V_rms^2 / Z0 = (V_pp / (2 * sqrt(2)))^2 / 50 = (V_pp^2) / (8 * 50) = 10.0 mW per modulator
-        # At 100% active state:
-        p_mod_rf_mW = ((2.0 ** 2) / (8.0 * 50.0)) * 1e3  # 10.0 mW
+        # 512 modulators across die (32 per tile x 16 tiles).
+        # Lumped capacitive load C_mod = 18.0 fF (120 um length), Vdd = 0.8 V.
+        # Dynamic pulse energy: E = C_mod * Vdd^2 = 18 fF * (0.8)^2 = 11.52 fJ.
+        # Spatial one-hot duty cycle: alpha = 1/16 = 6.25% (1 of 16 waveguides fires).
+        # P_mod = alpha * C_mod * Vdd^2 * f_clk = (1/16) * 18 fF * 0.64 * 100 GHz = 0.072 mW / modulator.
+        p_mod_rf_mW = (1.0 / 16.0) * (18.0e-15 * (self.v_dd_cmos_V ** 2) * (self.f_clk_optical_GHz * 1e9)) * 1e3  # 0.072 mW
         power_items.append(ComponentPowerSpec(
             name="LiTaO3 Pockels Modulators (100 GHz)",
             category="Electro-Optics",
-            unit_count=self.num_tiles,
+            unit_count=self.total_lanes,
             unit_power_mW=p_mod_rf_mW,
-            total_power_mW=self.num_tiles * p_mod_rf_mW * self.activity_factor,
+            total_power_mW=self.total_lanes * p_mod_rf_mW * self.activity_factor,
             activity_factor=self.activity_factor,
-            derivation_notes="P = V_rms^2 / Z0 = (2.0 Vpp / 2*sqrt(2))^2 / 50 Ohm = 10.0 mW / mod"
+            derivation_notes="Capacitive lumped drive (18 fF, 11.5 fJ/pulse), 1/16 spatial one-hot duty cycle: 0.072 mW / mod"
         ))
 
         # ----------------------------------------------------------------------
@@ -138,7 +148,7 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         power_items.append(ComponentPowerSpec(
             name="Sb2S3 Non-Volatile Couplers (Static)",
             category="Passive Optics",
-            unit_count=self.num_tiles * 16,  # 256 switches total
+            unit_count=self.total_switches,  # 122,880 switches total
             unit_power_mW=0.0,
             total_power_mW=0.0,
             activity_factor=self.activity_factor,
@@ -146,23 +156,23 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # ----------------------------------------------------------------------
-        # 4. SAC2M Ge/Si Avalanche Photodiodes (APDs)
+        # 4. SAC2M Ge/Si Avalanche Photodiodes (Receiverless Gate Charge)
         # ----------------------------------------------------------------------
-        # 16 active APDs (1 per tile detector lane).
-        # V_bias = 24.5 V.
-        # Peak photocurrent I_pd = 96.7 uA, Average photocurrent (50% '1's) = 48.4 uA.
-        # Dark current I_dark = 1.0 nA.
-        # P_apd = V_bias * I_avg = 24.5 V * 48.4 uA = 1.186 mW per APD.
-        i_avg_apd_uA = 48.35
-        p_apd_mW = self.v_bias_apd_V * (i_avg_apd_uA * 1e-6) * 1e3  # 1.186 mW
+        # 512 active detector lanes (1 active diode receiving pulse per lane at any instant).
+        # Direct StrongARM gate drive (NO power-hungry TIA).
+        # Pulse duration tau = 5 ps: Q = I_peak (96.7 uA) * 5 ps = 0.4835 fC.
+        # E_det = Q * V_bias (24.5 V) = 11.85 fJ per pulse.
+        # Spatial one-hot duty cycle: alpha = 1/16 = 6.25%.
+        # P_apd = alpha * E_det * f_clk = (1/16) * 11.85 fJ * 100 GHz = 0.074 mW / lane.
+        p_apd_mW = (1.0 / 16.0) * (96.7e-6 * 5.0e-12 * self.v_bias_apd_V * (self.f_clk_optical_GHz * 1e9)) * 1e3  # 0.074 mW
         power_items.append(ComponentPowerSpec(
             name="SAC2M Ge/Si APD Photodetectors",
             category="Optoelectronics",
-            unit_count=self.num_tiles,
+            unit_count=self.total_lanes,
             unit_power_mW=p_apd_mW,
-            total_power_mW=self.num_tiles * p_apd_mW * self.activity_factor,
+            total_power_mW=self.total_lanes * p_apd_mW * self.activity_factor,
             activity_factor=self.activity_factor,
-            derivation_notes="P = V_bias (24.5 V) * I_avg (48.4 uA) = 1.186 mW / APD"
+            derivation_notes="Receiverless direct gate drive, 5 ps pulse, 1/16 spatial one-hot duty cycle: 0.074 mW / lane"
         ))
 
         # ----------------------------------------------------------------------
@@ -349,10 +359,10 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # 2. LiTaO3 100-GHz Electro-Optic Pockels Modulators
-        # 16 modulators (1 per tile).
+        # 512 modulators across die (32 per tile x 16 tiles).
         # Length = 120.0 um, Width = 2.0 um rib + 2.5 um gap + 10 um CPW = 25.0 um total envelope.
         # Area = 120.0 * 25.0 = 3,000.0 um^2 per modulator envelope.
-        n_mods = self.num_tiles
+        n_mods = self.total_lanes  # 512
         area_mod_um2 = LITAO3_LEN_UM * 25.0  # 3000.0 um^2
         tot_mod_um2 = n_mods * area_mod_um2
         area_items.append(ComponentAreaSpec(
@@ -367,10 +377,10 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # 3. Sb2S3 Non-Volatile Directional Couplers
-        # 256 switches across 16 tiles (16 per tile).
-        # Coupling length = 8.4 um, patch = 8.0 um, envelope = 12.0 um x 4.0 um = 48.0 um^2.
-        n_switches = self.num_tiles * 16  # 256
-        area_sw_um2 = 48.0
+        # 122,880 switches across 16 tiles (512 trees x 15 switches = 7,680 per tile).
+        # Slot coupling length = 4.26 um, patch = 4.26 um, envelope = 6.26 um x 2.0 um = 12.52 um^2.
+        n_switches = self.total_switches  # 122,880
+        area_sw_um2 = 12.52
         tot_sw_um2 = n_switches * area_sw_um2
         area_items.append(ComponentAreaSpec(
             name="Sb2S3 Directional Coupler Switches",
@@ -380,13 +390,13 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             total_area_um2=round(tot_sw_um2, 2),
             total_area_mm2=round(tot_sw_um2 * 1e-6, 4),
             percent_die_area=round((tot_sw_um2 * 1e-6 / self.total_die_area_mm2) * 100.0, 2),
-            dimensions_notes="8.4 um coupling region x 4.0 um dual-strip envelope"
+            dimensions_notes="4.26 um slot coupling cell x 2.0 um dual-rail envelope"
         ))
 
         # 4. Waveguide Crossings (Talbot Focused)
-        # ~1,024 crossings across 16 tiles.
+        # ~16,384 crossings across the 16-tile routing fabric.
         # 6.0 um x 6.0 um = 36.0 um^2 per crossing.
-        n_crossings = 1024
+        n_crossings = 16384
         area_cross_um2 = 36.0
         tot_cross_um2 = n_crossings * area_cross_um2
         area_items.append(ComponentAreaSpec(
@@ -401,9 +411,9 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # 5. SAC2M Ge/Si APD Photodetectors
-        # 16 APDs (1 per tile).
+        # 8,192 APDs across die (512 per tile).
         # Mesa: Length = 10.0 um, Width = 1.2 um. Total envelope with contact vias = 15.0 um x 8.0 um = 120.0 um^2.
-        n_apds = self.num_tiles
+        n_apds = 8192
         area_apd_um2 = 120.0
         tot_apd_um2 = n_apds * area_apd_um2
         area_items.append(ComponentAreaSpec(
@@ -418,9 +428,9 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # 6. Through-Dielectric Vias (TDV) & Microbumps
-        # 256 vertical Cu TDVs (8.0 um diam, 16 per tile) + UBM microbump pads (50 um pitch).
+        # 8,192 vertical Cu TDVs (8.0 um diam, 512 per tile) + UBM microbump pads (50 um pitch).
         # Area per TDV pad = 12.0 um x 12.0 um = 144.0 um^2.
-        n_tdvs = self.num_tiles * 16  # 256
+        n_tdvs = 8192
         area_tdv_um2 = 144.0
         tot_tdv_um2 = n_tdvs * area_tdv_um2
         area_items.append(ComponentAreaSpec(

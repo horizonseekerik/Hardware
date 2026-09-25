@@ -79,15 +79,24 @@ LAYER_FLOORPLAN       = (199, 0)  # Die Boundary & Tile Keep-Out Margins
 # ==============================================================================
 # CANONICAL PHYSICAL DIMENSIONS  (micrometers, consistent across both scripts)
 # ==============================================================================
-# --- Die geometry ---
-DIE_WIDTH_UM          = 3200.0    # 3.20 mm (identical for both strata)
-DIE_HEIGHT_UM         = 3200.0    # 3.20 mm (identical for both strata)
+# --- Die geometry (100.0 mm^2 total chip area) ---
+DIE_WIDTH_UM          = 10000.0   # 10.00 mm (identical for both strata)
+DIE_HEIGHT_UM         = 10000.0   # 10.00 mm (identical for both strata)
 
-# --- Tile array geometry (4x4 = 16 tiles) ---
-TILE_CORE_UM          = 600.0     # 600 um x 600 um core active area per tile
-TILE_PITCH_UM         = 700.0     # 700 um center-to-center pitch (100 um inter-tile gap)
-TILE_ARRAY_ORIGIN_X   = 200.0     # X position of tile[row=0,col=0] bottom-left corner
-TILE_ARRAY_ORIGIN_Y   = 200.0     # Y position of tile[row=0,col=0] bottom-left corner
+# --- Tile array geometry (4x4 = 16 tiles, 6.25 mm^2 each) ---
+NUM_TILES_X           = 4
+NUM_TILES_Y           = 4
+TILE_CORE_UM          = 2500.0    # 2.50 mm x 2.50 mm core active area per tile (6.25 mm^2)
+TILE_PITCH_UM         = 2500.0    # 2.50 mm center-to-center pitch
+TILE_ARRAY_ORIGIN_X   = 0.0       # Tiled array origin
+TILE_ARRAY_ORIGIN_Y   = 0.0
+
+# --- SIMD Lane & Tree Bay Geometry ---
+NUM_LANES_PER_TILE    = 32        # 32 parallel SIMD lanes per tile
+NUM_TREES_PER_LANE    = 16        # 16 binary switch trees per lane (one per residue state)
+LANE_PITCH_UM         = TILE_CORE_UM / NUM_LANES_PER_TILE  # 78.125 um column pitch
+TREE_BAY_HEIGHT_UM    = TILE_CORE_UM / NUM_TREES_PER_LANE  # 156.25 um tree bay height
+CHANNEL_PITCH_UM      = LANE_PITCH_UM  # 78.125 um inter-channel pitch (54 um clear dielectric gap)
 
 # --- Optical waveguide dimensions ---
 # Conventional port waveguide (Si3N4 strip at ports, outside switch cell)
@@ -110,7 +119,6 @@ SWITCH_CELL_AREA_UM2  = 3.408     # 3.408 µm² per switch cell             [was
 
 # Inverse-taper slot coupler (port lead → slot interaction region, outside cell)
 INV_TAPER_LEN_UM      = 3.000     # 3.0 um adiabatic inverse taper (Almeida 2004 method)
-CHANNEL_PITCH_UM      = 1.800     # 1.8 um channel-to-channel pitch (slot WG compact layout)
 
 # MMI splitter
 MMI_W_UM              = 2.400     # 2.4 um Si3N4 Talbot MMI multimode width
@@ -124,13 +132,14 @@ LITAO3_W_UM           = 2.000     # 2.0 um LiTaO3 waveguide rib width
 # --- Photodetector & 3D interconnect ---
 APD_LEN_UM            = 10.00     # 10 um Ge absorption mesa length
 APD_W_UM              = 1.200     # 1.2 um Ge mesa width
+THERMAL_BUF_THICKNESS_UM = 50.0   # 50 um SiO2 thermal buffer (6.25:1 aspect ratio, C_via = 5.92 fF)
 TDV_DIAMETER_UM       = 8.000     # 8 um Cu-pillar via diameter
-TDV_UBM_OVERHANG_UM   = 1.500     # UBM pad extends 1.5 um beyond TDV radius per side
+TDV_UBM_OVERHANG_UM   = 1.500     # UBM pad extends 1.5 um beyond TDV radius per side (11 um pad diam)
 BUMP_PITCH_UM         = 50.00     # 50 um micro-bump pitch
 
 # --- Grating coupler (2nd-order Si3N4 coupler at operating wavelength) ---
-WAVELENGTH_NM         = 1310.0    # 1310 nm operating wavelength (Ge APD absorption peak)
-GC_TEETH_PERIOD_UM    = 0.630     # 630 nm grating period (2nd-order Si3N4 at 1310 nm)
+WAVELENGTH_NM         = 1064.0    # 1064 nm operating wavelength (Yb-fiber laser carrier)
+GC_TEETH_PERIOD_UM    = 0.725     # 725 nm grating period (2nd-order Si3N4 phase-matched at 1064 nm)
 GC_DUTY_CYCLE         = 0.500     # 50% duty cycle
 GC_NUM_TEETH          = 22        # Number of grating teeth per coupler
 GC_BODY_LEN_UM        = 35.0      # Grating coupler total body length
@@ -143,3 +152,40 @@ PAD_PITCH_UM          = 120.0     # 120 um center-to-center pad pitch
 # --- Power distribution ---
 PWR_RING_WIDTH_UM     = 40.0      # Global VDD/VSS power ring width
 PWR_RING_OFFSET_UM    = 60.0      # Distance of power ring from die edge
+
+
+# ==============================================================================
+# CANONICAL 1:1 TDV COORDINATE GENERATOR (Shared by Optical & CMOS Strata)
+# ==============================================================================
+def get_leaf_tdv_coordinate(tile_x_idx: int, tile_y_idx: int,
+                           lane_idx: int, tree_idx: int,
+                           leaf_idx: int) -> tuple[float, float]:
+    """
+    Deterministic mathematical source of truth for the absolute (X, Y)
+    coordinates of every TDV pillar and CMOS UBM landing pad across the 100 mm^2 die.
+    Guarantees 0.00 nm misalignment between strata.
+
+    Args:
+        tile_x_idx : Horizontal tile index (0 to 3)
+        tile_y_idx : Vertical tile index (0 to 3)
+        lane_idx   : Parallel SIMD lane index (0 to 31)
+        tree_idx   : Binary switch tree index in lane (0 to 15)
+        leaf_idx   : Spatial output leaf index in tree (0 to 15)
+
+    Returns:
+        (x_abs, y_abs) coordinate tuple in micrometers.
+    """
+    tile_origin_x = tile_x_idx * TILE_PITCH_UM
+    tile_origin_y = tile_y_idx * TILE_PITCH_UM
+
+    lane_x = tile_origin_x + (lane_idx + 0.5) * LANE_PITCH_UM
+    tree_y = tile_origin_y + (tree_idx + 0.5) * TREE_BAY_HEIGHT_UM
+
+    # 4x4 leaf sub-grid inside the tree bay (sub-pitch: 16 um in X, 32 um in Y)
+    col = leaf_idx % 4
+    row = leaf_idx // 4
+    dx_leaf = (col - 1.5) * 16.0
+    dy_leaf = (row - 1.5) * 32.0
+
+    return (lane_x + dx_leaf, tree_y + dy_leaf)
+

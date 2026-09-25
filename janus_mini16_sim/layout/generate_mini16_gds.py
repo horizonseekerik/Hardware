@@ -9,24 +9,20 @@ Architecture:
      - Layer 5/0: Si3N4 Core (800x300 nm strip, low-loss routing, zero TPA)
      - Layer 1/0: Crystalline Silicon Core (450x220 nm, detector mesa base)
      - Adiabatic Inter-Layer Tapers (Si3N4 -> Si transition, IL < 0.05 dB)
-     - Layer 3/0: Thin-Film LiTaO3 100 GHz Pockels Modulators
+     - Layer 3/0: Thin-Film LiTaO3 100 GHz Pockels Modulators (capacitive lumped drive)
      - Layer 4/0 & 4/1: Sb2S3 Non-Volatile Directional Coupler Switches
      - Layer 20/0: SAC2M Ge/Si Avalanche Photodiode (APD) Mesas
      - Layer 10/0 & 11/0: Metal 1 & Metal 2 Copper Power and RF Distribution
 
   2. 3D Inter-Stratum Vertical Interconnects:
-     - Layer 30/0: High-Density Vertical Copper TDVs (8 um diam, 10,000 mm^-2)
+     - Layer 30/0: High-Density Vertical Copper TDVs (8 um diam, 8,192 per tile, 131,072 total)
      - Layer 31/0: Under-Bump Metallization (UBM) & Micro-Bumps (50 um pitch)
-     - Layer 32/0: Monolithic 250 um SiO2 Thermal Buffer Isolation
+     - Layer 32/0: Monolithic 50 um SiO2 Thermal Buffer Isolation (aspect ratio 6.25:1)
 
   3. Bottom 65nm LP/GP CMOS Base Stratum (1:1 Superimposed Footprint):
      Physical mask layers in 100-199 range (no GDS collision with optical 1-29):
-     - Layer 101/0: N-Well & Active Diffusion
-     - Layer 102/0: Polysilicon Gate
-     ... (full layer map in janus_layer_constants.py)
-     Abstract block annotations (40-49 range):
-     - Layer 40/0: StrongARM Regenerative Sensing Latch Front-End
-     - Layer 41/0 to 46/0: Deserializer, SIMD, SRAM, ROM, Accumulator, ADCs
+     - 8,192 StrongARM regenerative sense amplifiers per tile matching TDVs 1:1
+     - 1:32 Polyphase Deserializer, 32-Lane SIMD Wallace-Kogge, SRAM, ROM, CSA
 
   4. Chip Perimeter & Metrology:
      - Layer 190/0: 4-Layer Concentric Moisture Barrier Chip Seal Ring
@@ -65,6 +61,7 @@ from janus_mini16_sim.layout.janus_layer_constants import (
     # Canonical physical dimensions
     DIE_WIDTH_UM, DIE_HEIGHT_UM,
     TILE_CORE_UM, TILE_PITCH_UM, TILE_ARRAY_ORIGIN_X, TILE_ARRAY_ORIGIN_Y,
+    NUM_LANES_PER_TILE, NUM_TREES_PER_LANE, LANE_PITCH_UM, TREE_BAY_HEIGHT_UM,
     SIN_WIDTH_UM, SI_WIDTH_UM,
     COUPLER_LEN_UM, COUPLER_GAP_UM, PATCH_LEN_UM, PATCH_WIDTH_UM,
     MMI_W_UM, MMI_L_UM, MMI_TAPER_UM,
@@ -76,6 +73,7 @@ from janus_mini16_sim.layout.janus_layer_constants import (
     PAD_SIZE_UM, PAD_PITCH_UM,
     PWR_RING_WIDTH_UM, PWR_RING_OFFSET_UM,
     WAVELENGTH_NM,
+    get_leaf_tdv_coordinate,
 )
 
 from janus_mini16_sim.layout.generate_cmos_base_gds import (
@@ -96,12 +94,6 @@ gf.gpdk.PDK.activate()
 
 
 # ==============================================================================
-# UTILITY: HTREE SEGMENT (re-exported from cmos module for top-level use)
-# ==============================================================================
-# _htree_seg and add_balanced_htree_4x4 are imported above.
-
-
-# ==============================================================================
 # 1. PARAMETRIC CELLS (PCELLS) — OPTICAL STRATUM
 # ==============================================================================
 
@@ -117,16 +109,14 @@ def pcell_sin_straight_wg(length: float = 20.0, width: float = SIN_WIDTH_UM) -> 
 
 
 @gf.cell
-def pcell_sin_sbend_wg(dx: float = 30.0, dy: float = 10.0,
+def pcell_sin_sbend_wg(dx: float = 16.0, dy: float = 18.0,
                        width: float = SIN_WIDTH_UM) -> gf.Component:
     """
     Adiabatic S-bend waveguide in Si3N4 with cubic spline (Layer 5/0).
-    Cell name encodes |dy| to avoid embedded '-' characters in GDS cell names,
-    which are non-standard and cause parsing failures in some EDA tools.
+    Cell name encodes |dy| to avoid embedded '-' characters in GDS cell names.
     """
-    # Use absolute value in name; sign encoded by 'N' prefix for negative dy
     sign_char = "N" if dy < 0 else "P"
-    c = gf.Component(f"SIN_SBEND_WG_DX{int(dx)}_{sign_char}DY{int(abs(dy) * 10)}")
+    c = gf.Component(f"SIN_SBEND_WG_DX{int(abs(dx))}_{sign_char}DY{int(abs(dy) * 10)}")
     N = 25
     pts = [(i / N * dx, dy * (3.0 * (i / N) ** 2 - 2.0 * (i / N) ** 3)) for i in range(N + 1)]
 
@@ -139,14 +129,12 @@ def pcell_sin_sbend_wg(dx: float = 30.0, dy: float = 10.0,
 @gf.cell
 def pcell_sin_to_si_taper(length: float = 15.0) -> gf.Component:
     """
-    Adiabatic inter-layer transition taper: Si3N4 (Layer 5/0) → Si (Layer 1/0).
+    Adiabatic inter-layer transition taper: Si3N4 (Layer 5/0) -> Si (Layer 1/0).
     Foundry-standard dual-core inverse taper (IL < 0.05 dB).
     """
     c = gf.Component(f"SIN_TO_SI_TAPER_L{int(length)}")
-    # Si3N4 inverse taper narrowing from 800 nm to 150 nm tip
     c.add_polygon([(0, -SIN_WIDTH_UM / 2), (length, -0.075),
                    (length, 0.075), (0, SIN_WIDTH_UM / 2)], layer=LAYER_SIN_CORE)
-    # Underlying Si inverse taper widening from 150 nm to 450 nm
     c.add_polygon([(0, -0.075), (length, -SI_WIDTH_UM / 2),
                    (length, SI_WIDTH_UM / 2), (0, 0.075)], layer=LAYER_SI_CORE)
     c.add_label("SIN_SI_TAPER", position=(length / 2, 0.0), layer=LAYER_SIN_CORE)
@@ -160,7 +148,7 @@ def pcell_sb2s3_sin_switch_cell() -> gf.Component:
     IL = 0.263 dB, ER = 51.9 dB, 0 W static power.
     """
     c = gf.Component("SB2S3_SIN_SWITCH_CELL")
-    total_len = COUPLER_LEN_UM + 3.0
+    total_len = COUPLER_LEN_UM + 2.0
     y_bar = COUPLER_GAP_UM / 2 + SIN_WIDTH_UM / 2
     y_cross = -y_bar
 
@@ -180,11 +168,6 @@ def pcell_sb2s3_sin_switch_cell() -> gf.Component:
     # Integrated Micro-Heater Contact Traces (Layer 10/0)
     c.add_polygon([(x_ps - 0.5, y_bar + 0.8), (x_pe + 0.5, y_bar + 0.8),
                    (x_pe + 0.5, y_bar + 2.0), (x_ps - 0.5, y_bar + 2.0)], layer=LAYER_CU_M1)
-    # TDV pillars connecting heater to CMOS drive (Layer 30/0)
-    c.add_polygon([(x_ps - 0.5, y_bar + 2.2), (x_ps + 1.2, y_bar + 2.2),
-                   (x_ps + 1.2, y_bar + 3.9), (x_ps - 0.5, y_bar + 3.9)], layer=LAYER_TDV_PILLAR)
-    c.add_polygon([(x_pe - 1.2, y_bar + 2.2), (x_pe + 0.5, y_bar + 2.2),
-                   (x_pe + 0.5, y_bar + 3.9), (x_pe - 1.2, y_bar + 3.9)], layer=LAYER_TDV_PILLAR)
 
     c.add_label("SB2S3_SW", position=(total_len / 2, y_bar), layer=LAYER_SB2S3_AMORPH)
     return c
@@ -198,7 +181,6 @@ def pcell_sin_mmi_crossing() -> gf.Component:
     l_mid = MMI_L_UM
     l_tap = MMI_TAPER_UM
 
-    # Horizontal body
     c.add_polygon([(-l_tap - l_mid / 2, -SIN_WIDTH_UM / 2), (-l_mid / 2, -w / 2),
                    (-l_mid / 2, w / 2), (-l_tap - l_mid / 2, SIN_WIDTH_UM / 2)],
                   layer=LAYER_SIN_CORE)
@@ -207,7 +189,6 @@ def pcell_sin_mmi_crossing() -> gf.Component:
     c.add_polygon([(l_mid / 2, -w / 2), (l_tap + l_mid / 2, -SIN_WIDTH_UM / 2),
                    (l_tap + l_mid / 2, SIN_WIDTH_UM / 2), (l_mid / 2, w / 2)],
                   layer=LAYER_SIN_CORE)
-    # Vertical body
     c.add_polygon([(-SIN_WIDTH_UM / 2, -l_tap - l_mid / 2), (-w / 2, -l_mid / 2),
                    (w / 2, -l_mid / 2), (SIN_WIDTH_UM / 2, -l_tap - l_mid / 2)],
                   layer=LAYER_SIN_CORE)
@@ -220,53 +201,6 @@ def pcell_sin_mmi_crossing() -> gf.Component:
 
 
 @gf.cell
-def pcell_sin_1x2_mmi_splitter(L_taper: float = 7.00,
-                               w_tap: float = 1.25,
-                               W_mmi: float = 2.80,
-                               L_mmi: float = 12.40,
-                               w_in: float = SIN_WIDTH_UM,
-                               y_out: float = 0.70) -> gf.Component:
-    """
-    Optimized 1:2 Si3N4 MMI Power Splitter (Layer 5/0).
-    Excess loss cut from 0.290 dB down to 0.140 dB per stage via:
-      - L_taper extended from 4.5 um -> 7.0 um (theta_taper = 1.84 deg, Love adiabatic)
-      - w_tap widened from 1.15 um -> 1.25 um (dielectric corner step reduced to 0.775 um)
-      - Twin output receiving tapers at y = +/- 0.70 um capturing full Talbot envelope
-    """
-    c = gf.Component(f"SIN_1X2_MMI_LT{int(L_taper)}_WT{int(w_tap*100)}")
-
-    # 1. Central MMI Multimode Cavity (W = 2.80 um, L = 12.40 um)
-    x0 = -L_mmi / 2.0
-    x1 = L_mmi / 2.0
-    y_top = W_mmi / 2.0
-    y_bot = -W_mmi / 2.0
-    c.add_polygon([(x0, y_bot), (x1, y_bot), (x1, y_top), (x0, y_top)], layer=LAYER_SIN_CORE)
-
-    # 2. Input Waveguide & Linear/Parabolic Taper (Centered at y = 0)
-    x_tap_in_start = x0 - L_taper
-    c.add_polygon([
-        (x_tap_in_start, -w_in / 2.0),
-        (x0, -w_tap / 2.0),
-        (x0, w_tap / 2.0),
-        (x_tap_in_start, w_in / 2.0),
-    ], layer=LAYER_SIN_CORE)
-
-    # 3. Twin Output Receiving Tapers at y = +y_out and y = -y_out (y = +/- 0.70 um)
-    x_tap_out_end = x1 + L_taper
-    for sign in [+1.0, -1.0]:
-        y_c = sign * y_out
-        c.add_polygon([
-            (x1, y_c - w_tap / 2.0),
-            (x_tap_out_end, y_c - w_in / 2.0),
-            (x_tap_out_end, y_c + w_in / 2.0),
-            (x1, y_c + w_tap / 2.0),
-        ], layer=LAYER_SIN_CORE)
-
-    c.add_label("MMI_1X2_SPLITTER", position=(0.0, 0.0), layer=LAYER_SIN_CORE)
-    return c
-
-
-@gf.cell
 def pcell_sac2m_apd_with_tdv() -> gf.Component:
     """
     Germanium-on-Silicon SAC2M APD Photodetector with 3D Vertical Cu TDVs:
@@ -274,42 +208,15 @@ def pcell_sac2m_apd_with_tdv() -> gf.Component:
       - Ge absorption mesa (Layer 20/0)
       - Anode/Cathode Cu Metal 1 contacts (Layer 10/0)
       - Octagonal UBM Pad + 8 um diameter Cu TDV to CMOS StrongARM (Layers 30/0 & 31/0)
-    UBM pad uses consistent TDV_DIAMETER_UM + 2*TDV_UBM_OVERHANG_UM sizing.
+    UBM pad and TDV pillar are centered exactly at (0.0, 0.0) for 1:1 deterministic alignment.
     """
     c = gf.Component("SAC2M_APD_WITH_TDV")
     l = APD_LEN_UM    # 10 um
     w = APD_W_UM      # 1.2 um
 
-    # Silicon Coupling Waveguide & Base Slab (Layer 1/0)
-    c.add_polygon([(0, -SI_WIDTH_UM / 2), (l / 2, -SI_WIDTH_UM / 2),
-                   (l / 2, SI_WIDTH_UM / 2), (0, SI_WIDTH_UM / 2)], layer=LAYER_SI_CORE)
-    c.add_polygon([(l / 4 - 1.0, -w / 2 - 1.5), (l / 4 + l + 1.0, -w / 2 - 1.5),
-                   (l / 4 + l + 1.0, w / 2 + 1.5), (l / 4 - 1.0, w / 2 + 1.5)],
-                  layer=LAYER_SI_CORE)
-
-    # Avalanche Guard Ring Frame (Layer 1/0)
-    c.add_polygon([(l / 4 - 2.0, -w / 2 - 2.8), (l / 4 + l + 2.0, -w / 2 - 2.8),
-                   (l / 4 + l + 2.0, -w / 2 - 2.0), (l / 4 - 2.0, -w / 2 - 2.0)],
-                  layer=LAYER_SI_CORE)
-    c.add_polygon([(l / 4 - 2.0, w / 2 + 2.0), (l / 4 + l + 2.0, w / 2 + 2.0),
-                   (l / 4 + l + 2.0, w / 2 + 2.8), (l / 4 - 2.0, w / 2 + 2.8)],
-                  layer=LAYER_SI_CORE)
-
-    # Crystalline Germanium Absorption Mesa (Layer 20/0)
-    c.add_polygon([(l / 4, -w / 2), (l / 4 + l, -w / 2),
-                   (l / 4 + l, w / 2), (l / 4, w / 2)], layer=LAYER_APD_GE)
-
-    # Anode & Cathode Metal 1 Contacts (Layer 10/0)
-    c.add_polygon([(l / 4 + 1.0, -w / 2 - 2.5), (l / 4 + 4.0, -w / 2 - 2.5),
-                   (l / 4 + 4.0, -w / 2), (l / 4 + 1.0, -w / 2)], layer=LAYER_CU_M1)
-    c.add_polygon([(l / 4 + l - 4.0, w / 2), (l / 4 + l - 1.0, w / 2),
-                   (l / 4 + l - 1.0, w / 2 + 2.5), (l / 4 + l - 4.0, w / 2 + 2.5)],
-                  layer=LAYER_CU_M1)
-
-    # Vertical Copper TDV & UBM (consistent sizing: TDV_DIAMETER_UM = 8 um)
+    cx, cy = 0.0, 0.0
     r_tdv = TDV_DIAMETER_UM / 2.0                          # 4.0 um
     r_ubm = r_tdv + TDV_UBM_OVERHANG_UM                   # 5.5 um
-    cx, cy = l / 4 + 2.5, -w / 2 - 2.5
 
     pts_ubm = [(cx + r_ubm * math.cos(math.radians(deg)),
                 cy + r_ubm * math.sin(math.radians(deg))) for deg in range(0, 360, 45)]
@@ -319,26 +226,141 @@ def pcell_sac2m_apd_with_tdv() -> gf.Component:
                 cy + r_tdv * math.sin(math.radians(deg))) for deg in range(0, 360, 45)]
     c.add_polygon(pts_tdv, layer=LAYER_TDV_PILLAR)
 
-    c.add_label("SAC2M_APD_TDV", position=(cx, cy), layer=LAYER_APD_GE)
+    y_mesa = 4.0
+    c.add_polygon([(-l / 2, y_mesa - SI_WIDTH_UM / 2), (l / 2, y_mesa - SI_WIDTH_UM / 2),
+                   (l / 2, y_mesa + SI_WIDTH_UM / 2), (-l / 2, y_mesa + SI_WIDTH_UM / 2)],
+                  layer=LAYER_SI_CORE)
+    c.add_polygon([(-l / 2 - 1.0, y_mesa - w / 2 - 1.5), (l / 2 + 1.0, y_mesa - w / 2 - 1.5),
+                   (l / 2 + 1.0, y_mesa + w / 2 + 1.5), (-l / 2 - 1.0, y_mesa + w / 2 + 1.5)],
+                  layer=LAYER_SI_CORE)
+
+    c.add_polygon([(-l / 2 - 2.0, y_mesa - w / 2 - 2.8), (l / 2 + 2.0, y_mesa - w / 2 - 2.8),
+                   (l / 2 + 2.0, y_mesa - w / 2 - 2.0), (-l / 2 - 2.0, y_mesa - w / 2 - 2.0)],
+                  layer=LAYER_SI_CORE)
+    c.add_polygon([(-l / 2 - 2.0, y_mesa + w / 2 + 2.0), (l / 2 + 2.0, y_mesa + w / 2 + 2.0),
+                   (l / 2 + 2.0, y_mesa + w / 2 + 2.8), (-l / 2 - 2.0, y_mesa + w / 2 + 2.8)],
+                  layer=LAYER_SI_CORE)
+
+    c.add_polygon([(-l / 2, y_mesa - w / 2), (l / 2, y_mesa - w / 2),
+                   (l / 2, y_mesa + w / 2), (-l / 2, y_mesa + w / 2)], layer=LAYER_APD_GE)
+
+    c.add_polygon([(-2.0, cy - 2.0), (2.0, cy - 2.0),
+                   (2.0, y_mesa - w / 2), (-2.0, y_mesa - w / 2)], layer=LAYER_CU_M1)
+    c.add_polygon([(-l / 2 + 1.0, y_mesa + w / 2), (l / 2 - 1.0, y_mesa + w / 2),
+                   (l / 2 - 1.0, y_mesa + w / 2 + 2.5), (-l / 2 + 1.0, y_mesa + w / 2 + 2.5)],
+                  layer=LAYER_CU_M1)
+
+    c.add_label("SAC2M_APD_TDV", position=(0.0, 0.0), layer=LAYER_APD_GE)
     return c
 
 
+@gf.cell
+def pcell_optical_tree_bay() -> gf.Component:
+    """
+    Single 4-stage binary switch tree bay (78.125 um wide x 156.25 um high):
+      - 15x Sb2S3 non-volatile directional coupler switch cells (Layers 4/0, 5/0)
+      - Adiabatic Si3N4 -> Si inverse tapers (Layers 5/0, 1/0)
+      - 16x SAC2M Ge/Si APD photodetectors with 8 um vertical Cu TDVs (Layers 1/0, 20/0, 30/0, 31/0)
+      - Arranged in 4x4 leaf sub-grid with deterministic (col-1.5)*16 um and (row-1.5)*32 um spacing
+    """
+    c = gf.Component("OPTICAL_TREE_BAY_16LEAVES")
+    sw_cell = pcell_sb2s3_sin_switch_cell()
+    taper_cell = pcell_sin_to_si_taper(length=15.0)
+    apd_cell = pcell_sac2m_apd_with_tdv()
+
+    # Stage 1: 1 switch at (0.0, -60.0)
+    c.add_ref(sw_cell).move((-COUPLER_LEN_UM / 2, -60.0))
+
+    # Stage 2: 2 switches at (-16.0, -42.0) and (16.0, -42.0)
+    c.add_ref(sw_cell).move((-16.0 - COUPLER_LEN_UM / 2, -42.0))
+    c.add_ref(sw_cell).move((16.0 - COUPLER_LEN_UM / 2, -42.0))
+
+    # Stage 3: 4 switches at (-24.0, -24.0), (-8.0, -24.0), (8.0, -24.0), (24.0, -24.0)
+    for xs in [-24.0, -8.0, 8.0, 24.0]:
+        c.add_ref(sw_cell).move((xs - COUPLER_LEN_UM / 2, -24.0))
+
+    # Stage 4: 8 switches at (-28.0, -20.0, -12.0, -4.0, 4.0, 12.0, 20.0, 28.0)
+    for xs in [-28.0, -20.0, -12.0, -4.0, 4.0, 12.0, 20.0, 28.0]:
+        c.add_ref(sw_cell).move((xs - COUPLER_LEN_UM / 2, -6.0))
+
+    # 16 Leaves: 4x4 sub-grid placed at get_leaf_tdv_coordinate relative offsets
+    for leaf in range(16):
+        col = leaf % 4
+        row = leaf // 4
+        dx = (col - 1.5) * 16.0   # -24.0, -8.0, 8.0, 24.0
+        dy = (row - 1.5) * 32.0   # -48.0, -16.0, 16.0, 48.0
+
+        c.add_ref(taper_cell).move((dx - 7.5, dy - 12.0))
+        c.add_ref(apd_cell).move((dx, dy))
+
+    c.add_label("16TREE_BAY", position=(0.0, 0.0), layer=LAYER_SIN_CORE)
+    return c
+
+
+@gf.cell
+def pcell_optical_simd_lane() -> gf.Component:
+    """
+    Single SIMD Lane (78.125 um width x 2500.0 um height):
+      - 1x LiTaO3 100-GHz electro-optic modulator at input (120 um length, 2 um rib,
+        24 um CPW electrode envelope with 54.125 um clean oxide clearance gap)
+      - Si3N4 low-loss optical feed trunk
+      - 16x stacked binary switch tree bays along Y (at y = (tree + 0.5) * 156.25 um)
+      - Total 16 trees x 16 leaves = 256 APD TDVs per lane
+    """
+    lane = gf.Component("OPTICAL_SIMD_LANE_16TREES")
+    tree_bay = pcell_optical_tree_bay()
+
+    # 1. LiTaO3 Electro-Optic Pockels Modulator (Y: 20.0 to 140.0 um, centered at x = 0.0)
+    lane.add_polygon([(-LITAO3_W_UM / 2, 20.0), (LITAO3_W_UM / 2, 20.0),
+                      (LITAO3_W_UM / 2, 20.0 + LITAO3_LEN_UM), (-LITAO3_W_UM / 2, 20.0 + LITAO3_LEN_UM)],
+                     layer=LAYER_LITAO3_EO)
+    lane.add_polygon([(-SIN_WIDTH_UM / 2, 10.0), (SIN_WIDTH_UM / 2, 10.0),
+                      (SIN_WIDTH_UM / 2, 145.0), (-SIN_WIDTH_UM / 2, 145.0)],
+                     layer=LAYER_SIN_CORE)
+
+    # RF CPW Electrodes (Layer 10/0, Metal 1 Cu)
+    lane.add_polygon([(-12.0, 20.0), (-1.5, 20.0),
+                      (-1.5, 20.0 + LITAO3_LEN_UM), (-12.0, 20.0 + LITAO3_LEN_UM)],
+                     layer=LAYER_CU_M1)
+    lane.add_polygon([(1.5, 20.0), (12.0, 20.0),
+                      (12.0, 20.0 + LITAO3_LEN_UM), (1.5, 20.0 + LITAO3_LEN_UM)],
+                     layer=LAYER_CU_M1)
+    lane.add_label("LITAO3_MODULATOR", position=(0.0, 80.0), layer=LAYER_LITAO3_EO)
+
+    # 2. Vertical Si3N4 Optical Distribution Trunk
+    lane.add_polygon([(-SIN_WIDTH_UM / 2, 145.0), (SIN_WIDTH_UM / 2, 145.0),
+                      (SIN_WIDTH_UM / 2, 2490.0), (-SIN_WIDTH_UM / 2, 2490.0)],
+                     layer=LAYER_SIN_CORE)
+
+    # 3. 16 Stacked Binary Switch Tree Bays
+    for tree in range(NUM_TREES_PER_LANE):
+        yt = (tree + 0.5) * TREE_BAY_HEIGHT_UM
+        ref = lane.add_ref(tree_bay)
+        ref.move((0.0, yt))
+
+    return lane
+
+
 # ==============================================================================
-# 2. COMPLETE MULTI-STRATUM TILE COMPONENT
+# 2. COMPLETE MULTI-STRATUM TILE COMPONENT (2500 x 2500 um = 6.25 mm^2)
 # ==============================================================================
 
 @gf.cell
 def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
     """
-    Synthesizes a complete 3D Monolithic Tile combining:
+    Synthesizes a complete 3D Monolithic Tile (2500 um x 2500 um = 6.25 mm^2):
       - Bottom 65nm CMOS digital compute base (physical mask layers 100-199)
-      - Middle monolithic SiO2 thermal buffer with high-density Cu TDV pillars
-      - Top dual-core Si3N4/Si optical permutation fabric with Sb2S3 switches
-        and SAC2M APDs with Cu TDVs
+      - Middle monolithic 50 um SiO2 thermal buffer (Layer 32/0) with high-density Cu TDV pillars
+      - Top dual-core Si3N4/Si optical permutation fabric:
+        - 32 parallel SIMD lanes @ 78.125 um pitch
+        - 16 binary switch trees per lane @ 156.25 um height
+        - 15 Sb2S3 slot switches per tree = 7,680 switches per tile
+        - 16 SAC2M APDs with 8 um vertical Cu TDVs per tree = 8,192 APDs/TDVs per tile
+        - 1:1 deterministic alignment with bottom CMOS StrongARM latches
     """
     tile = gf.Component(f"MONOLITHIC_3D_TILE_{tile_id}")
-    tile_w = TILE_CORE_UM   # 600 um
-    tile_h = TILE_CORE_UM   # 600 um
+    tile_w = TILE_CORE_UM   # 2500 um
+    tile_h = TILE_CORE_UM   # 2500 um
 
     # Physical Keep-Out Boundary (Layer 199/0)
     tile.add_polygon([(0, 0), (tile_w, 0), (tile_w, tile_h), (0, tile_h)],
@@ -352,134 +374,26 @@ def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
     # 1. Bottom 65nm CMOS Base Stratum (physical mask layers 100-199)
     tile.add_ref(build_cmos_base_tile(tile_id=tile_id))
 
-    # ---- Optical stratum component handles ----
-    # ── Slot-waveguide switch cell dimensions ──────────────────────────────────
-    # COUPLER_LEN_UM = 4.260 um (MPB-verified, Γ=36%), INV_TAPER_LEN_UM = 3.0 um
-    # Total switch cell + inv-taper exits = 4.260 + 2.0 = 6.26 um in x-direction
-    sw_len_slot = COUPLER_LEN_UM + 2.0   # 6.26 um: slot cell + exit inv-taper stubs
-    sw_len      = sw_len_slot             # alias for compatibility
-    ch_pitch    = CHANNEL_PITCH_UM        # 1.8 um compact channel pitch (was 31 um)
+    # 2. 32 Optical SIMD Lanes across tile width
+    simd_lane = pcell_optical_simd_lane()
+    for lane in range(NUM_LANES_PER_TILE):
+        xl = (lane + 0.5) * LANE_PITCH_UM
+        ref = tile.add_ref(simd_lane)
+        ref.move((xl, 0.0))
 
-    sin_sw     = pcell_sb2s3_sin_switch_cell()
-    sin_cross  = pcell_sin_mmi_crossing()
-    taper_cell = pcell_sin_to_si_taper(length=15.0)
-    apd_cell   = pcell_sac2m_apd_with_tdv()
-
-    # 2. Input Modulation Stage (X: 70-190 um)
-    # Channel y-positions: compact 1.8 um slot-WG pitch starting at 45 um
-    channel_y = [45.0 + i * ch_pitch for i in range(17)]
-    for ch, y_ch in enumerate(channel_y):
-        tile.add_ref(pcell_sin_straight_wg(10.0)).move((60.0, y_ch))
-        if ch < 16:
-            # Active Channels: LiTaO3 Modulator (Layer 3/0)
-            tile.add_polygon([(70.0, y_ch - LITAO3_W_UM / 2), (190.0, y_ch - LITAO3_W_UM / 2),
-                               (190.0, y_ch + LITAO3_W_UM / 2), (70.0, y_ch + LITAO3_W_UM / 2)],
-                              layer=LAYER_LITAO3_EO)
-            tile.add_ref(pcell_sin_straight_wg(LITAO3_LEN_UM)).move((70.0, y_ch))
-            # Modulator RF Coplanar Electrodes (Layer 10/0)
-            tile.add_polygon([(70.0, y_ch + 1.5), (190.0, y_ch + 1.5),
-                               (190.0, y_ch + 12.0), (70.0, y_ch + 12.0)], layer=LAYER_CU_M1)
-            tile.add_polygon([(70.0, y_ch - 12.0), (190.0, y_ch - 12.0),
-                               (190.0, y_ch - 1.5), (70.0, y_ch - 1.5)], layer=LAYER_CU_M1)
-            tile.add_label(f"LITAO3_MOD_CH{ch}", position=(130.0, y_ch), layer=LAYER_LITAO3_EO)
-        else:
-            # Dark Reference Channel WG0
-            tile.add_ref(pcell_sin_straight_wg(LITAO3_LEN_UM)).move((70.0, y_ch))
-            tile.add_label("DARK_REF_WG0", position=(130.0, y_ch), layer=LAYER_SIN_CORE)
-
-    # 3. 4-Stage Binary Tree Fermat Switching Network — Slot-WG Compact Layout (X: 200-240 um)
-    # Stage x-spacing: 8 um between stage origins (sw_len_slot=6.26 um + 1.74 um inter-stage gap)
-    stage_x = [205.0, 213.0, 221.0, 229.0]
-
-    # Routing WGs from modulator outputs to stage 1
-    for ch, y_ch in enumerate(channel_y):
-        gap = stage_x[0] - (70.0 + LITAO3_LEN_UM)
-        if gap > 0:
-            tile.add_ref(pcell_sin_straight_wg(gap)).move((70.0 + LITAO3_LEN_UM, y_ch))
-
-    # Stage 1 — 1 switch per channel (1→2 fan-out)
-    for ch in range(16):
-        y_ch = channel_y[ch]
-        tile.add_ref(sin_sw).move((stage_x[0], y_ch))
-        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy= ch_pitch / 2)).move(
-            (stage_x[0] + sw_len_slot, y_ch))
-        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy=-ch_pitch / 2)).move(
-            (stage_x[0] + sw_len_slot, y_ch))
-
-    # Stage 2 — 2 switches per channel (2→4 fan-out)
-    for ch in range(16):
-        y_ch = channel_y[ch]
-        tile.add_ref(sin_sw).move((stage_x[1], y_ch + ch_pitch / 2))
-        tile.add_ref(sin_sw).move((stage_x[1], y_ch - ch_pitch / 2))
-        if ch % 2 == 0:
-            tile.add_ref(sin_cross).move((stage_x[1] + sw_len_slot + 1.0, y_ch))
-        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy= ch_pitch)).move(
-            (stage_x[1] + sw_len_slot, y_ch + ch_pitch / 2))
-        tile.add_ref(pcell_sin_sbend_wg(dx=4.0, dy=-ch_pitch)).move(
-            (stage_x[1] + sw_len_slot, y_ch - ch_pitch / 2))
-
-    # Stage 3 — 4 switches per channel (4→8 fan-out)
-    for ch in range(16):
-        y_ch = channel_y[ch]
-        for s in range(4):
-            dy = (s - 1.5) * ch_pitch
-            tile.add_ref(sin_sw).move((stage_x[2], y_ch + dy))
-            tile.add_ref(pcell_sin_straight_wg(2.0)).move(
-                (stage_x[2] + sw_len_slot, y_ch + dy))
-
-    # Stage 4 — 4 switches per channel (fan-out to 16 APD outputs)
-    for ch in range(16):
-        y_ch = channel_y[ch]
-        for s in range(4):
-            dy = (s - 1.5) * ch_pitch
-            tile.add_ref(sin_sw).move((stage_x[3], y_ch + dy))
-            dy_bend = -dy * 0.7
-            tile.add_ref(pcell_sin_sbend_wg(dx=6.0, dy=dy_bend)).move(
-                (stage_x[3] + sw_len_slot, y_ch + dy))
-
-    # WG0 dark reference bypass
-    wg0_len = stage_x[3] + sw_len_slot + 6.0 - stage_x[0]
-    tile.add_ref(pcell_sin_straight_wg(wg0_len)).move(
-        (stage_x[0], channel_y[16]))
-
-    # 4. Si3N4→Si Taper Transition & SAC2M APDs with TDVs (X: 475-560 um)
-    x_taper = stage_x[3] + sw_len + 30.0
-    x_apd = x_taper + 18.0
-    for ch, y_ch in enumerate(channel_y):
-        tile.add_ref(taper_cell).move((x_taper, y_ch))
-        tile.add_ref(apd_cell).move((x_apd, y_ch))
-        tile.add_label(f"APD_TDV_CH{ch}", position=(x_apd + 5.0, y_ch), layer=LAYER_APD_GE)
-
-    # 5. High-Density Cu-Pillar TDV Grid (50 um pitch, 10,000 mm^-2 density)
-    n_tdv = int(tile_w / BUMP_PITCH_UM)  # 11 x 11
-    for ix in range(n_tdv + 1):
-        for iy in range(n_tdv + 1):
-            cx = 50.0 + ix * BUMP_PITCH_UM
-            cy = 50.0 + iy * BUMP_PITCH_UM
-            if cx > tile_w - 5 or cy > tile_h - 5:
-                continue
-            r = TDV_DIAMETER_UM / 2.0
-            r_ubm = r + TDV_UBM_OVERHANG_UM
-            tile.add_polygon([(cx - r, cy - r), (cx + r, cy - r),
-                              (cx + r, cy + r), (cx - r, cy + r)], layer=LAYER_TDV_PILLAR)
-            tile.add_polygon([(cx - r_ubm, cy - r_ubm), (cx + r_ubm, cy - r_ubm),
-                              (cx + r_ubm, cy + r_ubm), (cx - r_ubm, cy + r_ubm)],
-                             layer=LAYER_UBM_BUMP)
-
-    # 6. Global Orthogonal Metal Power Distribution Mesh (Layers 10/0 & 11/0)
-    for p_idx in range(6):
-        yp = 25.0 + p_idx * 110.0
-        tile.add_polygon([(15.0, yp), (585.0, yp), (585.0, yp + 4.0), (15.0, yp + 4.0)],
+    # 3. Global Orthogonal Metal Power Distribution Mesh (Layers 10/0 & 11/0)
+    for p_idx in range(11):
+        yp = 50.0 + p_idx * 240.0
+        tile.add_polygon([(15.0, yp), (tile_w - 15.0, yp), (tile_w - 15.0, yp + 4.0), (15.0, yp + 4.0)],
                          layer=LAYER_CU_M1)
-    for p_idx in range(6):
-        xp = 40.0 + p_idx * 105.0
-        tile.add_polygon([(xp, 15.0), (xp + 4.0, 15.0), (xp + 4.0, 585.0), (xp, 585.0)],
+    for p_idx in range(11):
+        xp = 50.0 + p_idx * 240.0
+        tile.add_polygon([(xp, 15.0), (xp + 4.0, 15.0), (xp + 4.0, tile_h - 15.0), (xp, tile_h - 15.0)],
                          layer=LAYER_CU_M2)
 
     tile.add_label(f"TILE_{tile_id}_3D_CORE", position=(tile_w / 2, tile_h - 20.0),
                    layer=LAYER_FLOORPLAN)
-    tile.add_label("16TREE_FERMAT_FABRIC", position=(310.0, 30.0), layer=LAYER_SIN_CORE)
-    tile.add_label("CU_TDV_POWER_GRID", position=(50.0, 50.0), layer=LAYER_TDV_PILLAR)
+    tile.add_label("32LANE_16TREE_OPTICAL_FABRIC", position=(tile_w / 2, 30.0), layer=LAYER_SIN_CORE)
     return tile
 
 
@@ -491,18 +405,18 @@ def generate_janus_mini16_top_layout() -> gf.Component:
     """
     Complete tapeout-ready layout of the JANUS Mini 16-Tile 3D Monolithic Accelerator:
       - 4x4 Array of Heterogeneous 3D Tiles (SiPh + SiO2 Thermal Buffer + 65nm CMOS)
-      - Dual 17-channel Fiber V-Groove Array Couplers (GC period from WAVELENGTH_NM)
+      - Dual Optical Fiber V-Groove Array Couplers (1064 nm, GC period = 0.725 um)
       - Complete 4-Layer Concentric Seal Ring & Scribe-Line Test Metrology
       - 4-Level Balanced H-Tree 3.125 GHz Clock (Metal 6 / Layer 161/0)
 
-    Die: 3200 x 3200 um | Tiles: 4x4 @ 700 um pitch | Origin: (200, 200)
+    Die: 10000 x 10000 um (100.0 mm^2) | Tiles: 4x4 @ 2500 um pitch | Origin: (0, 0)
     """
     top = gf.Component("JANUS_MINI16_TOP_CORE")
 
-    die_w = DIE_WIDTH_UM    # 3200 um
-    die_h = DIE_HEIGHT_UM   # 3200 um
+    die_w = DIE_WIDTH_UM    # 10000 um
+    die_h = DIE_HEIGHT_UM   # 10000 um
 
-    # ---- 1. 4-Layer Concentric Moisture Seal Ring (Layer 190/0) & Die Boundary ----
+    # 1. 4-Layer Concentric Moisture Seal Ring (Layer 190/0) & Die Boundary
     seal_ring_w = 4.0
     seal_ring_gap = 6.0
     seal_edge_off = 10.0
@@ -517,7 +431,7 @@ def generate_janus_mini16_top_layout() -> gf.Component:
         top.add_polygon([(off, off), (off + seal_ring_w, off),
                          (off + seal_ring_w, die_h - off), (off, die_h - off)],
                         layer=LAYER_SEAL_RING)
-        top.add_polygon([(die_w - off - seal_ring_w, off), (die_w - off, off),
+        top.add_polygon([(die_w - off - seal_ring_w, off), (die_w - off, die_h - off),
                          (die_w - off, die_h - off), (die_w - off - seal_ring_w, die_h - off)],
                         layer=LAYER_SEAL_RING)
 
@@ -527,10 +441,10 @@ def generate_janus_mini16_top_layout() -> gf.Component:
     top.add_label("4LAYER_MOISTURE_SEAL_RING", position=(40.0, die_h - 40.0),
                   layer=LAYER_SEAL_RING)
 
-    # ---- 2. 4x4 Grid of 3D Monolithic Tiles (16 Tiles Total) ----
-    x_origin = TILE_ARRAY_ORIGIN_X   # 200 um
-    y_origin = TILE_ARRAY_ORIGIN_Y   # 200 um
-    tile_pitch = TILE_PITCH_UM       # 700 um  (was 690 um — fixed)
+    # 2. 4x4 Grid of 3D Monolithic Tiles (16 Tiles Total)
+    x_origin = TILE_ARRAY_ORIGIN_X   # 0.0 um
+    y_origin = TILE_ARRAY_ORIGIN_Y   # 0.0 um
+    tile_pitch = TILE_PITCH_UM       # 2500.0 um
 
     for row in range(4):
         for col in range(4):
@@ -540,11 +454,10 @@ def generate_janus_mini16_top_layout() -> gf.Component:
             tile_ref = top.add_ref(build_monolithic_3d_tile(tile_id=tile_id))
             tile_ref.move((x_pos, y_pos))
             top.add_label(f"TILE_{tile_id}_LOCATION",
-                          position=(x_pos + 300.0, y_pos + 300.0), layer=LAYER_FLOORPLAN)
+                          position=(x_pos + 1250.0, y_pos + 1250.0), layer=LAYER_FLOORPLAN)
 
-    # ---- 3. Dual Optical Fiber V-Groove Array Grating Couplers ----
-    # Grating coupler period derived from WAVELENGTH_NM constant (not hardcoded).
-    gc_period = GC_TEETH_PERIOD_UM   # from janus_layer_constants
+    # 3. Dual Optical Fiber V-Groove Array Grating Couplers
+    gc_period = GC_TEETH_PERIOD_UM   # 0.725 um at 1064 nm
     gc_dc = GC_DUTY_CYCLE            # 0.5
 
     gc_cell = gf.Component("JANUS_OPTICAL_FIBER_VGROOVE_COUPLER")
@@ -568,25 +481,25 @@ def generate_janus_mini16_top_layout() -> gf.Component:
                             layer=LAYER_SIN_CORE)
         gc_cell.add_label(f"FIBER_CH{i}", position=(17.5, y_gc), layer=LAYER_SIN_CORE)
 
-    top.add_ref(gc_cell).move((35.0, 550.0))
+    top.add_ref(gc_cell).move((35.0, 3900.0))
     ref_r = top.add_ref(gc_cell)
-    ref_r.mirror((0, 0), (0, 1))
-    ref_r.move((die_w - 35.0, 550.0))
-    top.add_label("FIBER_VGROOVE_PORT_WEST", position=(20.0, 520.0), layer=LAYER_SIN_CORE)
-    top.add_label("FIBER_VGROOVE_PORT_EAST", position=(die_w - 20.0, 520.0), layer=LAYER_SIN_CORE)
+    ref_r.mirror_x()
+    ref_r.move((die_w - 35.0, 3900.0))
+    top.add_label("FIBER_VGROOVE_PORT_WEST", position=(20.0, 3870.0), layer=LAYER_SIN_CORE)
+    top.add_label("FIBER_VGROOVE_PORT_EAST", position=(die_w - 20.0, 3870.0), layer=LAYER_SIN_CORE)
 
     # Optical Feed Trunks (Si3N4, Layer 5/0)
     for i in range(17):
-        y_gc = 550.0 + i * 127.0
+        y_gc = 3900.0 + i * 127.0
         if y_gc < die_h - 100.0:
             for x0, x1 in [(10.0, 180.0), (die_w - 180.0, die_w - 10.0)]:
                 top.add_polygon([(x0, y_gc - SIN_WIDTH_UM / 2), (x1, y_gc - SIN_WIDTH_UM / 2),
                                   (x1, y_gc + SIN_WIDTH_UM / 2), (x0, y_gc + SIN_WIDTH_UM / 2)],
                                 layer=LAYER_SIN_CORE)
 
-    # ---- 4. Global 65nm CMOS VDD/VSS Power Ring (Top Metal 171/0) ----
-    pwr_off = PWR_RING_OFFSET_UM   # 60 um
-    pwr_w = PWR_RING_WIDTH_UM      # 40 um
+    # 4. Global 65nm CMOS VDD/VSS Power Ring (Top Metal 171/0)
+    pwr_off = PWR_RING_OFFSET_UM     # 60 um
+    pwr_w = PWR_RING_WIDTH_UM        # 40 um
     top.add_polygon([(pwr_off, 50.0), (die_w - pwr_off, 50.0),
                      (die_w - pwr_off, 50.0 + pwr_w), (pwr_off, 50.0 + pwr_w)],
                     layer=LAYER_TOP_METAL_PWR)
@@ -602,11 +515,9 @@ def generate_janus_mini16_top_layout() -> gf.Component:
     top.add_label("GLOBAL_VDD_VSS_POWER_RING", position=(die_w / 2, 70.0),
                   layer=LAYER_TOP_METAL_PWR)
 
-    # ---- 5. Complete 4-Side Wire-Bond / Solder Bump I/O Pad Ring ----
+    # 5. Complete 4-Side Wire-Bond / Solder Bump I/O Pad Ring
     pad_s = PAD_SIZE_UM    # 75 um
     pad_p = PAD_PITCH_UM   # 120 um
-
-    # Bottom & Top rows (horizontal)
     num_pads_x = int((die_w - 400.0) / pad_p)
     for p in range(num_pads_x):
         xp = 200.0 + p * pad_p
@@ -617,7 +528,6 @@ def generate_janus_mini16_top_layout() -> gf.Component:
             top.add_label(f"IO_PAD_{lbl_base}_{p}",
                           position=(xp + pad_s / 2, pad_y + pad_s / 2), layer=LAYER_PAD_IO)
 
-    # Left & Right columns (vertical)
     num_pads_y = int((die_h - 400.0) / pad_p)
     for p in range(num_pads_y):
         yp = 200.0 + p * pad_p
@@ -628,17 +538,17 @@ def generate_janus_mini16_top_layout() -> gf.Component:
             top.add_label(f"IO_PAD_{lbl_base}_{p}",
                           position=(pad_x + pad_s / 2, yp + pad_s / 2), layer=LAYER_PAD_IO)
 
-    # ---- 6. 4-Level Balanced H-Tree Global Clock (Metal 6 / Layer 161/0) ----
+    # 6. 4-Level Balanced H-Tree Global Clock (Metal 6 / Layer 161/0)
     add_balanced_htree_4x4(top, x_origin, y_origin, tile_pitch, LAYER_METAL6_CLK)
 
-    # ---- 7. Metrology & Test Structures in Scribe Margin ----
-    top.add_polygon([(1300.0, 50.0), (1700.0, 50.0),
-                     (1700.0, 50.0 + SIN_WIDTH_UM), (1300.0, 50.0 + SIN_WIDTH_UM)],
+    # 7. Metrology & Test Structures in Scribe Margin
+    top.add_polygon([(4300.0, 50.0), (5700.0, 50.0),
+                     (5700.0, 50.0 + SIN_WIDTH_UM), (4300.0, 50.0 + SIN_WIDTH_UM)],
                     layer=LAYER_SIN_CORE)
-    top.add_polygon([(1300.0, die_h - 60.0), (1700.0, die_h - 60.0),
-                     (1700.0, die_h - 60.0 + SIN_WIDTH_UM), (1300.0, die_h - 60.0 + SIN_WIDTH_UM)],
+    top.add_polygon([(4300.0, die_h - 60.0), (5700.0, die_h - 60.0),
+                     (5700.0, die_h - 60.0 + SIN_WIDTH_UM), (4300.0, die_h - 60.0 + SIN_WIDTH_UM)],
                     layer=LAYER_SIN_CORE)
-    top.add_label("OPTICAL_TEST_STRUCTURE_SIN", position=(1500.0, 50.0), layer=LAYER_SIN_CORE)
+    top.add_label("OPTICAL_TEST_STRUCTURE_SIN", position=(5000.0, 50.0), layer=LAYER_SIN_CORE)
 
     return top
 

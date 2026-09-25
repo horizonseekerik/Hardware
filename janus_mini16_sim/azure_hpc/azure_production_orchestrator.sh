@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# PROJECT JANUS: AZURE PRODUCTION CLOUD HPC ORCHESTRATOR
-# Budget: < $10.00 (from your $200 Azure Credit)
-# Workload: 1,000,000 Monte Carlo Runs + 1,000,000 SPICE Cycles + 5M Elmer FEM
+# PROJECT JANUS: AZURE PRODUCTION CLOUD HPC ORCHESTRATOR (100M-RUN CAMPAIGN)
+# Budget Ceiling: < $2.00 per 100M run (from your $200 Azure Credit)
+# Workload: 100,000,000 Monte Carlo Runs + 100,000,000 SPICE Cycles + 5M Elmer FEM
 # Generates: 19 High-Resolution Publication Figures & OFC 3-Page Dashboard
 # ==============================================================================
 set -euo pipefail
@@ -13,10 +13,11 @@ CONTAINER_NAME="results"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 echo "========================================================================"
-echo "  PROJECT JANUS: AZURE HPC 1,000,000-RUN PRODUCTION CAMPAIGN"
-echo "  Target Budget  : < \$10.00 (from \$200 credit)"
-echo "  Primary Region : Central India (Pune) / South India (Chennai)"
-echo "  Strategy       : Auto-fallback across India & global high-speed clusters"
+echo "  PROJECT JANUS: AZURE HPC 100,000,000-RUN PRODUCTION CAMPAIGN"
+echo "  Target Budget  : < \$2.00 per 100M run (from \$200 credit)"
+echo "  Workload       : 100M Monte Carlo + 100M SPICE Receiver Cycles"
+echo "  Primary Region : Central India / South India / East US / Central US"
+echo "  Strategy       : Auto-fallback across high-speed compute clusters"
 echo "  Timestamp      : ${TIMESTAMP}"
 echo "========================================================================"
 
@@ -47,7 +48,7 @@ az storage container create --name "${CONTAINER_NAME}" --account-name "${STORAGE
 # Generate 7-day write SAS token for hands-free background upload
 SAS_EXPIRY=$(date -u -d "7 days" '+%Y-%m-%dT%H:%MZ' 2>/dev/null || date -u -v+7d '+%Y-%m-%dT%H:%MZ')
 SAS_TOKEN=$(az storage container generate-sas --account-name "${STORAGE_ACCOUNT}" --name "${CONTAINER_NAME}" --account-key "${STORAGE_KEY}" --permissions rwl --expiry "${SAS_EXPIRY}" --output tsv)
-BLOB_UPLOAD_URL="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/janus_1m_results.tar.gz?${SAS_TOKEN}"
+BLOB_UPLOAD_URL="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/janus_100m_results.tar.gz?${SAS_TOKEN}"
 
 # 3. Create Cloud Startup Script (Runs 100% in Background inside the VM)
 cat <<EOF > /tmp/azure_janus_startup.sh
@@ -57,7 +58,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo "[*] Updating system packages & installing dependencies..."
 apt-get update -y
-apt-get install -y git python3 python3-pip python3-venv libopenmpi-dev openmpi-bin gmsh curl
+apt-get install -y git python3 python3-pip python3-venv libopenmpi-dev openmpi-bin gmsh curl tar
 
 cd /opt
 git clone https://github.com/horizonseekerik/janus-photonic-hardware.git janus
@@ -70,26 +71,44 @@ pip install numpy scipy matplotlib sympy pytest
 
 mkdir -p /opt/janus/output/cloud_figures /opt/janus/janus_mini16_sim/output /opt/janus/janus_mini16_sim/orchestrator/artifacts
 
-echo "[*] Step 1: Running 1,000,000-Sample Monte Carlo Tolerance with 7 Figures..."
-python3 janus_mini16_sim/tier1_meep_optics/monte_carlo_tolerance.py --samples 1000000 --batch-size 250000 --export-graphs --graph-dir /opt/janus/output/cloud_figures > /opt/janus/output/mc_1m.log 2>&1
+export OMP_NUM_THREADS=\$(nproc)
+N_CORES=\$(nproc)
 
-echo "[*] Step 2: Running 1,000,000-Cycle 100 GHz SPICE Eye & BER with 6 Figures..."
-python3 janus_mini16_sim/tier3_xyce_circuit/eye_diagram_ber.py --bits 1000000 --export-graphs --graph-dir /opt/janus/output/cloud_figures > /opt/janus/output/spice_1m.log 2>&1
+echo "[*] Step 1: Running 100,000,000-Sample Monte Carlo Tolerance with 7 Figures (\${N_CORES} workers)..."
+python3 janus_mini16_sim/tier1_meep_optics/monte_carlo_tolerance.py \
+    --samples 100000000 \
+    --batch-size 1000000 \
+    --parallel \
+    --workers \${N_CORES} \
+    --export-graphs \
+    --graph-dir /opt/janus/output/cloud_figures > /opt/janus/output/mc_100m.log 2>&1
 
-echo "[*] Step 3: Running Full 5-Tier Co-Simulation & Decision Tree..."
+echo "[*] Step 2: Running 100,000,000-Cycle 100 GHz SPICE Eye & BER with 6 Figures (\${N_CORES} workers)..."
+python3 janus_mini16_sim/tier3_xyce_circuit/eye_diagram_ber.py \
+    --bits 100000000 \
+    --chunk-size 250000 \
+    --parallel \
+    --workers \${N_CORES} \
+    --export-graphs \
+    --graph-dir /opt/janus/output/cloud_figures > /opt/janus/output/spice_100m.log 2>&1
+
+echo "[*] Step 3: Running Full 5-Tier Co-Simulation & Decision Tree Sign-Off..."
 python3 janus_mini16_sim/run_mini16_full_cosim.py --all > /opt/janus/output/full_cosim.log 2>&1
 
 echo "[*] Step 4: Generating All 19 Publication-Grade Scientific Figures & OFC Dashboards..."
-python3 janus_mini16_sim/cloud_hpc/cloud_graph_generator.py --output-dir /opt/janus/output/cloud_figures --samples 1000000 --cycles 1000000 > /opt/janus/output/cloud_graphs.log 2>&1
+python3 janus_mini16_sim/cloud_hpc/cloud_graph_generator.py \
+    --output-dir /opt/janus/output/cloud_figures \
+    --samples 100000000 \
+    --cycles 100000000 > /opt/janus/output/cloud_graphs.log 2>&1
 
-echo "[*] Compressing all figures, logs, and artifacts..."
+echo "[*] Compressing all 100M figures, logs, and artifacts..."
 cd /opt/janus
-tar -czvf /opt/janus_1m_results.tar.gz output/ janus_mini16_sim/output/ janus_mini16_sim/orchestrator/artifacts/
+tar -czvf /opt/janus_100m_results.tar.gz output/ janus_mini16_sim/output/ janus_mini16_sim/orchestrator/artifacts/
 
 echo "[*] Uploading completed archive directly to Azure Storage Container..."
-curl -X PUT -T /opt/janus_1m_results.tar.gz -H "x-ms-blob-type: BlockBlob" "${BLOB_UPLOAD_URL}"
+curl -X PUT -T /opt/janus_100m_results.tar.gz -H "x-ms-blob-type: BlockBlob" "${BLOB_UPLOAD_URL}"
 
-echo "[*] All simulations finished and uploaded to Azure Storage! Shutting down VM to save credit..."
+echo "[*] All 100M simulations finished and uploaded to Azure Storage! Shutting down VM to save credit..."
 sudo shutdown -h now
 EOF
 
@@ -97,6 +116,11 @@ EOF
 echo "[*] Step 3: Launching Azure VM with automatic SKU & region fallback..."
 
 CANDIDATE_SIZES=(
+    "Standard_F16s_v2"
+    "Standard_D16s_v5"
+    "Standard_D8s_v5"
+    "Standard_F8s_v2"
+    "Standard_HB120rs_v3"
     "Standard_D4s_v5"
     "Standard_F4s_v2"
     "Standard_D4s_v4"
@@ -106,7 +130,6 @@ CANDIDATE_SIZES=(
     "Standard_D4as_v5"
     "Standard_B2ms"
     "Standard_D2s_v5"
-    "Standard_F2s_v2"
 )
 
 REGIONS=("centralindia" "southindia" "eastus" "eastus2" "centralus")
@@ -151,9 +174,11 @@ if [ "${VM_LAUNCHED}" = false ]; then
 fi
 
 echo "========================================================================"
-echo "  [LAUNCHED] Azure HPC VM (${FINAL_SIZE} in ${FINAL_REGION}) is running!"
+echo "  [LAUNCHED] Azure HPC 100M VM (${FINAL_SIZE} in ${FINAL_REGION}) is running!"
 echo "  VM Name        : ${FINAL_VM_NAME}"
 echo "  Storage URL    : https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/"
+echo "  Archive Target : janus_100m_results.tar.gz"
 echo "  Monitor with   : az vm get-instance-view --name ${FINAL_VM_NAME} --resource-group ${RESOURCE_GROUP} --output table"
+echo "  To download    : ./azure_hpc/finish_and_upload.sh"
 echo "  To delete when done: az group delete --name ${RESOURCE_GROUP} --yes --no-wait"
 echo "========================================================================"

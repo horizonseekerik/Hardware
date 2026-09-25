@@ -328,7 +328,7 @@ janus_mini16_sim/
 │
 ├── tier1_meep_optics/                     # TIER 1: Photonic FDTD & Waveguide Solvers
 │   ├── asymmetric_16tree_sim.py           # 4-stage binary 16-Tree Fermat optical core solver
-│   ├── sb2s3_switch_cell.py               # 3D FDTD Sb2S3 directional coupler model
+│   ├── sb2s3_1x2_switch_cell.py           # 3D FDTD 1x2 Sb2S3 directional coupler model
 │   ├── mmi_1x2_splitter.py                # Optimized 1:2 MMI splitter tapers (parabolic profile)
 │   ├── waveguide_crossing.py              # MEEP 2D FDTD waveguide crossing solver
 │   ├── litao3_pockels_router.py           # 100 GHz electro-optic LiTaO3 Pockels modulator

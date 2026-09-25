@@ -101,7 +101,7 @@ All simulation parameters defined in this section are **immutable constants** sh
 | `cycling_endurance_max` | N_endure_max | 10^8 | cycles | T1 | Sb2S3 demonstrated endurance ceiling |
 | `volumetric_expansion` | delta_V | 4 - 8 | % | T1, T2 | Volumetric strain (amorphous to crystalline) |
 | `k_sb2s3_thermal` | k_GST | 0.5 | W/(m-K) | T2 | Sb2S3 thermal conductivity |
-| `A_pcm_cell` | A_sw | 1.25 x 10^-12 | m^2 | T1, T2 | Single PCM switch footprint (1.25 um^2) |
+| `A_pcm_cell` | A_sw | 12.04 x 10^-12 | m^2 | T1, T2 | Single 1x2 Sb2S3 directional coupler cell footprint (12.04 um^2: 8.60 x 1.40 um) |
 | `V_gap_pcm` | V_gap | 25 x 10^-9 | m | T1, T2 | Nanoscale engineered void gap (> 20 nm) |
 | `V_gap_minimum` | V_gap_min | 20 x 10^-9 | m | T1, T2 | Absolute minimum void gap (phonon tunneling cutoff) |
 | `sb2s3_patch_thickness` | t_GST | 15 x 10^-9 | m | T1 | Sb2S3 active patch thickness (15 nm) |
@@ -344,8 +344,8 @@ All simulation parameters defined in this section are **immutable constants** sh
 | `L_propagation_coupling` | L_prop | 1.50 | dB | T1 | Waveguide propagation & interlayer coupling |
 | `L_excess_total` | L_ex | 4.93 | dB | T1 | Total excess path loss (MMI 1.82 + 16-Tree 1.61 + prop 1.50) |
 | `L_distribution_total` | L_tot | 44.06 | dB | T1, T3 | Total end-to-end distribution loss (ideal 39.13 + excess 4.93) |
-| `IL_switch_cell` | IL_sw | 0.10 | dB/cell | T1 | Sb2S3 switch cell insertion loss (a-Sb2S3 state) |
-| `ER_pcm_switch` | ER | 25.0 | dB | T1 | PCM switch extinction ratio (minimum) |
+| `IL_switch_cell` | IL_sw | 0.057 | dB/cell | T1 | Sb2S3 1x2 switch cell insertion loss (amorphous cross state; 0.142 dB crystalline bar) |
+| `ER_pcm_switch` | ER | 21.86 | dB | T1 | Sb2S3 1x2 switch extinction ratio (minimum across both states) |
 
 ---
 
@@ -658,7 +658,7 @@ janus_mini16_sim/
 |   +-- mini_16t_constants.py         # ALL Section 2 global variables as Python constants
 |   +-- mini_16t_specs.json           # JSON export of constants for cross-tool interop
 +-- tier1_meep_optics/
-|   +-- sb2s3_switch_cell.py         # 3D FDTD of PCM directional coupler
+|   +-- sb2s3_1x2_switch_cell.py     # 3D FDTD of 1x2 PCM directional coupler switch cell
 |   +-- waveguide_crossing.py         # MMI crossing extraction
 |   +-- litao3_pockels_router.py      # LiTaO3 Pockels micro-ring modulator
 |   +-- export_touchstone.py          # Generates Touchstone .s4p files

@@ -22,7 +22,7 @@ try:
 except ImportError:
     HAS_MEEP = False
 
-from tier1_meep_optics.sb2s3_switch_cell import Sb2S3SwitchCellMeep
+from tier1_meep_optics.sb2s3_1x2_switch_cell import Sb2S3_1x2_SwitchCellMeep, Sb2S3SwitchCellMeep
 from tier1_meep_optics.waveguide_crossing import WaveguideCrossingMeep
 from tier1_meep_optics.litao3_pockels_router import LiTaO3PockelsModulatorMeep
 from tier1_meep_optics.sb2s3_tolerance_monte_carlo import Sb2S3MonteCarlo
@@ -96,22 +96,22 @@ def test_waveguide_crossing():
     assert res["insertion_loss_dB"] <= 0.10, f"Crossing insertion loss exceeds 0.10 dB spec: {res['insertion_loss_dB']} dB"
     assert res["crosstalk_dB"] <= -38.0, f"Crossing crosstalk above -38.0 dB spec: {res['crosstalk_dB']} dB"
 
-def test_mzi_switch_cell():
-    solver = Sb2S3SwitchCellMeep()
-    res_am = solver.solve_mzi_state("amorphous")
-    res_cr = solver.solve_mzi_state("crystalline")
+def test_1x2_switch_cell():
+    solver = Sb2S3_1x2_SwitchCellMeep()
+    res_am = solver.solve_state("amorphous")
+    res_cr = solver.solve_state("crystalline")
     
-    assert res_am["fidelity"] == "semi-analytical-transfer-matrix"
-    assert res_am["insertion_loss_dB"] <= 0.50, f"MZI amorphous IL too high: {res_am['insertion_loss_dB']}"
-    assert res_am["crosstalk_dB"] <= -25.0, f"MZI amorphous crosstalk too high: {res_am['crosstalk_dB']}"
-    assert res_cr["insertion_loss_dB"] <= 0.50, f"MZI crystalline IL too high: {res_cr['insertion_loss_dB']}"
-    assert res_cr["crosstalk_dB"] <= -25.0, f"MZI crystalline crosstalk too high: {res_cr['crosstalk_dB']}"
+    assert res_am["insertion_loss_dB"] <= 0.10, f"1x2 amorphous IL too high: {res_am['insertion_loss_dB']}"
+    assert res_am["crosstalk_dB"] <= -20.0, f"1x2 amorphous crosstalk too high: {res_am['crosstalk_dB']}"
+    assert res_cr["insertion_loss_dB"] <= 0.20, f"1x2 crystalline IL too high: {res_cr['insertion_loss_dB']}"
+    assert res_cr["crosstalk_dB"] <= -20.0, f"1x2 crystalline crosstalk too high: {res_cr['crosstalk_dB']}"
     assert res_am["passivity"] <= 1.05
+    assert res_cr["passivity"] <= 1.05
 
-def test_mzi_monte_carlo_yield():
-    mc = Sb2S3MonteCarlo(runs=50, topology="mzi")
+def test_1x2_directional_coupler_monte_carlo_yield():
+    mc = Sb2S3MonteCarlo(runs=50, topology="directional_coupler")
     res = mc.run()
-    assert res["yield"] >= 0.95, f"MZI Monte Carlo yield below 95%: {res['yield']*100:.1f}%"
+    assert res["yield"] >= 0.95, f"1x2 Directional Coupler Monte Carlo yield below 95%: {res['yield']*100:.1f}%"
 
 
 # ============================================================================

@@ -1,3 +1,3 @@
 // Project Janus Mini (16-Tile) 3D Thermal Stack Mesh
-// Generated Mesh: C:\Users\hp\Desktop\Deepanshu\Janus Update\janus_mini16_sim\orchestrator\artifacts\mini16_stack.msh
-Merge "C:\Users\hp\Desktop\Deepanshu\Janus Update\janus_mini16_sim\orchestrator\artifacts\mini16_stack.msh";
+// Generated Mesh: /mnt/c/Users/hp/Desktop/Deepanshu/Janus Update/janus_mini16_sim/orchestrator/artifacts/mini16_stack.msh
+Merge "/mnt/c/Users/hp/Desktop/Deepanshu/Janus Update/janus_mini16_sim/orchestrator/artifacts/mini16_stack.msh";

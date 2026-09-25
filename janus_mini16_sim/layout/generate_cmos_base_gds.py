@@ -4,10 +4,11 @@ PROJECT JANUS MINI-16: 65nm CMOS BASE DIE PHYSICAL GDS II SYNTHESIZER
 Target Hardware: JANUS Mini 16-Tile Monolithic MVP (Model 1A)
 Foundry Process: Standard 65nm LP/GP CMOS (1P7M to 1P9M)
 Operating Freq : 3.125 GHz (320.0 ps clock period, 32-lane SIMD)
-Die Dimensions : 3.20 mm x 3.20 mm (1:1 match with SiPh top stratum)
+Die Dimensions : 10.00 mm x 10.00 mm (100.0 mm^2, 1:1 match with SiPh top stratum)
 
 This script synthesizes the standalone 65nm CMOS base die mask layout:
-  - StrongARM Regenerative Sensing Latch Array (1:1 vertically under APD TDVs)
+  - StrongARM Regenerative Sensing Latch Array (1:1 vertically under APD TDVs,
+    32 lanes x 16 trees x 16 leaves = 8,192 latches per tile, 131,072 total)
   - 1:32 Polyphase Time-Interleaved Deserializers
   - 32-Lane SIMD Wallace-Tree & Kogge-Stone Parallel-Prefix Arithmetic Arrays
   - 1.5 MB Dual-LUT Volatile Local SRAM Slices (48 KB per lane)
@@ -56,9 +57,11 @@ from janus_mini16_sim.layout.janus_layer_constants import (
     # Canonical physical dimensions
     DIE_WIDTH_UM, DIE_HEIGHT_UM,
     TILE_CORE_UM, TILE_PITCH_UM, TILE_ARRAY_ORIGIN_X, TILE_ARRAY_ORIGIN_Y,
+    NUM_LANES_PER_TILE, NUM_TREES_PER_LANE, LANE_PITCH_UM, TREE_BAY_HEIGHT_UM,
     TDV_DIAMETER_UM, TDV_UBM_OVERHANG_UM,
     PAD_SIZE_UM, PAD_PITCH_UM,
     PWR_RING_WIDTH_UM, PWR_RING_OFFSET_UM,
+    get_leaf_tdv_coordinate,
 )
 
 # Activate generic layout environment
@@ -99,41 +102,39 @@ def add_balanced_htree_4x4(comp, origin_x, origin_y, pitch, layer):
         comp       : gf.Component to add segments to.
         origin_x   : X of tile[row=0, col=0] bottom-left corner.
         origin_y   : Y of tile[row=0, col=0] bottom-left corner.
-        pitch      : Center-to-center tile pitch.
+        pitch      : Center-to-center tile pitch (2500.0 um).
         layer      : GDS layer tuple for clock metal.
     """
-    # Tile center positions
     tile_half = TILE_CORE_UM / 2.0
-    xs = [origin_x + col * pitch + tile_half for col in range(4)]  # [500,1200,1900,2600]
-    ys = [origin_y + row * pitch + tile_half for row in range(4)]  # [500,1200,1900,2600]
+    xs = [origin_x + col * pitch + tile_half for col in range(4)]
+    ys = [origin_y + row * pitch + tile_half for row in range(4)]
 
     # Quad midpoints
-    x_ql = (xs[0] + xs[1]) / 2.0   # Left quad X mid  = 850
-    x_qr = (xs[2] + xs[3]) / 2.0   # Right quad X mid = 2250
-    y_qb = (ys[0] + ys[1]) / 2.0   # Bottom quad Y mid = 850
-    y_qt = (ys[2] + ys[3]) / 2.0   # Top quad Y mid    = 2250
+    x_ql = (xs[0] + xs[1]) / 2.0
+    x_qr = (xs[2] + xs[3]) / 2.0
+    y_qb = (ys[0] + ys[1]) / 2.0
+    y_qt = (ys[2] + ys[3]) / 2.0
 
     # H-tree root centroid
-    cx = (xs[0] + xs[-1]) / 2.0    # 1550
-    cy = (ys[0] + ys[-1]) / 2.0    # 1550
+    cx = (xs[0] + xs[-1]) / 2.0
+    cy = (ys[0] + ys[-1]) / 2.0
 
-    W = [8.0, 6.0, 4.5, 3.0]       # Wire width per level (trunk → terminal)
+    W = [8.0, 6.0, 4.5, 3.0]       # Wire width per level (trunk -> terminal)
 
-    # ---- Level 1: Root horizontal trunk (left quad-center → right quad-center) ----
+    # Level 1: Root horizontal trunk
     _htree_seg(comp, x_ql, cy, x_qr, cy, W[0], layer)
 
-    # ---- Level 2: Vertical branch at each quad X position ----
+    # Level 2: Vertical branch at each quad X position
     for xq in [x_ql, x_qr]:
         _htree_seg(comp, xq, y_qb, xq, y_qt, W[1], layer)
 
-    # ---- Level 3: Horizontal branch at each quadrant corner ----
+    # Level 3: Horizontal branch at each quadrant corner
     for xq, (xa, xb) in [(x_ql, (xs[0], xs[1])), (x_qr, (xs[2], xs[3]))]:
         for yq in [y_qb, y_qt]:
             _htree_seg(comp, xa, yq, xb, yq, W[2], layer)
 
-    # ---- Level 4: Vertical terminal drops to each individual tile center ----
+    # Level 4: Vertical terminal drops to each individual tile center
     for xi, x in enumerate(xs):
-        yq_parent = y_qb if xi < 2 else None   # xi drives which quad X, ys drive quad Y
         for yi, y in enumerate(ys):
             yq = y_qb if yi < 2 else y_qt
             _htree_seg(comp, x, yq, x, y, W[3], layer)
@@ -156,47 +157,80 @@ def pcell_cmos_strongarm_latch_unit() -> gf.Component:
       - Differential cross-coupled inverters (M1-M4)
       - Input differential NMOS pair (M5-M6)
       - Clock tail current source (M7)
-      - UBM Micro-Bump pad landing directly on sense node
+      - UBM Micro-Bump pad landing directly on sense node (centered at 0, 0)
     Physical CMOS layers: 101/0 (NW_DIFF), 102/0 (POLY_GATE), 106/0 (CONTACT),
                           111/0 (M1), 112/0 (VIA1), 121/0 (M2), 181/0 (UBM).
     """
     c = gf.Component("STRONGARM_LATCH_UNIT")
 
-    # Active Diffusion & Poly Gates
-    c.add_polygon([(0, 0), (25.0, 0), (25.0, 18.0), (0, 18.0)], layer=LAYER_NW_DIFF)
+    # Active Diffusion centered around (0, 0)
+    c.add_polygon([(-12.5, -9.0), (12.5, -9.0), (12.5, 9.0), (-12.5, 9.0)], layer=LAYER_NW_DIFF)
     for g in range(4):
-        xg = 3.0 + g * 5.5
-        c.add_polygon([(xg, -1.0), (xg + 1.2, -1.0), (xg + 1.2, 19.0), (xg, 19.0)],
+        xg = -12.5 + 3.0 + g * 5.5
+        c.add_polygon([(xg, -10.0), (xg + 1.2, -10.0), (xg + 1.2, 10.0), (xg, 10.0)],
                       layer=LAYER_POLY_GATE)
         # Tungsten contact plugs on S/D nodes
-        c.add_polygon([(xg - 1.2, 3.0), (xg - 0.2, 3.0), (xg - 0.2, 5.0), (xg - 1.2, 5.0)],
+        c.add_polygon([(xg - 1.2, -6.0), (xg - 0.2, -6.0), (xg - 0.2, -4.0), (xg - 1.2, -4.0)],
                       layer=LAYER_CONTACT)
-        c.add_polygon([(xg - 1.2, 12.0), (xg - 0.2, 12.0), (xg - 0.2, 14.0), (xg - 1.2, 14.0)],
+        c.add_polygon([(xg - 1.2, 3.0), (xg - 0.2, 3.0), (xg - 0.2, 5.0), (xg - 1.2, 5.0)],
                       layer=LAYER_CONTACT)
 
     # Metal 1 Cross-Coupled Connections
-    c.add_polygon([(2.0, 2.0), (23.0, 2.0), (23.0, 6.0), (2.0, 6.0)], layer=LAYER_METAL1)
-    c.add_polygon([(2.0, 12.0), (23.0, 12.0), (23.0, 16.0), (2.0, 16.0)], layer=LAYER_METAL1)
+    c.add_polygon([(-10.5, -7.0), (10.5, -7.0), (10.5, -3.0), (-10.5, -3.0)], layer=LAYER_METAL1)
+    c.add_polygon([(-10.5, 3.0), (10.5, 3.0), (10.5, 7.0), (-10.5, 7.0)], layer=LAYER_METAL1)
 
     # Via 1 & Metal 2 Output Rails
-    c.add_polygon([(4.0, 5.0), (7.0, 5.0), (7.0, 7.0), (4.0, 7.0)], layer=LAYER_VIA1)
-    c.add_polygon([(18.0, 11.0), (21.0, 11.0), (21.0, 13.0), (18.0, 13.0)], layer=LAYER_VIA1)
-    c.add_polygon([(4.0, 5.0), (7.0, 5.0), (7.0, 13.0), (4.0, 13.0)], layer=LAYER_METAL2)
-    c.add_polygon([(18.0, 5.0), (21.0, 5.0), (21.0, 13.0), (18.0, 13.0)], layer=LAYER_METAL2)
+    c.add_polygon([(-8.5, -4.0), (-5.5, -4.0), (-5.5, -2.0), (-8.5, -2.0)], layer=LAYER_VIA1)
+    c.add_polygon([(5.5, 2.0), (8.5, 2.0), (8.5, 4.0), (5.5, 4.0)], layer=LAYER_VIA1)
+    c.add_polygon([(-8.5, -4.0), (-5.5, -4.0), (-5.5, 4.0), (-8.5, 4.0)], layer=LAYER_METAL2)
+    c.add_polygon([(5.5, -4.0), (8.5, -4.0), (8.5, 4.0), (5.5, 4.0)], layer=LAYER_METAL2)
 
-    # UBM Landing Pad for Cu TDV from APD anode
+    # UBM Landing Pad for Cu TDV from APD anode (Centered exactly at 0.0, 0.0)
     # Diameter = TDV_DIAMETER_UM = 8 um; pad radius = TDV/2 + UBM_OVERHANG = 4+1.5 = 5.5 um
     r_pad = TDV_DIAMETER_UM / 2.0 + TDV_UBM_OVERHANG_UM   # 5.5 um
-    cx, cy = 12.5, 9.0
     pts_ubm = [
-        (cx + r_pad * np.cos(np.deg2rad(deg)), cy + r_pad * np.sin(np.deg2rad(deg)))
+        (r_pad * np.cos(np.deg2rad(deg)), r_pad * np.sin(np.deg2rad(deg)))
         for deg in range(0, 360, 45)
     ]
     c.add_polygon(pts_ubm, layer=LAYER_PASSIVATION_UBM)
 
     # Architectural annotation
-    c.add_polygon([(0, 0), (25.0, 0), (25.0, 18.0), (0, 18.0)], layer=LAYER_ARCH_STRONGARM)
-    c.add_label("STRONGARM_LATCH", position=(12.5, 9.0), layer=LAYER_ARCH_STRONGARM)
+    c.add_polygon([(-12.5, -9.0), (12.5, -9.0), (12.5, 9.0), (-12.5, 9.0)], layer=LAYER_ARCH_STRONGARM)
+    c.add_label("STRONGARM_LATCH", position=(0.0, 0.0), layer=LAYER_ARCH_STRONGARM)
+    return c
+
+
+@gf.cell
+def pcell_cmos_strongarm_latch_bay() -> gf.Component:
+    """
+    16-Latch StrongARM Bay corresponding to 1 binary switch tree.
+    Contains a 4x4 array of StrongARM latches placed at the exact relative offsets
+    (col - 1.5)*16.0 um in X and (row - 1.5)*32.0 um in Y, matching the optical TDVs.
+    """
+    c = gf.Component("CMOS_STRONGARM_LATCH_BAY")
+    latch = pcell_cmos_strongarm_latch_unit()
+    for leaf in range(16):
+        col = leaf % 4
+        row = leaf // 4
+        dx = (col - 1.5) * 16.0
+        dy = (row - 1.5) * 32.0
+        ref = c.add_ref(latch)
+        ref.move((dx, dy))
+    return c
+
+
+@gf.cell
+def pcell_cmos_strongarm_lane() -> gf.Component:
+    """
+    SIMD Lane of StrongARM Latches: 16 stacked latch bays along Y (16 x 16 = 256 latches).
+    Bay centers at y = (tree + 0.5) * TREE_BAY_HEIGHT_UM (156.25 um pitch).
+    """
+    c = gf.Component("CMOS_STRONGARM_LANE")
+    bay = pcell_cmos_strongarm_latch_bay()
+    for tree in range(NUM_TREES_PER_LANE):
+        yt = (tree + 0.5) * TREE_BAY_HEIGHT_UM
+        ref = c.add_ref(bay)
+        ref.move((0.0, yt))
     return c
 
 
@@ -208,7 +242,7 @@ def pcell_cmos_deserializer_bank() -> gf.Component:
       - 32-bit register shift register array (height = 16*32 = 512 um core)
     """
     c = gf.Component("DESERIALIZER_1TO32_BANK")
-    w, h = 45.0, 512.0    # Corrected: 32 stages * 16 um = 512 um
+    w, h = 45.0, 512.0
 
     c.add_polygon([(0, 0), (w, 0), (w, h), (0, h)], layer=LAYER_NW_DIFF)
 
@@ -297,7 +331,6 @@ def pcell_cmos_duallut_sram_macro() -> gf.Component:
 
     c.add_polygon([(0, 0), (w, 0), (w, h), (0, h)], layer=LAYER_NW_DIFF)
 
-    # Memory Sub-Banks (4 quadrants x 2 rows)
     for qx in range(4):
         for qy in range(2):
             bx = 10.0 + qx * 62.0
@@ -335,7 +368,6 @@ def pcell_cmos_central_rom_jir_macro() -> gf.Component:
 
     c.add_polygon([(0, 0), (w, 0), (w, h), (0, h)], layer=LAYER_NW_DIFF)
 
-    # Dense Via-ROM Matrix
     for col in range(12):
         xc = 8.0 + col * 9.0
         c.add_polygon([(xc, 10.0), (xc + 2.5, 10.0), (xc + 2.5, 140.0), (xc, 140.0)],
@@ -345,7 +377,6 @@ def pcell_cmos_central_rom_jir_macro() -> gf.Component:
             c.add_polygon([(xc, yr), (xc + 2.5, yr), (xc + 2.5, yr + 2.5), (xc, yr + 2.5)],
                           layer=LAYER_VIA1)
 
-    # JIR Controller Logic Block (Y: 150-185 um)
     c.add_polygon([(5.0, 150.0), (w - 5.0, 150.0), (w - 5.0, 185.0), (5.0, 185.0)],
                   layer=LAYER_METAL2)
     c.add_polygon([(10.0, 155.0), (w - 10.0, 155.0), (w - 10.0, 180.0), (10.0, 180.0)],
@@ -405,15 +436,16 @@ def pcell_cmos_thermal_sensor_unit() -> gf.Component:
 
 
 # ==============================================================================
-# 2. SINGLE 65nm CMOS TILE SUB-SYSTEM (600 x 600 um footprint)
+# 2. SINGLE 65nm CMOS TILE SUB-SYSTEM (2500 x 2500 um footprint = 6.25 mm^2)
 # ==============================================================================
 
 @gf.cell
 def build_cmos_base_tile(tile_id: int = 0) -> gf.Component:
     """
-    Synthesizes a complete 65nm CMOS Base Tile (600 um x 600 um core active area,
+    Synthesizes a complete 65nm CMOS Base Tile (2500 um x 2500 um core active area,
     matching the 6.25 mm^2 top optical tile footprint 1:1):
-      1. 17x StrongARM Regenerative Sensing Latches (1:1 aligned with APD TDVs)
+      1. 32 SIMD Lanes x 16 Tree Bays x 16 StrongARM Latches = 8,192 StrongARM Latches
+         (1:1 aligned with APD TDVs via get_leaf_tdv_coordinate)
       2. 1:32 Polyphase Time-Interleaved Deserializer Bank
       3. 32-Lane SIMD Wallace-Tree / Kogge-Stone Arithmetic Array
       4. 1.5 MB Dual-LUT Volatile Local SRAM Slices
@@ -423,77 +455,60 @@ def build_cmos_base_tile(tile_id: int = 0) -> gf.Component:
       8. Inter-block M3/M4/M5 buses & local Power Grid / Clock trunk
     """
     tile = gf.Component(f"CMOS_BASE_TILE_{tile_id}")
-    tile_w = TILE_CORE_UM
-    tile_h = TILE_CORE_UM
+    tile_w = TILE_CORE_UM   # 2500.0 um
+    tile_h = TILE_CORE_UM   # 2500.0 um
 
     # Physical Boundary
     tile.add_polygon([(0, 0), (tile_w, 0), (tile_w, tile_h), (0, tile_h)],
                      layer=LAYER_FLOORPLAN)
 
-    # 1. 17x StrongARM Latches directly beneath APD TDVs (X: 510-535 um)
-    latch_unit = pcell_cmos_strongarm_latch_unit()
-    for ch in range(17):
-        y_latch = 45.0 + ch * 31.0
-        tile.add_ref(latch_unit).move((510.0, y_latch - 9.0))
-        tile.add_label(f"STRONGARM_CH{ch}", position=(522.5, y_latch),
-                       layer=LAYER_ARCH_STRONGARM)
+    # 1. 32 SIMD Lanes of StrongARM Latches (8,192 latches per tile, matching TDVs)
+    lane_comp = pcell_cmos_strongarm_lane()
+    for lane in range(NUM_LANES_PER_TILE):
+        xl = (lane + 0.5) * LANE_PITCH_UM
+        ref = tile.add_ref(lane_comp)
+        ref.move((xl, 0.0))
 
-    # 2. 1:32 Polyphase Deserializer Bank (X: 450-495 um, Y: 40-552 um)
-    tile.add_ref(pcell_cmos_deserializer_bank()).move((450.0, 40.0))
+    # 2. Digital compute macros placed in base die
+    tile.add_ref(pcell_cmos_deserializer_bank()).move((40.0, 40.0))
+    tile.add_ref(pcell_cmos_simd_wallace_kogge_array()).move((120.0, 40.0))
+    tile.add_ref(pcell_cmos_duallut_sram_macro()).move((350.0, 40.0))
+    tile.add_ref(pcell_cmos_central_rom_jir_macro()).move((650.0, 40.0))
+    tile.add_ref(pcell_cmos_accumulator_160bit()).move((800.0, 40.0))
 
-    # 3. 32-Lane SIMD Wallace-Kogge Array (X: 250-430 um, Y: 40-350 um)
-    tile.add_ref(pcell_cmos_simd_wallace_kogge_array()).move((250.0, 40.0))
-
-    # 4. 1.5 MB Dual-LUT Local SRAM (X: 60-320 um, Y: 380-570 um)
-    tile.add_ref(pcell_cmos_duallut_sram_macro()).move((60.0, 380.0))
-
-    # 5. Central ROM & JIR Controller (X: 340-460 um, Y: 380-570 um)
-    tile.add_ref(pcell_cmos_central_rom_jir_macro()).move((340.0, 380.0))
-
-    # 6. 160-Bit Binary Carry-Save Accumulator (X: 40-240 um, Y: 40-200 um)
-    tile.add_ref(pcell_cmos_accumulator_160bit()).move((40.0, 40.0))
-
-    # 7. 4x Distributed JIR Thermal Diode Sensors
+    # 4x Distributed JIR Thermal Diode Sensors
     sensor_cell = pcell_cmos_thermal_sensor_unit()
     for td in range(4):
-        xt = 70.0 + td * 120.0
-        tile.add_ref(sensor_cell).move((xt, 220.0))
+        xt = 200.0 + td * 500.0
+        tile.add_ref(sensor_cell).move((xt, 2400.0))
 
-    # 8. Inter-Block Signal Buses
-    # Sense-Amp → Deserializer Bus (Metal 2)
-    for ch in range(17):
-        y_latch = 45.0 + ch * 31.0
-        tile.add_polygon([(495.0, y_latch - 1.5), (510.0, y_latch - 1.5),
-                          (510.0, y_latch + 1.5), (495.0, y_latch + 1.5)], layer=LAYER_METAL2)
-    # Deserializer → SIMD 32-Lane Bus (Metal 3)
+    # Inter-Block Signal Buses (Metal 2, 3, 4, 5)
     for b in range(16):
         yb = 55.0 + b * 18.0
-        tile.add_polygon([(430.0, yb), (450.0, yb), (450.0, yb + 2.0), (430.0, yb + 2.0)],
+        tile.add_polygon([(310.0, yb), (350.0, yb), (350.0, yb + 2.0), (310.0, yb + 2.0)],
                          layer=LAYER_METAL3)
-    # SRAM → SIMD Dual-LUT Weight Bus (Metal 4)
     for w_idx in range(12):
         xw = 260.0 + w_idx * 12.0
-        tile.add_polygon([(xw, 350.0), (xw + 2.0, 350.0),
-                          (xw + 2.0, 380.0), (xw, 380.0)], layer=LAYER_METAL4)
-    # SIMD → Accumulator 160-bit Carry-Save Bus (Metal 5)
+        tile.add_polygon([(xw, 200.0), (xw + 2.0, 200.0),
+                          (xw + 2.0, 240.0), (xw, 240.0)], layer=LAYER_METAL4)
     for a_idx in range(8):
         ya = 60.0 + a_idx * 16.0
-        tile.add_polygon([(240.0, ya), (250.0, ya), (250.0, ya + 2.5), (240.0, ya + 2.5)],
+        tile.add_polygon([(780.0, ya), (800.0, ya), (800.0, ya + 2.5), (780.0, ya + 2.5)],
                          layer=LAYER_METAL5)
 
-    # 9. Local Power Grid Mesh (Top Metal 171/0: VDD / VSS Stripes)
-    for p in range(7):
-        yp = 30.0 + p * 85.0
+    # Local Power Grid Mesh (Top Metal 171/0: VDD / VSS Stripes across 2500x2500 um)
+    for p in range(11):
+        yp = 50.0 + p * 240.0
         tile.add_polygon([(10.0, yp), (tile_w - 10.0, yp),
                           (tile_w - 10.0, yp + 12.0), (10.0, yp + 12.0)],
                          layer=LAYER_TOP_METAL_PWR)
-    for p in range(7):
-        xp = 30.0 + p * 85.0
+    for p in range(11):
+        xp = 50.0 + p * 240.0
         tile.add_polygon([(xp, 10.0), (xp + 12.0, 10.0),
                           (xp + 12.0, tile_h - 10.0), (xp, tile_h - 10.0)],
                          layer=LAYER_TOP_METAL_PWR)
 
-    # 10. In-tile Clock Trunk (Metal 6: cross-shaped local distribution)
+    # In-tile Clock Trunk (Metal 6: cross-shaped local distribution)
     tile.add_polygon([(tile_w / 2 - 3.0, 20.0), (tile_w / 2 + 3.0, 20.0),
                       (tile_w / 2 + 3.0, tile_h - 20.0), (tile_w / 2 - 3.0, tile_h - 20.0)],
                      layer=LAYER_METAL6_CLK)
@@ -512,7 +527,7 @@ def build_cmos_base_tile(tile_id: int = 0) -> gf.Component:
 
 
 # ==============================================================================
-# 3. FULL CHIP 65nm CMOS BASE DIE SYNTHESIZER (3.20 mm x 3.20 mm)
+# 3. FULL CHIP 65nm CMOS BASE DIE SYNTHESIZER (10.00 mm x 10.00 mm)
 # ==============================================================================
 
 def generate_janus_mini16_cmos_top_layout() -> gf.Component:
@@ -523,48 +538,43 @@ def generate_janus_mini16_cmos_top_layout() -> gf.Component:
       - 4-side wire-bond / solder bump I/O pad ring
       - 4-layer concentric moisture seal ring
 
-    Die: 3200 x 3200 um | Tiles: 4x4 @ 700 um pitch | Origin: (200, 200)
+    Die: 10000 x 10000 um (100.0 mm^2) | Tiles: 4x4 @ 2500 um pitch | Origin: (0, 0)
     """
     top = gf.Component("JANUS_MINI16_CMOS_BASE_DIE")
 
-    die_w = DIE_WIDTH_UM    # 3200 um
-    die_h = DIE_HEIGHT_UM   # 3200 um
+    die_w = DIE_WIDTH_UM    # 10000 um
+    die_h = DIE_HEIGHT_UM   # 10000 um
 
-    # ---- 1. Chip Boundary ----
+    # 1. Chip Boundary
     top.add_polygon([(0, 0), (die_w, 0), (die_w, die_h), (0, die_h)], layer=LAYER_FLOORPLAN)
     top.add_label("JANUS_MINI16_CMOS_DIE_BOUNDARY", position=(die_w / 2, die_h - 30.0),
                   layer=LAYER_FLOORPLAN)
 
-    # ---- 2. 4-Layer Concentric Moisture Seal Ring ----
-    # Four separate ring widths stacked inward from the edge at 4 um spacing.
-    seal_ring_w = 4.0       # individual ring width
-    seal_ring_gap = 6.0     # pitch between ring centers
-    seal_edge_off = 10.0    # innermost ring outer edge distance from die edge
+    # 2. 4-Layer Concentric Moisture Seal Ring
+    seal_ring_w = 4.0
+    seal_ring_gap = 6.0
+    seal_edge_off = 10.0
     for s in range(4):
         off = seal_edge_off + s * seal_ring_gap
-        # Bottom bar
         top.add_polygon([(off, off), (die_w - off, off),
                          (die_w - off, off + seal_ring_w), (off, off + seal_ring_w)],
                         layer=LAYER_SEAL_RING)
-        # Top bar
         top.add_polygon([(off, die_h - off - seal_ring_w), (die_w - off, die_h - off - seal_ring_w),
                          (die_w - off, die_h - off), (off, die_h - off)],
                         layer=LAYER_SEAL_RING)
-        # Left bar
         top.add_polygon([(off, off), (off + seal_ring_w, off),
                          (off + seal_ring_w, die_h - off), (off, die_h - off)],
                         layer=LAYER_SEAL_RING)
-        # Right bar
         top.add_polygon([(die_w - off - seal_ring_w, off), (die_w - off, off),
                          (die_w - off, die_h - off), (die_w - off - seal_ring_w, die_h - off)],
                         layer=LAYER_SEAL_RING)
     top.add_label("CMOS_SEAL_RING_4LAYER", position=(40.0, die_h - 40.0),
                   layer=LAYER_SEAL_RING)
 
-    # ---- 3. 4x4 Array of 16 CMOS Compute Tiles ----
-    x_origin = TILE_ARRAY_ORIGIN_X   # 200 um
-    y_origin = TILE_ARRAY_ORIGIN_Y   # 200 um
-    tile_pitch = TILE_PITCH_UM       # 700 um
+    # 3. 4x4 Array of 16 CMOS Compute Tiles
+    x_origin = TILE_ARRAY_ORIGIN_X   # 0.0 um
+    y_origin = TILE_ARRAY_ORIGIN_Y   # 0.0 um
+    tile_pitch = TILE_PITCH_UM       # 2500.0 um
 
     for row in range(4):
         for col in range(4):
@@ -574,20 +584,18 @@ def generate_janus_mini16_cmos_top_layout() -> gf.Component:
             tile_ref = top.add_ref(build_cmos_base_tile(tile_id=tile_id))
             tile_ref.move((x_pos, y_pos))
             top.add_label(f"CMOS_TILE_{tile_id}_LOC",
-                          position=(x_pos + 300.0, y_pos + 300.0),
+                          position=(x_pos + 1250.0, y_pos + 1250.0),
                           layer=LAYER_FLOORPLAN)
 
-    # ---- 4. Global VDD/VSS Power Ring (Top Metal 171/0) ----
+    # 4. Global VDD/VSS Power Ring (Top Metal 171/0)
     pwr_off = PWR_RING_OFFSET_UM     # 60 um
     pwr_w = PWR_RING_WIDTH_UM        # 40 um
-    # Bottom & Top rails
     top.add_polygon([(pwr_off, 50.0), (die_w - pwr_off, 50.0),
                      (die_w - pwr_off, 50.0 + pwr_w), (pwr_off, 50.0 + pwr_w)],
                     layer=LAYER_TOP_METAL_PWR)
     top.add_polygon([(pwr_off, die_h - 50.0 - pwr_w), (die_w - pwr_off, die_h - 50.0 - pwr_w),
                      (die_w - pwr_off, die_h - 50.0), (pwr_off, die_h - 50.0)],
                     layer=LAYER_TOP_METAL_PWR)
-    # Left & Right rails
     top.add_polygon([(pwr_off, 50.0), (pwr_off + pwr_w, 50.0),
                      (pwr_off + pwr_w, die_h - 50.0), (pwr_off, die_h - 50.0)],
                     layer=LAYER_TOP_METAL_PWR)
@@ -597,11 +605,11 @@ def generate_janus_mini16_cmos_top_layout() -> gf.Component:
     top.add_label("GLOBAL_VDD_VSS_POWER_RING", position=(die_w / 2, 70.0),
                   layer=LAYER_TOP_METAL_PWR)
 
-    # ---- 5. Complete 4-Side Wire-Bond / Solder Bump I/O Pad Ring ----
+    # 5. Complete 4-Side Wire-Bond / Solder Bump I/O Pad Ring
     pad_s = PAD_SIZE_UM      # 75 um
     pad_p = PAD_PITCH_UM     # 120 um
-    pad_y_bot = 95.0         # Bottom row Y offset from die bottom
-    pad_y_top = die_h - 95.0 - pad_s   # Top row Y offset from die top
+    pad_y_bot = 95.0
+    pad_y_top = die_h - 95.0 - pad_s
 
     # Bottom & Top rows (horizontal)
     num_pads_x = int((die_w - 400.0) / pad_p)
@@ -635,7 +643,7 @@ def generate_janus_mini16_cmos_top_layout() -> gf.Component:
         top.add_label(f"IO_PAD_RIGHT_{p}",
                       position=(pad_x_right + pad_s / 2, yp + pad_s / 2), layer=LAYER_PAD_IO)
 
-    # ---- 6. 4-Level Balanced H-Tree Global Clock (Metal 6 / Layer 161/0) ----
+    # 6. 4-Level Balanced H-Tree Global Clock (Metal 6 / Layer 161/0)
     add_balanced_htree_4x4(top, x_origin, y_origin, tile_pitch, LAYER_METAL6_CLK)
 
     return top
@@ -649,8 +657,9 @@ def main():
     print("=" * 75)
     print("PROJECT JANUS: 65nm LP/GP CMOS DIGITAL BASE DIE GDS II SYNTHESIZER")
     print("=" * 75)
-    print("[*] Synthesizing 16x 65nm CMOS Compute Tiles...")
-    print("[*] Synthesizing StrongARM Latches, 1:32 Deserializers & SIMD Wallace-Kogge...")
+    print("[*] Synthesizing 16x 65nm CMOS Compute Tiles (2.5x2.5 mm each)...")
+    print("[*] Synthesizing StrongARM Latches (32 lanes x 16 trees x 16 leaves = 8,192 per tile)...")
+    print("[*] Synthesizing 1:32 Deserializers & SIMD Wallace-Kogge Arithmetic...")
     print("[*] Synthesizing 1.5MB Dual-LUT SRAM & Central ROM Macros...")
     print("[*] Synthesizing 160-Bit Carry-Save Accumulator & JIR Thermal Diodes...")
     print("[*] Synthesizing UBM Micro-Bump Pads, 4-Level H-Tree Clock & Power Rings...")

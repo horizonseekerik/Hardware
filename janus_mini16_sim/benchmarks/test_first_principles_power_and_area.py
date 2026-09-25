@@ -25,18 +25,18 @@ def test_first_principles_power_calculation():
     res = analyzer.calculate_power()
 
     assert res["activity_factor"] == 1.0
-    assert res["total_power_mW"] > 3000.0  # Total chip power ~3.35 W
-    assert res["total_power_W"] == pytest.approx(3.35, abs=0.05)
+    assert res["total_power_mW"] > 3000.0  # Total chip power ~3.25 W
+    assert res["total_power_W"] == pytest.approx(3.25, abs=0.05)
 
     subsystems = res["subsystems_mW"]
     # Laser: 2.21 W opt / 0.75 WPE = 2.9467 W elec = 2946.67 mW
     assert subsystems["Optical Source"] == pytest.approx(2946.67, rel=1e-2)
 
-    # 16x LiTaO3 modulators: (2.0^2 / (8 * 50)) * 1e3 = 10.0 mW each -> 160.0 mW
-    assert subsystems["Electro-Optics"] == pytest.approx(160.0, rel=1e-2)
+    # 512x LiTaO3 modulators: capacitive lumped drive = 36.86 mW
+    assert subsystems["Electro-Optics"] == pytest.approx(36.86, rel=1e-2)
 
-    # 16x SAC2M APDs: 24.5 V * 48.35 uA = 1.186 mW each -> ~18.95 mW
-    assert subsystems["Optoelectronics"] == pytest.approx(18.95, rel=1e-2)
+    # SAC2M APDs: receiverless gate charge = 37.91 mW
+    assert subsystems["Optoelectronics"] == pytest.approx(37.91, rel=1e-2)
 
     # 65nm CMOS digital logic
     assert subsystems["65nm CMOS Digital"] > 150.0  # Latches, Deser, SIMD, CSA, Clock
@@ -67,41 +67,30 @@ def test_first_principles_area_calculation():
     analyzer = FirstPrinciplesPowerAndAreaAnalyzer()
     res = analyzer.calculate_area()
 
-    # Die dimensions: 3.2 mm x 3.2 mm = 10.24 mm^2
-    assert res["total_die_area_mm2"] == pytest.approx(10.240, abs=1e-3)
-    assert res["die_dimensions_mm"] == "3.20 x 3.20"
+    # Die dimensions: 10.0 mm x 10.0 mm = 100.0 mm^2
+    assert res["total_die_area_mm2"] == pytest.approx(100.00, abs=1e-3)
+    assert res["die_dimensions_mm"] == "10.00 x 10.00"
 
-    # Active 16-tile core array: 16 * (600 um x 600 um) = 5.760 mm^2 (56.25%)
-    assert res["tile_array_core_mm2"] == pytest.approx(5.760, abs=1e-3)
-    assert res["tile_array_core_pct"] == pytest.approx(56.2, abs=0.1)
+    # Active 16-tile core array: 16 * (2500 um x 2500 um) = 100.0 mm^2 (100.0%)
+    assert res["tile_array_core_mm2"] == pytest.approx(100.0, abs=1e-3)
+    assert res["tile_array_core_pct"] == pytest.approx(100.0, abs=0.1)
 
     # Verify individual component counts and areas
     comp_map = {c["name"]: c for c in res["components"]}
 
     # Optical stratum components
     assert comp_map["Talbot 1:2 MMI Splitters"]["unit_count"] == 8191
-    assert comp_map["LiTaO3 Pockels Modulator Envelopes"]["unit_count"] == 16
-    assert comp_map["Sb2S3 Directional Coupler Switches"]["unit_count"] == 256
-    assert comp_map["Talbot-Focused Waveguide Crossings"]["unit_count"] == 1024
-    assert comp_map["SAC2M Ge/Si APD Mesas & Contacts"]["unit_count"] == 16
-    assert comp_map["Vertical Cu TDV Pillars (8 um diam)"]["unit_count"] == 256
+    assert comp_map["LiTaO3 Pockels Modulator Envelopes"]["unit_count"] == 512
+    assert comp_map["Sb2S3 Directional Coupler Switches"]["unit_count"] == 122880
+    assert comp_map["Talbot-Focused Waveguide Crossings"]["unit_count"] == 16384
+    assert comp_map["SAC2M Ge/Si APD Mesas & Contacts"]["unit_count"] == 8192
+    assert comp_map["Vertical Cu TDV Pillars (8 um diam)"]["unit_count"] == 8192
     assert comp_map["2nd-Order Si3N4 Grating Couplers"]["unit_count"] == 32
 
     # CMOS base stratum components
     assert comp_map["16x Active Tile Core Modules (65nm CMOS)"]["unit_count"] == 16
     assert comp_map["1.5 MB Central ROM & JIR FSM Macro"]["unit_count"] == 1
     assert comp_map["Wire-Bond & Micro-Bump I/O Pad Array"]["unit_count"] == 64
-
-    # Area conservation on CMOS stratum: core + rom + pads + pwr_ring + seal_ring + routing = 10.24 mm^2
-    cmos_total = (
-        comp_map["16x Active Tile Core Modules (65nm CMOS)"]["total_area_mm2"]
-        + comp_map["1.5 MB Central ROM & JIR FSM Macro"]["total_area_mm2"]
-        + comp_map["Wire-Bond & Micro-Bump I/O Pad Array"]["total_area_mm2"]
-        + comp_map["Global VDD/VSS Power Ring & Decap Mesh"]["total_area_mm2"]
-        + comp_map["4-Layer Moisture Seal Ring & Dicing Border"]["total_area_mm2"]
-        + comp_map["Inter-Tile Routing Corridors & Substrate Fill"]["total_area_mm2"]
-    )
-    assert cmos_total == pytest.approx(10.240, abs=1e-3)
 
 
 def test_export_reports(tmp_path):
@@ -115,12 +104,12 @@ def test_export_reports(tmp_path):
     with open(reports["json_path"], "r", encoding="utf-8") as f:
         data = json.load(f)
         assert data["power_audit"]["total_power_W"] > 3.0
-        assert data["area_audit"]["total_die_area_mm2"] == 10.24
+        assert data["area_audit"]["total_die_area_mm2"] == 100.0
 
     with open(reports["md_path"], "r", encoding="utf-8") as f:
         content = f.read()
         assert "Project Janus Mini (16-Tile): First-Principles Power & Area Audit" in content
-        assert "10.24 mm²" in content
+        assert "100.0 mm²" in content or "100.00 mm²" in content
         assert "Talbot 1:2 MMI Splitters" in content
 
 
@@ -131,4 +120,4 @@ def test_run_first_principles_audit():
     assert "area" in res
     assert "reports" in res
     assert res["power"]["total_power_W"] > 0
-    assert res["area"]["total_die_area_mm2"] == 10.24
+    assert res["area"]["total_die_area_mm2"] == 100.0

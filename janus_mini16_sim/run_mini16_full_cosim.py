@@ -136,9 +136,9 @@ def main():
     parser.add_argument(
         "--switch-topology",
         type=str,
-        default="mzi",
-        choices=["mzi", "directional_coupler"],
-        help="Switch cell topology for Tier 1 ('mzi' [default] or 'directional_coupler')",
+        default="directional_coupler",
+        choices=["directional_coupler", "mzi"],
+        help="Switch cell topology for Tier 1 ('directional_coupler' [default] or 'mzi')",
     )
 
     parser.add_argument(

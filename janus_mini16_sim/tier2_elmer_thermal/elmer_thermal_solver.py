@@ -315,7 +315,7 @@ class TransientThermal1D:
           - eta_thermal_cryst = 0.35: Reflects thermal diffusion into surrounding dielectric during 50 ns SET pulse.
           - eta_thermal_reset = 0.80: High efficiency under ultra-short 1 ns electro-thermal melt-quench pulse.
         """
-        V_cell_m3 = cfg.A_pcm_cell * cfg.gst_patch_thickness  # 1.25 um^2 x 15 nm = 1.875e-20 m^3
+        V_cell_m3 = getattr(cfg, "A_pcm_patch", 1.456e-12) * cfg.gst_patch_thickness  # 1.456 um^2 x 15 nm = 2.184e-20 m^3
         rho_pcm = 4640.0  # kg/m^3 (Sb2S3 mass density)
         cp_pcm = 360.0    # J/(kg*K) (Sb2S3 specific heat capacity)
         m_cell = rho_pcm * V_cell_m3  # 8.7e-17 kg

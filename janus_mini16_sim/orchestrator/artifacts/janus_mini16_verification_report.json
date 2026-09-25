@@ -1,15 +1,15 @@
 {
   "project": "Project JANUS Mini 16-Tile",
-  "timestamp": "2026-09-20T17:47:03Z",
+  "timestamp": "2026-09-24T05:43:01Z",
   "overall_pass": true,
   "status": "VERIFICATION COMPLETED",
   "execution_times_seconds": {
-    "tier1": 0.016284704208374023,
-    "tier2": 1.0645875930786133,
-    "tier3": 0.016645431518554688,
-    "tier4": 1.7805304527282715,
-    "tier5": 2.2836380004882812,
-    "total": 5.161686182022095
+    "tier1": 179.69555592536926,
+    "tier2": 5.751840353012085,
+    "tier3": 0.019166231155395508,
+    "tier4": 2.621351957321167,
+    "tier5": 1.6387889385223389,
+    "total": 189.72723174095154
   },
   "verification_checks": [
     {
@@ -17,10 +17,10 @@
       "name": "Sb2S3 Switch Insertion Loss (Amorphous)",
       "tier": "Tier 1",
       "target_spec": "IL <= 0.50 dB",
-      "measured_value": "0.2627",
+      "measured_value": "0.05707",
       "threshold": "<= 0.50 dB",
       "passed": true,
-      "details": "Amorphous low-loss state transmission (MZI architecture)"
+      "details": "Amorphous low-loss state transmission (1x2 directional coupler with filter)"
     },
     {
       "id": 2,
@@ -37,7 +37,7 @@
       "name": "Waveguide Crossing Insertion Loss",
       "tier": "Tier 1",
       "target_spec": "IL <= 0.100 dB",
-      "measured_value": "0.0914",
+      "measured_value": "0.09143",
       "threshold": "<= 0.100 dB",
       "passed": true,
       "details": "Talbot self-imaging MMI crossing through-loss (adiabatic parabolic expansion)"
@@ -47,7 +47,7 @@
       "name": "Waveguide Crossing Crosstalk",
       "tier": "Tier 1",
       "target_spec": "XT <= -38.0 dB",
-      "measured_value": "-60",
+      "measured_value": "-57.77",
       "threshold": "<= -38.0 dB",
       "passed": true,
       "details": "Cross-port parasitic optical isolation"
@@ -107,7 +107,7 @@
       "name": "Optical Receiver Bit Error Rate",
       "tier": "Tier 3",
       "target_spec": "BER <= 10^-18",
-      "measured_value": "3.376e-56",
+      "measured_value": "2.91e-47",
       "threshold": "<= 1.00e-18",
       "passed": true,
       "details": "Calculated with Q=9.38 error bound"
@@ -117,7 +117,7 @@
       "name": "100 GHz Eye Diagram Opening",
       "tier": "Tier 3",
       "target_spec": "Eye Opening > 0%",
-      "measured_value": "81.1",
+      "measured_value": "78.9",
       "threshold": "> 0.0%",
       "passed": true,
       "details": "Clear binary spatial discrimination at 100 GHz"

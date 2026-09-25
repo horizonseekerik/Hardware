@@ -12,7 +12,7 @@ if BASE_DIR not in sys.path:
 
 import pytest
 from orchestrator.master_orchestrator import JanusMasterOrchestrator
-from tier1_meep_optics.sb2s3_switch_cell import HAS_MEEP
+from tier1_meep_optics.sb2s3_1x2_switch_cell import HAS_MEEP
 
 
 def test_master_orchestrator_initialization():

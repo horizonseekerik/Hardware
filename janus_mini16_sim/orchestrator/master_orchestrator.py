@@ -33,7 +33,7 @@ if BASE_DIR not in sys.path:
 from configs import mini_16t_constants as cfg
 
 # Tier 1 Imports
-from tier1_meep_optics.sb2s3_switch_cell import Sb2S3SwitchCellMeep
+from tier1_meep_optics.sb2s3_1x2_switch_cell import Sb2S3_1x2_SwitchCellMeep
 from tier1_meep_optics.waveguide_crossing import WaveguideCrossingMeep
 from tier1_meep_optics.litao3_pockels_router import LiTaO3PockelsModulatorMeep
 from tier1_meep_optics.asymmetric_16tree_sim import Asymmetric15TreeCore, Asymmetric16TreeCore, OpticalSwitchSpecs
@@ -130,17 +130,11 @@ class JanusMasterOrchestrator:
         t0 = time.time()
         self.log("=== EXECUTING TIER 1: ELECTRO-OPTICS & 3D FDTD EXTRACTIONS ===", "TIER 1")
 
-        # 2. Sb2S3 Switch Cell (Algorithm 1A)
-        # Primary topology: Industry-standard 2x2 MZI Switch with 3dB MMI Couplers
-        switch_solver = Sb2S3SwitchCellMeep()
-        if self.switch_topology == "mzi":
-            res_am = switch_solver.solve_mzi_state("amorphous")
-            res_cr = switch_solver.solve_mzi_state("crystalline")
-        else:
-            switch_solver.resolution = 20 # Calibrated resolution
-            switch_solver.L_patch = 39.0  # Taper-compensated beat length (MPB L_c = 37.71 um)
-            res_am = switch_solver.solve_state("amorphous")
-            res_cr = switch_solver.solve_state("crystalline")
+        # 2. Sb2S3 1x2 Switch Cell (Algorithm 1A)
+        # Architecture 1: 1x2 Directional Coupler with 700 nm S-Bend Detuning Extension & Outside Mode Filter
+        switch_solver = Sb2S3_1x2_SwitchCellMeep()
+        res_am = switch_solver.solve_state("amorphous")
+        res_cr = switch_solver.solve_state("crystalline")
 
         # 3. MMI Waveguide Crossing (Algorithm 1B)
         # Full-wave 2D MEEP FDTD simulation with multi-segment parabolic tapers (Option 2)
@@ -482,7 +476,7 @@ class JanusMasterOrchestrator:
         spec_xt_cross = getattr(cfg, "SPEC_XT_crossing_min_dB", -38.0)
         spec_scr_16tree = getattr(cfg, "SPEC_SCR_16tree_min_dB", getattr(cfg, "SPEC_SCR_15tree_min_dB", 18.0))
         make_check(1, "Sb2S3 Switch Insertion Loss (Amorphous)", "Tier 1", f"IL <= {spec_il_switch:.2f} dB", f"<= {spec_il_switch:.2f} dB", 
-                   il_am, lambda v: v <= spec_il_switch, "Amorphous low-loss state transmission (MZI architecture)")
+                   il_am, lambda v: v <= spec_il_switch, "Amorphous low-loss state transmission (1x2 directional coupler with filter)")
         make_check(2, "16-Tree Signal-to-Crosstalk Ratio (SCR)", "Tier 1", f"SCR >= {spec_scr_16tree:.1f} dB", f">= {spec_scr_16tree:.1f} dB", 
                    scr_16tree, lambda v: v >= spec_scr_16tree, "16-Tree Fermat Core worst-case signal vs total leakage across non-target leaves")
         make_check(3, "Waveguide Crossing Insertion Loss", "Tier 1", f"IL <= {spec_il_cross:.3f} dB", f"<= {spec_il_cross:.3f} dB", 
