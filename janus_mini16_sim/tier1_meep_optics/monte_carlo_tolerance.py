@@ -240,7 +240,7 @@ class MonteCarloFoundryToleranceEngine:
                 from cloud_hpc.cloud_graph_generator import CloudGraphGenerator
                 gen = CloudGraphGenerator(output_dir=graph_dir)
                 print(f"[*] Exporting Monte Carlo scientific figures to {gen.output_dir}...")
-                gen.generate_all_mc_graphs(margins)
+                gen.generate_all_mc_graphs(margins, total_samples=self.n_samples)
             except Exception as e:
                 print(f"[!] Warning: Graph export failed: {e}")
 

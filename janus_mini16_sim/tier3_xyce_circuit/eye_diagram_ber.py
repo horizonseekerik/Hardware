@@ -477,15 +477,16 @@ class EyeDiagramAndBERSolver:
 
         if export_graphs:
             try:
-                from cloud_hpc.cloud_graph_generator import CloudGraphGenerator, SPICE_CHECKPOINT_INTERVALS
+                from cloud_hpc.cloud_graph_generator import CloudGraphGenerator, SPICE_CHECKPOINT_INTERVALS_100M, SPICE_CHECKPOINT_INTERVALS_1M
                 gen = CloudGraphGenerator(output_dir=graph_dir)
                 print(f"[*] Exporting SPICE scientific figures to {gen.output_dir}...")
                 gen.generate_spice_2d_eye_density_heatmap(n_cycles=num_bits)
-                gen.generate_spice_ber_waterfall_plot()
+                gen.generate_spice_ber_waterfall_plot(n_cycles=num_bits)
                 gen.generate_spice_strongarm_regen_plot(n_cycles=num_bits)
                 gen.generate_spice_jitter_distribution_plot()
                 gen.generate_spice_noise_psd_spectrum_plot()
-                gen.generate_spice_checkpoint_evolution_plot(SPICE_CHECKPOINT_INTERVALS)
+                cps = SPICE_CHECKPOINT_INTERVALS_100M if num_bits >= 10_000_000 else SPICE_CHECKPOINT_INTERVALS_1M
+                gen.generate_spice_checkpoint_evolution_plot(cps)
             except Exception as e:
                 print(f"[!] Warning: SPICE graph export failed: {e}")
 
