@@ -294,10 +294,14 @@ class JanusMasterOrchestrator:
 
         tier4_dir = os.path.join(BASE_DIR, "tier4_rtl_digital")
         iverilog = shutil.which("iverilog") or (
-            "/mnt/c/iverilog/bin/iverilog.exe" if os.path.exists("/mnt/c/iverilog/bin/iverilog.exe") else r"C:\iverilog\bin\iverilog.exe"
+            "/usr/bin/iverilog" if os.path.exists("/usr/bin/iverilog") else (
+                "/mnt/c/iverilog/bin/iverilog.exe" if os.path.exists("/mnt/c/iverilog/bin/iverilog.exe") else r"C:\iverilog\bin\iverilog.exe"
+            )
         )
         vvp = shutil.which("vvp") or (
-            "/mnt/c/iverilog/bin/vvp.exe" if os.path.exists("/mnt/c/iverilog/bin/vvp.exe") else r"C:\iverilog\bin\vvp.exe"
+            "/usr/bin/vvp" if os.path.exists("/usr/bin/vvp") else (
+                "/mnt/c/iverilog/bin/vvp.exe" if os.path.exists("/mnt/c/iverilog/bin/vvp.exe") else r"C:\iverilog\bin\vvp.exe"
+            )
         )
 
         if not os.path.exists(iverilog) or not os.path.exists(vvp):

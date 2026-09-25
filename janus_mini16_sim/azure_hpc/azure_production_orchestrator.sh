@@ -58,7 +58,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo "[*] Updating system packages & installing dependencies..."
 apt-get update -y
-apt-get install -y git python3 python3-pip python3-venv libopenmpi-dev openmpi-bin gmsh curl tar
+apt-get install -y git python3 python3-pip python3-venv libopenmpi-dev openmpi-bin gmsh curl tar iverilog
 
 cd /opt
 git clone https://github.com/horizonseekerik/janus-photonic-hardware.git janus
@@ -67,7 +67,7 @@ cd /opt/janus
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
-pip install numpy scipy matplotlib sympy pytest
+pip install numpy scipy matplotlib sympy pytest z3-solver
 
 mkdir -p /opt/janus/output/cloud_figures /opt/janus/janus_mini16_sim/output /opt/janus/janus_mini16_sim/orchestrator/artifacts
 
