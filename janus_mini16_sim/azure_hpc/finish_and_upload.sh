@@ -72,27 +72,41 @@ SAS_EXPIRY=$(date -u -d "7 days" '+%Y-%m-%dT%H:%MZ' 2>/dev/null || date -u -v+7d
 SAS_TOKEN=$(az storage container generate-sas --account-name "${STORAGE_ACCOUNT}" --name "${CONTAINER_NAME}" --account-key "${STORAGE_KEY}" --permissions rwl --expiry "${SAS_EXPIRY}" -o tsv)
 BLOB_URL="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/janus_100m_results.tar.gz?${SAS_TOKEN}"
 
-echo "[*] Step 4: Executing figure generation and upload inside VM..."
-cat << 'INNER_EOF' > /tmp/vm_finish_task.sh
+echo "[*] Step 4: Executing full 5-tier co-simulation, figures, and upload inside VM..."
+cat << EOF > /tmp/vm_finish_task.sh
+#!/usr/bin/env bash
+set -e
+export DEBIAN_FRONTEND=noninteractive
+
+echo "[*] 1. Installing iverilog & z3-solver..."
+apt-get update -y && apt-get install -y iverilog
+/opt/janus/venv/bin/pip install z3-solver
+
+echo "[*] 2. Updating repository to latest commit..."
+cd /opt/janus
+git fetch origin main
+git reset --hard origin/main
+
+echo "[*] 3. Running Full 5-Tier Co-Simulation & Decision Tree Sign-Off..."
 source /opt/janus/venv/bin/activate
-echo "[*] Generating Category C (Thermal FEM) & Category D (OFC Dashboards) with 100M figures..."
-python3 /opt/janus/janus_mini16_sim/cloud_hpc/cloud_graph_generator.py \
+python3 janus_mini16_sim/run_mini16_full_cosim.py --all
+
+echo "[*] 4. Generating All 19 Publication Figures & OFC Dashboards..."
+python3 janus_mini16_sim/cloud_hpc/cloud_graph_generator.py \
     --output-dir /opt/janus/output/cloud_figures \
     --samples 100000000 \
     --cycles 100000000
 
-echo "[*] Packaging all 100M figures, logs, and artifacts..."
+echo "[*] 5. Packaging all 100M figures, logs, and artifacts..."
 cd /opt/janus
 tar -czvf /opt/janus_100m_results.tar.gz output/ janus_mini16_sim/output/ janus_mini16_sim/orchestrator/artifacts/ 2>/dev/null || tar -czvf /opt/janus_100m_results.tar.gz -C /opt/janus output/
 
-echo "[*] Uploading completed archive to Azure Storage..."
-curl -X PUT -T /opt/janus_100m_results.tar.gz -H "x-ms-blob-type: BlockBlob" "__BLOB_URL__"
+echo "[*] 6. Uploading completed archive to Azure Storage..."
+curl -f -X PUT -T /opt/janus_100m_results.tar.gz -H "x-ms-blob-type: BlockBlob" '${BLOB_URL}'
 
 echo "[*] Upload complete! Powering down VM to save credit..."
 sudo shutdown -h now
-INNER_EOF
-
-sed -i "s|__BLOB_URL__|${BLOB_URL}|g" /tmp/vm_finish_task.sh
+EOF
 
 az vm run-command invoke \
   --resource-group "${RESOURCE_GROUP}" \
