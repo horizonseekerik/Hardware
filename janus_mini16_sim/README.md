@@ -249,7 +249,7 @@ To mathematically guarantee foundry manufacturability and high-frequency signal 
 
 ### 2. Publication-Grade 19-Figure Scientific Suite
 
-All 19 publication figures are available in both **vector `.pdf`** (for LaTeX IEEE/Optica papers) and **300-DPI `.png`** (for presentation and high-res display) in [`hpc_1m_campaign_results/figures/`](./hpc_1m_campaign_results/figures/):
+All 19 publication figures are available in both **vector `.pdf`** (for LaTeX IEEE/Optica papers) and **300-DPI `.png`** (for presentation and high-res display) in [`hpc_100m_campaign_results/figures/`](./hpc_100m_campaign_results/figures/):
 
 | Category | Figure Name | Deliverable File | Description |
 |---|---|---|---|
@@ -334,7 +334,7 @@ chmod +x janus_mini16_sim/azure_hpc/finish_and_upload.sh
 ./janus_mini16_sim/azure_hpc/finish_and_upload.sh
 
 # 3. Generate all 19 publication figures locally
-python janus_mini16_sim/cloud_hpc/cloud_graph_generator.py --output-dir janus_mini16_sim/hpc_1m_campaign_results/figures/png
+python janus_mini16_sim/cloud_hpc/cloud_graph_generator.py --output-dir janus_mini16_sim/hpc_100m_campaign_results/figures/png
 ```
 
 ---
@@ -364,12 +364,14 @@ janus_mini16_sim/
 │   ├── janus_mini16_cmos_base_layout.lyp  # CMOS base-die KLayout layer properties file
 │   └── README.md                          # Layout & packaging architectural specification
 │
-├── hpc_1m_campaign_results/               # 1,000,000-Run Cloud HPC Campaign Artifacts
-│   ├── archives/                          # Full packaged results archives (janus_1m_results.tar.gz)
+├── hpc_100m_campaign_results/             # 100,000,000-Run Cloud HPC Production Campaign Artifacts
+│   ├── archives/                          # Full packaged results archives (janus_100m_results.tar.gz)
 │   ├── figures/                           # All 19 publication-grade figures (PDF vector & 300-DPI PNG)
 │   │   ├── pdf/                           # Vector PDF figures formatted for IEEE/Optica LaTeX
 │   │   └── png/                           # High-resolution 300-DPI PNG figures
-│   └── logs/                              # Full HPC execution logs (mc_1m.log, spice_1m.log, full_cosim.log)
+│   ├── logs/                              # Full HPC execution logs (mc_100m.log, spice_100m.log, full_cosim.log)
+│   ├── reports/                           # Co-simulation sign-off report (MD + JSON)
+│   └── data/                              # Elmer 3D FEM tetrahedral meshes, field data & touchstone S4P
 │
 ├── tier1_meep_optics/                     # TIER 1: Photonic FDTD & Waveguide Solvers
 │   ├── asymmetric_16tree_sim.py           # 4-stage binary 16-Tree Fermat optical core solver
