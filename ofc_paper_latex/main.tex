@@ -29,7 +29,7 @@
 \setlength{\abovedisplayshortskip}{1pt plus 1pt}
 \setlength{\belowdisplayshortskip}{1pt plus 1pt}
 
-\title{100-GHz One-Hot Spatial Photonic Modular Processor: 100M-Sample 6$\sigma$ Tolerance and Receiverless Optoelectronic Validation}
+\title{100-GHz One-Hot Spatial Photonic Modular Processor: 100M-Sample 6$\sigma$ Tolerance and TIA/ADC-Free Optoelectronic Validation}
 
 \author{Deepanshu Bhardwaj\authormark{1,*}}
 \address{\authormark{1}Project Janus}
@@ -44,9 +44,9 @@ A 100-GHz one-hot spatial photonic processor computes modular arithmetic over Fe
 \end{abstract}
 
 \section{The Optical Dynamic Range Wall and Hybrid RNS Partitioning}
-Analog optical matrix multipliers accumulate continuous optical power on photodetectors \cite{Shen2017}. In an $N=32$ dot product with 8-bit operands, power scales to $S_{\max} = 32 \times 255^2 = 2{,}080{,}800$, imposing an optical dynamic range $\text{DR}_{\text{opt}} = 10\log_{10}(S_{\max}) = 63.2\,\text{dB}$ ($126.4\,\text{dB}$ electrical). Digitizing this range at gigahertz rates requires $\approx 21$ effective number of bits (ENOB), exceeding photodiode linearity and ADC power walls \cite{Shen2017}.
+Analog optical matrix multipliers accumulate continuous optical power on photodetectors \cite{Shen2017}. In an $N=32$ dot product with 8-bit operands, power scales to $S_{\max} = 32 \times 255^2 = 2{,}080{,}800$, imposing an optical dynamic range $\text{DR} = 10\log_{10}(S_{\max}) = 63.2\,\text{dB}$. Linearly digitizing this continuous current range at gigahertz rates requires $\log_2(S_{\max}) \approx 21$ bits of resolution, exceeding photodiode linearity and high-speed ADC power walls \cite{Shen2017}.
 
-The JANUS processor eliminates continuous accumulation via \textbf{Hybrid Optical-CMOS Partitioning}: optics strictly evaluates bounded $1 \times 1$ modular products over Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($F_1 = 2^{2^1}+1, F_2 = 2^{2^2}+1$) \cite{Huang1979, Mohan2016, Zheng2024}: $x, w \to (xw \bmod 17, \; xw \bmod 257)$. Optical detection collapses from linear ADCs to 1-bit binary spatial thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM dynamic latches. Chinese Remainder Theorem (CRT) reconstruction recovers exact products: $xw = \operatorname{CRT}(xw \bmod 17, \; xw \bmod 257)$ over range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$, strictly bounding all 4-bit products. Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$ and $Y = 16 Y_H + Y_L$ in Eq.~\eqref{eq:nibble}:
+The JANUS processor eliminates continuous accumulation via \textbf{Hybrid Optical-CMOS Partitioning}: optics strictly evaluates bounded $1 \times 1$ modular products over Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($F_2 = 2^{2^2}+1, F_3 = 2^{2^3}+1$) \cite{Huang1979, Mohan2016, Zheng2024}: $x, w \to (xw \bmod 17, \; xw \bmod 257)$. Optical detection collapses from linear ADCs to 1-bit binary spatial thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM dynamic latches. Chinese Remainder Theorem (CRT) reconstruction recovers exact products: $xw = \operatorname{CRT}(xw \bmod 17, \; xw \bmod 257)$ over range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$, strictly bounding all 4-bit products. Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$ and $Y = 16 Y_H + Y_L$ in Eq.~\eqref{eq:nibble}:
 \begin{equation}
 XY = X_L Y_L + 16(X_L Y_H + X_H Y_L) + 256 X_H Y_H,
 \label{eq:nibble}
@@ -54,23 +54,23 @@ XY = X_L Y_L + 16(X_L Y_H + X_H Y_L) + 256 X_H Y_H,
 where sub-products $X_i Y_j \le 225 < 257$ evaluate optically in parallel and recombine in CMOS carry-save accumulators ($320\,\text{ps}$ word cycle; 160-bit accumulator provides a 27-bit guard margin over 133-bit $N=32$ INT64 dot products).
 
 \section{Monolithic 3D Architecture and Asymmetric 16-Tree Fermat Core}
-The JANUS architecture is modeled as a monolithic 3D die ($10.0 \times 10.0\,\text{mm} = 100.00\,\text{mm}^2$ total die area) integrating a top SiPh stratum bonded over a 65nm CMOS base across 16 compute tiles ($32 \times 32$ mesh/tile, $16,384$ multipliers die-wide) at $100\,\text{GHz}$. Residues in $\mathbb{Z}_{17}$ map to 17 spatial waveguides $\mathcal{A} = \{WG_0, \dots, WG_{16}\}$; $WG_0$ gates zero operands ($X=0$), while $WG_1\dots WG_{16}$ route non-zero states ($100\%$ state coverage). Waveguides are designed in stoichiometric $\text{Si}_3\text{N}_4$ ($800 \times 400\,\text{nm}$, $E_g = 5.0\,\text{eV}$, loss $\alpha = 0.10\,\text{dB/cm}$, bend radius $R = 25\,\mu\text{m}$, $<0.005\,\text{dB/bend}$) \cite{Rahim2021}, excited by a $2.21\,\text{W}$ CW laser ($\lambda = 1064\,\text{nm}$, $h\nu = 1.165\,\text{eV} < E_g/2$), completely avoiding two-photon absorption.
+The JANUS architecture is modeled as a monolithic 3D die ($10.0 \times 10.0\,\text{mm} = 100.00\,\text{mm}^2$) integrating a top SiPh stratum bonded over 65nm CMOS across 16 compute tiles ($16,384$ multipliers die-wide) at $100\,\text{GHz}$. Residues in $\mathbb{Z}_{17}$ map to 17 spatial waveguides $\mathcal{A} = \{WG_0, \dots, WG_{16}\}$; $WG_0$ gates zero operands ($X=0$), while $WG_1\dots WG_{16}$ route non-zero states ($100\%$ coverage). Waveguides are modeled in stoichiometric $\text{Si}_3\text{N}_4$ ($800 \times 400\,\text{nm}$, $E_g = 5.0\,\text{eV}$, loss $\alpha = 0.10\,\text{dB/cm}$, bend $R = 25\,\mu\text{m}$, $<0.005\,\text{dB/bend}$) \cite{Rahim2021}, excited by a $2.21\,\text{W}$ CW laser ($\lambda = 1064\,\text{nm}$, $h\nu = 1.165\,\text{eV} < E_g/2$), completely avoiding two-photon absorption. An independent 13-stage cascaded MMI binary tree ($1:8192$ split, $0.14\,\text{dB/stage}$) distributes optical power across the array.
 
-Each active channel drives a 4-stage binary switch tree ($\log_2 16 = 4$, 15 switches/channel, $240$ switches/multiplier, $3,932,160$ die-wide). Weights are stored non-volatilely in compact $\text{Sb}_2\text{S}_3$ phase-change material (PCM) directional couplers ($12.04\,\mu\text{m}^2$/cell; $3.93\text{M}$ cells occupy $47.34\,\text{mm}^2$, leaving $>52\,\text{mm}^2$ on the $100.00\,\text{mm}^2$ die for low-crosstalk spatial routing buses and pads) \cite{Dong2019}, achieving $\text{ER} \ge 21.86\,\text{dB}$ ($<0.63\%$ leakage), zero static hold power ($0.00\,\text{W}$), and $1.33\,\text{ps}$ time-of-flight. Modulo 17 maps Tree 16 to modular negation ($16 W \equiv -W \pmod{17}$); modulo 257 enables division-free Radix-16 reduction via $(16^2 Y_H + Y_L) \bmod 257 = (Y_L - Y_H) \pmod{257}$ (Fig.~\ref{fig:fermat_topology}a). Active path loss is $1.61\,\text{dB}$ ($8.0\times$ fewer switches vs.~Beneš networks). Parabolic waveguide crossings contribute $0.0914\,\text{dB/crossing}$ with $-42.5\,\text{dB}$ crosstalk isolation. Operands modulate at $100\,\text{GHz}$ via push-pull thin-film $\text{LiTaO}_3$ Pockels modulators ($r_{33} = 30.5\,\text{pm/V}$, $V_{\text{pp}} = 0.8\,\text{V}$, $42.5\,\text{fJ/bit}$) \cite{Wang2023, Cheng2024Nature}, coupled via inverted nanotapers ($0.80\,\text{dB}$ loss).
+Each channel drives a 4-stage binary computational switch tree ($\log_2 16 = 4$, 15 switches/channel, $240$/multiplier, $3,932,160$ die-wide). Weights are stored non-volatilely in compact $\text{Sb}_2\text{S}_3$ phase-change material (PCM) couplers ($12.04\,\mu\text{m}^2$/cell; $3.93\text{M}$ cells occupy $47.34\,\text{mm}^2$, leaving $>52\,\text{mm}^2$ on the $100.00\,\text{mm}^2$ die for routing buses and pads) \cite{Dong2019}, achieving $\text{ER} \ge 21.86\,\text{dB}$ ($<0.63\%$ leakage), negligible static hold power ($0.00\,\text{W}$), and $1.33\,\text{ps}$ time-of-flight. Modulo 17 maps Tree 16 to modular negation ($16 W \equiv -W \pmod{17}$); modulo 257 enables division-free Radix-16 reduction via $(16^2 Y_H + Y_L) \bmod 257 = (Y_L - Y_H) \pmod{257}$ (Fig.~\ref{fig:fermat_topology}a). Active path loss is $1.61\,\text{dB}$ across the 4-stage tree; parabolic waveguide crossings contribute $0.0914\,\text{dB/crossing}$ with $-42.5\,\text{dB}$ crosstalk isolation. Operands modulate at $100\,\text{GHz}$ via push-pull thin-film $\text{LiTaO}_3$ Pockels modulators ($r_{33} = 30.5\,\text{pm/V}$, $V_{\text{pp}} = 0.8\,\text{V}$, $42.5\,\text{fJ/bit}$) \cite{Wang2023, Cheng2024Nature}, coupled via inverted nanotapers ($0.80\,\text{dB}$ loss).
 
 \begin{center}
 \vspace{-8pt}
 \noindent\begin{minipage}[t]{0.48\textwidth}
   \vspace{0pt}
   \centering
-  \includegraphics[width=\columnwidth, height=0.79in, keepaspectratio]{figures/fig_asymmetric_16tree_fermat_topology.png}
+  \includegraphics[width=\columnwidth, height=0.68in, keepaspectratio]{figures/fig_asymmetric_16tree_fermat_topology.png}
   \vspace{-2pt}
   \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (a) Asymmetric 16-Tree Fermat Core}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \vspace{0pt}
   \centering
-  \includegraphics[width=\columnwidth, height=0.79in, keepaspectratio]{figures/fig_mc_cascaded_mmi_loss.pdf}
+  \includegraphics[width=\columnwidth, height=0.68in, keepaspectratio]{figures/fig_mc_cascaded_mmi_loss.pdf}
   \vspace{-2pt}
   \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (b) 13-Stage MMI Tree Loss Progression}
 \end{minipage}
@@ -134,9 +134,9 @@ Transient co-simulation in Sandia Xyce SPICE across $100,000,000$ continuous clo
 Q = \frac{\mathcal{R} M P_{\text{rx}} \cdot \eta_{\text{capture}}}{\sigma_{\text{total}}} = 13.41
 \label{eq:snr}
 \end{equation}
-yields analytical $\text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2}) = 2.66 \times 10^{-41}$ ($23$ orders of magnitude above $10^{-18}$), confirmed by zero errors across $99,996,000$ simulated active bits ($0/99,996,000$). StrongARM latching resolves in $4.16\,\text{ps}$ median ($\tau_{\text{regen}} = 0.65\,\text{ps}, <5.0\,\text{ps}$ half-cycle budget) with jitter $\sigma_{\text{jitter}} < 0.35\,\text{ps}$ and metastability rate $P_{\text{meta}} < 10^{-20}$. A 1:32 polyphase CML deserializer tree converts $100\,\text{GHz}$ bits to $3.125\,\text{GHz}$ words ($T_{\text{CMOS}} = 320\,\text{ps}$) for CMOS logic ($>17\times$ timing margin) \cite{Schinkel2007}. Table~\ref{tab:receiver_budget} outlines the complete optoelectronic budget.
+yields an analytical $\text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2}) = 2.66 \times 10^{-41}$ at the modeled $Q$-factor ($23$ orders of magnitude below $10^{-18}$), with zero errors observed across $99,996,000$ simulated active bits ($0/99,996,000$). StrongARM latching resolves in $4.16\,\text{ps}$ median ($\tau_{\text{regen}} = 0.65\,\text{ps}, <5.0\,\text{ps}$ half-cycle budget) with jitter $\sigma_{\text{jitter}} < 0.35\,\text{ps}$. A 1:32 polyphase CML deserializer tree converts $100\,\text{GHz}$ bits to $3.125\,\text{GHz}$ words ($T_{\text{CMOS}} = 320\,\text{ps}$) for CMOS logic ($>17\times$ timing margin) \cite{Schinkel2007}. Table~\ref{tab:receiver_budget} outlines the complete optoelectronic budget.
 
-\textit{Non-Interferometric Phase Noise Immunity:} Unlike coherent Mach-Zehnder meshes requiring continuous phase tuning ($\Delta\phi < 0.01\,\text{rad}$) and active heaters ($>10\,\text{mW/shifter}$) \cite{Shen2017}, JANUS routes light purely in the intensity domain: light is steered along spatial waveguides without optical interference. Phase fluctuations and laser linewidth cause zero decision error, eliminating active phase drift calibration while avoiding multi-watt ADC arrays at $100\,\text{GHz}$ \cite{Shi2025Nature}.
+\textit{Non-Interferometric Phase Noise Immunity:} Unlike coherent Mach-Zehnder meshes requiring continuous phase tuning ($\Delta\phi < 0.01\,\text{rad}$) and active heaters ($>10\,\text{mW/shifter}$) \cite{Shen2017}, JANUS routes light purely in the intensity domain: light is steered along spatial waveguides without optical interference. Phase fluctuations and laser linewidth exhibit no modeled impact on decision thresholds, eliminating active phase drift calibration while avoiding multi-watt ADC arrays at $100\,\text{GHz}$ \cite{Shi2025Nature}.
 
 \begin{center}
 \vspace{-4pt}
@@ -151,9 +151,9 @@ yields analytical $\text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2}) = 2.6
 APD Multiplication Gain \& Noise & $M = 8.5,\; k_{\text{eff}} = 0.05$ & $F(M) = 2.27$ & $k_{\text{eff}} \le 0.10$ & $2.0\times$ noise reduction \\
 Primary Responsivity ($\lambda = 1064\,\text{nm}$) & $\mathcal{R} = \eta q / (h\nu)$ & $0.85\,\text{A/W}$ & $\ge 0.80\,\text{A/W}$ & $+0.05\,\text{A/W}$ margin \\
 Total Input-Referred Noise Current & $\sigma_{\text{total}} = \sqrt{\sigma_{\text{shot}}^2 + \sigma_{\text{dark}}^2 + \sigma_{\text{therm}}^2}$ & $2.70\,\mu\text{A}$ & $\le 4.00\,\mu\text{A}$ & $+3.42\,\text{dB}$ noise margin \\
-Optoelectronic SNR \& BER & $Q = 13.41,\; \text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2})$ & $\mathbf{2.66 \times 10^{-41}}$ & $\le 10^{-18}$ ($Q \ge 9.38$) & $23$ orders of magnitude \\
+Optoelectronic SNR \& Analytical BER & $Q = 13.41,\; \text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2})$ & $\mathbf{2.66 \times 10^{-41}}$ & $\le 10^{-18}$ ($Q \ge 9.38$) & $23$ orders of magnitude \\
 StrongARM Latch Regeneration & $\tau_{\text{regen}} = 0.65\,\text{ps},\; t_{\text{latch}} = 4.16\,\text{ps}$ & $4.16\,\text{ps}$ & $\le 5.00\,\text{ps}$ (Half-Cycle) & $+0.84\,\text{ps}$ setup margin \\
-Metastability Failure Probability & $P_{\text{meta}} = \exp(-T_{\text{half}} / \tau_{\text{regen}})$ & $\mathbf{< 10^{-20}}$ & $\le 1.00 \times 10^{-15}$ & $>5$ orders of magnitude \\
+SPICE 100M-Cycle Bit Verification & PRBS-7 at $100\,\text{GHz}$ ($99.96\text{M}$ bits) & $\mathbf{0\text{ Errors}}$ & $\le 10^{-8}$ empirical & 0 hang-ups observed \\
 \bottomrule
 \end{tabular*}
 \vspace{-4pt}
@@ -165,13 +165,13 @@ Metastability Failure Probability & $P_{\text{meta}} = \exp(-T_{\text{half}} / \
 \vspace{-4pt}
 \noindent\begin{minipage}[t]{0.48\textwidth}
   \centering
-  \includegraphics[width=\columnwidth, height=0.86in, keepaspectratio]{figures/fig_spice_100m_eye_density_heatmap.pdf}
+  \includegraphics[width=\columnwidth, height=0.76in, keepaspectratio]{figures/fig_spice_100m_eye_density_heatmap.pdf}
   \vspace{-2pt}
   \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (a) 100M-Cycle SPICE Eye Persistence}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \centering
-  \includegraphics[width=\columnwidth, height=0.86in, keepaspectratio]{figures/fig_pex_pre_vs_post_eye_overlay.png}
+  \includegraphics[width=\columnwidth, height=0.76in, keepaspectratio]{figures/fig_pex_pre_vs_post_eye_overlay.png}
   \vspace{-2pt}
   \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (b) 3D Post-Layout PEX Extraction Overlay}
 \end{minipage}
@@ -184,13 +184,13 @@ Metastability Failure Probability & $P_{\text{meta}} = \exp(-T_{\text{half}} / \
 \section{3D Post-Layout PEX Closure and 18.5 kHz JIR Thermal Clamping}
 Full 3D electro-photonic parasitic extraction (PEX) was performed directly on dual-stratum GDS II masks (SiPh stratum + 65nm CMOS base), modeling $50\,\mu\text{m}$-pitch micro-bumps, vertical TDVs ($R_{\text{via}} = 18.62\,\text{m}\Omega$, $L_{\text{via}} = 1.833\,\mathrm{pH}$), and CPW lines ($C_{\text{node}} = 31.99\,\text{fF}$). The 3-dB cutoff reaches $f_{\text{3dB,PEX}} = 166.14\,\text{GHz}$ ($>100\,\text{GHz}$ Nyquist), with LC self-resonance at $289.58\,\text{GHz}$. Post-layout differential eye opening is $84.21\%$ ($336.84\,\text{mV}$, Fig.~\ref{fig:eye_and_pex}b), incurring a $-3.07\%$ delta vs.~pre-layout nominal ($87.28\%$), while latch delay increases by $+0.14\,\text{ps}$ ($1.04\,\text{ps}$).
 
-\textit{Timescale Decoupling Thermal Clamping:} To prevent $\text{Sb}_2\text{S}_3$ crystallization ($70.0^\circ\text{C}$ threshold), JANUS executes Joint-Interleaved Rotation (JIR) \cite{Tuckerman1981, Brunschwiler2009}. Core hotspots reach $58.40^\circ\text{C}$ in static operation ($\tau_{\text{diff}} = 69.06\,\text{ms}$). Permuting modulus assignments at $f_{\text{JIR}} = 18.5\,\text{kHz}$ ($\tau_{\text{JIR}} = 5.0\,\mu\text{s} \ll \tau_{\text{diff}}$) caps energy per epoch to $1.93\,\mu\text{J}$ ($\Delta T_{\text{cycle}} = 0.798\,\text{mK}$). Spreading resistance collapses to zero; die temperature rise is governed solely by macro-stack resistance ($0.244\,\text{K/W}$): $\Delta T = 4.41\,\text{W} \times 0.244\,\text{K/W} = 1.08\,\text{K}$, clamping peak core temperature to $\mathbf{26.08^\circ\text{C}}$ ($+43.92^\circ\text{C}$ margin).
+\textit{Timescale Decoupling Thermal Clamping:} To prevent $\text{Sb}_2\text{S}_3$ crystallization ($70.0^\circ\text{C}$ threshold), JANUS executes Joint-Interleaved Rotation (JIR) \cite{Tuckerman1981, Brunschwiler2009}. Core hotspots reach $58.40^\circ\text{C}$ in static operation ($\tau_{\text{diff}} = 69.06\,\text{ms}$). Permuting modulus assignments at $f_{\text{JIR}} = 18.5\,\text{kHz}$ ($\tau_{\text{JIR}} = 54.1\,\mu\text{s} \ll \tau_{\text{diff}}$) caps energy per epoch to $1.93\,\mu\text{J}$ ($\Delta T_{\text{cycle}} = 0.798\,\text{mK}$). Spreading resistance is negligible relative to macro-stack resistance ($0.244\,\text{K/W}$). Of the $6.17\,\text{W}$ package budget ($2.21\,\text{W}$ optical delivery), net on-die dissipated thermal power is $P_{\text{die}} = 4.41\,\text{W}$: $\Delta T = 4.41\,\text{W} \times 0.244\,\text{K/W} = 1.08\,\text{K}$, clamping peak core temperature to $\mathbf{26.08^\circ\text{C}}$ ($+43.92^\circ\text{C}$ margin).
 
 \section{Multi-Precision Compute Scaling and Energy Efficiency}
-The simulated package power budget is $P_{\text{total}} = 6.17\,\text{W}$ ($2.95\,\text{W}$ optical laser at $75\%$ WPE, $0.51\,\text{W}$ modulators, $0.16\,\text{W}$ sensing latches, $1.05\,\text{W}$ CMOS carry-save accumulators, $1.50\,\text{W}$ JIR control logic, and $\mathbf{0.00\,\text{W}}$ static PCM hold power). Operands dynamically configure compute modes: (1)~\textbf{INT4 Direct Mode ($1.64\,\text{PMAC/s}$ simulated peak):} Evaluated natively on $\mathbb{Z}_{257}$ ($XW \le 225 < 257$) without CRT overhead; the 16 compute tiles deliver a peak $1,638.4\,\text{TMAC/s}$ at $\mathbf{265.5\,\text{TMAC/s/W}}$ ($\mathbf{3.77\,\text{fJ/MAC}}$) with a compute density of $\mathbf{16.4\,\text{TMAC/s/mm}^2}$ across the $100.00\,\text{mm}^2$ total die area; (2)~\textbf{INT64 Exact Mode ($102.4\,\text{TMAC/s}$ simulated peak):} Evaluated via optical sub-words and CMOS 32-lane SIMD Wallace--Kogge units at $3.125\,\text{GHz}$, delivering $102.4\,\text{TMAC/s}$ at $\mathbf{16.6\,\text{TMAC/s/W}}$ ($\mathbf{60.3\,\text{fJ/MAC}}$) with mathematically exact precision (zero quantization drift or analog noise accumulation).
+The simulated package power budget is $P_{\text{total}} = 6.17\,\text{W}$ ($2.95\,\text{W}$ optical laser at $75\%$ WPE, $0.51\,\text{W}$ modulators across $120$ active $4.25\,\text{mW}$ channels, $0.16\,\text{W}$ sensing latches, $1.05\,\text{W}$ CMOS carry-save accumulators, $1.50\,\text{W}$ JIR control logic, and negligible static PCM hold power). Operands dynamically configure compute modes: (1)~\textbf{INT4 Direct Mode ($1.64\,\text{PMAC/s}$ simulated peak):} Evaluated natively on $\mathbb{Z}_{257}$ ($XW \le 225 < 257$) without CRT overhead; the 16 compute tiles deliver a peak $1,638.4\,\text{TMAC/s}$ at $\mathbf{265.5\,\text{TMAC/s/W}}$ ($\mathbf{3.77\,\text{fJ/MAC}}$) with a compute density of $\mathbf{16.4\,\text{TMAC/s/mm}^2}$ across the $100.00\,\text{mm}^2$ total die area; (2)~\textbf{INT64 Exact Mode ($102.4\,\text{TMAC/s}$ simulated peak):} Evaluated via optical sub-words and CMOS 32-lane SIMD Wallace--Kogge units at $3.125\,\text{GHz}$, delivering $102.4\,\text{TMAC/s}$ at $\mathbf{16.6\,\text{TMAC/s/W}}$ ($\mathbf{60.3\,\text{fJ/MAC}}$) with mathematically exact precision (zero quantization drift or analog noise accumulation).
 
 \section{Conclusion and Data Reproducibility}
-Simulation results demonstrate that one-hot spatial optical computing over Fermat prime fields overcomes the analog dynamic range wall. Supported by a $100,000,000$-sample Cloud HPC campaign ($6\sigma = +6.80\,\text{dB}$ margin, $100.000000\%$ yield), 100M-cycle SPICE co-simulation ($\text{BER} = 2.66 \times 10^{-41}$, $0$ errors), 3D PEX parasitic extraction, and $18.5\,\text{kHz}$ JIR thermal clamping ($26.08^\circ\text{C}$), JANUS establishes a simulated physical foundation for scalable optical tensor processing.
+By replacing continuous analog optical accumulation with bounded exact spatial modular products over Fermat primes, JANUS collapses high-speed optoelectronic detection to 1-bit dynamic latching, bypassing the analog dynamic range and ADC power walls. Supported by a $100,000,000$-sample Cloud HPC campaign ($6\sigma = +6.80\,\text{dB}$ margin), 100M-cycle SPICE co-simulation ($0$ errors), 3D PEX extraction, and $18.5\,\text{kHz}$ thermal clamping ($26.08^\circ\text{C}$), this architecture establishes a simulated physical foundation for scalable optical computing.
 
 \noindent\textbf{Data Reproducibility:} Netlists, GDS II scripts, and 100M-run datasets are archived at: \url{https://github.com/horizonseekerik/janus-photonic-hardware}.
 
