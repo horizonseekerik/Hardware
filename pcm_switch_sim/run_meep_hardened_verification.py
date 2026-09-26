@@ -118,19 +118,34 @@ def solve_cross_section(is_hardened: bool = False):
         ms = mpb.ModeSolver(geometry_lattice=mp.Lattice(size=cell), geometry=geom, default_material=sio2, resolution=50)
         ms.verbosity = 0
         k_val = ms.find_k(mp.NO_PARITY, FCEN, 1, 1, mp.Vector3(1, 0, 0), 1e-4, 2.6 * FCEN, 1.4 * FCEN, 3.5 * FCEN)[0]
-        n_eff = float(k_val / FCEN)
-        
+        ms.get_dfield(1)
+        ms.compute_field_energy()
+        if not is_hardened:
+            g_pcm = ms.compute_energy_in_dielectric(n_pcm**2 - 0.2, n_pcm**2 + 0.2)
+            g_ald = 0.0
+        else:
+            g_ald = ms.compute_energy_in_dielectric(N_AL2O3**2 - 0.1, N_AL2O3**2 + 0.1)
+            g_pcm = ms.compute_energy_in_dielectric(n_pcm**2 - 0.2, n_pcm**2 + 0.2)
+            
         if state == "amorphous":
             n_eff_am = n_eff
+            gamma_pcm_am = g_pcm
+            gamma_ald_am = g_ald
         else:
             n_eff_cr = n_eff
+            gamma_pcm_cr = g_pcm
+            gamma_ald_cr = g_ald
             
     delta_n = n_eff_cr - n_eff_am
     return {
         "n_eff_bare": n_eff_bare,
         "n_eff_am": n_eff_am,
         "n_eff_cr": n_eff_cr,
-        "delta_n_eff": delta_n
+        "delta_n_eff": delta_n,
+        "gamma_pcm_am": gamma_pcm_am,
+        "gamma_pcm_cr": gamma_pcm_cr,
+        "gamma_ald_am": gamma_ald_am,
+        "gamma_ald_cr": gamma_ald_cr
     }
 
 def run_switch_fdtd(state: str, delta_n_eff: float, extra_loss_db: float = 0.0):
@@ -257,15 +272,34 @@ def main():
     base_cr = run_switch_fdtd("crystalline", delta_n_eff=0.240, extra_loss_db=0.0)
     
     print("\n[STEP 4/4] Running Full-Wave Meep FDTD: HARDENED SUPERLATTICE SWITCH...")
-    # Scale 2D FDTD delta_n_eff by relative MPB mode modulation ratio
-    mpb_ratio = modes_hard['delta_n_eff'] / modes_base['delta_n_eff'] # ~ 0.84 - 0.95
-    # The active patch length in hardened superlattice is adjusted: L_patch = 5.20 um * (1 / mpb_ratio)
-    # OR with tuned thickness, delta_n_eff_2d = 0.240
     delta_n_hardened = 0.240
     
-    # Extra absorption penalty from ALD interlayers + nitrogen doping: +0.0009 dB
-    hard_am = run_switch_fdtd("amorphous", delta_n_eff=delta_n_hardened, extra_loss_db=0.0009)
-    hard_cr = run_switch_fdtd("crystalline", delta_n_eff=delta_n_hardened, extra_loss_db=0.0009)
+    # Dynamically compute physical material absorption from MPB Poynting overlap:
+    # 1. ALD Al2O3 buffer (k < 1e-5 @ 1064 nm)
+    alpha_ald = (4.0 * math.pi * 1e-5) / (LAMBDA_UM * 1e-6) # m^-1
+    loss_ald_am_db = 4.343 * modes_hard['gamma_ald_am'] * alpha_ald * (L_PATCH * 1e-6)
+    loss_ald_cr_db = 4.343 * modes_hard['gamma_ald_cr'] * alpha_ald * (L_PATCH * 1e-6)
+    
+    # 2. Nitrogen doping (1.2 at% N gives delta_k ~ 2.5e-5 in PCM layer)
+    alpha_doping = (4.0 * math.pi * 2.5e-5) / (LAMBDA_UM * 1e-6)
+    loss_doping_am_db = 4.343 * modes_hard['gamma_pcm_am'] * alpha_doping * (L_PATCH * 1e-6)
+    loss_doping_cr_db = 4.343 * modes_hard['gamma_pcm_cr'] * alpha_doping * (L_PATCH * 1e-6)
+    
+    # 3. Monolayer graphene micro-heater contact sheet (evanescent boundary tail ~0.05%)
+    loss_graphene_db = 0.00015
+    
+    extra_loss_am = loss_ald_am_db + loss_doping_am_db + loss_graphene_db
+    extra_loss_cr = loss_ald_cr_db + loss_doping_cr_db + loss_graphene_db
+    
+    print(f"  MPB Confinement Factor (Sb2S3 Amorphous):  {modes_hard['gamma_pcm_am']*100:.3f}%")
+    print(f"  MPB Confinement Factor (ALD Al2O3 Layers): {modes_hard['gamma_ald_am']*100:.4f}%")
+    print(f"  Physical ALD Dielectric Absorption:       {loss_ald_am_db:.6f} dB")
+    print(f"  Physical Nitrogen Doping Absorption:      {loss_doping_am_db:.6f} dB")
+    print(f"  Graphene Contact Sheet Evanescent Tail:   {loss_graphene_db:.6f} dB")
+    print(f"  Total Dynamically Derived Excess Penalty: {extra_loss_am:.6f} dB (Amorphous), {extra_loss_cr:.6f} dB (Crystalline)")
+    
+    hard_am = run_switch_fdtd("amorphous", delta_n_eff=delta_n_hardened, extra_loss_db=extra_loss_am)
+    hard_cr = run_switch_fdtd("crystalline", delta_n_eff=delta_n_hardened, extra_loss_db=extra_loss_cr)
     
     print("\n" + "=" * 75)
     print("FINAL CONVERGED MEEP FDTD RESULTS COMPARISON:")

@@ -13,6 +13,7 @@ Physics Engines:
 """
 
 import numpy as np
+import math
 import dataclasses
 from typing import Dict, Tuple, List, Optional
 
@@ -217,12 +218,19 @@ class PCMSwitchPhysicsEngine:
         base_plastic_strain = max(1e-5, eps_total - eps_elastic) # ~ 0.00327
         
         # Hall-Petch & Superlattice Strain-Clamping Modifiers
+        # Optical attenuation penalty from MPB modal energy confinement:
+        # Delta_IL = 4.343 * (Gamma_ald * alpha_ald + Gamma_pcm * alpha_doping + Gamma_graphene * alpha_graphene) * L_patch
+        gamma_pcm = 0.0455
+        gamma_ald = 0.0001
+        alpha_ald = (4.0 * math.pi * 1e-5) / 1.064e-6
+        loss_ald = 4.343 * gamma_ald * alpha_ald * 5.20e-6 # ~ 1e-6 dB (negligible)
+
         if config == "config_2_buffer":
             # 2 nm ALD TiO2/Al2O3 buffer increases interfacial bond energy (1.5 -> 6.2 J/m^2)
             # Effective plastic strain reduced by 22%
             eps_p = base_plastic_strain * 0.78
             heal_efficiency = 0.0
-            il_penalty = 0.0005
+            il_penalty = loss_ald
         elif config == "config_4_anneal":
             # Baseline stack + periodic sub-melting healing (380 C, 200 ns) every 1e7 cycles
             # Anneals 85% of point vacancies
@@ -233,55 +241,43 @@ class PCMSwitchPhysicsEngine:
             # Buffer + periodic healing
             eps_p = base_plastic_strain * 0.78
             heal_efficiency = 0.85
-            il_penalty = 0.0005
+            il_penalty = loss_ald
         elif config == "config_ultimate_hardened":
             # 1.2% N-doping (18 nm grain size) raises yield strength via Hall-Petch: (85/18)^0.5 = 2.17x
             # 1 nm ALD laminate interrupts shear slip planes: eps_p reduced by 55%
             # Healing efficiency with refined grains: 99.5%
             eps_p = base_plastic_strain * 0.45
             heal_efficiency = 0.995
-            il_penalty = 0.0007
+            alpha_doping = (4.0 * math.pi * 2.5e-5) / 1.064e-6
+            loss_doping = 4.343 * gamma_pcm * alpha_doping * 5.20e-6 # 0.000305 dB
+            il_penalty = loss_ald + loss_doping
         elif config == "config_trillion_superlattice":
             # Quad-layer superlattice (4 x 6 nm) mechanically clamps through-plane shear: eps_p reduced by 68%
             # Adaptive 10^6-cycle healing catches sub-nm vacancy clusters: 99.98% annihilation
             eps_p = base_plastic_strain * 0.32
             heal_efficiency = 0.9998
-            il_penalty = 0.0009
+            alpha_doping = (4.0 * math.pi * 2.5e-5) / 1.064e-6
+            loss_doping = 4.343 * gamma_pcm * alpha_doping * 5.20e-6
+            loss_graphene = 0.00015
+            il_penalty = loss_ald + loss_doping + loss_graphene
         else: # baseline
             eps_p = base_plastic_strain
             heal_efficiency = 0.0
             il_penalty = 0.0
             
-        # Coffin-Manson low-cycle fatigue cycles to micro-void initiation:
-        # N_f0 = 0.5 * (Delta_eps_p / (2 * eps_f))^(1 / c)
-        c = self.p.coffin_manson_c # -0.55
-        eps_f = self.p.coffin_manson_eps_f # 0.18
-        n_fatigue_raw = 0.5 * ((eps_p / (2.0 * eps_f)) ** (-1.0 / c))
+        # Coffin-Manson low-cycle fatigue scaling:
+        # Strain fatigue factor: (Delta_eps_p_base / Delta_eps_p)^(1 / c)
+        c = self.p.coffin_manson_c # 0.55
+        strain_gain = (base_plastic_strain / eps_p) ** (1.0 / c)
         
-        # Scaling with interfacial defect annihilation & healing:
-        # Effective lifetime scales inversely with net unhealed defect fraction (1 - R_heal)
-        if heal_efficiency > 0:
-            defect_retention = max(1e-4, 1.0 - heal_efficiency)
-            healing_multiplier = (1.0 / defect_retention) ** 1.35
-        else:
-            healing_multiplier = 1.0
-            
-        # Physical characteristic lifetime eta (calibrated to baseline 2.4e8 benchmark)
-        eta_lifetime = (n_fatigue_raw / 1.75e4) * (2.4e8) * healing_multiplier
+        # Interfacial defect annihilation & dynamic vacancy healing factor:
+        # Retention scales inversely with unhealed defect fraction: (1 / (1 - R_heal))^gamma
+        unhealed = max(1e-5, 1.0 - heal_efficiency)
+        heal_gain = (1.0 / unhealed) ** 0.85
         
-        # Cap to physical bounds based on target configurations
-        if config == "config_2_buffer":
-            eta_lifetime = 6.5e8
-        elif config == "config_4_anneal":
-            eta_lifetime = 1.4e10
-        elif config == "config_2_plus_4":
-            eta_lifetime = 3.8e10
-        elif config == "config_ultimate_hardened":
-            eta_lifetime = 5.2e11
-        elif config == "config_trillion_superlattice":
-            eta_lifetime = 1.85e12
-        elif config == "baseline":
-            eta_lifetime = 2.4e8
+        # Characteristic lifetime eta derived continuously from physics:
+        n_base_benchmark = 2.40e8
+        eta_lifetime = n_base_benchmark * strain_gain * heal_gain
             
         return eta_lifetime, il_penalty, self.p.meep_er_db
 
