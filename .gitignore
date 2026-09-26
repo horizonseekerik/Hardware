@@ -72,6 +72,8 @@ janus_mini16_sim/orchestrator/artifacts/
 *.h5
 *.npy
 *.s4p
+pcm_checkpoints/
+pcm_trillion_results/
 
 # Local execution scripts
 start_dashboard.vbs
