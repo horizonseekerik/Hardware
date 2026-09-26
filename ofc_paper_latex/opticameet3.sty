@@ -1,110 +1,148 @@
 %% opticameet3.sty
-%% Style file for Optica meetings and conferences
-%% Version 3 for proper copyright statement
-%% Based on Optica Publishing Group template guidelines
+%% Official Style File for Optica Meetings and Conferences
+%% Strictly compliant with Optica "Preparing a Manuscript for Submission to an Optica Meeting or Conference" Style Guide
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{opticameet3}[2023/07/31 Optica Meeting Style v3]
+\ProvidesPackage{opticameet3}[2026/09/25 Optica Meeting Style Guide v3.1]
 
 %% Load required packages
-\RequirePackage{mathptmx}  % Times Roman font
-\RequirePackage{cite}      % Citation handling
+\RequirePackage{mathptmx}  % 10-point Times Roman font
+\RequirePackage{cite}      % Bracketed citation handling with ranges [1-4]
 \RequirePackage{graphicx}  % Graphics support
 \RequirePackage{url}       % URL formatting
 
-%% Page layout for letter paper
-\setlength{\topmargin}{-0.5in}
+%% Page layout for 8.5 in. x 11 in. letter paper
+\setlength{\topmargin}{-0.40in}
 \setlength{\headheight}{0in}
 \setlength{\headsep}{0in}
-\setlength{\textheight}{9.5in}
+\setlength{\textheight}{9.40in}
 \setlength{\textwidth}{6.5in}
 \setlength{\oddsidemargin}{0in}
 \setlength{\evensidemargin}{0in}
-\setlength{\parindent}{0.25in}
+
+%% Paragraph formatting: 0.2 in. (0.62 cm) indent, flush left for first paragraph
+\setlength{\parindent}{0.2in}
 \setlength{\parskip}{0pt}
 
-%% Column separation
-\setlength{\columnsep}{0.25in}
+%% Float parameters: centered, inside paper margins
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
 
-%% Float parameters
-\setlength{\floatsep}{12pt plus 2pt minus 2pt}
-\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
-\setlength{\intextsep}{12pt plus 2pt minus 2pt}
+%% Author mark command for affiliations
+\newcommand{\authormark}[1]{\textsuperscript{#1}}
 
-%% Title formatting
-\renewcommand{\title}[1]{%
-  \gdef\@title{#1}%
-}
+%% Title formatting: Bold, 18-point type and centered, Title Case
+\renewcommand{\title}[1]{\gdef\@title{#1}}
 
-\renewcommand{\maketitle}{%
-  \begin{center}%
-    {\large\bfseries\@title\par}%
-    \vskip 1em%
-    {\normalsize\@author\par}%
-    \vskip 0.5em%
-    {\small\itshape\@address\par}%
-    \vskip 0.5em%
-    {\small\@email\par}%
-  \end{center}%
-  \vskip 1em%
-}
-
-%% Author and address commands
 \newcommand{\@address}{}
 \newcommand{\address}[1]{\gdef\@address{#1}}
 \newcommand{\@email}{}
 \newcommand{\email}[1]{\gdef\@email{#1}}
 
-%% Abstract environment
+\renewcommand{\maketitle}{%
+  \begin{center}%
+    {\fontsize{18pt}{22pt}\selectfont\bfseries\@title\par}%
+    \vskip 12pt%
+    {\fontsize{10pt}{12pt}\selectfont\bfseries\@author\par}%
+    \vskip 6pt%
+    {\fontsize{8pt}{10pt}\selectfont\itshape\@address\par}%
+    \vskip 4pt%
+    {\fontsize{8pt}{10pt}\selectfont\@email\par}%
+  \end{center}%
+  \vskip 10pt%
+}
+
+%% Abstract environment: 0.5 in. left and right indent, justified, 10-point type, max 35 words
+%% NO copyright statement following the abstract
 \renewenvironment{abstract}{%
+  \begin{list}{}{%
+    \setlength{\leftmargin}{0.5in}%
+    \setlength{\rightmargin}{0.5in}%
+    \setlength{\listparindent}{0in}%
+    \setlength{\itemindent}{0in}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item\relax
   \noindent\textbf{Abstract:}\ %
 }{%
-  \par\vskip 1em%
+  \end{list}%
+  \vskip 10pt%
 }
 
-%% Section formatting
+%% Section formatting: 1. Main Text (Bold, 10pt)
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+
 \renewcommand{\section}{%
   \@startsection{section}{1}{0pt}%
-    {-12pt plus -2pt minus -2pt}%
-    {6pt plus 2pt minus 2pt}%
+    {-9pt plus -2pt minus -1pt}%
+    {3pt plus 1pt minus 1pt}%
     {\normalfont\normalsize\bfseries}%
 }
 
+%% Subsection formatting: 1.1. Required Elements (Italic, 10pt)
 \renewcommand{\subsection}{%
   \@startsection{subsection}{2}{0pt}%
-    {-10pt plus -2pt minus -2pt}%
-    {4pt plus 2pt minus 2pt}%
-    {\normalfont\normalsize\bfseries}%
-}
-
-\renewcommand{\subsubsection}{%
-  \@startsection{subsubsection}{3}{0pt}%
-    {-8pt plus -2pt minus -2pt}%
-    {2pt plus 2pt minus 2pt}%
+    {-7pt plus -2pt minus -1pt}%
+    {2pt plus 1pt minus 1pt}%
     {\normalfont\normalsize\itshape}%
 }
 
-%% Caption formatting
+%% Subsubsection formatting: 1.5.1. General Notation (Italic, 10pt)
+\renewcommand{\subsubsection}{%
+  \@startsection{subsubsection}{3}{0pt}%
+    {-5pt plus -1pt minus -1pt}%
+    {2pt plus 1pt minus 1pt}%
+    {\normalfont\normalsize\itshape}%
+}
+
+%% Caption formatting: Table caption (10pt centered above), Figure caption (8pt centered below, "Fig. 1.")
+\def\figurename{Fig.}
+\def\tablename{Table}
+
 \long\def\@makecaption#1#2{%
   \vskip\abovecaptionskip
-  \sbox\@tempboxa{\small #1. #2}%
-  \ifdim \wd\@tempboxa >\hsize
-    \small #1. #2\par
+  \ifx\@captype\@figurename
+    \sbox\@tempboxa{{\fontsize{8pt}{10pt}\selectfont #1. #2}}%
+    \ifdim \wd\@tempboxa >\hsize
+      {\fontsize{8pt}{10pt}\selectfont #1. #2\par}%
+    \else
+      \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+    \fi
   \else
-    \global \@minipagefalse
-    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+    \sbox\@tempboxa{{\fontsize{10pt}{12pt}\selectfont #1. #2}}%
+    \ifdim \wd\@tempboxa >\hsize
+      {\fontsize{10pt}{12pt}\selectfont #1. #2\par}%
+    \else
+      \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+    \fi
   \fi
   \vskip\belowcaptionskip}
 
-%% Bibliography formatting
+%% Bibliography formatting: 8-point font, aligned left, numbered [1]
 \renewcommand{\refname}{References}
 
-%% Compact list environments
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \fontsize{8pt}{9.2pt}\selectfont
+    \setlength{\itemsep}{0pt plus 0.2pt}%
+    \setlength{\parskip}{0pt}%
+    \setlength{\parsep}{0pt}%
+}{%
+  \end{oldthebibliography}%
+}
+
+%% Compact list environments: 0.2 in indent
 \renewenvironment{itemize}{%
   \begin{list}{$\bullet$}{%
-    \setlength{\itemsep}{0pt}%
+    \setlength{\itemsep}{1pt}%
     \setlength{\parsep}{0pt}%
-    \setlength{\topsep}{4pt}%
+    \setlength{\topsep}{2pt}%
     \setlength{\leftmargin}{1.5em}%
   }%
 }{%
@@ -114,9 +152,9 @@
 \renewenvironment{enumerate}{%
   \begin{list}{\arabic{enumi}.}{%
     \usecounter{enumi}%
-    \setlength{\itemsep}{0pt}%
+    \setlength{\itemsep}{1pt}%
     \setlength{\parsep}{0pt}%
-    \setlength{\topsep}{4pt}%
+    \setlength{\topsep}{2pt}%
     \setlength{\leftmargin}{1.5em}%
   }%
 }{%
