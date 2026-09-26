@@ -453,8 +453,8 @@ class CloudGraphGenerator:
         ax.axhline(-0.4, color='#ef4444', linestyle='--', alpha=0.6, label="Logic '0' (-400 mV)")
         ax.axhline(0.0, color='white', linestyle=':', alpha=0.4, label="Threshold (0 V)")
 
-        ax.annotate(r"$\mathbf{73.9\%}$ Eye Opening", xy=(5.0, 0.0), xytext=(5.0, 0.18),
-                    color='#4ade80', fontsize=11, weight='bold', ha='center',
+        ax.annotate(r"$\mathbf{77.3\%}$ Eye Opening" + "\n" + r"$(115.5\,\mathrm{mV})$", xy=(5.0, 0.0), xytext=(5.0, 0.15),
+                    color='#4ade80', fontsize=10.5, weight='bold', ha='center',
                     arrowprops=dict(arrowstyle='<->', color='#4ade80', lw=2))
 
         title_prefix = "100,000,000-Cycle" if n_cycles >= 10_000_000 else ("1,000,000-Cycle" if n_cycles >= 500_000 else f"{n_cycles:,}-Cycle")
