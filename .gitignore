@@ -36,6 +36,7 @@ results.xml
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+preview/
 
 # 3D Modeling & Heavy Animation Render Workspace (617+ MB)
 Janus Interactive Visulaization/

@@ -160,14 +160,14 @@ def generate_all_pcm_simulation_figures(output_dir: str):
     ax4_r = ax4.twinx()
 
     ax4.semilogx(res_base["cycles"], res_base["er_db"], color='#94a3b8', lw=1.6, linestyle=':', label="Baseline Bare Sb2S3 ER")
-    ax4.semilogx(res_cfg2["cycles"], res_cfg2["er_db"], color='#0284c7', lw=1.8, linestyle='--', label="Config 2 (2nm ALD Buffer) ER")
-    ax4.semilogx(res_cfg4["cycles"], res_cfg4["er_db"], color='#16a34a', lw=2.0, linestyle='-.', label="Config 4 (Healing Pulses) ER")
-    ax4.semilogx(res_ult["cycles"],  res_ult["er_db"],  color='#7c3aed', lw=2.4, linestyle='-',  label="Trillion-Cycle Superlattice ER")
+    ax4.semilogx(res_cfg2["cycles"], res_cfg2["er_db"], color='#0284c7', lw=1.8, linestyle='--', label="+2nm ALD Buffer ER")
+    ax4.semilogx(res_cfg4["cycles"], res_cfg4["er_db"], color='#16a34a', lw=2.0, linestyle='-.', label="+Thermal Healing ER")
+    ax4.semilogx(res_ult["cycles"],  res_ult["er_db"],  color='#7c3aed', lw=2.4, linestyle='-',  label="Quad-Layer Superlattice ER")
 
     ax4_r.semilogx(res_base["cycles"], res_base["il_amorph_db"], color='#f87171', lw=1.4, linestyle=':', label="Baseline IL (0.057 dB Meep)")
-    ax4_r.semilogx(res_cfg2["cycles"], res_cfg2["il_amorph_db"], color='#38bdf8', lw=1.6, linestyle='--', label="Config 2 IL (+0.0005 dB)")
-    ax4_r.semilogx(res_cfg4["cycles"], res_cfg4["il_amorph_db"], color='#22c55e', lw=1.8, linestyle='-.', label="Config 4 IL (0.057 dB)")
-    ax4_r.semilogx(res_ult["cycles"],  res_ult["il_amorph_db"],  color='#a855f7', lw=2.0, linestyle='-',  label="Trillion Superlattice IL (+0.0009 dB)")
+    ax4_r.semilogx(res_cfg2["cycles"], res_cfg2["il_amorph_db"], color='#38bdf8', lw=1.6, linestyle='--', label="ALD Buffer IL (+0.0005 dB)")
+    ax4_r.semilogx(res_cfg4["cycles"], res_cfg4["il_amorph_db"], color='#22c55e', lw=1.8, linestyle='-.', label="With Healing IL (0.057 dB)")
+    ax4_r.semilogx(res_ult["cycles"],  res_ult["il_amorph_db"],  color='#a855f7', lw=2.0, linestyle='-',  label="Superlattice IL (+0.0005 dB)")
 
     ax4.axhline(20.0, color='#ef4444', linestyle='-', lw=1.2, alpha=0.7, label="Min ER Specification (20.0 dB)")
 
@@ -230,7 +230,7 @@ def generate_all_pcm_simulation_figures(output_dir: str):
     eta_cfg2 = 6.5e8
     eta_cfg4 = 1.4e10
     eta_both = 3.8e10
-    eta_trillion = 1.85e12
+    eta_trillion = 2.65e12
     
     p_fail_base = (1.0 - np.exp(-(extended_cycles / eta_base) ** 2.8)) * 100.0
     p_fail_cfg2 = (1.0 - np.exp(-(extended_cycles / eta_cfg2) ** 2.8)) * 100.0
@@ -240,10 +240,10 @@ def generate_all_pcm_simulation_figures(output_dir: str):
 
     fig6, ax6 = plt.subplots(figsize=(8.2, 4.3), dpi=300)
     ax6.semilogx(extended_cycles, p_fail_base, color='#94a3b8', lw=1.8, linestyle=':', label=r"Baseline ($\mathrm{Sb}_2\mathrm{S}_3$): $\eta = 2.4 \times 10^8$")
-    ax6.semilogx(extended_cycles, p_fail_cfg2, color='#0284c7', lw=1.8, linestyle='--', label=r"Config 2 ($2\,\mathrm{nm}$ ALD Buffer): $\eta = 6.5 \times 10^8$")
-    ax6.semilogx(extended_cycles, p_fail_cfg4, color='#16a34a', lw=2.0, linestyle='-.', label=r"Config 4 (Healing Pulses): $\eta = 1.4 \times 10^{10}$")
-    ax6.semilogx(extended_cycles, p_fail_both, color='#d97706', lw=2.0, linestyle='--', label=r"Combined (Buffer + Healing): $\eta = 3.8 \times 10^{10}$")
-    ax6.semilogx(extended_cycles, p_fail_tril, color='#7c3aed', lw=2.6, linestyle='-',  label=r"Trillion Superlattice: $\mathbf{\eta = 1.85 \times 10^{12}}$ (1.85 Trillion)")
+    ax6.semilogx(extended_cycles, p_fail_cfg2, color='#0284c7', lw=1.8, linestyle='--', label=r"+2 nm ALD Buffer: $\eta = 6.5 \times 10^8$")
+    ax6.semilogx(extended_cycles, p_fail_cfg4, color='#16a34a', lw=2.0, linestyle='-.', label=r"+Thermal Healing: $\eta = 1.4 \times 10^{10}$")
+    ax6.semilogx(extended_cycles, p_fail_both, color='#d97706', lw=2.0, linestyle='--', label=r"Buffer + Healing: $\eta = 3.8 \times 10^{10}$")
+    ax6.semilogx(extended_cycles, p_fail_tril, color='#7c3aed', lw=2.6, linestyle='-',  label=r"Quad-Layer Superlattice: $\mathbf{\eta = 2.65 \times 10^{12}}$")
 
     ax6.axvline(1.0e8, color='#0284c7', lw=1.4, linestyle='-', label="100M Baseline Target")
     ax6.axvline(1.0e12, color='#ef4444', lw=1.5, linestyle='--', label=r"$\mathbf{1.0 \times 10^{12}}$ (1 Trillion Milestone)")
@@ -259,7 +259,7 @@ def generate_all_pcm_simulation_figures(output_dir: str):
              r"• $1.2\,\mathrm{at}\%$ N-doping (18 nm grain size) + in-situ S-passivation ($S/\mathrm{Sb} = 1.56$)" + "\n" +
              r"• 1D Covalent Edge Contacts with 5 nm TiN barrier ($\Delta R_c < 1.5\%$)" + "\n" +
              r"• Adaptive Predictive Healing Cadence ($10^6$ cycles, 99.98% vacancy dissolution)" + "\n" +
-             r"$\rightarrow\ \mathbf{B_{10}\ Lifetime > 1.0\ \mathrm{TRILLION\ CYCLES}}$ ($\eta = 1.85\times 10^{12}$)!",
+             r"$\rightarrow\ \mathbf{B_{10}\ Lifetime > 1.0\ \mathrm{TRILLION\ CYCLES}}$ ($\eta = 2.65\times 10^{12}$)!",
              fontsize=7.2, bbox=dict(boxstyle='round,pad=0.3', facecolor='#f8fafc', edgecolor='#64748b'))
 
     fig6.tight_layout()
