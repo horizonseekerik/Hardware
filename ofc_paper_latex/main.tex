@@ -44,40 +44,40 @@ A 100-GHz one-hot spatial photonic processor computes modular arithmetic over Fe
 \end{abstract}
 
 \section{The Optical Dynamic Range Wall and Hybrid RNS Partitioning}
-Analog optical matrix multipliers accumulate continuous optical power on photodetectors \cite{Shen2017}. In an $N=32$ dot product with 8-bit operands, power scales to $S_{\max} = 32 \times 255^2 = 2{,}080{,}800$, imposing an optical dynamic range $\text{DR} = 10\log_{10}(S_{\max}) = 63.2\,\text{dB}$. Linearly digitizing this continuous current range at gigahertz rates requires $\log_2(S_{\max}) \approx 21$ bits of resolution, exceeding photodiode linearity and high-speed ADC power walls \cite{Shen2017}.
+Analog optical matrix multipliers accumulating continuous power encounter a dynamic range wall \cite{Shen2017}: for an $N=32$ dot product with 8-bit operands, optical power reaches $S_{\max} = 32 \times 255^2 = 2{,}080{,}800$ ($\text{DR} = 10\log_{10}(S_{\max}) = 63.2\,\text{dB}$), demanding $\log_2(S_{\max}) \approx 21$ bits of linear current resolution at gigahertz rates, exceeding photodiode linearity and ADC power limits.
 
-The JANUS processor eliminates continuous accumulation via \textbf{Hybrid Optical-CMOS Partitioning}: optics strictly evaluates bounded $1 \times 1$ modular products over Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($F_2 = 2^{2^2}+1, F_3 = 2^{2^3}+1$) \cite{Huang1979, Mohan2016, Zheng2024}: $x, w \to (xw \bmod 17, \; xw \bmod 257)$. Optical detection collapses from linear ADCs to 1-bit binary spatial thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM dynamic latches. Chinese Remainder Theorem (CRT) reconstruction recovers exact products: $xw = \operatorname{CRT}(xw \bmod 17, \; xw \bmod 257)$ over range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$, strictly bounding all 4-bit products. Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$ and $Y = 16 Y_H + Y_L$ in Eq.~\eqref{eq:nibble}:
+JANUS eliminates continuous accumulation via \textbf{Hybrid Optical-CMOS Partitioning}: optics strictly evaluates bounded $1 \times 1$ modular products over Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($F_2 = 2^{2^2}+1, F_3 = 2^{2^3}+1$) \cite{Huang1979, Mohan2016, Zheng2024}, collapsing detection from multi-bit ADCs to 1-bit binary thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM latches. Chinese Remainder Theorem (CRT) reconstruction recovers exact products over dynamic range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$, strictly bounding all 4-bit products. Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$ and $Y = 16 Y_H + Y_L$ in Eq.~\eqref{eq:nibble}:
 \begin{equation}
-XY = X_L Y_L + 16(X_L Y_H + X_H Y_L) + 256 X_H Y_H,
+XY = X_L Y_L + 16(X_L Y_H + X_H Y_L) + 256 X_H Y_H.
 \label{eq:nibble}
 \end{equation}
-where sub-products $X_i Y_j \le 225 < 257$ evaluate optically in parallel and recombine in CMOS carry-save accumulators ($320\,\text{ps}$ word cycle; 160-bit accumulator provides a 27-bit guard margin over 133-bit $N=32$ INT64 dot products).
+Sub-products $X_i Y_j \le 225 < 257$ evaluate optically in parallel and recombine in CMOS carry-save accumulators ($320\,\text{ps}$ word cycle).
 
 \section{Monolithic 3D Architecture and Asymmetric 16-Tree Fermat Core}
-The JANUS architecture is modeled as a monolithic 3D die ($10.0 \times 10.0\,\text{mm} = 100.00\,\text{mm}^2$) integrating a top SiPh stratum bonded over 65nm CMOS across 16 compute tiles ($16,384$ multipliers die-wide) at $100\,\text{GHz}$. Residues in $\mathbb{Z}_{17}$ map to 17 spatial waveguides $\mathcal{A} = \{WG_0, \dots, WG_{16}\}$; $WG_0$ gates zero operands ($X=0$), while $WG_1\dots WG_{16}$ route non-zero states ($100\%$ coverage). Waveguides are modeled in stoichiometric $\text{Si}_3\text{N}_4$ ($800 \times 400\,\text{nm}$, $E_g = 5.0\,\text{eV}$, loss $\alpha = 0.10\,\text{dB/cm}$, bend $R = 25\,\mu\text{m}$, $<0.005\,\text{dB/bend}$) \cite{Rahim2021}, excited by a $2.21\,\text{W}$ CW laser ($\lambda = 1064\,\text{nm}$, $h\nu = 1.165\,\text{eV} < E_g/2$), completely avoiding two-photon absorption. An independent 13-stage cascaded MMI binary tree ($1:8192$ split, $0.14\,\text{dB/stage}$) distributes optical power across the array.
+The JANUS architecture is modeled as a 3D monolithic die ($100.00\,\text{mm}^2$) integrating a top SiPh stratum bonded over 65nm CMOS across 16 compute tiles ($16,384$ multipliers) at $100\,\text{GHz}$. Residues in $\mathbb{Z}_{17}$ map to 17 spatial waveguides: $WG_0$ routes zero operands, while $WG_1\dots WG_{16}$ route active states. Waveguides use stoichiometric $\text{Si}_3\text{N}_4$ ($800 \times 400\,\text{nm}$, $E_g = 5.0\,\text{eV}$, $\alpha = 0.10\,\text{dB/cm}$, bend $R = 25\,\mu\text{m}$) \cite{Rahim2021}, excited by a $2.21\,\text{W}$ CW laser ($\lambda = 1064\,\text{nm}, h\nu < E_g/2$) to avoid two-photon absorption. A 13-stage cascaded MMI binary tree ($1:8192$ split, $0.14\,\text{dB/stage}$) distributes optical power across the fabric (Fig.~\ref{fig:fermat_topology}b).
 
-Each channel drives a 4-stage binary computational switch tree ($\log_2 16 = 4$, 15 switches/channel, $240$/multiplier, $3,932,160$ die-wide). Weights are stored non-volatilely in compact $\text{Sb}_2\text{S}_3$ phase-change material (PCM) couplers ($12.04\,\mu\text{m}^2$/cell; $3.93\text{M}$ cells occupy $47.34\,\text{mm}^2$, leaving $>52\,\text{mm}^2$ on the $100.00\,\text{mm}^2$ die for routing buses and pads) \cite{Dong2019}, achieving $\text{ER} \ge 21.86\,\text{dB}$ ($<0.63\%$ leakage), negligible static hold power ($0.00\,\text{W}$), and $1.33\,\text{ps}$ time-of-flight. Modulo 17 maps Tree 16 to modular negation ($16 W \equiv -W \pmod{17}$); modulo 257 enables division-free Radix-16 reduction via $(16^2 Y_H + Y_L) \bmod 257 = (Y_L - Y_H) \pmod{257}$ (Fig.~\ref{fig:fermat_topology}a). Active path loss is $1.61\,\text{dB}$ across the 4-stage tree; parabolic waveguide crossings contribute $0.0914\,\text{dB/crossing}$ with $-42.5\,\text{dB}$ crosstalk isolation. Operands modulate at $100\,\text{GHz}$ via push-pull thin-film $\text{LiTaO}_3$ Pockels modulators ($r_{33} = 30.5\,\text{pm/V}$, $V_{\text{pp}} = 0.8\,\text{V}$, $42.5\,\text{fJ/bit}$) \cite{Wang2023, Cheng2024Nature}, coupled via inverted nanotapers ($0.80\,\text{dB}$ loss).
+Each channel drives a 4-stage binary switch tree ($\log_2 16 = 4$, 15 switches/channel, $240$/multiplier) with non-volatile $\text{Sb}_2\text{S}_3$ phase-change couplers ($12.04\,\mu\text{m}^2$/cell, $47.34\,\text{mm}^2$ active area) \cite{Dong2019}, achieving $\text{ER} \ge 21.86\,\text{dB}$, zero static hold power, and $1.33\,\text{ps}$ time-of-flight. Modulo 17 maps Tree 16 to modular negation ($16 W \equiv -W \pmod{17}$); modulo 257 enables division-free Radix-16 reduction via $(16^2 Y_H + Y_L) \bmod 257 = (Y_L - Y_H) \pmod{257}$ (Fig.~\ref{fig:fermat_topology}a). Path loss is $1.61\,\text{dB}$ across the tree; parabolic crossings add $0.0914\,\text{dB/crossing}$ ($-42.5\,\text{dB}$ isolation). Operands modulate at $100\,\text{GHz}$ via push-pull thin-film $\text{LiTaO}_3$ Pockels modulators ($r_{33} = 30.5\,\text{pm/V}$, $V_{\text{pp}} = 0.8\,\text{V}$, $42.5\,\text{fJ/bit}$) \cite{Wang2023, Cheng2024Nature} with inverted nanotapers ($0.80\,\text{dB}$ loss).
 
 \begin{center}
-\vspace{-8pt}
+\vspace{-6pt}
 \noindent\begin{minipage}[t]{0.48\textwidth}
   \vspace{0pt}
   \centering
-  \includegraphics[width=\columnwidth, height=0.68in, keepaspectratio]{figures/fig_asymmetric_16tree_fermat_topology.png}
+  \includegraphics[width=\columnwidth, height=1.25in, keepaspectratio]{figures/fig_asymmetric_16tree_fermat_topology.pdf}
   \vspace{-2pt}
-  \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (a) Asymmetric 16-Tree Fermat Core}
+  \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (a) 4-Stage Fermat Routing Core}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \vspace{0pt}
   \centering
-  \includegraphics[width=\columnwidth, height=0.68in, keepaspectratio]{figures/fig_mc_cascaded_mmi_loss.pdf}
+  \includegraphics[width=\columnwidth, height=1.25in, keepaspectratio]{figures/fig_mc_cascaded_mmi_loss.pdf}
   \vspace{-2pt}
-  \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (b) 13-Stage MMI Tree Loss Progression}
+  \centerline{\fontsize{7.0pt}{8.2pt}\selectfont (b) 13-Stage MMI Distribution Tree Loss}
 \end{minipage}
-\vspace{-5pt}
-\captionof{figure}{Architecture and Optical Distribution. (a) 4-stage asymmetric 16-tree Fermat core routing $WG_1\dots WG_{16}$ and modular reduction matrix. (b) 13-stage cascaded MMI distribution tree cumulative insertion loss across $1:8192$ split with 100M-run $\pm 3\sigma$ lithographic bounds.}
+\vspace{-4pt}
+\captionof{figure}{Architecture and Optical Distribution. (a) 4-stage binary Fermat tree routing active channel $WG_{11}$ ($WG_1\dots WG_{16}$) with zero bypass $WG_0$. (b) 13-stage cascaded MMI distribution tree cumulative insertion loss across $1:8192$ split with $\pm 3\sigma$ lithographic bounds.}
 \label{fig:fermat_topology}
-\vspace{-6pt}
+\vspace{-4pt}
 \end{center}
 
 \clearpage
