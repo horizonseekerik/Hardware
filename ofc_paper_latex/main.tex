@@ -40,13 +40,13 @@
 \maketitle
 
 \begin{abstract}
-A 100-GHz one-hot spatial photonic processor maps modular arithmetic over Fermat primes. A 100,000,000-run HPC campaign verifies $+7.10\,\text{dB}$ margin ($6\sigma = +6.80\,\text{dB}$, $100\%$ yield); 100M-cycle SPICE achieves $\text{BER} = 2.66\times 10^{-41}$ with $18.5\,\text{kHz}$ thermal clamping ($26.08^\circ\text{C}$).
+A 100-GHz one-hot spatial photonic processor computes modular arithmetic over Fermat primes. A 100M-sample Cloud HPC campaign verifies $+7.10\,\text{dB}$ margin ($100\%$ yield); 100M-cycle SPICE validates zero errors with $18.5\,\text{kHz}$ thermal clamping.
 \end{abstract}
 
 \section{The Optical Dynamic Range Wall and Hybrid RNS Partitioning}
 Analog optical matrix multipliers accumulate continuous optical power on photodetectors \cite{Shen2017}. In an $N=32$ dot product with 8-bit operands, power scales to $S_{\max} = 32 \times 255^2 = 2{,}080{,}800$, imposing an optical dynamic range $\text{DR}_{\text{opt}} = 10\log_{10}(S_{\max}) = 63.2\,\text{dB}$ ($126.4\,\text{dB}$ electrical). Digitizing this range at gigahertz rates requires $\approx 21$ effective number of bits (ENOB), exceeding photodiode linearity and ADC power walls \cite{Shen2017}.
 
-The JANUS processor eliminates continuous accumulation via \textbf{Hybrid Optical-CMOS Partitioning}: optics strictly evaluates bounded $1 \times 1$ modular products over Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($F_1 = 2^{2^1}+1, F_2 = 2^{2^2}+1$) \cite{Huang1979, Mohan2016, Zheng2024}: $x, w \to (xw \bmod 17, \; xw \bmod 257)$. Optical detection collapses from linear ADCs to 1-bit binary spatial thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM dynamic latches. Chinese Remainder Theorem (CRT) reconstruction recovers exact products: $xw = \operatorname{CRT}(xw \bmod 17, \; xw \bmod 257)$ over range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$, strictly bounding all 4-bit products. Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$ and $Y = 16 Y_H + Y_L$:
+The JANUS processor eliminates continuous accumulation via \textbf{Hybrid Optical-CMOS Partitioning}: optics strictly evaluates bounded $1 \times 1$ modular products over Fermat prime moduli $\{m_1, m_2\} = \{17, 257\}$ ($F_1 = 2^{2^1}+1, F_2 = 2^{2^2}+1$) \cite{Huang1979, Mohan2016, Zheng2024}: $x, w \to (xw \bmod 17, \; xw \bmod 257)$. Optical detection collapses from linear ADCs to 1-bit binary spatial thresholding ($P_{\text{ON}} > P_{\text{sens}} > P_{\text{OFF}}$) on clocked StrongARM dynamic latches. Chinese Remainder Theorem (CRT) reconstruction recovers exact products: $xw = \operatorname{CRT}(xw \bmod 17, \; xw \bmod 257)$ over range $M = 17 \times 257 = 4{,}369 > 15^2 = 225$, strictly bounding all 4-bit products. Full 8-bit operands $X, Y \in [0, 255]$ decompose into 4-bit nibbles $X = 16 X_H + X_L$ and $Y = 16 Y_H + Y_L$ in Eq.~\eqref{eq:nibble}:
 \begin{equation}
 XY = X_L Y_L + 16(X_L Y_H + X_H Y_L) + 256 X_H Y_H,
 \label{eq:nibble}
@@ -129,9 +129,10 @@ As shown in Fig.~\ref{fig:mc_100m_hist}, the link margin exhibits a tight Gaussi
 \section{100-GHz Optoelectronic Receiver and 100M-Cycle SPICE Integrity}
 The detection interface couples $\text{SAC}^2\text{M}$ Ge/Si APDs directly to clocked 65nm StrongARM latches via vertical Cu TDVs ($8\,\mu\text{m}\,\varnothing, C_{\text{pad}} = 5.54\,\text{fF}$), eliminating linear TIAs and ADCs. Photocarriers undergo low-noise avalanche multiplication in crystalline Si ($M=8.5, k_{\text{eff}} = 0.05, \mathcal{R} = 0.85\,\text{A/W}$) \cite{Shi2025Nature, McIntyre1966}. Avalanche charge directly gates the cross-coupled regenerative pair during latch evaluation.
 
-Transient co-simulation in Sandia Xyce SPICE across $100,000,000$ continuous clock cycles at $100\,\text{GHz}$ ($T_{\text{clk}} = 10.0\,\text{ps}$, PRBS-7) models APD shot noise, dark current ($10\,\text{nA}$), thermal noise, and $50\,\text{fs~rms}$ jitter. Differential eye opening is $115.48\,\text{mV}$ ($77.30\%$ eye height). The optoelectronic signal-to-noise ratio:
+Transient co-simulation in Sandia Xyce SPICE across $100,000,000$ continuous clock cycles at $100\,\text{GHz}$ ($T_{\text{clk}} = 10.0\,\text{ps}$, PRBS-7) models APD shot noise, dark current ($10\,\text{nA}$), thermal noise, and $50\,\text{fs~rms}$ jitter. Differential eye opening is $115.48\,\text{mV}$ ($77.30\%$ eye height). The optoelectronic signal-to-noise ratio in Eq.~\eqref{eq:snr}:
 \begin{equation}
 Q = \frac{\mathcal{R} M P_{\text{rx}} \cdot \eta_{\text{capture}}}{\sigma_{\text{total}}} = 13.41
+\label{eq:snr}
 \end{equation}
 yields analytical $\text{BER} = \frac{1}{2}\operatorname{erfc}(Q/\sqrt{2}) = 2.66 \times 10^{-41}$ ($23$ orders of magnitude above $10^{-18}$), confirmed by zero errors across $99,996,000$ simulated active bits ($0/99,996,000$). StrongARM latching resolves in $4.16\,\text{ps}$ median ($\tau_{\text{regen}} = 0.65\,\text{ps}, <5.0\,\text{ps}$ half-cycle budget) with jitter $\sigma_{\text{jitter}} < 0.35\,\text{ps}$ and metastability rate $P_{\text{meta}} < 10^{-20}$. A 1:32 polyphase CML deserializer tree converts $100\,\text{GHz}$ bits to $3.125\,\text{GHz}$ words ($T_{\text{CMOS}} = 320\,\text{ps}$) for CMOS logic ($>17\times$ timing margin) \cite{Schinkel2007}. Table~\ref{tab:receiver_budget} outlines the complete optoelectronic budget.
 
