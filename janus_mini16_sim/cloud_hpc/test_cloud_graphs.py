@@ -2,7 +2,7 @@
 TEST SUITE: CLOUD HPC SCIENTIFIC GRAPHING & CHECKPOINT SUITE
 ============================================================
 Verifies that all 19 publication-grade figures, checkpoint overlays,
-and OFC composite dashboards are properly generated, non-empty,
+and verification composite dashboards are properly generated, non-empty,
 and formatted correctly in both PNG and vector PDF formats.
 """
 
@@ -133,7 +133,7 @@ def test_category_c_thermal_graphs(test_output_dir):
 
 
 def test_category_d_ofc_dashboards(test_output_dir):
-    """Verifies all 2 Category D OFC 3-page composite dashboards."""
+    """Verifies all 2 Category D verification composite dashboards."""
     gen = CloudGraphGenerator(output_dir=test_output_dir)
 
     # 18. Hero dashboard

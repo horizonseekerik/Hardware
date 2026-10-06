@@ -9,8 +9,8 @@
 [![Energy Efficiency](https://img.shields.io/badge/Energy%20Efficiency-489.1%20TOPS%2FW-cyan.svg)](#-ai-workload-benchmarks--gpu-comparison)
 [![Die Footprint](https://img.shields.io/badge/Die%20Area-10.24%20mm%C2%B2%20(3.2x3.2mm)-blueviolet.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![Total Power](https://img.shields.io/badge/Total%20Power-3.35%20Watts-purple.svg)](#-master-hardware-scaling-roadmap-18-models)
-[![100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100%25%20Yield%20(%2B6.95dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--ofc-2027-sign-off)
-[![100M 100GHz SPICE](https://img.shields.io/badge/100M%20SPICE%20Cycles-0%20Errors%20(BER%20%3C%2010%E2%81%BB%E2%81%B4%C2%B9)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--ofc-2027-sign-off)
+[![100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100%25%20Yield%20(%2B6.95dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
+[![100M 100GHz SPICE](https://img.shields.io/badge/100M%20SPICE%20Cycles-0%20Errors%20(BER%20%3C%2010%E2%81%BB%E2%81%B4%C2%B9)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![Thermal Clamping](https://img.shields.io/badge/JIR%20Clamping-26.08%C2%B0C%20(Safe)-blue.svg)](#-thermodynamic-physics-how-jir-thermal-clamping-works-under-100-workload)
 [![Simulation Matrix](https://img.shields.io/badge/Simulation%20Targets-16%2F16%20Met%20(100%25)-brightgreen.svg)](#-16-point-multi-physics-sign-off-matrix)
 [![Pytest Suite](https://img.shields.io/badge/Pytest%20Suite-86%2F86%20Passed%20(MEEP%20FDTD)-brightgreen.svg)](#-16-point-multi-physics-sign-off-matrix)
@@ -108,25 +108,24 @@ Janus Update/
 ├── janus_100m_results.tar.gz                  # 100,000,000-Run Cloud HPC Production Archive (11.78 MB)
 │
 ├── 📄 Primary Academic Manuscripts & Reports
-│   ├── JANUS_IEEE_Manuscript.pdf              # Complete 39-page formally verified IEEE manuscript
-│   ├── JANUS_OFC_3Page_Paper.pdf              # OFC 2027 3-page conference submission paper
-│   ├── JANUS_Mini16_Simulation_Report.pdf     # Multi-physics co-simulation sign-off report (1M & 100M verified)
-│   ├── JANUS_Mini16_CMOS_Architecture.pdf     # 65nm CMOS digital backend architecture blueprint
-│   ├── main.pdf                               # Compiled master IEEEtran manuscript
-│   ├── deep-research-report.md                # In-depth architectural synthesis research report
-│   └── JANUS_ASYMMETRIC_16TREE_ARCHITECTURE.md # 4-Stage Fermat Core mathematical & physical specification
+│   ├── documentation_reports/JANUS_IEEE_Manuscript.pdf              # Complete 39-page formally verified IEEE manuscript
+│   ├── documentation_reports/JANUS_Mini16_Simulation_Report.pdf     # Multi-physics co-simulation sign-off report (1M & 100M verified)
+│   ├── documentation_reports/JANUS_Mini16_CMOS_Architecture.pdf     # 65nm CMOS digital backend architecture blueprint
+│   ├── documentation_reports/deep-research-report.md                # In-depth architectural synthesis research report
+│   └── documentation_reports/JANUS_ASYMMETRIC_16TREE_ARCHITECTURE.md # 4-Stage Fermat Core mathematical & physical specification
 │
 ├── 📐 Physical Layout & Fabrication Mask Sets
-│   ├── janus_mini16_layout.gds                # Tapeout-grade photonic 3D top-die GDS II stream file (955 KB)
-│   ├── janus_mini16_cmos_base_layout.gds      # 65nm CMOS digital base-die GDS II stream file (169 KB)
-│   ├── janus_mini16_layout.lyp                # KLayout layer color palette & visual styling definition
-│   └── fig_gds_die_and_tile_floorplan.png     # 300 DPI composite full-die & single-tile mask floorplan
+│   ├── janus_mini16_sim/layout/janus_mini16_layout.gds           # Tapeout-grade photonic 3D top-die GDS II stream file (955 KB)
+│   ├── janus_mini16_sim/layout/janus_mini16_cmos_base_layout.gds # 65nm CMOS digital base-die GDS II stream file (169 KB)
+│   ├── janus_mini16_sim/layout/janus_mini16_layout.lyp           # KLayout layer color palette & visual styling definition
+│   └── fig_gds_die_and_tile_floorplan.png                        # 300 DPI composite full-die & single-tile mask floorplan
 │
 ├── 🎬 Media & Interactive Visual Assets
-│   ├── JANUS_Mini16_Demonstration.mp4         # High-resolution architectural demonstration video (1.8 MB)
-│   ├── janus_mini16_poster.jpg                # Academic conference presentation poster
-│   ├── janus-logo.png                         # High-resolution Project JANUS branding logo
-│   └── apple-touch-icon.png / favicon*        # High-DPI browser tab icons and mobile app badges
+│   ├── media/videos/JANUS_Mini16_Demonstration.mp4               # High-resolution architectural demonstration video (1.8 MB)
+│   ├── media/renders/                                            # High-resolution multi-stratum architectural renders & figures
+│   ├── janus_mini16_poster.jpg                                   # Academic conference presentation poster
+│   ├── janus-logo.png                                            # High-resolution Project JANUS branding logo
+│   └── apple-touch-icon.png / favicon*                           # High-DPI browser tab icons and mobile app badges
 │
 ├── 📂 Academic Paper LaTeX Source Repositories
 │   ├── paper_latex/                           # 39-Page Primary IEEE Architecture Manuscript (IEEEtran)
@@ -135,13 +134,6 @@ Janus Update/
 │   │   ├── main.pdf                           # Compiled IEEE manuscript PDF
 │   │   ├── PCM_MATERIAL_SELECTION_RATIONALE.md # Thermodynamic & optical selection of Sb2S3 vs GST
 │   │   └── rns_64bit_architecture_update.md   # Exact 64-bit RNS dynamic range scaling update
-│   │
-│   ├── ofc_paper_latex/                       # OFC 2027 3-Page Conference Submission Paper
-│   │   ├── main.tex                           # 3-page condensed LaTeX source code (IEEE/Optica format)
-│   │   ├── references.bib                     # OFC targeted bibliography database
-│   │   ├── janus_ofc_paper.pdf                # Compiled 3-page OFC conference paper
-│   │   ├── figures/                           # Vector figures scaled for 2-column layout
-│   │   └── page-1.png, page-2.png, page-3.png # High-resolution 300-DPI rasterized page previews
 │   │
 │   ├── cmos_paper_latex/                      # IEEE CMOS Backend Architecture Specification
 │   │   ├── JANUS_Mini16_CMOS_Architecture.tex # Companion CMOS paper LaTeX source code
@@ -165,12 +157,6 @@ Janus Update/
 │   │   ├── deep-research-report.md            # Deep research architectural synthesis report
 │   │   └── figures/                           # System diagrams, waveguide cross-sections & schematics
 │   │
-│   ├── Simulation Changes for 100%/           # Uncompromised Simulation & Authoring Guides
-│   │   ├── OFC_2027_3PAGE_PAPER_AUTHORING_GUIDE.md # Reviewer defense checklist & paper guidelines
-│   │   ├── PROJECT_JANUS_AZURE_HPC_UPGRADE_ROADMAP.md # Azure Cloud HPC architecture roadmap
-│   │   ├── PROJECT_JANUS_GCP_100_PERCENT_SIMULATION_GUIDE.md # GCP cluster simulation deployment guide
-│   │   └── PROJECT_JANUS_HIGHER_ORDER_EDGE_CASES.md # Comprehensive 32-point physical edge-case audit
-│   │
 │   ├── Janus Interactive Visulaization/       # 3D Cinematic Visualizations & Layer Renders
 │   │   ├── JANUS_Mini16_3D_Development_Spec.md # 3D development spec & material breakdown
 │   │   └── renders/                           # High-resolution multi-stratum architectural renders
@@ -191,7 +177,6 @@ Janus Update/
 ├── 🛠️ Automation & Historical Tooling
 │   ├── scripts/                               # Tooling & Figure Generators
 │   │   ├── sync_simulation_repo.py            # Automated synchronization script
-│   │   ├── make_ofc_4figures.py               # OFC 4-panel composite figure synthesizer
 │   │   └── fix_fig1_topology.py               # Waveguide crossing topology optimization script
 │   │
 │   └── scratch_archive/                       # Historical Diagnostics & Exploratory Scripts
@@ -493,9 +478,10 @@ Temperature (°C)
 
 ---
 
-## 🌩️ Cloud HPC 100,000,000-Run Production Campaign & OFC 2027 Sign-Off
+## 🌩️ Cloud HPC 100,000,000-Run Production Campaign & Hardware Sign-Off
 
 To mathematically guarantee foundry manufacturability and high-frequency signal integrity at hyperscale statistical confidence, Project JANUS was subjected to a massive **100,000,000-Sample Monte Carlo Tolerance Sweep** and **100,000,000-Cycle 100 GHz SPICE Optoelectronic Simulation** on Microsoft Azure Cloud HPC (`Standard_D4s_v5`, 4 vCPUs, 16 GB RAM in Central India).
+
 
 ### 1. Statistical Results Summary
 
@@ -539,8 +525,8 @@ All publication figures from the 100M production campaign are available in both 
 | | Fig 15 | `fig_thermal_transient_step_5pole` | Multi-time-scale step response ($1\,\mu\text{s}$ to $1\,\text{s}$) comparing 3D FEM, 1D FVM, and 5-pole Foster RC |
 | | Fig 16 | `fig_thermal_lateral_crosstalk_decay` | Lateral inter-cell thermal crosstalk decay ($\Delta T < 0.15\,\text{K}$ at $250\,\mu\text{m}$ pitch) |
 | | Fig 17 | `fig_thermal_jir_clamping_dynamics` | Dynamic temperature clamping: uncontrolled thermal runaway ($+33.4\,\text{K}$) vs. JIR active clamping ($+1.08\,\text{K}$) |
-| **Category D: OFC 3-Page Publication Dashboards (2 Figs)** | Fig 18 | `fig_ofc_3page_hero_dashboard` | 5-panel composite hero dashboard formatted to IEEE/Optica 2-column standards |
-| | Fig 19 | `fig_ofc_radar_signoff_matrix` | 16-point multi-physics verification radar chart demonstrating 100% specification compliance |
+| **Category D: Publication Verification Dashboards (2 Figs)** | Fig 18 | `fig_hero_dashboard` | 5-panel composite hero dashboard formatted to IEEE/Optica 2-column standards |
+| | Fig 19 | `fig_radar_signoff_matrix` | 16-point multi-physics verification radar chart demonstrating 100% specification compliance |
 
 ---
 

@@ -2,8 +2,8 @@
 
 [![CI Multi-Physics Suite](https://github.com/horizonseekerik/janus-photonic-hardware/actions/workflows/ci.yml/badge.svg)](https://github.com/horizonseekerik/janus-photonic-hardware/actions)
 [![TRL Readiness](https://img.shields.io/badge/TRL-4.0%20(Cloud%20HPC%20Validated)-blue.svg)](#-technology-readiness-level)
-[![HPC 100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100.0000%25%20Yield%20(%2B6.95%20dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--ofc-2027-sign-off)
-[![100 GHz SPICE](https://img.shields.io/badge/100%20GHz%20SPICE-BER%20%3D%202.66%C3%9710%E2%81%BB%E2%81%B4%C2%B9%20(0%20Errors)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--ofc-2027-sign-off)
+[![HPC 100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100.0000%25%20Yield%20(%2B6.95%20dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
+[![100 GHz SPICE](https://img.shields.io/badge/100%20GHz%20SPICE-BER%20%3D%202.66%C3%9710%E2%81%BB%E2%81%B4%C2%B9%20(0%20Errors)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![JIR Thermal Clamping](https://img.shields.io/badge/JIR%20Thermal-26.08%C2%B0C%20(Clamped)-blue.svg)](#-thermodynamic-physics-how-jir-thermal-clamping-works-under-100-workload)
 [![Energy Efficiency](https://img.shields.io/badge/INT8%20Efficiency-489.1%20TOPS%2FW%20(3.35W)-green.svg)](#-gpu-comparative-benchmarks-janus-vs-nvidia-h100--b200)
 [![Compute Density](https://img.shields.io/badge/Compute%20Density-160.0%20TOPS%2Fmm%C2%B2-cyan.svg)](#-gpu-comparative-benchmarks-janus-vs-nvidia-h100--b200)
@@ -220,7 +220,7 @@ For running 100% full-mesh 3D FDTD and FEM solvers on high-performance cloud clu
 
 ---
 
-## 🌩️ Cloud HPC 100,000,000-Run Production Campaign & OFC 2027 Sign-Off
+## 🌩️ Cloud HPC 100,000,000-Run Production Campaign & Hardware Sign-Off
 
 To mathematically guarantee foundry manufacturability and high-frequency signal integrity at hyperscale statistical confidence, Project JANUS was subjected to a massive **100,000,000-Sample Monte Carlo Tolerance Sweep** and **100,000,000-Cycle 100 GHz SPICE Optoelectronic Simulation** on Microsoft Azure Cloud HPC (`Standard_D4s_v5`, 4 vCPUs, 16 GB RAM in Central India).
 
@@ -266,7 +266,7 @@ All publication figures from the 100M production campaign are available in both 
 | | Fig 15 | `fig_thermal_transient_step_5pole` | Multi-time-scale step response ($1\,\mu\text{s}$ to $1\,\text{s}$) comparing 3D FEM, 1D FVM, and 5-pole Foster RC |
 | | Fig 16 | `fig_thermal_lateral_crosstalk_decay` | Lateral inter-cell thermal crosstalk decay ($\Delta T < 0.15\,\text{K}$ at $250\,\mu\text{m}$ pitch) |
 | | Fig 17 | `fig_thermal_jir_clamping_dynamics` | Dynamic temperature clamping: uncontrolled thermal runaway ($+33.4\,\text{K}$) vs. JIR active clamping ($+1.08\,\text{K}$) |
-| **Category D: OFC 3-Page Publication Dashboards (2 Figs)** | Fig 18 | `fig_ofc_3page_hero_dashboard` | 5-panel composite hero dashboard formatted to IEEE/Optica 2-column standards |
+| **Category D: Publication Verification Dashboards (2 Figs)** | Fig 18 | `fig_hero_dashboard` | 5-panel composite hero dashboard formatted to IEEE/Optica 2-column standards |
 | | Fig 19 | `fig_ofc_radar_signoff_matrix` | 16-point multi-physics verification radar chart demonstrating 100% specification compliance |
 
 ---

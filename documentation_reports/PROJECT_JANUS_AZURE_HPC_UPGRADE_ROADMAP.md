@@ -1,11 +1,11 @@
 # PROJECT JANUS: AZURE CLOUD HPC MIGRATION & SIMULATION FIDELITY ROADMAP
-## Eliminating Engineering Compromises via Microsoft Azure Cloud HPC for Tape-Out-Grade Verification and OFC 2027 Submission
+## Eliminating Engineering Compromises via Microsoft Azure Cloud HPC for Tape-Out-Grade Verification and Hardware Sign-Off
 
 **Document ID:** JANUS-HPC-AZURE-2026-V1  
 **Classification:** Strategic Technical Specification & Grant Proposal Blueprint  
 **Authors:** Project Janus Core Architecture Team  
 **Date:** September 2026  
-**Target Submission:** Optical Fiber Communication Conference (OFC 2027, Los Angeles, CA) / IEEE Transactions on Computers  
+**Target Submission:** Optical Fiber Communication Conference (Tier-1 Conferences, Los Angeles, CA) / IEEE Transactions on Computers  
 **Target Grant Program:** Microsoft for Startups Founders Hub ($1,000–$5,000 Initial Tier $\to$ $25,000 Accelerated Tier)
 
 ---
@@ -14,7 +14,7 @@
 
 Project Janus is an ultra-dense, receiverless photonic computing architecture delivering **104.8 PetaMAC/s** at **16.9 fJ/MAC** via a 16-tile spatial Residue Number System (RNS) engine. To validate the feasibility of this architecture on a local Windows workstation without a multi-million-dollar commercial Electronic Design Automation (EDA) cluster, the engineering pipeline relied on **Reduced-Order Models (ROM)**, **2D Effective-Index Approximations**, and **Coupled Analytical Submodels**.
 
-While these models provided the mathematical rigor necessary to establish fundamental link margins ($+8.41\,\text{dB}$) and energy budgets, transitioning Janus into a **tape-out-ready, peer-review-bulletproof manuscript for OFC 2027** requires eliminating all local heuristic simplifications. 
+While these models provided the mathematical rigor necessary to establish fundamental link margins ($+8.41\,\text{dB}$) and energy budgets, transitioning Janus into a **tape-out-ready, peer-review-bulletproof manuscript for Tier-1 Conferences** requires eliminating all local heuristic simplifications. 
 
 Through the **Microsoft for Startups Founders Hub**, Janus will leverage high-performance Azure Linux clusters (`HB120rs_v3` with AMD EPYC processors and `ND96amsr_A100_v4` GPU nodes). This compute infrastructure unlocks:
 1. **Full 3D Vectorial Finite-Difference Time-Domain (FDTD)** optical propagation across complete active device lengths.
@@ -48,8 +48,8 @@ The table below catalogs every engineering approximation present in the current 
 
 ## 3. Why We Must Not Compromise Anymore (The Azure HPC Paradigm Shift)
 
-### 3.1 The Standards of OFC 2027 and Top-Tier Reviewers
-The Optical Fiber Communication Conference (OFC) is attended by the world's most demanding photonics engineers from MIT, UCSB, Stanford, TSMC, NVIDIA, and Intel. When evaluating a novel computing paradigm:
+### 3.1 The Standards of Tier-1 Conferences and Top-Tier Reviewers
+The Optical Fiber Communication Conference (Optoelectronics) is attended by the world's most demanding photonics engineers from MIT, UCSB, Stanford, TSMC, NVIDIA, and Intel. When evaluating a novel computing paradigm:
 * **Reviewers immediately recognize 2D FDTD and analytical approximations.** While acceptable for early exploratory concepts, papers that achieve oral presentation status feature **3D full-vectorial Maxwell equation solutions** and **statistically robust yield data**.
 * **Foundry Compatibility**: Reviewers require proof that the design will function in silicon despite lithographic variations ($\pm 5\,\text{nm}$ line-edge roughness). A 10,000-run Monte Carlo tolerance sweep proves that Janus is not an idealized academic toy, but a commercially manufacturable processor.
 
@@ -122,7 +122,7 @@ This section contains the ready-to-submit proposal text for the **Microsoft for 
 
 ### 5.1 Project Abstract
 > **Project Janus: Accelerating Generative AI via a 104.8-PetaMAC/s, 16.9-fJ/MAC Receiverless Photonic Residue Number System Processor**  
-> Modern artificial intelligence accelerators are approaching the "electrical interconnect wall," where copper wiring and analog-to-digital converters (ADCs) consume over 60% of total chip power. Project Janus pioneers a revolutionary computing architecture that merges Thin-Film Lithium Tantalate ($\text{LiTaO}_3$) ballistic electro-optic routers with a 16-channel Residue Number System (RNS) optical core. By eliminating analog ADCs, DACs, and Transimpedance Amplifiers (TIAs) through direct receiverless StrongARM latch sensing at zero Two-Photon Absorption ($1064\,\text{nm}$), Janus achieves an unprecedented efficiency of $16.9\,\text{fJ/MAC}$ and an optical link margin of $+8.41\,\text{dB}$. To prepare this architecture for silicon foundry tape-out and premier peer-reviewed presentation at OFC 2027, Microsoft Azure Cloud HPC resources are requested to execute full-scale 3D vectorial FDTD electromagnetic and multi-physics thermal simulations.
+> Modern artificial intelligence accelerators are approaching the "electrical interconnect wall," where copper wiring and analog-to-digital converters (ADCs) consume over 60% of total chip power. Project Janus pioneers a revolutionary computing architecture that merges Thin-Film Lithium Tantalate ($\text{LiTaO}_3$) ballistic electro-optic routers with a 16-channel Residue Number System (RNS) optical core. By eliminating analog ADCs, DACs, and Transimpedance Amplifiers (TIAs) through direct receiverless StrongARM latch sensing at zero Two-Photon Absorption ($1064\,\text{nm}$), Janus achieves an unprecedented efficiency of $16.9\,\text{fJ/MAC}$ and an optical link margin of $+8.41\,\text{dB}$. To prepare this architecture for silicon foundry tape-out and premier peer-reviewed presentation at Tier-1 Conferences, Microsoft Azure Cloud HPC resources are requested to execute full-scale 3D vectorial FDTD electromagnetic and multi-physics thermal simulations.
 
 ### 5.2 Deep-Tech Significance & Innovation
 * **Zero-ADC Computing**: Replaces power-hungry 8-bit/16-bit analog converters with spatial one-hot optical switches and direct capacitive charging of nanoscale avalanche photodiodes ($C_{\text{node}} \approx 5\,\text{fF}$).
@@ -148,7 +148,7 @@ The table below demonstrates rigorous financial planning, showing how **$1,500 t
 | **Process Yield (Batch)** | Azure Batch (`F16s_v2` fleet) | 16 vCPUs per worker (Pool of 20 VMs) | ~$0.30 / hr per VM (Spot) | 50 hrs | **$300.00** | 10,000-run Monte Carlo foundry lithography tolerance sweep. |
 | **Storage & Transfer** | Azure Premium SSD + Egress | 2 TB Premium Managed Disk + Snapshot backup | Flat / Month | 2 Months | **$180.00** | Mesh files, HDF5 field monitors, Touchstone `.s2p` files, VTK profiles. |
 | **Buffer / Contingency** | Overhead | — | — | — | **$232.00** | Reruns, convergence debugging, mesh refinement studies. |
-| **TOTAL REQUESTED** | — | — | — | — | **$1,500.00** | **Delivers 100% full-chip 3D cloud verification for OFC 2027.** |
+| **TOTAL REQUESTED** | — | — | — | — | **$1,500.00** | **Delivers 100% full-chip 3D cloud verification for Tier-1 Conferences.** |
 
 ---
 
@@ -172,9 +172,9 @@ The table below demonstrates rigorous financial planning, showing how **$1,500 t
 | **Physics**       | - Run parallel Xyce SPICE on 1M StrongARM cycles.         |                   |
 |                   | - Synthesize digital CRT through OpenROAD 7nm flow.       |                   |
 +-------------------+-----------------------------------------------------------+-------------------+
-| **Phase 4: Paper**| - Integrate full 3D data into 3-page OFC 2027 manuscript. | Weeks 5–6         |
+| **Phase 4: Paper**| - Integrate full 3D data into 3-page Tier-1 Conferences manuscript. | Weeks 5–6         |
 |                   | - Publish open-source reproducibility artifacts to GitHub.|                   |
-|                   | - Submit to OFC 2027 (Los Angeles, CA).                   |                   |
+|                   | - Submit to Tier-1 Conferences (Los Angeles, CA).                   |                   |
 +-------------------+-----------------------------------------------------------+-------------------+
 ```
 
@@ -182,4 +182,4 @@ The table below demonstrates rigorous financial planning, showing how **$1,500 t
 
 ## 7. Conclusion
 
-By recognizing and documenting our current local workstation compromises, Project Janus demonstrates genuine scientific honesty and engineering maturity. Transitioning to Microsoft Azure Cloud HPC through the Founders Hub eliminates every compromise, replacing analytical placeholders with indisputable 3D physical data. This roadmap provides the exact bridge required to establish Janus as a landmark breakthrough in optical computing at OFC 2027 and beyond.
+By recognizing and documenting our current local workstation compromises, Project Janus demonstrates genuine scientific honesty and engineering maturity. Transitioning to Microsoft Azure Cloud HPC through the Founders Hub eliminates every compromise, replacing analytical placeholders with indisputable 3D physical data. This roadmap provides the exact bridge required to establish Janus as a landmark breakthrough in optical computing at Tier-1 Conferences and beyond.

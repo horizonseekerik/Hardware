@@ -259,7 +259,7 @@ def generate_all_pcm_simulation_figures(output_dir: str):
              r"• $1.2\,\mathrm{at}\%$ N-doping (18 nm grain size) + in-situ S-passivation ($S/\mathrm{Sb} = 1.56$)" + "\n" +
              r"• 1D Covalent Edge Contacts with 5 nm TiN barrier ($\Delta R_c < 1.5\%$)" + "\n" +
              r"• Adaptive Predictive Healing Cadence ($10^6$ cycles, 99.98% vacancy dissolution)" + "\n" +
-             r"$\rightarrow\ \mathbf{B_{10}\ Lifetime > 1.0\ \mathrm{TRILLION\ CYCLES}}$ ($\eta = 2.65\times 10^{12}$)!",
+             r"$\rightarrow\ \mathbf{B_{10}\ Lifetime = 1.19\times 10^{12}\ \mathrm{Cycles}}$ ($\eta = 2.65\times 10^{12},\ \beta = 2.80$)",
              fontsize=7.2, bbox=dict(boxstyle='round,pad=0.3', facecolor='#f8fafc', edgecolor='#64748b'))
 
     fig6.tight_layout()
@@ -274,3 +274,9 @@ def generate_all_pcm_simulation_figures(output_dir: str):
 if __name__ == "__main__":
     out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures")
     generate_all_pcm_simulation_figures(out_dir)
+    
+    # Also mirror directly to ofc_switch_paper_latex/figures
+    paper_fig_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ofc_switch_paper_latex", "figures"))
+    if os.path.exists(paper_fig_dir):
+        print(f"Mirroring generated figures to: {paper_fig_dir}")
+        generate_all_pcm_simulation_figures(paper_fig_dir)

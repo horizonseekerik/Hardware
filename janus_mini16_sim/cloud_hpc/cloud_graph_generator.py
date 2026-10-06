@@ -3,7 +3,7 @@ PROJECT JANUS: CLOUD HPC 1,000,000-RUN SCIENTIFIC GRAPHING SUITE
 ================================================================
 Document ID: JANUS-CLOUD-GRAPH-1M-2026-V1
 Classification: Multi-Physics Cloud Visualization & Checkpoint Engine
-Target Publication: OFC / IEEE Journal of Lightwave Technology
+Target Publication: IEEE Journal of Lightwave Technology
 
 Generates 19 publication-grade scientific figures across all physical tiers:
   Category A: 1,000,000-Sample Monte Carlo Optical Tolerance & Yield (7 figures)
@@ -12,7 +12,7 @@ Generates 19 publication-grade scientific figures across all physical tiers:
     - Checkpoint intervals: 50k, 100k, 250k, 500k, 1,000,000 cycles
   Category C: 5,000,000-Element Elmer 3D FEM & 5-Pole Foster RC Thermal (4 figures)
     - Multi-stratum cross-sections, 5-pole step response, lateral crosstalk, JIR clamping
-  Category D: OFC 3-Page Publication Composite Dashboards (2 figures)
+  Category D: Publication Verification Composite Dashboards (2 figures)
     - 5-panel hero figure and 16-point multi-physics sign-off radar chart
 """
 
@@ -754,12 +754,12 @@ class CloudGraphGenerator:
         self._save_fig(fig, "fig_thermal_jir_clamping_dynamics")
 
     # =========================================================================
-    # CATEGORY D: OFC 3-PAGE PUBLICATION COMPOSITE DASHBOARDS (2 Figs)
+    # CATEGORY D: Publication Verification COMPOSITE DASHBOARDS (2 Figs)
     # =========================================================================
 
     def generate_ofc_3page_hero_dashboard(self, margins: np.ndarray = None, n_samples: int = None):
         """
-        Fig 18: OFC 3-Page Publication Hero Figure (Multi-panel composite):
+        Fig 18: Publication Verification Hero Figure (Multi-panel composite):
           - Panel A: 100 GHz SPICE Eye Diagram
           - Panel B: 1M-Sample Monte Carlo Yield CDF
           - Panel C: 5-Pole Foster RC Thermal Step Response
@@ -944,8 +944,8 @@ class CloudGraphGenerator:
         self.generate_thermal_lateral_crosstalk_plot()
         self.generate_thermal_jir_clamping_plot()
 
-        # 4. Generate Category D: OFC 3-Page Publication Dashboards (18-19)
-        print("[*] Generating Category D: OFC 3-Page Publication Composite Dashboards (18-19)...")
+        # 4. Generate Category D: Publication Verification Dashboards (18-19)
+        print("[*] Generating Category D: Publication Verification Composite Dashboards (18-19)...")
         self.generate_ofc_3page_hero_dashboard(margins, n_samples=n_mc_samples)
         self.generate_ofc_radar_signoff_plot(n_samples=n_mc_samples)
 

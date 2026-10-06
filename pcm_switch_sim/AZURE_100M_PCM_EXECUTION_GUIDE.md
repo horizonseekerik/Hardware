@@ -2,7 +2,7 @@
 ==============================================================================
 **Document ID:** `JANUS-AZURE-PCM-100M-GUIDE-2026-V1`  
 **Target Device:** $\mathrm{Sb}_2\mathrm{S}_3$ Non-Volatile Phase-Change Waveguide Switch ($2 \times 2$ MZI / Coupler Cell)  
-**Target Publication:** OFC 2027 (Subcommittee D2: PICs & Switching Devices) / IEEE JSTQE  
+**Target Publication:** IEEE JSTQE  
 **Target Campaign:** 100,000,000 Rewrite Cycles + Continuous 100M-Pulse High-Frequency Workload  
 **Estimated Cloud Budget:** `< $0.25` on Microsoft Azure (from your active $200 credit)  
 ==============================================================================
@@ -13,7 +13,7 @@
 
 This directory (`pcm_switch_sim/`) contains the complete multi-physics simulation suite that verifies the **long-term endurance, thermal dynamics, continuous fatigue, and failure horizon of the $\mathrm{Sb}_2\mathrm{S}_3$ phase-change switch** across **$100,000,000$ full rewrite cycles**.
 
-The simulation rigorously addresses the primary concerns of OFC Subcommittee D2 reviewers:
+The simulation rigorously addresses the primary concerns of peer reviewers:
 1. **Electro-Thermal Pulse Quenching:** Verifies melt-quench reset ($552^\circ\mathrm{C}$, quench rate $> 10^{10}\,\mathrm{K/s}$) and crystallization set ($320^\circ\mathrm{C}$, $75\,\mathrm{ns}$) dynamics.
 2. **Phase Transformation Kinetics:** JMAK crystal fraction growth curves across temperatures ($230^\circ\mathrm{C}$ to $350^\circ\mathrm{C}$).
 3. **CW Laser Immunity:** Proves that $2.21\,\mathrm{W}$ distributed optical power induces negligible heating ($\Delta T < 0.05\,\mathrm{mK}$), preventing laser-induced recrystallization.

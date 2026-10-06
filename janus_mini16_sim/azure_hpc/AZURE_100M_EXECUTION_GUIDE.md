@@ -3,7 +3,7 @@
 **Document ID:** `JANUS-AZURE-100M-GUIDE-2026-V1`  
 **Target Workload:** `100,000,000` Optical Monte Carlo + `100,000,000` SPICE Cycles  
 **Estimated Budget:** `< $0.35` per 100M campaign run (from your **$200** Azure Credit)  
-**Target Publication:** OFC 2027 / IEEE Journal of Lightwave Technology  
+**Target Publication:** IEEE Journal of Lightwave Technology  
 ==============================================================================
 
 ---
@@ -15,7 +15,7 @@ This guide provides step-by-step instructions to execute the **100,000,000-run p
 1. **Tier 1 (3D Optics):** 100,000,000-sample stochastic foundry tolerance sweep across 13 MMI cascade stages ($1:8192$ split) and waveguide routing mesh ($32 \times 32$ crossing matrix).
 2. **Tier 3 (SPICE Electronics):** 100,000,000-cycle $100\text{ GHz}$ optoelectronic StrongARM receiver dynamics, eye diagram persistence heatmap, and empirical bit-error-rate verification.
 3. **5-Tier Co-Simulation:** Full-chip multi-physics decision tree sign-off ($16/16$ criteria passed).
-4. **Cloud Visualization:** 19 publication-grade scientific figures (300-DPI PNG + vector PDF) and OFC 3-page composite dashboards.
+4. **Cloud Visualization:** 19 publication-grade scientific figures (300-DPI PNG + vector PDF) and multi-panel composite dashboards.
 
 ---
 
@@ -138,7 +138,7 @@ The downloaded `janus_100m_results.tar.gz` package contains:
   - `fig_thermal_transient_step_5pole.png` / `.pdf`
   - `fig_thermal_lateral_crosstalk_decay.png` / `.pdf`
   - `fig_thermal_jir_clamping_dynamics.png` / `.pdf`
-- **Category D (OFC 2027 Composite Dashboards):**
+- **Category D (Verification Composite Dashboards):**
   - `fig_ofc_3page_hero_dashboard.png` / `.pdf`
   - `fig_ofc_radar_signoff_matrix.png` / `.pdf`
 - **Simulation Logs:**

@@ -45,3 +45,13 @@ env/
 # Exclude heavy GDS and LYP files from backend function
 janus_mini16_sim/layout/*.gds
 janus_mini16_sim/layout/*.lyp
+
+# Blind Review Confidentiality & Submissions (OFC / Optica)
+confidential_submissions/
+ofc_paper_latex/
+ofc_switch_paper_latex/
+ofc_apd_paper_latex/
+*OFC*
+*ofc*
+ScholarOne*
+

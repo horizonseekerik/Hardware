@@ -2,7 +2,7 @@
 ================================================================================
 **Document ID:** `JANUS-AZURE-PCM-1TRILLION-GUIDE-2026-V1`  
 **Target Device:** $\mathrm{Sb}_2\mathrm{S}_3$ Non-Volatile Phase-Change Waveguide Switch (Directional Coupler Cell)  
-**Target Paper:** Paper 2 (OFC 2027 Subcommittee D2: PICs & Optical Switching Devices)  
+**Target Paper:** Paper 2 (Optical Switching Devices)  
 **Target Campaign:** Exactly **1,000,000,000,000 (1.0 TRILLION)** Physical Rewrite Cycles  
 **Execution Window:** Continuous background execution through October 20 (on Azure Free Tier / Credit)  
 ================================================================================
@@ -113,7 +113,7 @@ az vm run-command invoke \
 
 ---
 
-## 6. Merging Results & Generating Final OFC 2027 Figures
+## 6. Merging Results & Generating Final Production Figures
 
 On **October 20** (or when the run reaches 1 Trillion):
 

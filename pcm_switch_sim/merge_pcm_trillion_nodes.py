@@ -4,7 +4,7 @@ PROJECT JANUS: MERGE 1-TRILLION CYCLE PCM SWITCH NODES & GENERATE FIGURES
 ================================================================================
 Aggregates time-series and state checkpoints from all parallel Azure nodes
 (e.g., Node 0, Node 1, Node 2, Node 3) for the 1-Trillion Cycle Sb2S3 Switch.
-Produces publication-grade figures (300-DPI PNG + Vector PDF) for OFC 2027.
+Produces publication-grade figures (300-DPI PNG + Vector PDF) for hardware sign-off.
 ================================================================================
 """
 

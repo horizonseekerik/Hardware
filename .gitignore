@@ -79,3 +79,15 @@ pcm_trillion_results/
 # Local execution scripts
 start_dashboard.vbs
 run_dashboard.py
+
+# ==============================================================================
+# BLIND REVIEW CONFIDENTIALITY & SUBMISSIONS (OFC / Optica)
+# Keep strictly local to prevent deanonymization and paper leaks
+# ==============================================================================
+confidential_submissions/
+ofc_paper_latex/
+ofc_switch_paper_latex/
+ofc_apd_paper_latex/
+*OFC*
+*ofc*
+ScholarOne*

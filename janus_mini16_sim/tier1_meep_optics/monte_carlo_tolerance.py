@@ -3,7 +3,7 @@ PROJECT JANUS MINI-16: 100,000,000-RUN MONTE CARLO FOUNDRY TOLERANCE ENGINE
 ============================================================================
 Document ID: JANUS-OPTICS-MC-100M-2026-V1
 Classification: Stochastic Process Tolerance & Optical Yield Verification
-Target Submission: OFC 2027 / IEEE Journal of Lightwave Technology
+Target Submission: IEEE Journal of Lightwave Technology
 
 Physical Methodology:
 ---------------------

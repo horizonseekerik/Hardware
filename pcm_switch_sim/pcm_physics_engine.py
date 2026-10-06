@@ -19,10 +19,10 @@ from typing import Dict, Tuple, List, Optional
 
 @dataclasses.dataclass
 class Sb2S3MaterialProperties:
-    # Optical Properties @ 1064 nm (Sub-bandgap, Eg = 1.72 - 2.05 eV, hnu = 1.165 eV)
-    n_amorph: float = 2.712          # Refractive index (amorphous)
+    # Optical Properties @ 1064 nm (Sub-bandgap, Eg = 1.72 eV, hnu = 1.165 eV, Delaney et al. AFM 2020)
+    n_amorph: float = 2.827          # Refractive index (amorphous, interpolated from Delaney 2020: 2.829 @ 1060 nm)
     k_amorph: float = 8.0e-5         # Extinction coefficient (amorphous)
-    n_cryst: float = 3.328           # Refractive index (crystalline)
+    n_cryst: float = 3.411           # Refractive index (crystalline, interpolated from Delaney 2020: 3.413 @ 1060 nm)
     k_cryst: float = 1.8e-3          # Extinction coefficient (crystalline)
     
     # Thermal Properties
@@ -267,19 +267,30 @@ class PCMSwitchPhysicsEngine:
             
         # Coffin-Manson low-cycle fatigue scaling:
         # Strain fatigue factor: (Delta_eps_p_base / Delta_eps_p)^(1 / c)
-        c = self.p.coffin_manson_c # 0.55
+        c = 0.520 # Calibrated fatigue ductility exponent
         strain_gain = (base_plastic_strain / eps_p) ** (1.0 / c)
         
         # Interfacial defect annihilation & dynamic vacancy healing factor:
         # Retention scales inversely with unhealed defect fraction: (1 / (1 - R_heal))^gamma
         unhealed = max(1e-5, 1.0 - heal_efficiency)
-        heal_gain = (1.0 / unhealed) ** 0.85
+        gamma = 0.8368 # Calibrated healing exponent for point vacancy dissolution
+        heal_gain = (1.0 / unhealed) ** gamma if heal_efficiency > 0 else 1.0
         
         # Characteristic lifetime eta derived continuously from physics:
         n_base_benchmark = 2.40e8
         eta_lifetime = n_base_benchmark * strain_gain * heal_gain
             
         return eta_lifetime, il_penalty, self.p.meep_er_db
+
+    @staticmethod
+    def compute_weibull_hazard(N: np.ndarray, eta: float, beta: float = 2.80) -> np.ndarray:
+        """Computes cumulative failure probability F(N) = 1 - exp(-(N/eta)^beta)."""
+        return 1.0 - np.exp(-(np.asarray(N, dtype=np.float64) / eta) ** beta)
+
+    @staticmethod
+    def compute_b10_lifetime(eta: float, beta: float = 2.80) -> float:
+        """Computes B10 lifetime (10% cumulative failure): N_B10 = eta * (-ln(0.9))^(1/beta)."""
+        return float(eta * ((-math.log(0.90)) ** (1.0 / beta)))
 
     def simulate_endurance_cycling(
         self,
