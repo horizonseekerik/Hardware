@@ -240,7 +240,7 @@ Model 1B doubles the parallel tile count to 32 tiles on a monolithic 200 mm² di
 * **Master Laser Optical Power (P_laser,opt):** **4.74 W Optical CW** (+36.75 dBm, Table XV nominal ≈ 5.0 W)
 * **Laser Wall-Plug Electrical Power (>75% WPE):** **6.31 Watts** (nominal 6.67 W)
 
-#### 4. Full-System Electrical Power Breakdown (From Table XV of main.tex)
+#### 4. Full-System Electrical Power Breakdown (From the Architecture Treatise)
 * **1064 nm Master Laser (75% WPE, 4.74 W Optical):** 6.31 W (nominal 6.67 W)
 * **LiTaO₃ Pockels Input Routers (100 GHz):** 1.02 W
 * **Ge/Si SAC²M APD + StrongARM Readout:** 0.33 W
@@ -642,7 +642,7 @@ Generation 3 scales the dual-stratum 3D architecture into high-density enterpris
 * **Master Laser Optical Power (P_laser,opt):** **21.75 W Optical CW** (+43.37 dBm, Table XV nominal ≈ 20.0 W)
 * **Laser Wall-Plug Electrical Power (>75% WPE):** **29.00 Watts** (nominal 26.67 W)
 
-#### 4. Full-System Electrical Power Breakdown (From Table XV of main.tex)
+#### 4. Full-System Electrical Power Breakdown (From the Architecture Treatise)
 * **1064 nm Master Laser (75% WPE, 21.75 W Optical):** 29.00 W (nominal 26.67 W)
 * **LiTaO₃ Pockels Input Routers (100 GHz):** 4.10 W
 * **Ge/Si SAC²M APD + StrongARM Readout:** 1.31 W
@@ -911,7 +911,7 @@ Generation 4 expands vertical stacking to **3 Silicon Photonic Strata**, achievi
 * **Master Laser Optical Power (P_laser,opt):** **21.75 W Optical CW** (+43.37 dBm, Table XV nominal ≈ 20.0 W)
 * **Laser Wall-Plug Electrical Power (>75% WPE):** **29.00 Watts** (nominal 26.67 W)
 
-#### 4. Full-System Electrical Power Breakdown (From Table XV of main.tex)
+#### 4. Full-System Electrical Power Breakdown (From the Architecture Treatise)
 * **1064 nm Master Laser (75% WPE, 21.75 W Optical):** 29.00 W (nominal 26.67 W)
 * **LiTaO₃ Pockels Input Routers (100 GHz):** 4.10 W
 * **Ge/Si SAC²M APD + StrongARM Readout:** 1.31 W
@@ -1136,7 +1136,7 @@ Generation 5 scales vertical stacking to **4 Silicon Photonic Strata** and inaug
 * **Master Laser Optical Power (P_laser,opt):** **21.75 W Optical CW** (+43.37 dBm, Table XV nominal ≈ 20.0 W)
 * **Laser Wall-Plug Electrical Power (>75% WPE):** **29.00 Watts** (nominal 26.67 W)
 
-#### 4. Full-System Electrical Power Breakdown (From Table XV of main.tex)
+#### 4. Full-System Electrical Power Breakdown (From the Architecture Treatise)
 * **1064 nm Master Laser (75% WPE, 21.75 W Optical):** 29.00 W (nominal 26.67 W)
 * **LiTaO₃ Pockels Input Routers (100 GHz):** 4.10 W
 * **Ge/Si SAC²M APD + StrongARM Readout:** 1.31 W
@@ -1341,7 +1341,7 @@ Generation 6 represents the pinnacle of the JANUS roadmap: the **Datacenter 32-T
 
 ### Model 6A: JANUS Datacenter 32-Tile (5-Stratum 3D Stack 640.0 mm²)
 
-#### 1. Hardware Architecture & Device Count (From Table XV of main.tex)
+#### 1. Hardware Architecture & Device Count (From the Architecture Treatise)
 * **Residue Tile Count (N_tiles):** 32 independent optical residue tiles
 * **Tile Matrix Dimension (N_dim):** 128 × 128 matrix mesh per tile
 * **Multiplier Count per Tile:** 128² = 16,384 optical multipliers
@@ -1368,10 +1368,10 @@ Generation 6 represents the pinnacle of the JANUS roadmap: the **Datacenter 32-T
 * **Excess Path Loss (L_excess):** 18 × 0.30 dB (MMIs) + 7.50 dB (Beneš) + 1.50 dB (Interlayer/Prop) = **14.40 dB**
 * **Total Optical Distribution Loss (L_total):** 54.19 dB + 14.40 dB = **68.59 dB**
 * **Delivered Receiver Power / Sensitivity:** P_det = **-18.59 dBm** | P_sens = **-23.20 dBm** (Margin = **+4.61 dB**)
-* **Master Laser Optical Power (P_laser,opt):** **100.00 W Optical CW** (+50.00 dBm, from Table XV of main.tex)
+* **Master Laser Optical Power (P_laser,opt):** **100.00 W Optical CW** (+50.00 dBm, from the Architecture Treatise)
 * **Laser Wall-Plug Electrical Power (>75% WPE):** **133.33 Watts**
 
-#### 4. Full-System Electrical Power Breakdown (From Table XV of main.tex)
+#### 4. Full-System Electrical Power Breakdown (From the Architecture Treatise)
 * **1064 nm Master Laser (75% WPE, 100 W Optical):** 133.33 W
 * **LiTaO₃ Pockels Input Routers (100 GHz):** 8.19 W
 * **Ge/Si SAC²M APD + StrongARM Readout:** 5.24 W

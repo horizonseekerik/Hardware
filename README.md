@@ -21,17 +21,17 @@
 
 **Project JANUS** is a constraint-aware, bounded-exact optoelectronic tensor computing architecture engineered for high-throughput, low-power deep learning acceleration. Verified via a **100,000,000-run Cloud HPC production campaign** across photonic FDTD, 3D FEM thermal, 100 GHz SPICE, and synthesizable CMOS RTL:
 
-* **Die Footprint**: **$10.24\text{ mm}^2$** ($3.20\text{ mm} \times 3.20\text{ mm}$) 3D heterogeneous die with **$5.76\text{ mm}^2$** active 16-tile photonic core matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
-* **Full-Chip Power Envelope**: **$3.35\text{ W}$** ($3,349.93\text{ mW}$) at 100% component activity ($2.95\text{ W}$ laser electrical power @ 75% WPE on $2.21\text{ W}$ optical carrier, $0.16\text{ W}$ modulators/switches, and $0.22\text{ W}$ CMOS digital logic, StrongARM sense amplifiers, and SRAM).
+* **Die Footprint**: **10.24 mm²** (3.20 mm × 3.20 mm) 3D heterogeneous die with **5.76 mm²** active 16-tile photonic core matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
+* **Full-Chip Power Envelope**: **3.35 W** (3,349.93 mW) at 100% component activity (2.95 W laser electrical power @ 75% WPE on 2.21 W optical carrier, 0.16 W modulators/switches, and 0.22 W CMOS digital logic, StrongARM sense amplifiers, and SRAM).
 * **Throughput & Areal Density**:
-  * **INT8**: **$1,638.4\text{ TOPS}$ ($819.2\text{ TMAC/s}$)** $\rightarrow$ **$1.64\text{ Peta-OPS}$** @ **$489.1\text{ TOPS/W}$** ($160.0\text{ TOPS/mm}^2$).
-  * **INT4**: **$3,276.8\text{ TOPS}$ ($1,638.4\text{ TMAC/s}$)** $\rightarrow$ **$3.28\text{ Peta-OPS}$** @ **$978.1\text{ TOPS/W}$** ($320.0\text{ TOPS/mm}^2$).
-  * **INT64 Exact**: **$204.8\text{ TOPS}$ ($102.4\text{ TMAC/s}$)** @ **$61.1\text{ TOPS/W}$** ($20.0\text{ TOPS/mm}^2$).
-  * **Optical Symbol Rate**: **$1.6\text{ Terabaud}$** ($16\text{ channels} \times 100\text{ Gbaud}$).
+  * **INT8**: **1,638.4 TOPS** (819.2 TMAC/s) → **1.64 Peta-OPS** @ **489.1 TOPS/W** (160.0 TOPS/mm²).
+  * **INT4**: **3,276.8 TOPS** (1,638.4 TMAC/s) → **3.28 Peta-OPS** @ **978.1 TOPS/W** (320.0 TOPS/mm²).
+  * **INT64 Exact**: **204.8 TOPS** (102.4 TMAC/s) @ **61.1 TOPS/W** (20.0 TOPS/mm²).
+  * **Optical Symbol Rate**: **1.6 Terabaud** (16 channels × 100 Gbaud).
 * **100M Production HPC Validation**:
-  * **100M-Sample Monte Carlo Tolerance**: $100.0000\%$ optical link yield, $+7.10\text{ dB}$ mean link margin, $+6.95\text{ dB}$ at $3\sigma$ worst-case process corner ($86.01\,\text{s}$ at $1.16\,\text{M samples/s}$).
-  * **100M-Cycle 100 GHz SPICE**: $Q = 13.41$ (target $\ge 9.38$), analytical $\text{BER} = 2.66 \times 10^{-41}$, **$0$ bit errors across $100,000,000$ bits**, $77.3\%$ eye opening ($115.48\text{ mV}$), StrongARM regeneration time $3.8\text{ ps} - 4.9\text{ ps}$.
-* **Thermodynamic Clamping (JIR)**: Peak steady-state hotspot actively clamped to **$26.08^\circ\text{C}$** ($+1.08\,\text{K}$ rise) under full 16-tile workloads via $18.5\,\text{kHz}$ Janus Interleaved Routing, ensuring a **$43.92^\circ\text{C}$ safety margin** below the $70.0^\circ\text{C}$ $\text{Sb}_2\text{S}_3$ phase degradation threshold.
+  * **100M-Sample Monte Carlo Tolerance**: 100.0000% optical link yield, +7.10 dB mean link margin, +6.95 dB at 3σ worst-case process corner (86.01 s at 1.16M samples/s).
+  * **100M-Cycle 100 GHz SPICE**: Q = 13.41 (target ≥ 9.38), analytical BER = 2.66 × 10⁻⁴¹, **0 bit errors across 100,000,000 bits**, 77.3% eye opening (115.48 mV), StrongARM regeneration time 3.8 ps – 4.9 ps.
+* **Thermodynamic Clamping (JIR)**: Peak steady-state hotspot actively clamped to **26.08 °C** (+1.08 K rise) under full 16-tile workloads via 18.5 kHz Janus Interleaved Routing, ensuring a **43.92 °C safety margin** below the 70.0 °C Sb₂S₃ phase degradation threshold.
 
 Conventional optical AI processors encode numbers in continuous analog amplitudes (Mach-Zehnder Interferometers / MZIs), accumulating optical power across analog meshes. For a 128 × 128 matrix multiplication, unreduced analog accumulation requires an impossible **138.4 dB SNR** (demanding a 21-bit ADC at 100 GHz sampling) and continuous milliwatt thermal tuning that consumes kilowatts of static hold power.
 
@@ -128,22 +128,22 @@ Janus Update/
 │   └── apple-touch-icon.png / favicon*                           # High-DPI browser tab icons and mobile app badges
 │
 ├── 📂 Academic Paper LaTeX Source Repositories
-│   ├── paper_latex/                           # 39-Page Primary IEEE Architecture Manuscript (IEEEtran)
-│   │   ├── main.tex                           # Full manuscript LaTeX source code
+│   ├── research_paper_sources/                           # 39-Page Primary IEEE Architecture Manuscript (IEEEtran)
+│   │   ├── full manuscript sources                           # Full manuscript LaTeX source code
 │   │   ├── references.bib                     # Comprehensive academic bibliography database
 │   │   ├── main.pdf                           # Compiled IEEE manuscript PDF
 │   │   ├── PCM_MATERIAL_SELECTION_RATIONALE.md # Thermodynamic & optical selection of Sb2S3 vs GST
 │   │   └── rns_64bit_architecture_update.md   # Exact 64-bit RNS dynamic range scaling update
 │   │
-│   ├── cmos_paper_latex/                      # IEEE CMOS Backend Architecture Specification
-│   │   ├── JANUS_Mini16_CMOS_Architecture.tex # Companion CMOS paper LaTeX source code
+│   ├── cmos_research_paper_sources/                      # IEEE CMOS Backend Architecture Specification
+│   │   ├── CMOS architecture specification sources # Companion CMOS paper LaTeX source code
 │   │   ├── references.bib                     # CMOS circuit & logic bibliography database
 │   │   ├── figures/                           # Micrograph layouts, StrongARM waveforms & logic trees
 │   │   ├── JANUS_Mini16_CMOS_Architecture.pdf # Compiled CMOS architecture PDF
 │   │   └── JANUS_MINI16_CMOS_ARCHITECTURE_SPEC.md # Full architectural engineering specification
 │   │
-│   └── simulation_paper_latex/                # IEEE Co-Simulation Sign-Off Paper
-│       ├── JANUS_Mini16_Simulation_Report.tex # Multi-physics co-simulation sign-off LaTeX source
+│   └── simulation_research_paper_sources/                # IEEE Co-Simulation Sign-Off Paper
+│       ├── multi-physics co-simulation sign-off sources # Multi-physics co-simulation sign-off LaTeX source
 │       ├── references.bib                     # Simulation & device physics bibliography database
 │       ├── figures/                           # 3D FEM thermal heatmaps, FDTD fields & eye diagrams
 │       └── JANUS_Mini16_Simulation_Report.pdf # Compiled simulation report PDF
@@ -332,22 +332,22 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 | # | Tier | Verification Metric | Target Specification | Measured Result | Status |
 |:---:|:---:|---|---|:---:|:---:|
-| **1** | **Tier 1** | $\text{Sb}_2\text{S}_3$ Switch Insertion Loss (Amorphous) | $\text{IL} \le 0.50\,\text{dB}$ | **$0.057\,\text{dB}$** | `PASS` ✅ |
-| **2** | **Tier 1** | 16-Tree Signal-to-Crosstalk Ratio (SCR) | $\text{SCR} \ge 18.0\,\text{dB}$ | **$18.96\,\text{dB}$** | `PASS` ✅ |
-| **3** | **Tier 1** | Waveguide Crossing Insertion Loss | $\text{IL} \le 0.100\,\text{dB}$ | **$0.0914\,\text{dB}$** | `PASS` ✅ |
-| **4** | **Tier 1** | Waveguide Crossing Crosstalk | $\text{XT} \le -38.0\,\text{dB}$ | **$-60.0\,\text{dB}$** | `PASS` ✅ |
-| **5** | **Tier 2** | $\text{SiO}_2$ Thermal Diffusion Time Constant | $65\,\text{ms} \le \tau_{\text{diff}} \le 72\,\text{ms}$ | **$69.06\,\text{ms}$** | `PASS` ✅ |
-| **6** | **Tier 2** | Per-Cycle Thermal Transient Rise | $\Delta T_{\text{cycle}} \le 0.80\,\text{mK}$ | **$0.798\,\text{mK}$** | `PASS` ✅ |
-| **7** | **Tier 2** | Max Steady-State Operating Temperature | $T_{\text{steady}} \le 70.0^\circ\text{C}$ | **$26.08^\circ\text{C}$** | `PASS` ✅ |
-| **8** | **Tier 2** | Thermal ROM Extraction Accuracy | $R^2 \ge 0.999$ | **$0.9998$** | `PASS` ✅ |
-| **9** | **Tier 3** | APD Practical Sensitivity Margin | $\text{Margin} \ge +3.00\,\text{dB}$ | **$+6.21\,\text{dB}$** | `PASS` ✅ |
-| **10** | **Tier 3** | Optical Receiver Bit Error Rate (BER) | $\text{BER} \le 10^{-18}$ | **$1.49 \times 10^{-42}$** | `PASS` ✅ |
-| **11** | **Tier 3** | $100\,\text{GHz}$ Eye Diagram Opening | $\text{Eye Opening} > 0.0\%$ | **$77.63\%$** | `PASS` ✅ |
-| **12** | **Tier 4** | CRT Adder Tree Digital Latency | $t_{\text{CRT}} \le 220\,\text{ps}$ | **$80\,\text{ps}$** | `PASS` ✅ |
-| **13** | **Tier 4** | RTL Cycle-Accurate Verification | $\text{Errors} = 0$ | **$0\text{ errors}$** | `PASS` ✅ |
-| **14** | **Tier 5** | Z3 SMT Formal Theorem Proofs | 5 Formal Proofs Verified | **$5 / 5\text{ Proved}$** | `PASS` ✅ |
-| **15** | **Tier 5** | RRNS Single-Fault Self-Healing Recovery | $\text{Correction} = 100.0\%$ | **$100.0\%$** | `PASS` ✅ |
-| **16** | **Tier 5** | Exact GEMM Arithmetic Deviation | $\text{Deviation} = 0\text{ across INT4–INT64}$ | **$0.00000000\%$** | `PASS` ✅ |
+| **1** | **Tier 1** | Sb₂S₃ Switch Insertion Loss (Amorphous) | IL ≤ 0.50 dB | **0.057 dB** | `PASS` ✅ |
+| **2** | **Tier 1** | 16-Tree Signal-to-Crosstalk Ratio (SCR) | SCR ≥ 18.0 dB | **18.96 dB** | `PASS` ✅ |
+| **3** | **Tier 1** | Waveguide Crossing Insertion Loss | IL ≤ 0.100 dB | **0.0914 dB** | `PASS` ✅ |
+| **4** | **Tier 1** | Waveguide Crossing Crosstalk | XT ≤ -38.0 dB | **-60.0 dB** | `PASS` ✅ |
+| **5** | **Tier 2** | SiO₂ Thermal Diffusion Time Constant | 65 ms ≤ τ_diff ≤ 72 ms | **69.06 ms** | `PASS` ✅ |
+| **6** | **Tier 2** | Per-Cycle Thermal Transient Rise | ΔT_cycle ≤ 0.80 mK | **0.798 mK** | `PASS` ✅ |
+| **7** | **Tier 2** | Max Steady-State Operating Temperature | T_steady ≤ 70.0 °C | **26.08 °C** | `PASS` ✅ |
+| **8** | **Tier 2** | Thermal ROM Extraction Accuracy | R² ≥ 0.999 | **0.9998** | `PASS` ✅ |
+| **9** | **Tier 3** | APD Practical Sensitivity Margin | Margin ≥ +3.00 dB | **+6.21 dB** | `PASS` ✅ |
+| **10** | **Tier 3** | Optical Receiver Bit Error Rate (BER) | BER ≤ 10⁻¹⁸ | **1.49 × 10⁻⁴²** | `PASS` ✅ |
+| **11** | **Tier 3** | 100 GHz Eye Diagram Opening | Eye Opening > 0.0% | **77.63%** | `PASS` ✅ |
+| **12** | **Tier 4** | CRT Adder Tree Digital Latency | t_CRT ≤ 220 ps | **80 ps** | `PASS` ✅ |
+| **13** | **Tier 4** | RTL Cycle-Accurate Verification | Errors = 0 | **0 errors** | `PASS` ✅ |
+| **14** | **Tier 5** | Z3 SMT Formal Theorem Proofs | 5 Formal Proofs Verified | **5 / 5 Proved** | `PASS` ✅ |
+| **15** | **Tier 5** | RRNS Single-Fault Self-Healing Recovery | Correction = 100.0% | **100.0%** | `PASS` ✅ |
+| **16** | **Tier 5** | Exact GEMM Arithmetic Deviation | Deviation = 0 across INT4–INT64 | **0.00000000%** | `PASS` ✅ |
 
 * **Co-Simulation Suite Summary:** 16 / 16 Verification Checks Passed (100.0%) | Execution Time: 2.11 s | **STATUS: TAPEOUT-READY (TRL 4)**
 * **Full Pytest Suite:** 86 / 86 Passed (100.0% with MEEP 1.29.0 FDTD, zero skips)
@@ -356,7 +356,7 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 ## 🗺️ Master Hardware Scaling Roadmap (18 Models)
 
-Project JANUS scales from an entry **Model 1A Monolithic Planar MVP** and **3D Heterogeneous Core ($10.24\text{ mm}^2$, $3.35\text{ W}$, $1.64\text{ Peta-OPS}$)** up to a **Model 6B 5-Stratum 3D Hyperscale Apex Module (104.85 PetaMAC/s at 392 W)** across 6 generations and 18 distinct hardware configurations:
+Project JANUS scales from an entry **Model 1A Monolithic Planar MVP** and **3D Heterogeneous Core (10.24 mm², 3.35 W, 1.64 Peta-OPS)** up to a **Model 6B 5-Stratum 3D Hyperscale Apex Module (104.85 PetaMAC/s at 392 W)** across 6 generations and 18 distinct hardware configurations:
 
 | Model | Generation & Stack | Strata | Tiles | Mesh Size | Total Switches | Die Area | Total Power | INT8 Throughput | INT64 Throughput | TRL Status |
 |:---:|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -387,15 +387,15 @@ Project JANUS scales from an entry **Model 1A Monolithic Planar MVP** and **3D H
 
 | Accelerator Platform | Architecture & Process | Die Footprint | TDP Power (W) | Peak INT8 Throughput | INT8 Energy Efficiency | Area Compute Density | Advantage vs Platform |
 |---|---|---|:---:|:---:|:---:|:---:|:---:|
-| **Project JANUS (Mini 16-Tile)** | **Spatial RNS Photonic (3D Heterogeneous)** | **10.24 mm²** ($3.2 \times 3.2\,\text{mm}$) | **3.35 W** | **1,638.4 TOPS** ($819.2\,\text{TMAC/s}$) | **489.1 TOPS/W** ($244.5\,\text{TMAC/s/W}$) | **160.0 TOPS/mm²** | **Baseline (1.0x)** |
-| NVIDIA H100 SXM5 | Hopper (TSMC 4N) Silicon GPU | 814 mm² | 700.0 W | 989.6 TOPS ($494.8\,\text{TMAC/s}$) | 1.41 TOPS/W ($0.71\,\text{TMAC/s/W}$) | 1.22 TOPS/mm² | **346.9x Higher Efficiency** |
-| NVIDIA B200 (Blackwell) | Blackwell (TSMC 4NP Dual-Die) Silicon GPU | 1,600 mm² | 1,000.0 W | 2,250.0 TOPS ($1,125.0\,\text{TMAC/s}$) | 2.25 TOPS/W ($1.13\,\text{TMAC/s/W}$) | 1.41 TOPS/mm² | **217.4x Higher Efficiency** |
-| Google TPU v5p | 4nm Electronic TPU ASIC | ~600 mm² | 450.0 W | 918.0 TOPS ($459.0\,\text{TMAC/s}$) | 2.04 TOPS/W ($1.02\,\text{TMAC/s/W}$) | 1.53 TOPS/mm² | **239.7x Higher Efficiency** |
+| **Project JANUS (Mini 16-Tile)** | **Spatial RNS Photonic (3D Heterogeneous)** | **10.24 mm²** (3.2 × 3.2 mm) | **3.35 W** | **1,638.4 TOPS** (819.2 TMAC/s) | **489.1 TOPS/W** (244.5 TMAC/s/W) | **160.0 TOPS/mm²** | **Baseline (1.0x)** |
+| NVIDIA H100 SXM5 | Hopper (TSMC 4N) Silicon GPU | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² | **346.9x Higher Efficiency** |
+| NVIDIA B200 (Blackwell) | Blackwell (TSMC 4NP Dual-Die) Silicon GPU | 1,600 mm² | 1,000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.13 TMAC/s/W) | 1.41 TOPS/mm² | **217.4x Higher Efficiency** |
+| Google TPU v5p | 4nm Electronic TPU ASIC | ~600 mm² | 450.0 W | 918.0 TOPS (459.0 TMAC/s) | 2.04 TOPS/W (1.02 TMAC/s/W) | 1.53 TOPS/mm² | **239.7x Higher Efficiency** |
 
-* **346.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** ($489.1$ vs. $1.41\text{ TOPS/W}$)
-* **217.4× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** ($489.1$ vs. $2.25\text{ TOPS/W}$)
-* **131.1× Higher Compute Area Density vs. NVIDIA H100 SXM5** ($160.0$ vs. $1.22\text{ TOPS/mm}^2$)
-* **113.5× Higher Compute Area Density vs. NVIDIA B200 Blackwell** ($160.0$ vs. $1.41\text{ TOPS/mm}^2$)
+* **346.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (489.1 vs. 1.41 TOPS/W)
+* **217.4× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (489.1 vs. 2.25 TOPS/W)
+* **131.1× Higher Compute Area Density vs. NVIDIA H100 SXM5** (160.0 vs. 1.22 TOPS/mm²)
+* **113.5× Higher Compute Area Density vs. NVIDIA B200 Blackwell** (160.0 vs. 1.41 TOPS/mm²)
 * **INT4 Peak Throughput: 3,276.8 TOPS (978.1 TOPS/W)**
 * **INT64 Deterministic Exact Precision: 204.8 TOPS (61.1 TOPS/W)**
 * **Optical Line Rate: 1.6 Terabaud (16 channels × 100 Gbaud)**
@@ -409,9 +409,9 @@ A central engineering question arises when evaluating the thermal management of 
 > *"If all 16 tiles are active simultaneously and receiving an equal computational workload (such that macroscopic chip power dissipation is constant at 4.41 W), how does dynamically rotating or interleaving the routing (JIR) lower the peak temperature from 58.40 °C down to 26.08 °C?"*
 
 ### 1. The Core Physical Finding: Timescale Decoupling
-JIR does **not** alter the first law of thermodynamics: total macroscopic thermal dissipation remains strictly conserved at $P_{\text{total}} = 4.41\,\text{W}$. Instead, JIR exploits the profound separation between **optical/electronic switching speed** ($\tau_{\text{JIR}} = 5.0\,\mu\text{s}$) and **solid-state heat diffusion time constants** ($\tau_{\text{thermal}} = 80\,\mu\text{s} \text{ to } 69.2\,\text{ms}$).
+JIR does **not** alter the first law of thermodynamics: total macroscopic thermal dissipation remains strictly conserved at P_total = 4.41 W. Instead, JIR exploits the profound separation between **optical/electronic switching speed** (τ_JIR = 5.0 µs) and **solid-state heat diffusion time constants** (τ_thermal = 80 µs to 69.2 ms).
 
-By operating an order of magnitude faster than the thermal response time of microscopic $\text{Sb}_2\text{S}_3$ phase-change junctions, JIR prevents localized thermal accumulation, destroying localized thermal spikes ("thermal needles") and converting the localized thermal flux into a spatially uniform, low-amplitude plateau over the package heat spreaders.
+By operating an order of magnitude faster than the thermal response time of microscopic Sb₂S₃ phase-change junctions, JIR prevents localized thermal accumulation, destroying localized thermal spikes ("thermal needles") and converting the localized thermal flux into a spatially uniform, low-amplitude plateau over the package heat spreaders.
 
 ```
 STATIC ROUTING (JIR OFF): Localized Thermal Spikes ("Thermal Needles")
@@ -441,38 +441,38 @@ Temperature (°C)
 
 ### 2. Four Microarchitectural & Physical Clamping Mechanisms
 
-1. **Sub-Thermal Time Slicing ($\tau_{\text{JIR}} \ll \tau_{\text{junction}}$):**
-   The microscopic $\text{Sb}_2\text{S}_3$ phase-change waveguide junction has a thermal time constant of $\tau_1 = 80\,\mu\text{s}$. Because JIR rotates routing every $\tau_{\text{JIR}} = 5.0\,\mu\text{s}$ ($\tau_{\text{JIR}} / \tau_1 = 0.0625 \ll 1$), each active junction receives heat for only $5\,\mu\text{s}$ before rotating into a passive state. The thermal energy deposited per cycle is $Q_{\text{gen}} = 1.93\,\mu\text{J}$, limiting the single-epoch temperature rise to:
-   $$\Delta T_{\text{cycle}} = \frac{Q_{\text{gen}}}{C_{\text{th, eff}}} = \mathbf{0.798\,\text{mK}} \quad (< 0.001^\circ\text{C})$$
-   The junction never integrates heat upward along its exponential rise curve toward $58.40^\circ\text{C}$.
+1. **Sub-Thermal Time Slicing (τ_JIR ≪ τ_junction):**
+   The microscopic Sb₂S₃ phase-change waveguide junction has a thermal time constant of τ₁ = 80 µs. Because JIR rotates routing every τ_JIR = 5.0 µs (τ_JIR / τ₁ = 0.0625 ≪ 1), each active junction receives heat for only 5 µs before rotating into a passive state. The thermal energy deposited per cycle is Q_gen = 1.93 µJ, limiting the single-epoch temperature rise to:
+   **ΔT_cycle = Q_gen / C_th,eff = 0.798 mK (< 0.001 °C)**
+   The junction never integrates heat upward along its exponential rise curve toward 58.40 °C.
 
 2. **Microscopic Switch Duty Cycling (<1.5% Per Junction):**
-   Each tile contains 1,024 optical multipliers and over 245,000 $\text{Sb}_2\text{S}_3$ phase-change switch cells. At any given moment, only 16 optical paths carry coherent $1064\,\text{nm}$ laser light. In static mode, the same 16 physical junctions are continuously illuminated ($>10^4\,\text{W/cm}^2$). JIR cycles light across different physical branches of the 16-Tree Fermat matrix, capping junction duty cycle below $1.5\%$ and allowing $>98.5\%$ passive cooling time.
+   Each tile contains 1,024 optical multipliers and over 245,000 Sb₂S₃ phase-change switch cells. At any given moment, only 16 optical paths carry coherent 1064 nm laser light. In static mode, the same 16 physical junctions are continuously illuminated (> 10⁴ W/cm²). JIR cycles light across different physical branches of the 16-Tree Fermat matrix, capping junction duty cycle below 1.5% and allowing > 98.5% passive cooling time.
 
 3. **Package-Level Spatial Low-Pass Filtering:**
-   The multi-stratum package acts as a multi-pole spatial-frequency low-pass filter. At an interleaving frequency of $f_{\text{JIR}} = 18.5\,\text{kHz}$, thermal diffusion waves cannot resolve localized microscopic heat sources. The high localized spreading resistance ($R_{\text{spread, micro}} \approx 33.4\,\text{K/W}$) collapses, and the thermal rise is governed solely by the global macro-stack resistance ($R_{\text{stack, macro}} = 0.244\,\text{K/W}$):
-   $$\Delta T_{\text{clamped}} = P_{\text{total}} \cdot R_{\text{stack, macro}} = 4.41\,\text{W} \times 0.244\,\text{K/W} = \mathbf{1.08\,\text{K}} \implies \mathbf{T_{\text{clamped}} = 26.08^\circ\text{C}}$$
+   The multi-stratum package acts as a multi-pole spatial-frequency low-pass filter. At an interleaving frequency of f_JIR = 18.5 kHz, thermal diffusion waves cannot resolve localized microscopic heat sources. The high localized spreading resistance (R_spread,micro ≈ 33.4 K/W) collapses, and the thermal rise is governed solely by the global macro-stack resistance (R_stack,macro = 0.244 K/W):
+   **ΔT_clamped = P_total · R_stack,macro = 4.41 W × 0.244 K/W = 1.08 K ⟹ T_clamped = 26.08 °C**
 
 4. **Residue Modulo Dynamic Switching Entropy & Perimeter Balancing:**
-   CMOS switching power varies sharply across coprime moduli: modulus $m=256$ is trivial bit masking (minimal $CV^2f$ dissipation), whereas prime moduli like $m=241$ and $m=227$ require dense carry-save additions with high Hamming weight. Furthermore, the 4 center tiles $(1,1)–(2,2)$ are thermally insulated by neighbors, while the 12 perimeter tiles enjoy direct lateral conduction to the die edge seal ring. JIR continually permutes residue assignments ($\text{Tile}_i \leftarrow m_{(i+k)\pmod{16}}$), dynamically shuttling peak computational heat between the insulated core and the cold perimeter.
+   CMOS switching power varies sharply across coprime moduli: modulus m = 256 is trivial bit masking (minimal CV²f dissipation), whereas prime moduli like m = 241 and m = 227 require dense carry-save additions with high Hamming weight. Furthermore, the 4 center tiles (1,1)–(2,2) are thermally insulated by neighbors, while the 12 perimeter tiles enjoy direct lateral conduction to the die edge seal ring. JIR continually permutes residue assignments (Tile_i ← m_{(i+k) mod 16}), dynamically shuttling peak computational heat between the insulated core and the cold perimeter.
 
 ### 3. Foster RC Thermal Stratum Breakdown & Performance Comparison
 
-| Pole ($k$) | Stratum / Sub-Assembly | Resistance $R_k$ | Time Constant $\tau_k$ | Physical Role |
+| Pole (k) | Stratum / Sub-Assembly | Resistance R_k | Time Constant τ_k | Physical Role |
 |:---:|---|:---:|:---:|---|
-| **$\tau_1$** | **$\text{Sb}_2\text{S}_3$ Switch / Waveguide Junction** | $0.030\,\text{K/W}$ | **$80\,\mu\text{s}$** | Microscopic junction heating |
-| **$\tau_2$** | **$\text{SiPh}$ Active Core Layer** | $0.060\,\text{K/W}$ | **$400\,\mu\text{s}$** | Intra-tile lateral heat diffusion |
-| **$\tau_3$** | **Thermal Interface Material (TIM Gap)** | $0.080\,\text{K/W}$ | **$2.0\,\text{ms}$** | Boundary conductance to spreader |
-| **$\tau_4$** | **Heat Spreader 1 (HS1 Copper, $30\,\mu\text{m}$)** | $0.120\,\text{K/W}$ | **$10.0\,\text{ms}$** | Planar lateral heat spreading |
-| **$\tau_5$** | **Monolithic $\text{SiO}_2$ Thermal Buffer ($250\,\mu\text{m}$)** | $0.198\,\text{K/W}$ | **$69.2\,\text{ms}$** | Vertical isolation to CMOS die |
+| **τ₁** | **Sb₂S₃ Switch / Waveguide Junction** | 0.030 K/W | **80 µs** | Microscopic junction heating |
+| **τ₂** | **SiPh Active Core Layer** | 0.060 K/W | **400 µs** | Intra-tile lateral heat diffusion |
+| **τ₃** | **Thermal Interface Material (TIM Gap)** | 0.080 K/W | **2.0 ms** | Boundary conductance to spreader |
+| **τ₄** | **Heat Spreader 1 (HS1 Copper, 30 µm)** | 0.120 K/W | **10.0 ms** | Planar lateral heat spreading |
+| **τ₅** | **Monolithic SiO₂ Thermal Buffer (250 µm)** | 0.198 K/W | **69.2 ms** | Vertical isolation to CMOS die |
 
-| Thermodynamic Metric | Static Routing (JIR OFF) | JIR Active ($18.5\,\text{kHz}$) | Physical Verification Delta |
+| Thermodynamic Metric | Static Routing (JIR OFF) | JIR Active (18.5 kHz) | Physical Verification Delta |
 |---|:---:|:---:|:---:|
-| **Peak Die Surface Temperature** | **$58.40^\circ\text{C}$** | **$26.08^\circ\text{C}$** | **$-32.32^\circ\text{C}$ reduction** |
-| **Hotspot Temperature Rise ($\Delta T$)** | $+33.40\,\text{K}$ | $+1.08\,\text{K}$ | Localized hotspots eliminated |
-| **Distance to $\text{Sb}_2\text{S}_3$ Crystallization ($70.0^\circ\text{C}$)** | $11.60^\circ\text{C}$ (Critical Risk) | **$43.92^\circ\text{C}$ (Safe Margin)** | Eliminates unintended phase flipping |
-| **Optical Phase Drift Tolerance ($\Delta T < 0.048\,\text{K}$)** | Violated ($> 5.7\,\text{K}$) | **Preserved ($< 0.048\,\text{K}$)** | Zero MMI phase-mismatch crosstalk |
-| **Total Electrical/Optical Power Dissipation** | $4.41\,\text{W}$ | $4.41\,\text{W}$ | Identical energy conservation ($1^{\text{st}}$ Law) |
+| **Peak Die Surface Temperature** | **58.40 °C** | **26.08 °C** | **-32.32 °C reduction** |
+| **Hotspot Temperature Rise (ΔT)** | +33.40 K | +1.08 K | Localized hotspots eliminated |
+| **Distance to Sb₂S₃ Crystallization (70.0 °C)** | 11.60 °C (Critical Risk) | **43.92 °C (Safe Margin)** | Eliminates unintended phase flipping |
+| **Optical Phase Drift Tolerance (ΔT < 0.048 K)** | Violated (> 5.7 K) | **Preserved (< 0.048 K)** | Zero MMI phase-mismatch crosstalk |
+| **Total Electrical/Optical Power Dissipation** | 4.41 W | 4.41 W | Identical energy conservation (1st Law) |
 
 > 📖 **Full Architectural Specification:** Read the complete mathematical derivation and boundary proofs in [`janus_mini16_sim/docs/JIR_THERMAL_CLAMPING_PHYSICS.md`](janus_mini16_sim/docs/JIR_THERMAL_CLAMPING_PHYSICS.md).
 
@@ -487,18 +487,18 @@ To mathematically guarantee foundry manufacturability and high-frequency signal 
 
 | Physical Metric | Simulation Parameter / Boundary Condition | Measured Result | Benchmark Target | Status |
 |---|---|---|---|:---:|
-| **Total Monte Carlo Samples** | 13-stage cascaded MMI tree, 32 crossings, 16,384 paths | **100,000,000 runs** (86.01 s, 1.16M samples/s) | $\ge 100,000$ | **PASSED (100%)** ✅ |
-| **Mean Optical Link Margin ($\mu$)** | $P_{\text{laser}} = 2.21\,\text{W}$, $P_{\text{sens}} = -25.05\,\text{dBm}$ | **+7.10 dB** ($\sigma = 0.051\,\text{dB}$) | $\ge +5.0\,\text{dB}$ | **PASSED** ✅ |
-| **3-Sigma Worst-Case Margin** | Gaussian $\Delta w \pm 5\,\text{nm}$, $\Delta h \pm 4\,\text{nm}$, Rayleigh roughness | **+6.95 dB** | $\ge +3.0\,\text{dB}$ | **PASSED (>4.1× Headroom)** ✅ |
-| **5-Sigma Extreme Outlier Margin** | Extreme tail foundry boundary ($\mu - 5\sigma$, min observed +6.82 dB) | **+6.85 dB** | $> 0.0\,\text{dB}$ | **PASSED** ✅ |
-| **Optical Link Yield (> 0 dB)** | Complete link closure over 100,000,000 stochastic draws | **100.000000%** | $\ge 99.8\%$ | **PASSED (Perfect Yield)** ✅ |
-| **High-Reliability Yield (> 3 dB)**| High-margin safety floor closure | **100.000000%** | $\ge 99.0\%$ | **PASSED** ✅ |
-| **100 GHz SPICE Simulated Bits** | PRBS-7 pattern at $T_{\text{cycle}} = 10.0\,\text{ps}$, $105\,\text{GHz}$ $\text{Ge/Si SAC}^2\text{M APD}$ | **100,000,000 cycles** | $\ge 500,000$ | **PASSED (100%)** ✅ |
-| **Time-Domain Q-Factor** | Noise-integrated decision eye at $t_{\text{int}} = 5.0\,\text{ps}$ | **Q = 13.41** | $\ge 9.38$ (for $\text{BER} \le 10^{-18}$) | **PASSED** ✅ |
-| **Analytical Bit Error Rate (BER)** | Full-band noise folding, dark current, StrongARM latch | **$\text{BER} = 2.66 \times 10^{-41}$** | $\le 10^{-18}$ | **PASSED (Zero FEC Required)** ✅ |
-| **Empirical Bit Errors Observed** | Direct threshold decisions over 99,996,000 bits | **0 errors / 100M** | $0$ | **PASSED (Zero Errors)** ✅ |
-| **Eye Diagram Opening** | $100\,\text{GHz}$ differential voltage height | **77.3% (115.48 mV)** | $\ge 25.0\%$ | **PASSED (Wide Open)** ✅ |
-| **StrongARM Regeneration Time** | Sub-picosecond regeneration time constant $\tau = 0.65\,\text{ps}$ | **3.8 ps – 4.9 ps** | $< 5.0\,\text{ps}$ | **PASSED (< Half Cycle)** ✅ |
+| **Total Monte Carlo Samples** | 13-stage cascaded MMI tree, 32 crossings, 16,384 paths | **100,000,000 runs** (86.01 s, 1.16M samples/s) | ≥ 100,000 | **PASSED (100%)** ✅ |
+| **Mean Optical Link Margin (µ)** | P_laser = 2.21 W, P_sens = -25.05 dBm | **+7.10 dB** (σ = 0.051 dB) | ≥ +5.0 dB | **PASSED** ✅ |
+| **3-Sigma Worst-Case Margin** | Gaussian Δw ± 5 nm, Δh ± 4 nm, Rayleigh roughness | **+6.95 dB** | ≥ +3.0 dB | **PASSED (>4.1× Headroom)** ✅ |
+| **5-Sigma Extreme Outlier Margin** | Extreme tail foundry boundary (µ - 5σ, min observed +6.82 dB) | **+6.85 dB** | > 0.0 dB | **PASSED** ✅ |
+| **Optical Link Yield (> 0 dB)** | Complete link closure over 100,000,000 stochastic draws | **100.000000%** | ≥ 99.8% | **PASSED (Perfect Yield)** ✅ |
+| **High-Reliability Yield (> 3 dB)**| High-margin safety floor closure | **100.000000%** | ≥ 99.0% | **PASSED** ✅ |
+| **100 GHz SPICE Simulated Bits** | PRBS-7 pattern at T_cycle = 10.0 ps, 105 GHz Ge/Si SAC²M APD | **100,000,000 cycles** | ≥ 500,000 | **PASSED (100%)** ✅ |
+| **Time-Domain Q-Factor** | Noise-integrated decision eye at t_int = 5.0 ps | **Q = 13.41** | ≥ 9.38 (for BER ≤ 10⁻¹⁸) | **PASSED** ✅ |
+| **Analytical Bit Error Rate (BER)** | Full-band noise folding, dark current, StrongARM latch | **BER = 2.66 × 10⁻⁴¹** | ≤ 10⁻¹⁸ | **PASSED (Zero FEC Required)** ✅ |
+| **Empirical Bit Errors Observed** | Direct threshold decisions over 99,996,000 bits | **0 errors / 100M** | 0 | **PASSED (Zero Errors)** ✅ |
+| **Eye Diagram Opening** | 100 GHz differential voltage height | **77.3% (115.48 mV)** | ≥ 25.0% | **PASSED (Wide Open)** ✅ |
+| **StrongARM Regeneration Time** | Sub-picosecond regeneration time constant τ = 0.65 ps | **3.8 ps – 4.9 ps** | < 5.0 ps | **PASSED (< Half Cycle)** ✅ |
 
 ---
 
@@ -508,23 +508,23 @@ All publication figures from the 100M production campaign are available in both 
 
 | Category | Figure Name | Deliverable File | Description |
 |---|---|---|---|
-| **Category A: Monte Carlo Optical Tolerance & Yield (7 Figs)** | Fig 1 | `fig_mc_convergence_vs_runs` | Running mean link margin $\mu(N)$ and $\pm 3\sigma/\sqrt{N}$ error band converging to $+7.10\,\text{dB}$ across 100M runs |
-| | Fig 2 | `fig_mc_histogram_pdf_100m` *(+ 1M)* | 100M-sample and 1M-sample probability density functions (PDF) with Gaussian fit and $3\sigma$ bound (+6.95 dB) |
-| | Fig 3 | `fig_mc_yield_cdf_semilog` | Semilog-y Cumulative Distribution Function (CDF) showing tail failure probability $< 10^{-7}$ |
+| **Category A: Monte Carlo Optical Tolerance & Yield (7 Figs)** | Fig 1 | `fig_mc_convergence_vs_runs` | Running mean link margin µ(N) and ± 3σ/√N error band converging to +7.10 dB across 100M runs |
+| | Fig 2 | `fig_mc_histogram_pdf_100m` *(+ 1M)* | 100M-sample and 1M-sample probability density functions (PDF) with Gaussian fit and 3σ bound (+6.95 dB) |
+| | Fig 3 | `fig_mc_yield_cdf_semilog` | Semilog-y Cumulative Distribution Function (CDF) showing tail failure probability < 10⁻⁷ |
 | | Fig 4 | `fig_mc_variance_decomposition` | Variance contributor breakdown: Talbot focal drift (42.5%), crossing loss (24.0%), roughness (16.5%) |
-| | Fig 5 | `fig_mc_process_window_2d` | 2D manufacturing tolerance contour over $(\Delta w, \Delta h)$ lithographic space with foundry spec box |
+| | Fig 5 | `fig_mc_process_window_2d` | 2D manufacturing tolerance contour over (Δw, Δh) lithographic space with foundry spec box |
 | | Fig 6 | `fig_mc_cascaded_mmi_loss` | Stage-by-stage cumulative loss progression across 13 MMI stages (1:8192 split) |
 | | Fig 7 | `fig_mc_checkpoints_evolution` | Multi-interval checkpoint evolution across 10k, 50k, 100k, 250k, 500k, 750k, 1M, 10M, 50M, 100M samples |
-| **Category B: 100 GHz SPICE Optoelectronic Signal Integrity (6 Figs)** | Fig 8 | `fig_spice_100m_eye_density_heatmap` *(+ 1M)* | 2D density eye diagram at $100\,\text{GHz}$ ($10\,\text{ps}$ UI) displaying wide-open eye height (77.3% opening) |
-| | Fig 9 | `fig_spice_ber_waterfall_curve` | Bit Error Rate (BER) waterfall curve down to $10^{-41}$ vs. received optical power $P_{\text{opt}}$ |
-| | Fig 10 | `fig_spice_strongarm_regen_histogram_100m` *(+ 1M)* | StrongARM regeneration time distribution across 100M cycles (all resolving in $< 5\,\text{ps}$) |
-| | Fig 11 | `fig_spice_jitter_distribution` | Sub-picosecond optoelectronic decision jitter ($\sigma_{\text{jitter}} < 0.35\,\text{ps}$) |
+| **Category B: 100 GHz SPICE Optoelectronic Signal Integrity (6 Figs)** | Fig 8 | `fig_spice_100m_eye_density_heatmap` *(+ 1M)* | 2D density eye diagram at 100 GHz (10 ps UI) displaying wide-open eye height (77.3% opening) |
+| | Fig 9 | `fig_spice_ber_waterfall_curve` | Bit Error Rate (BER) waterfall curve down to 10⁻⁴¹ vs. received optical power P_opt |
+| | Fig 10 | `fig_spice_strongarm_regen_histogram_100m` *(+ 1M)* | StrongARM regeneration time distribution across 100M cycles (all resolving in < 5 ps) |
+| | Fig 11 | `fig_spice_jitter_distribution` | Sub-picosecond optoelectronic decision jitter (σ_jitter < 0.35 ps) |
 | | Fig 12 | `fig_spice_noise_psd_spectrum` | Noise power spectral density (PSD) combining APD excess noise, shot noise, and thermal noise |
 | | Fig 13 | `fig_spice_eye_checkpoints_evolution` | Multi-interval eye opening and Q-factor evolution across 50k, 100k, 250k, 500k, 1M, 10M, 50M, 100M cycles |
-| **Category C: Elmer 3D FEM & Foster RC Thermal (4 Figs)** | Fig 14 | `fig_thermal_3d_stratum_slices` | Elmer 3D FEM through-thickness temperature profile across all 6 packaging layers ($250\,\mu\text{m}$ buffer) |
-| | Fig 15 | `fig_thermal_transient_step_5pole` | Multi-time-scale step response ($1\,\mu\text{s}$ to $1\,\text{s}$) comparing 3D FEM, 1D FVM, and 5-pole Foster RC |
-| | Fig 16 | `fig_thermal_lateral_crosstalk_decay` | Lateral inter-cell thermal crosstalk decay ($\Delta T < 0.15\,\text{K}$ at $250\,\mu\text{m}$ pitch) |
-| | Fig 17 | `fig_thermal_jir_clamping_dynamics` | Dynamic temperature clamping: uncontrolled thermal runaway ($+33.4\,\text{K}$) vs. JIR active clamping ($+1.08\,\text{K}$) |
+| **Category C: Elmer 3D FEM & Foster RC Thermal (4 Figs)** | Fig 14 | `fig_thermal_3d_stratum_slices` | Elmer 3D FEM through-thickness temperature profile across all 6 packaging layers (250 µm buffer) |
+| | Fig 15 | `fig_thermal_transient_step_5pole` | Multi-time-scale step response (1 µs to 1 s) comparing 3D FEM, 1D FVM, and 5-pole Foster RC |
+| | Fig 16 | `fig_thermal_lateral_crosstalk_decay` | Lateral inter-cell thermal crosstalk decay (ΔT < 0.15 K at 250 µm pitch) |
+| | Fig 17 | `fig_thermal_jir_clamping_dynamics` | Dynamic temperature clamping: uncontrolled thermal runaway (+33.4 K) vs. JIR active clamping (+1.08 K) |
 | **Category D: Publication Verification Dashboards (2 Figs)** | Fig 18 | `fig_hero_dashboard` | 5-panel composite hero dashboard formatted to IEEE/Optica 2-column standards |
 | | Fig 19 | `fig_radar_signoff_matrix` | 16-point multi-physics verification radar chart demonstrating 100% specification compliance |
 
