@@ -5,10 +5,10 @@
 [![Architecture Treatise](https://img.shields.io/badge/Architecture%20Treatise-39%20Pages%20(IEEEtran)-blue.svg)](./JANUS_IEEE_Manuscript.pdf)
 [![Patent Pending](https://img.shields.io/badge/Indian%20Patent-App%20202611052791-gold.svg)](#-patent--intellectual-property)
 [![TRL Readiness](https://img.shields.io/badge/TRL-4.0%20(Co--Sim%20Validated)-green.svg)](#-master-hardware-scaling-roadmap-18-models)
-[![Peak Compute](https://img.shields.io/badge/Peak%20Compute-1.64%20Peta--OPS%20(INT8)-gold.svg)](#-ai-workload-benchmarks--gpu-comparison)
-[![Energy Efficiency](https://img.shields.io/badge/Energy%20Efficiency-489.1%20TOPS%2FW-cyan.svg)](#-ai-workload-benchmarks--gpu-comparison)
-[![Die Footprint](https://img.shields.io/badge/Die%20Area-10.24%20mm%C2%B2%20(3.2x3.2mm)-blueviolet.svg)](#-master-hardware-scaling-roadmap-18-models)
-[![Total Power](https://img.shields.io/badge/Total%20Power-3.35%20Watts-purple.svg)](#-master-hardware-scaling-roadmap-18-models)
+[![Peak Compute](https://img.shields.io/badge/Peak%20Compute-1.64%20PMAC%2Fs%20(3.28%20Peta--OPS%20INT4)-gold.svg)](#-ai-workload-benchmarks--gpu-comparison)
+[![Energy Efficiency](https://img.shields.io/badge/Energy%20Efficiency-265.5%20TMAC%2Fs%2FW%20(531.1%20TOPS%2FW)-cyan.svg)](#-ai-workload-benchmarks--gpu-comparison)
+[![Die Footprint](https://img.shields.io/badge/Die%20Area-100.00%20mm%C2%B2%20(10.0x10.0mm)-blueviolet.svg)](#-master-hardware-scaling-roadmap-18-models)
+[![Total Power](https://img.shields.io/badge/Total%20Power-6.17%20Watts-purple.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100%25%20Yield%20(%2B6.95dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![100M 100GHz SPICE](https://img.shields.io/badge/100M%20SPICE%20Cycles-0%20Errors%20(BER%20%3C%2010%E2%81%BB%E2%81%B4%C2%B9)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![Thermal Clamping](https://img.shields.io/badge/JIR%20Clamping-26.08%C2%B0C%20(Safe)-blue.svg)](#-thermodynamic-physics-how-jir-thermal-clamping-works-under-100-workload)
@@ -21,12 +21,12 @@
 
 **Project JANUS** is a constraint-aware, bounded-exact optoelectronic tensor computing architecture engineered for high-throughput, low-power deep learning acceleration. Verified via a **100,000,000-run Cloud HPC production campaign** across photonic FDTD, 3D FEM thermal, 100 GHz SPICE, and synthesizable CMOS RTL:
 
-* **Die Footprint**: **10.24 mm²** (3.20 mm × 3.20 mm) 3D heterogeneous die with **5.76 mm²** active 16-tile photonic core matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
-* **Full-Chip Power Envelope**: **3.35 W** (3,349.93 mW) at 100% component activity (2.95 W laser electrical power @ 75% WPE on 2.21 W optical carrier, 0.16 W modulators/switches, and 0.22 W CMOS digital logic, StrongARM sense amplifiers, and SRAM).
+* **Die Footprint**: **100.00 mm²** (10.0 mm × 10.0 mm) monolithic 3D optoelectronic die featuring **47.34 mm²** active Sb₂S₃ phase-change switch fabric (3,932,160 non-volatile directional couplers at 12.04 µm²/cell) with > 52 mm² dedicated routing and crossing margin. Matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
+* **Full-Package Power Envelope**: **6.17 W** total system dissipation at 100% component activity (2.95 W laser electrical power @ 75% WPE on 2.21 W optical carrier, 0.51 W LiTaO₃ modulators across 120 active 4.25 mW channels, 0.16 W Ge/Si SAC²M APDs and clocked StrongARM latches, 1.05 W 65nm CMOS carry-save accumulators, 1.50 W JIR dynamic modulus scheduler, and **0.00 W static hold power** for non-volatile Sb₂S₃ switches).
 * **Throughput & Areal Density**:
-  * **INT8**: **1,638.4 TOPS** (819.2 TMAC/s) → **1.64 Peta-OPS** @ **489.1 TOPS/W** (160.0 TOPS/mm²).
-  * **INT4**: **3,276.8 TOPS** (1,638.4 TMAC/s) → **3.28 Peta-OPS** @ **978.1 TOPS/W** (320.0 TOPS/mm²).
-  * **INT64 Exact**: **204.8 TOPS** (102.4 TMAC/s) @ **61.1 TOPS/W** (20.0 TOPS/mm²).
+  * **INT4 Direct**: **1,638.4 TMAC/s** (3,276.8 TOPS → **3.28 Peta-OPS**) @ **265.5 TMAC/s/W** (531.1 TOPS/W) and **16.4 TMAC/s/mm²** (32.8 TOPS/mm²).
+  * **INT8 Exact**: **696.3 TMAC/s** (1,392.6 TOPS sustained) to **819.2 TMAC/s** (1,638.4 TOPS peak) @ **112.8 TMAC/s/W** (225.6 TOPS/W) and **7.0 – 8.2 TMAC/s/mm²**.
+  * **INT64 Exact Deterministic**: **87.0 TMAC/s** (174.1 TOPS sustained) to **102.4 TMAC/s** (204.8 TOPS peak) @ **14.1 – 16.6 TMAC/s/W** and **0.87 – 1.02 TMAC/s/mm²** (0 arithmetic deviation).
   * **Optical Symbol Rate**: **1.6 Terabaud** (16 channels × 100 Gbaud).
 * **100M Production HPC Validation**:
   * **100M-Sample Monte Carlo Tolerance**: 100.0000% optical link yield, +7.10 dB mean link margin, +6.95 dB at 3σ worst-case process corner (86.01 s at 1.16M samples/s).
@@ -356,48 +356,47 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 ## 🗺️ Master Hardware Scaling Roadmap (18 Models)
 
-Project JANUS scales from an entry **Model 1A Monolithic Planar MVP** and **3D Heterogeneous Core (10.24 mm², 3.35 W, 1.64 Peta-OPS)** up to a **Model 6B 5-Stratum 3D Hyperscale Apex Module (104.85 PetaMAC/s at 392 W)** across 6 generations and 18 distinct hardware configurations:
+Project JANUS scales from an entry **Model 1A Monolithic Planar MVP (100.00 mm², 6.17 W, 3,932,160 Sb₂S₃ switches, 1.64 PMAC/s INT4)** up to a **Model 6B 5-Stratum 3D Hyperscale Apex Module (104.85 PetaMAC/s at 392 W)** across 6 generations and 18 distinct hardware configurations:
 
 | Model | Generation & Stack | Strata | Tiles | Mesh Size | Total Switches | Die Area | Total Power | INT8 Throughput | INT64 Throughput | TRL Status |
 |:---:|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **MVP** | **Mini 16-Tile 3D Monolithic Stack** | **2** | **16** | **32 x 32** | **31.46 M** | **10.24 mm²** | **3.35 W** | **819.2 TMAC/s (1,638.4 TOPS)** | **102.4 TMAC/s (204.8 TOPS)** | **TRL 4 (1M HPC Verified)** |
-| **1A** | Gen-1 Monolithic Planar MVP | 1 | 16 | 32 x 32 | 31.46 M | 100.0 mm² | **6.17 W** | 696.3 TMAC/s | 87.0 TMAC/s | **TRL 4 (Co-Sim Verified)** |
-| **1B** | Gen-1 Monolithic Planar Full | 1 | 32 | 32 x 32 | 62.91 M | 200.0 mm² | **12.67 W** | 1,392.6 TMAC/s | 174.1 TMAC/s | TRL 3 (Analytical Proof) |
-| **2A** | Gen-2 Monolithic Planar Edge | 1 | 16 | 64 x 64 | 125.83 M | 400.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
-| **2B** | Gen-2 3D Mini Stack (50 mm²) | 2 | 16 | 32 x 32 | 31.46 M | 50.0 mm² | **6.17 W** | 696.3 TMAC/s | 87.0 TMAC/s | TRL 3 (Analytical Proof) |
-| **2C** | Gen-2 3D Mini Stack (100 mm²) | 2 | 32 | 32 x 32 | 62.91 M | 100.0 mm² | **12.67 W** | 1,392.6 TMAC/s | 174.1 TMAC/s | TRL 3 (Analytical Proof) |
-| **3A** | Gen-3 3D Mini Stack (200 mm²) | 2 | 64 | 32 x 32 | 125.83 M | 200.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
-| **3B** | Gen-3 3D Edge Stack (200 mm²) | 2 | 16 | 64 x 64 | 125.83 M | 200.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
-| **3C** | Gen-3 3D Edge Stack (400 mm²) | 2 | 32 | 64 x 64 | 251.66 M | 400.0 mm² | 45.91 W | 5,570.6 TMAC/s | 696.3 TMAC/s | TRL 3 (Analytical Proof) |
-| **4E** | Gen-4 3D Edge Flagship | 3 | 64 | 64 x 64 | 503.32 M | 533.3 mm² | 92.97 W | 11,141.1 TMAC/s | 1,392.6 TMAC/s | TRL 3 (Analytical Proof) |
-| **5D** | Gen-5 3D Datacenter MVP | 4 | 16 | 128 x 128 | 503.32 M | 400.0 mm² | 90.39 W | 11,141.1 TMAC/s | 1,392.6 TMAC/s | TRL 3 (Analytical Proof) |
-| **6A** | Gen-6 3D Datacenter Master | 5 | 32 | 128 x 128 | **1.0066 B** | 640.0 mm² | 186.65 W | 22,282.2 TMAC/s | 2,785.3 TMAC/s | TRL 3 (Analytical Proof) |
-| **6B** | Gen-6 3D Hyperscale Apex Module | 5 | 64 | 128 x 128 | **2.0132 B** | 1,280.0 mm² | **392.36 W** | **52.42 PMAC/s** | **5,570.6 TMAC/s** | TRL 3 (Analytical Proof) |
+| **1A** | **Gen-1 Monolithic Planar MVP** | **1** | **16** | **32 x 32** | **3.93 M** | **100.0 mm²** | **6.17 W** | **696.3 – 819.2 TMAC/s** | **87.0 – 102.4 TMAC/s** | **TRL 4 (Co-Sim & 100M HPC Verified)** |
+| **1B** | Gen-1 Monolithic Planar Full | 1 | 32 | 32 x 32 | 7.86 M | 200.0 mm² | **12.67 W** | 1,392.6 TMAC/s | 174.1 TMAC/s | TRL 3 (Analytical Proof) |
+| **2A** | Gen-2 Monolithic Planar Edge | 1 | 16 | 64 x 64 | 15.73 M | 400.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
+| **2B** | Gen-2 3D Mini Stack (50 mm²) | 2 | 16 | 32 x 32 | 3.93 M | 50.0 mm² | **6.17 W** | 696.3 – 819.2 TMAC/s | 87.0 – 102.4 TMAC/s | TRL 3 (Analytical Proof) |
+| **2C** | Gen-2 3D Mini Stack (100 mm²) | 2 | 32 | 32 x 32 | 7.86 M | 100.0 mm² | **12.67 W** | 1,392.6 TMAC/s | 174.1 TMAC/s | TRL 3 (Analytical Proof) |
+| **3A** | Gen-3 3D Mini Stack (200 mm²) | 2 | 64 | 32 x 32 | 15.73 M | 200.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
+| **3B** | Gen-3 3D Edge Stack (200 mm²) | 2 | 16 | 64 x 64 | 15.73 M | 200.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
+| **3C** | Gen-3 3D Edge Stack (400 mm²) | 2 | 32 | 64 x 64 | 31.46 M | 400.0 mm² | 45.91 W | 5,570.6 TMAC/s | 696.3 TMAC/s | TRL 3 (Analytical Proof) |
+| **4E** | Gen-4 3D Edge Flagship | 3 | 64 | 64 x 64 | 62.91 M | 533.3 mm² | 92.97 W | 11,141.1 TMAC/s | 1,392.6 TMAC/s | TRL 3 (Analytical Proof) |
+| **5D** | Gen-5 3D Datacenter MVP | 4 | 16 | 128 x 128 | 62.91 M | 400.0 mm² | 90.39 W | 11,141.1 TMAC/s | 1,392.6 TMAC/s | TRL 3 (Analytical Proof) |
+| **6A** | Gen-6 3D Datacenter Master | 5 | 32 | 128 x 128 | **125.83 M** | 640.0 mm² | 186.65 W | 22,282.2 TMAC/s | 2,785.3 TMAC/s | TRL 3 (Analytical Proof) |
+| **6B** | Gen-6 3D Hyperscale Apex Module | 5 | 64 | 128 x 128 | **251.66 M** | 1,280.0 mm² | **392.36 W** | **52.42 PMAC/s** | **5,570.6 TMAC/s** | TRL 3 (Analytical Proof) |
 
 ---
 
 ## 🤖 AI Workload Benchmarks & GPU Comparison
 
-### Model Inference Performance (JANUS Mini 16-Tile: 3.35 W)
-* **LLaMA-3-8B (INT8):** 0.446 µJ per autoregressive token (489.1 TOPS/W average efficiency).
-* **GPT-2 Base (INT8):** 0.023 µJ per token (492.4 TOPS/W).
-* **ViT-Huge (INT8):** 0.328 µJ per image patch pass (490.2 TOPS/W).
+### Model Inference Performance (JANUS Model 1A: 6.17 W)
+* **LLaMA-3-8B (INT8):** 1.94 µJ per layer block (314.07 ns latency, 112.6 TMAC/s/W sustained energy efficiency).
+* **GPT-2 Base (INT8):** 0.07 µJ per layer block (10.73 ns latency, 106.9 TMAC/s/W sustained energy efficiency).
+* **ViT-Huge (INT8):** 1.22 µJ per transformer block pass (198.21 ns latency, 3,151.0 TMAC/s/W packed patch efficiency).
 
 ### Hardware Efficiency Comparison Table
 
 | Accelerator Platform | Architecture & Process | Die Footprint | TDP Power (W) | Peak INT8 Throughput | INT8 Energy Efficiency | Area Compute Density | Advantage vs Platform |
 |---|---|---|:---:|:---:|:---:|:---:|:---:|
-| **Project JANUS (Mini 16-Tile)** | **Spatial RNS Photonic (3D Heterogeneous)** | **10.24 mm²** (3.2 × 3.2 mm) | **3.35 W** | **1,638.4 TOPS** (819.2 TMAC/s) | **489.1 TOPS/W** (244.5 TMAC/s/W) | **160.0 TOPS/mm²** | **Baseline (1.0x)** |
-| NVIDIA H100 SXM5 | Hopper (TSMC 4N) Silicon GPU | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² | **346.9x Higher Efficiency** |
-| NVIDIA B200 (Blackwell) | Blackwell (TSMC 4NP Dual-Die) Silicon GPU | 1,600 mm² | 1,000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.13 TMAC/s/W) | 1.41 TOPS/mm² | **217.4x Higher Efficiency** |
-| Google TPU v5p | 4nm Electronic TPU ASIC | ~600 mm² | 450.0 W | 918.0 TOPS (459.0 TMAC/s) | 2.04 TOPS/W (1.02 TMAC/s/W) | 1.53 TOPS/mm² | **239.7x Higher Efficiency** |
+| **Project JANUS (Model 1A Planar)** | **Spatial RNS Photonic (Monolithic 3D)** | **100.00 mm²** (10.0 × 10.0 mm) | **6.17 W** | **696.3 – 819.2 TMAC/s** (1,392.6 – 1,638.4 TOPS) | **112.8 – 132.8 TMAC/s/W** (225.6 – 265.5 TOPS/W) | **16.4 TMAC/s/mm²** (32.8 TOPS/mm² INT4) | **Baseline (1.0x)** |
+| NVIDIA H100 SXM5 | Hopper (TSMC 4N) Silicon GPU | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² (0.61 TMAC/s/mm²) | **158.9x Higher Efficiency** |
+| NVIDIA B200 (Blackwell) | Blackwell (TSMC 4NP Dual-Die) Silicon GPU | 1,600 mm² | 1,000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.12 TMAC/s/W) | 1.41 TOPS/mm² (0.70 TMAC/s/mm²) | **100.8x Higher Efficiency** |
+| Google TPU v5p | 4nm Electronic TPU ASIC | ~600 mm² | 450.0 W | 918.0 TOPS (459.0 TMAC/s) | 2.04 TOPS/W (1.02 TMAC/s/W) | 1.53 TOPS/mm² (0.77 TMAC/s/mm²) | **110.6x Higher Efficiency** |
 
-* **346.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (489.1 vs. 1.41 TOPS/W)
-* **217.4× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (489.1 vs. 2.25 TOPS/W)
-* **131.1× Higher Compute Area Density vs. NVIDIA H100 SXM5** (160.0 vs. 1.22 TOPS/mm²)
-* **113.5× Higher Compute Area Density vs. NVIDIA B200 Blackwell** (160.0 vs. 1.41 TOPS/mm²)
-* **INT4 Peak Throughput: 3,276.8 TOPS (978.1 TOPS/W)**
-* **INT64 Deterministic Exact Precision: 204.8 TOPS (61.1 TOPS/W)**
+* **158.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (112.8 vs. 0.71 TMAC/s/W)
+* **100.8× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (112.8 vs. 1.12 TMAC/s/W)
+* **26.9× Higher Area Compute Density vs. NVIDIA H100 SXM5** (16.4 vs. 0.61 TMAC/s/mm²)
+* **23.4× Higher Area Compute Density vs. NVIDIA B200 Blackwell** (16.4 vs. 0.70 TMAC/s/mm²)
+* **INT4 Direct Peak Throughput: 1,638.4 TMAC/s (3,276.8 TOPS @ 265.5 TMAC/s/W)**
+* **INT64 Deterministic Exact Precision: 87.0 – 102.4 TMAC/s (174.1 – 204.8 TOPS @ 14.1 – 16.6 TMAC/s/W)**
 * **Optical Line Rate: 1.6 Terabaud (16 channels × 100 Gbaud)**
 
 ---
