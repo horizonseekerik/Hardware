@@ -157,12 +157,9 @@ Janus Update/
 │   │   ├── deep-research-report.md            # Deep research architectural synthesis report
 │   │   └── figures/                           # System diagrams, waveguide cross-sections & schematics
 │   │
-│   ├── Janus Interactive Visulaization/       # 3D Cinematic Visualizations & Layer Renders
-│   │   ├── JANUS_Mini16_3D_Development_Spec.md # 3D development spec & material breakdown
-│   │   └── renders/                           # High-resolution multi-stratum architectural renders
-│   │
-│   └── CMOS RECONSTRUCTION/                   # Archival Silicon Reconstruction Documents
-│       └── JANUS_CMOS_Architecture.pdf        # Initial CMOS reconstruction specification
+│   └── Janus Interactive Visulaization/       # 3D Cinematic Visualizations & Layer Renders
+│       ├── JANUS_Mini16_3D_Development_Spec.md # 3D development spec & material breakdown
+│       └── renders/                           # High-resolution multi-stratum architectural renders
 │
 ├── 🌐 Web Application & Serverless Cloud Runtime
 │   ├── api/                                   # Vercel Serverless Functions
@@ -174,14 +171,16 @@ Janus Update/
 │       ├── documentation_reports/             # Hosted PDF/HTML technical specifications
 │       └── JANUS_IEEE_Manuscript.pdf, etc.    # Hosted academic PDF manuscripts
 │
-├── 🛠️ Automation & Historical Tooling
-│   ├── scripts/                               # Tooling & Figure Generators
-│   │   ├── sync_simulation_repo.py            # Automated synchronization script
-│   │   └── fix_fig1_topology.py               # Waveguide crossing topology optimization script
-│   │
-│   └── scratch_archive/                       # Historical Diagnostics & Exploratory Scripts
-│       ├── fix_flaws.py, modify_docx.py       # Manuscript formatting utilities
-│       └── test_mod.v, test_mod.vvp           # Early Verilog exploratory modules
+├── 🛠️ Automation & Production Tooling
+│   └── scripts/                               # Tooling & Figure Generators
+│       ├── sync_simulation_repo.py            # Automated synchronization script
+│       └── fix_fig1_topology.py               # Waveguide crossing topology optimization script
+│
+├── 📦 outdated/                               # Deprecated & Superseded Artifacts (Eligible for deletion)
+│   ├── CMOS RECONSTRUCTION/                   # Archival initial CMOS design draft
+│   ├── scratch/                               # Temporary test scratch directory
+│   ├── scratch_archive/                       # Historical diagnostics & early exploratory scripts
+│   └── sim_build/                             # Legacy Verilog simulation build cache
 │
 └── 🔬 janus_mini16_sim/                       # 5-TIER MULTI-PHYSICS CO-SIMULATION FRAMEWORK
     ├── run_mini16_full_cosim.py               # Master CLI co-simulation test suite runner

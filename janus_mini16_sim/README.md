@@ -102,16 +102,16 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 | Platform | Architecture / Process Node | Die Footprint | Total Power | INT8 Compute Throughput | INT8 Energy Efficiency | Area Compute Density |
 |---|---|---|---|---|---|---|
-| **JANUS Mini 16-Tile** | **3D Hybrid (Sb₂S₃ + 100 GHz CMOS)** | **10.24 mm²** ($3.2 \times 3.2\,\text{mm}$) | **3.35 W** | **1,638.4 TOPS** ($819.2\,\text{TMAC/s}$) | **489.1 TOPS/W** ($244.5\,\text{TMAC/s/W}$) | **160.0 TOPS/mm²** |
-| **NVIDIA H100 SXM5** | Hopper (TSMC 4N) | 814 mm² | 700.0 W | 989.6 TOPS ($494.8\,\text{TMAC/s}$) | 1.41 TOPS/W ($0.71\,\text{TMAC/s/W}$) | 1.22 TOPS/mm² |
-| **NVIDIA B200 Blackwell** | Blackwell (TSMC 4NP Dual-Die) | 1600 mm² | 1000.0 W | 2,250.0 TOPS ($1,125.0\,\text{TMAC/s}$) | 2.25 TOPS/W ($1.13\,\text{TMAC/s/W}$) | 1.41 TOPS/mm² |
+| **JANUS Model 1A (Planar MVP)** | **Spatial RNS Photonic (Monolithic 3D)** | **100.00 mm²** (10.0 × 10.0 mm) | **6.17 W** | **696.3 – 819.2 TMAC/s** (1,392.6 – 1,638.4 TOPS) | **112.8 – 132.8 TMAC/s/W** (225.6 – 265.5 TOPS/W) | **16.4 TMAC/s/mm²** (32.8 TOPS/mm² INT4) |
+| **NVIDIA H100 SXM5** | Hopper (TSMC 4N) | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² (0.61 TMAC/s/mm²) |
+| **NVIDIA B200 Blackwell** | Blackwell (TSMC 4NP Dual-Die) | 1600 mm² | 1000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.12 TMAC/s/W) | 1.41 TOPS/mm² (0.70 TMAC/s/mm²) |
 
-- **346.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** ($489.1$ vs. $1.41\text{ TOPS/W}$)
-- **217.4× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** ($489.1$ vs. $2.25\text{ TOPS/W}$)
-- **131.1× Higher Compute Area Density vs. NVIDIA H100 SXM5** ($160.0$ vs. $1.22\text{ TOPS/mm}^2$)
-- **113.5× Higher Compute Area Density vs. NVIDIA B200 Blackwell** ($160.0$ vs. $1.41\text{ TOPS/mm}^2$)
-- **INT4 Peak Throughput: 3,276.8 TOPS (978.1 TOPS/W)**
-- **INT64 Deterministic Exact Precision: 204.8 TOPS (61.1 TOPS/W)**
+- **158.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (112.8 vs. 0.71 TMAC/s/W)
+- **100.8× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (112.8 vs. 1.12 TMAC/s/W)
+- **26.9× Higher Compute Area Density vs. NVIDIA H100 SXM5** (16.4 vs. 0.61 TMAC/s/mm²)
+- **23.4× Higher Compute Area Density vs. NVIDIA B200 Blackwell** (16.4 vs. 0.70 TMAC/s/mm²)
+- **INT4 Direct Peak Throughput: 1,638.4 TMAC/s (3,276.8 TOPS @ 265.5 TMAC/s/W)**
+- **INT64 Deterministic Exact Precision: 87.0 – 102.4 TMAC/s (174.1 – 204.8 TOPS @ 14.1 – 16.6 TMAC/s/W)**
 - **Optical Line Rate: 1.6 Terabaud (16 channels × 100 Gbaud)**
 
 ---

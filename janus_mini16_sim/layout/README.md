@@ -47,8 +47,8 @@ No two strata share a GDS (layer, datatype) pair:
 ### `janus_mini16_cmos_base_layout.gds` — Standalone 65nm CMOS Base Die
 
   - **Process Node**: Standard 65nm LP/GP CMOS (1P7M to 1P9M BEOL).
-  - **Die Footprint**: 3.20 mm × 3.20 mm (10.24 mm²) — identical to top optical die (1:1 vertical alignment).
-  - **Tile Array**: 4×4 @ 700 µm pitch, origin (200, 200) µm — consistent with 3D GDS.
+  - **Die Footprint**: 10.00 mm × 10.00 mm (100.00 mm²) — identical to top optical die (1:1 vertical alignment).
+  - **Tile Array**: 4×4 @ 2500 µm pitch — consistent with 3D GDS and 100 mm² floorplan.
   - **Physical Mask Layers (100-199 range)**:
 
 | Layer | Symbol | Purpose |
@@ -90,7 +90,7 @@ No two strata share a GDS (layer, datatype) pair:
 
 | Parameter | Value |
 |-----------|-------|
-| Total Die Footprint | 3.20 mm × 3.20 mm (10.24 mm² — both strata) |
+| Total Die Footprint | 10.00 mm × 10.00 mm (100.00 mm² — both strata) |
 | 3D Top Cell | `JANUS_MINI16_TOP_CORE` |
 | CMOS Top Cell | `JANUS_MINI16_CMOS_BASE_DIE` |
 | Tile Array | 4×4 × 700 µm pitch, origin (200, 200) µm |

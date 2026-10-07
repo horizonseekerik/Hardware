@@ -2340,8 +2340,8 @@
           Project JANUS replaces analog amplitude accumulation with <strong>Spatial One-Hot Residue Number System
             (RNS)</strong> routing, non-volatile <strong>Sb₂S₃</strong> phase-change switches, and an electro-optic
           <strong>50 fs ILO comb clock</strong>—scaling from 4-bit neural inference up to <strong>Exact INT64
-            deterministic precision</strong>. Modeled from a <strong>696.3 TMAC/s Planar Processor (1,392.6 TMAC/s INT4, Model 1A at 3.35
-            W, 10.24 mm² die)</strong> up to a <strong>104.8 PetaMAC/s Hyperscale 3D Module (Model 6B projection at ~392 W)</strong>
+            deterministic precision</strong>. Modeled from a <strong>696.3 – 819.2 TMAC/s Planar Processor (1,638.4 TMAC/s INT4, Model 1A at 6.17
+            W, 100.00 mm² die)</strong> up to a <strong>104.8 PetaMAC/s Hyperscale 3D Module (Model 6B projection at ~392 W)</strong>
           with zero static hold power.
         </p>
 
@@ -3174,14 +3174,14 @@
                 <tr style="background: rgba(0, 242, 254, 0.08); font-weight: bold;">
                   <td><b style="color: var(--accent-cyan);">JANUS Model 1A (Monolithic Planar)</b></td>
                   <td>Spatial RNS Optical + 65nm CMOS (Model 1A)</td>
-                  <td>10.24 mm²</td>
-                  <td><b style="color: var(--accent-green);">3.35 W</b></td>
-                  <td><b style="color: var(--accent-cyan);">696.3 TMAC/s</b></td>
-                  <td><b style="color: var(--accent-green); white-space: nowrap;">207.8 TMAC/s/W</b><span
+                  <td>100.00 mm²</td>
+                  <td><b style="color: var(--accent-green);">6.17 W</b></td>
+                  <td><b style="color: var(--accent-cyan);">696.3 – 819.2 TMAC/s</b></td>
+                  <td><b style="color: var(--accent-green); white-space: nowrap;">112.8 – 132.8 TMAC/s/W</b><span
                       class="status-badge"
-                      style="color:var(--accent-green); border-color:var(--accent-green);font-size:0.7rem; margin-left:6px;">296.8x
+                      style="color:var(--accent-green); border-color:var(--accent-green);font-size:0.7rem; margin-left:6px;">158.9x
                       HIGHER</span></td>
-                  <td>67.99 TMAC/s/mm²</td>
+                  <td>16.4 TMAC/s/mm²</td>
                 </tr>
                 <tr>
                   <td><b>NVIDIA H100 SXM5</b></td>
@@ -3214,7 +3214,7 @@
             </table>
             <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.75rem; line-height:1.5;">
               <em>* Methodology Note: JANUS figures represent multi-physics simulated projections for the Model 1A
-                16-Tile Monolithic Architecture (3.35 W first-principles TDP, 10.24 mm² die). GPU / TPU figures reflect manufacturer published
+                16-Tile Monolithic Architecture (6.17 W first-principles TDP, 100.00 mm² die). GPU / TPU figures reflect manufacturer published
                 datasheet specifications for production silicon (NVIDIA H100 SXM5 / B200 / Google TPU v5p).</em>
             </div>
 
@@ -3880,10 +3880,10 @@
                 <td style="padding: 8px 10px;">16</td>
                 <td style="padding: 8px 10px;">32 × 32</td>
                 <td style="padding: 8px 10px;">3.93 M</td>
-                <td style="padding: 8px 10px;">10.24 mm²</td>
-                <td style="padding: 8px 10px;"><b style="color: var(--accent-green);">3.35 W</b></td>
-                <td style="padding: 8px 10px;">1,392.6 TMAC/s</td>
-                <td style="padding: 8px 10px;">87.0 TMAC/s</td>
+                <td style="padding: 8px 10px;">100.00 mm²</td>
+                <td style="padding: 8px 10px;"><b style="color: var(--accent-green);">6.17 W</b></td>
+                <td style="padding: 8px 10px;">1,638.4 TMAC/s</td>
+                <td style="padding: 8px 10px;">87.0 – 102.4 TMAC/s</td>
               </tr>
               <tr onclick="selectRoadmapModel('1B')"
                 style="border-bottom: 1px solid var(--card-border); cursor: pointer;"
@@ -4155,7 +4155,7 @@
 
             <p id="inspect-model-trl-desc"
               style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
-              Model 1A multi-physics simulation 100% completed: 32 higher-order physical edge cases verified, monolithic continuous time-stepping (dt=100fs), Adaptive Threshold Tracking (77.0% eye opening, BER=0.0), first-principles power (3.35 W) and die area (10.24 mm²) certified across 81 passing test suites. Ready for MPW Tapeout.
+              Model 1A multi-physics simulation 100% completed: 32 higher-order physical edge cases verified, monolithic continuous time-stepping (dt=100fs), Adaptive Threshold Tracking (77.0% eye opening, BER=0.0), first-principles power (6.17 W) and die area (100.00 mm²) certified across 81 passing test suites. Ready for MPW Tapeout.
             </p>
           </div>
 
@@ -4308,8 +4308,8 @@
             <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.5; margin-bottom:0.75rem;">
               <strong>Architecture:</strong> Single monolithic SiPh stratum over an ultra-thick 250 µm SiO₂ thermal
               buffer (zero 3D optical vias; lowest fabrication risk).<br>
-              <strong>Model 1A:</strong> 16 tiles (32×32), 3.93M 16-Tree Sb₂S₃ switches, 278.5k Ge/Si APDs, 10.24
-              mm² die (100 mm² reticle), <strong>3.35 W total power</strong>, 1,392.6 TMAC/s INT4.<br>
+              <strong>Model 1A:</strong> 16 tiles (32×32), 3.93M 16-Tree Sb₂S₃ switches, 278.5k Ge/Si APDs, 100.00
+              mm² die (47.34 mm² active switch core), <strong>6.17 W total power</strong>, 1,638.4 TMAC/s INT4.<br>
               <strong>Model 1B:</strong> 32 tiles (32×32), 62.91M switches, 8.39M APDs, 200.0 mm² die, <strong>12.67 W
                 total power</strong>, 2,785.3 TMAC/s INT4.
             </p>
@@ -9364,17 +9364,17 @@
         tiles: 16, mesh: '32 × 32 (1,024 Mults/Tile)', multipliers: '16,384',
         waveguides: '278,528 (0.28M active)', switches: '3,932,160 (3.93M 16-Tree Sb₂S₃ Switches)', apds: '278,528 (0.28M SAC²M Ge/Si)',
         activeEvents: '16,384 active / 10 ps cycle (8,192 per 5 ps phase)',
-        area: '10.24 mm² (3.20 mm × 3.20 mm Die • 5.76 mm² active core)', laserOpt: '2.21 W Optical CW (+33.44 dBm)',
-        laserElec: '2.95 W (75% WPE)', linkLoss: '52.93 dB total (13-stage tree + 32 edge cases)',
-        detMargin: '+5.61 dB Net Preserved (All 32 Edge Cases Active • BER = 0.0)',
-        power: '3.35 W', powerBreakdown: 'Laser: 2.95W (75% WPE) • Modulators: 0.16W (16x LiTaO3) • APDs: 0.019W • 65nm CMOS Base: 0.224W',
-        heatFlux: '0.0327 W/mm² (3.27 W/cm²)', tauDiff: '69.06 ms (13,812 JIR cycles)',
-        int4_tmacs: '1,392.6 TMAC/s (1.39 PMAC/s)', int8_tmacs: '696.3 TMAC/s', int16_tmacs: '348.2 TMAC/s',
-        int32_tmacs: '174.1 TMAC/s', int64_tmacs: '87.0 TMAC/s',
-        efficiency: '415.7 TMAC/s/W (INT4) / 195.5 TMAC/s/W (INT8) / 26.0 TMAC/s/W (INT64)',
-        yield: '5,500+ Functional Dies / 300mm Wafer (6,000+ DPW @ 90% yield)',
-        trl: 4, trlLabel: '● TRL 4: Monolithic Dynamic Co-Simulation & First-Principles Audit 100% Complete',
-        trlDesc: 'Model 1A multi-physics simulation 100% completed: 32 higher-order physical edge cases verified, monolithic continuous time-stepping (dt=100fs), Adaptive Threshold Tracking (77.0% eye opening, BER=0.0), first-principles power (3.35 W) and area (10.24 mm²) certified across 81 passing test suites. Ready for MPW shuttle tapeout.',
+        area: '100.00 mm² (10.0 mm × 10.0 mm Die • 47.34 mm² active switch core)', laserOpt: '2.21 W Optical CW (+33.44 dBm)',
+        laserElec: '2.95 W (75% WPE)', linkLoss: '52.03 dB total (13-stage tree + 32 edge cases)',
+        detMargin: '+6.95 dB Net Preserved (All 32 Edge Cases Active • BER = 0.0)',
+        power: '6.17 W', powerBreakdown: 'Laser: 2.95W (75% WPE) • Modulators: 0.51W (LiTaO3) • APDs: 0.16W • 65nm CMOS CRT: 1.05W • JIR FSM: 1.50W',
+        heatFlux: '0.0617 W/mm² (6.17 W/cm²)', tauDiff: '69.06 ms (13,812 JIR cycles)',
+        int4_tmacs: '1,638.4 TMAC/s (3.28 PMAC/s)', int8_tmacs: '696.3 – 819.2 TMAC/s', int16_tmacs: '348.2 TMAC/s',
+        int32_tmacs: '174.1 TMAC/s', int64_tmacs: '87.0 – 102.4 TMAC/s',
+        efficiency: '265.5 TMAC/s/W (INT4) / 112.8 – 132.8 TMAC/s/W (INT8) / 14.1 – 16.6 TMAC/s/W (INT64)',
+        yield: '100% Optical Yield (100M Monte Carlo, +6.95 dB 3σ margin)',
+        trl: 4, trlLabel: '● TRL 4: Monolithic Dynamic Co-Simulation & 100M Cloud HPC Certified',
+        trlDesc: 'Model 1A multi-physics simulation 100% completed: 32 higher-order physical edge cases verified, monolithic continuous time-stepping (dt=100fs), Adaptive Threshold Tracking (77.0% eye opening, BER=0.0), first-principles power (6.17 W) and area (100.00 mm²) certified across 81 passing test suites. Ready for MPW shuttle tapeout.',
         target: 'TSMC 65nm LP/GP + GlobalFoundries 45CLO MPW Shuttle Tapeout'
       },
       '1B': {

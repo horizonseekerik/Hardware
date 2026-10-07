@@ -44,8 +44,7 @@ Janus Interactive Visulaization/
 *.blend1
 
 # Temporary Scratch Directories & Archives
-scratch_archive/
-CMOS RECONSTRUCTION/
+outdated/
 Simulation Changes for 100%/
 public/Simulation Changes for 100%/
 
