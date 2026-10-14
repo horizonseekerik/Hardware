@@ -101,9 +101,7 @@ JANUS originates from the observation that the analog accumulation model itself 
 
 The central architectural transition is therefore: 
 
-\begin{center}
 \textbf{Amplitude Reconstruction $\Longrightarrow$ Spatial Localization}
-\end{center}
 
 Instead of representing values through optical intensity, JANUS represents values through spatial waveguide position using One-Hot Optical Residue Number System (RNS) encoding. Each input activates exactly one waveguide among the spatial channels ($N \le 256$ in general RNS formulations, or 17 channels in the Asymmetric 16-Tree Fermat Core). Photodetection no longer estimates analog amplitude. Instead, the detector answers a binary question:
 
@@ -143,99 +141,28 @@ JANUS addresses these constraints through a fully constraint-driven architecture
 
 The resulting system operates entirely within bounded thermal, optical, and electrical regimes:
 
-\begin{center}
-\text{$P_{noise} < P_{signal} < P_{sat}$}
-\end{center}
-
-\begin{align}
-\text{$T_{junction} < T_{critical}$}
-\end{align}
-
-\begin{align}
-\text{$\phi_{drift} < \phi_{max}$}
-\end{align}
+\begin{equation}
+P_{\mathrm{noise}} < P_{\mathrm{signal}} < P_{\mathrm{sat}}, \quad T_{\mathrm{junction}} < T_{\mathrm{critical}}, \quad |\Delta\phi_{\mathrm{drift}}| < \phi_{\mathrm{max}}.
+\end{equation}
 
 Rather than pursuing theoretical peak throughput under idealized assumptions, JANUS prioritizes sustained deterministic operation under realistic deployment conditions.
 
 \section{PHYSICAL CONSTRAINT LANDSCAPE}
 
 \subsection{\textbf{Analog Precision Collapse in Photonic Accumulation}}
+\label{sec:precision_collapse}
 
 The dominant assumption underlying conventional optical neural networks is that analog optical accumulation can scale proportionally with matrix dimension while maintaining recoverable signal fidelity. This assumption fails under realistic large-scale operating conditions.
-For an N $\times$N photonic matrix multiplication using unsigned 8-bit operands, the worst-case analog accumulation scales as
-
-\begin{align}
-S_{\max} = N \times 255 \times 255
-\label{eq:general_accumulation}
-\end{align}
-
-For the three JANUS deployment configurations:
-
-\begin{align}
-S_{\max,\mathrm{Mini}} &= 32 \times 255 \times 255 \\
-&= 2{,}080{,}800
-\end{align}
-
-\begin{align}
-S_{\max,\mathrm{Edge}} &= 64 \times 255 \times 255 \\
-&= 4{,}161{,}600
-\end{align}
-
-\begin{align}
-S_{\max,\mathrm{Datacenter}} &= 128 \times 255 \times 255 \\
-&= 8{,}323{,}200
-\end{align}
-
-The corresponding minimum analog SNR requirements become
-
-\begin{align}
-\mathrm{SNR}_{req} = 20\log_{10}\left(S_{\max}\right)
-\label{eq:general_snr}
-\end{align}
-
-Thus:
-
-\begin{align}
-\mathrm{SNR}_{Mini} &= 20\log_{10}(2{,}080{,}800) \\
-&\approx 126.4~\mathrm{dB}
-\end{align}
-
-\begin{align}
-\mathrm{SNR}_{Edge} &= 20\log_{10}(4{,}161{,}600) \\
-&\approx 132.4~\mathrm{dB}
-\end{align}
-
-\begin{align}
-\mathrm{SNR}_{Datacenter} &= 20\log_{10}(8{,}323{,}200) \\
-&\approx 138.4~\mathrm{dB}
-\end{align}
-
-These requirements exceed realistic photonic operating conditions by orders of magnitude.
-
-\begin{table*}[htbp]
-\centering
-\caption{
-Analog Accumulation Scaling Constraints Across JANUS Configurations
-}
-\label{tab:analog_constraints}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Metric} & \textbf{Mini} & \textbf{Edge} & \textbf{Datacenter} \\
-\midrule
-
-Mesh Size & $32 \times 32$ & $64 \times 64$ & $128 \times 128$ \\
-
-Maximum Accumulation & $2{,}080{,}800$ & $4{,}161{,}600$ & $8{,}323{,}200$ \\
-
-Required Analog SNR & $126.4~\mathrm{dB}$ & $132.4~\mathrm{dB}$ & $138.4~\mathrm{dB}$ \\
-
-ADC Feasibility at 100 GHz  & Impractical & Impractical & Impractical \\
-
-Operational Stability & Unbounded & Unbounded & Unbounded \\
-
-\bottomrule
-\end{tabular}
-\end{table*}
+For an $N \times N$ photonic matrix multiplication using unsigned 8-bit operands, the worst-case unreduced analog accumulation scales as $S_{\max} = N \times 255 \times 255$, requiring an exact recovery signal-to-noise ratio $\mathrm{SNR}_{\mathrm{req}} = 20\log_{10}(S_{\max})$ \cite{Winzer2006,Saleh2019}:
+\begin{equation}
+\begin{aligned}
+S_{\max,\mathrm{Mini}} &= 2{,}080{,}800 \implies \mathrm{SNR}_{\mathrm{Mini}} \approx 126.4\,\mathrm{dB}, \\
+S_{\max,\mathrm{Edge}} &= 4{,}161{,}600 \implies \mathrm{SNR}_{\mathrm{Edge}} \approx 132.4\,\mathrm{dB}, \\
+S_{\max,\mathrm{Datacenter}} &= 8{,}323{,}200 \implies \mathrm{SNR}_{\mathrm{Datacenter}} \approx 138.4\,\mathrm{dB}.
+\end{aligned}
+\label{eq:analog_snr_scaling}
+\end{equation}
+These requirements exceed realistic photonic operating conditions by several orders of magnitude (as summarized alongside the One-Hot solution in Table~\ref{tab:onehot_transition}).
 
 The contradiction becomes especially severe when detector bandwidth is considered. Because high-resolution requirements---such as the 138 dB analog precision target derived above---cannot be met by standard ADC/DAC architectures operating above 10 GHz , JANUS bypasses these conventional limitations through a specialized spatial encoding approach. As derived in Section~\ref{sec:operating_frequency}, the architecture sustains an operating frequency of 100 GHz; this is critical, as no practical ADC architecture can simultaneously sustain high resolution, high sampling rate, low thermal noise, and acceptable power density within a realistic operating envelope.
 
@@ -298,20 +225,16 @@ For a photonic matrix multiplication core operating on $N_{\mathrm{dim}} \times 
 N_{\mathrm{switch,total}} = N_{\mathrm{tiles}} \times N_{\mathrm{dim}}^2 \times N_{\mathrm{switch,single}}
 \label{eq:total_switches}
 \end{equation}
-Evaluating this across the three JANUS deployment tiers:
-\begin{align}
-N_{\mathrm{Mini}}      &= 32 \times 32^2 \times 240 = \mathbf{7,864,320} \label{eq:switch_mini} \\
-N_{\mathrm{Edge}}      &= 32 \times 64^2 \times 240 = \mathbf{31,457,280} \label{eq:switch_edge} \\
-N_{\mathrm{Datacenter}} &= 32 \times 128^2 \times 240 = \mathbf{125,829,120} \label{eq:switch_dc}
-\end{align}
-This streamlined switch scaling maintains total active element counts well within current monolithic foundry lithography limits (see Section~\ref{sec:16tree_arch} and Table~\ref{tab:table5} for a comprehensive topological comparison against conventional optical routing meshes).
-
-Because $\mathrm{Sb_2S_3}$ PCM switches maintain their state non-volatily, static hold power is identically zero ($0.00~\mathrm{W}$ across all tiers). Under conventional thermo-optic MZI heaters, even the reduced 16-Tree switch count would consume:
-\begin{align}
-P_{\mathrm{Mini,TO}}       &= 7{,}864{,}320 \times 0.10~\mathrm{mW} = 786.4~\mathrm{W} \\
-P_{\mathrm{Edge,TO}}       &= 31{,}457{,}280 \times 0.10~\mathrm{mW} = 3.15~\mathrm{kW} \\
-P_{\mathrm{Datacenter,TO}} &= 125{,}829{,}120 \times 0.10~\mathrm{mW} = 12.58~\mathrm{kW}
-\end{align}
+Evaluating this across the three deployment configurations demonstrates the unsustainable thermal wall of thermo-optic tuning ($P_{\mathrm{MZI}} \approx 0.10\,\mathrm{mW}$):
+\begin{equation}
+\begin{aligned}
+N_{\mathrm{Mini}} &= 7{,}864{,}320 \implies P_{\mathrm{Mini,TO}} = 786.4\,\mathrm{W}, \\
+N_{\mathrm{Edge}} &= 31{,}457{,}280 \implies P_{\mathrm{Edge,TO}} = 3.15\,\mathrm{kW}, \\
+N_{\mathrm{Datacenter}} &= 125{,}829{,}120 \implies P_{\mathrm{Datacenter,TO}} = 12.58\,\mathrm{kW}.
+\end{aligned}
+\label{eq:mzi_heat_wall}
+\end{equation}
+Because non-volatile $\mathrm{Sb_2S_3}$ PCM switches maintain atomic state with zero holding bias, JANUS slashes this static power to identically $0.00\,\mathrm{W}$ across all tiers.
 Non-volatile PCM integration completely eliminates this multi-kilowatt static heat load.
 
 \begin{table*}[htbp]
@@ -366,6 +289,7 @@ As routing density increases, lateral heat diffusion produces cross-coupled phas
 Thus, the routing fabric itself becomes the dominant thermal failure mechanism in large-scale photonic systems.
 
 \subsection{\textbf{Nonlinear Failure of Multi-Wavelength Scaling}}
+\label{sec:nonlinear_failure}
 
 Many photonic accelerator architectures attempt to improve throughput through Dense Wavelength-Division Multiplexing (DWDM). In these systems, multiple optical carrier frequencies propagate simultaneously through shared waveguides.
 
@@ -398,14 +322,12 @@ The problem becomes increasingly severe under high-power amplification, where st
 
 Consequently, wavelength scaling introduces a contradiction:
 
-\begin{center}
 \textbf{Higher Spectral Density $\Longrightarrow$ Higher Nonlinear Corruption}
-\label{eq:wdm_contradiction}
-\end{center}
 
 This makes large-scale exact arithmetic fundamentally unstable under multi-wavelength analog operation.
 
 \subsection{\textbf{Optical Loss Accumulation and Amplifier Noise}}
+\label{sec:loss_accumulation}
 
 Large photonic routing fabrics inevitably accumulate substantial optical propagation loss. The total path loss can be expressed as:
 
@@ -424,29 +346,7 @@ L_{\mathrm{routing}}
 \label{eq:total_loss}
 \end{align}
 
-For practical large-scale systems:
-
-\begin{center}
-\text{L$_{mod} \approx$ 3--6 dB}
-\end{center}
-
-\begin{center}
-\text{L$_{wg} \approx$ 0.5--2 dB}
-\end{center}
-
-\begin{center}
-\text{L$_{coupler} \approx$ 1--3 dB}
-\end{center}
-
-\begin{center}
-\text{L$_{routing} \approx$ 15--20 dB}
-\end{center}
-
-Thus:
-
-\begin{center}
-\text{L$_{total} \approx$ 30--50 dB}
-\end{center}
+For practical large-scale systems, component losses typically span $L_{\mathrm{mod}} \approx 3\text{--}6\,\mathrm{dB}$, $L_{\mathrm{wg}} \approx 0.5\text{--}2\,\mathrm{dB}$, $L_{\mathrm{coupler}} \approx 1\text{--}3\,\mathrm{dB}$, and $L_{\mathrm{routing}} \approx 15\text{--}20\,\mathrm{dB}$, yielding cumulative uncompensated attenuation $L_{\mathrm{total}} \approx 30\text{--}50\,\mathrm{dB}$.
 
 
 Without compensation, optical power decays exponentially along the propagation path:
@@ -469,16 +369,14 @@ where: $G$ is amplifier gain, $n_{sp}$ is the spontaneous emission factor, and $
 
 The contradiction is therefore:
 
-\begin{center}
 \textbf{Higher Gain $\Longrightarrow$ Higher ASE Corruption}
-\label{eq:gain_contradiction}
-\end{center}
 
 Thus, conventional amplification preserves optical amplitude while simultaneously degrading informational integrity.
 
 For exact arithmetic systems, this failure is especially severe because even small analog corruption propagates catastrophically through high-dimensional reconstruction.
 
 \subsection{\textbf{Thermal Drift and Calibration Instability}}
+\label{sec:thermal_drift}
 
 Photonic interferometric systems are intrinsically sensitive to thermal variation because optical phase depends directly upon refractive index and propagation length.
 
@@ -517,33 +415,13 @@ Conventional architectures compensate this instability through active calibratio
 
 However, calibration overhead scales poorly with mesh density \cite{Miller2013}, \cite{Hamerly2022}:
 
-\begin{center}
-\text{C$_{calibration} \propto N^{2}$}
-\label{eq:calibration_scaling}
-\end{center}
+$C_{\mathrm{calibration}} \propto N^2$
 
 At large dimensions, calibration itself becomes a dominant energy and latency cost.
 
 Furthermore, continuously recalibrated systems do not operate within a stable thermodynamic equilibrium. Instead, they remain permanently trapped in transient correction states. Thus, large-scale photonic accelerators face a second-order contradiction:
 
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.2cm and 1cm,
-    block/.style={draw, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=1cm, align=center, font=\small\sffamily},
-    highlight/.style={draw=orange!80!black, fill=orange!10, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=1cm, align=center, font=\small\sffamily\bfseries},
-    arrow/.style={-Stealth, thick}
-]
-\node[block] (b1) {Higher\\Routing Density};
-\node[block, below=of b1] (b2) {Higher\\Thermal Instability};
-\node[highlight, below=of b2] (b3) {Higher\\Calibration Overhead};
 
-\draw[arrow] (b1) -- (b2);
-\draw[arrow] (b2) -- (b3);
-\end{tikzpicture}
-\caption{Causal impact of physical routing constraints on operational runtime overhead.}
-\label{fig:causal_routing}
-\end{figure}
 
 This contradiction prevents sustained deterministic operation under realistic deployment conditions.
 
@@ -565,21 +443,7 @@ Specifically:
 
 Consequently, JANUS adopts a fundamentally different computational philosophy. Rather than attempting to improve analog reconstruction fidelity, JANUS reformulates optical computation into a bounded spatial routing problem.
 
-The resulting architecture enforces:
-
-\begin{center}
-\text{$P_{noise} < P_{signal} < P_{sat}$}
-\end{center}
-
-\begin{center}
-\text{$T_{junction} < T_{critical}$}
-\end{center}
-
-\begin{center}
-\text{$\phi_{drift} < \phi_{max}$}
-\end{center}
-
-within all operating regimes.
+The resulting architecture enforces $P_{\mathrm{noise}} < P_{\mathrm{signal}} < P_{\mathrm{sat}}$, $T_{\mathrm{junction}} < T_{\mathrm{critical}}$, and $|\Delta\phi_{\mathrm{drift}}| < \phi_{\mathrm{max}}$ across all operating regimes.
 
 This bounded-operation methodology intentionally sacrifices theoretical peak analog density in favor of sustained exact arithmetic under realistic physical constraints.
 
@@ -605,10 +469,7 @@ The architecture consists of six tightly integrated subsystems:
 
 Each subsystem exists because a conventional alternative becomes physically unstable at large scale.
 The resulting architecture operates under a constraint-first design principle:
-\begin{center}
-\text{Physical Stability > Theoretical Peak Density}
-\label{eq:constraint_priority}
-\end{center}
+\textbf{Physical Stability > Theoretical Peak Density}
 
 Unlike conventional photonic accelerators that rely upon continuous calibration and optimistic analog assumptions, JANUS constrains all thermal, optical, and electrical states within bounded operating regions.
 
@@ -616,7 +477,7 @@ This bounded-operation philosophy forms the foundational principle of the entire
 
 \paragraph{\textbf{Demonstrated Components and Forward-Looking Integration.}}
 
-Several device-level components discussed in this work have been independently demonstrated in literature, including 105~GHz Ge/Si $\mathrm{SAC^2M}$ avalanche photodetectors \cite{Chen2025}, non-volatile $\mathrm{Sb_2S_3}$ PCM switching in silicon photonic waveguides utilizing graphene micro-heaters \cite{Delaney2020,Rios2021}, and silicon photonic routing meshes. However, the full JANUS architecture as described---including the high-power passive fan-out and APD link closure, multi-million-switch non-volatile 16-Tree Fermat fabric ($125.8\text{ M}$ switches in Datacenter, $3.93\text{ M}$ in Mini), complete stacked integration, and multi-tile datacenter configuration---remains a forward-looking systems integration proposal. This paper presents the architectural and physical motivation for such integration rather than a fabrication-validated implementation.
+Several device-level components discussed in this work have been independently demonstrated in literature, including 105~GHz Ge/Si $\mathrm{SAC^2M}$ avalanche photodetectors \cite{Chen2025}, non-volatile $\mathrm{Sb_2S_3}$ PCM switching in silicon photonic waveguides utilizing graphene micro-heaters \cite{Delaney2020,Rios2021}, and silicon photonic routing meshes. However, the full JANUS architecture as described---including the high-power passive fan-out and APD link closure, multi-million-switch non-volatile 16-Tree Fermat fabric ($125.8\text{ M}$ switches in Datacenter, $7.86\text{ M}$ in 32-tile Mini, and $3.93\text{ M}$ in the 16-tile Model~1A prototype), complete stacked integration, and multi-tile datacenter configuration---remains a forward-looking systems integration proposal. This paper presents the architectural and physical motivation for such integration rather than a fabrication-validated implementation.
 
 \begin{figure*}[!t]
 \centering
@@ -837,99 +698,13 @@ The central architectural transition within JANUS is the elimination of analog o
 
 This transition is motivated by the observation that analog amplitude reconstruction constitutes the dominant precision bottleneck in large-scale photonic computation.
 
-\subsubsection{\textbf{Failure of Analog Optical Accumulation}}
-
-Conventional optical neural accelerators encode values through optical power:
-
-\begin{center}
-\text{$x_i \rightarrow P_i$}
-\label{eq:analog_encoding}
-\end{center}
-
-Weighted optical contributions are then accumulated through coherent or incoherent interference:
-
-\begin{align}
-P_{\mathrm{out}} = \sum_{i=1}^{N} w_i x_i
-\label{eq:analog_mac}
-\end{align}
-
-The photodetector must subsequently reconstruct the analog output value through high-resolution amplitude estimation.
-
-For an unsigned 8-bit accumulation:
-
-\begin{center}
-\text{$x_i,w_i \in [0,255]$}
-\end{center}
-
-the maximum accumulation becomes:
-
-\begin{equation}
-S_{\max} = N \times 255 \times 255
-\end{equation}
-
-As previously derived:
-\begin{equation}
-S_{\max, \mathrm{Mini}} = 2,080,800
-\end{equation}
-
-\begin{equation}
-S_{\max, \mathrm{Edge}} = 4,161,600
-\end{equation}
-
-\begin{equation}
-S_{\max, \mathrm{Datacenter}} = 8,323,200
-\end{equation}
-
-The corresponding minimum exact analog SNR requirements are:
-
-\begin{equation}
-\mathrm{SNR}_{\mathrm{Mini}} \approx 126.4~\mathrm{dB}
-\end{equation}
-
-\begin{equation}
-\mathrm{SNR}_{\mathrm{Edge}} \approx 132.4~\mathrm{dB}
-\end{equation}
-
-\begin{equation}
-\mathrm{SNR}_{\mathrm{Datacenter}} \approx 138.4~\mathrm{dB}
-\end{equation}
-
-These requirements exceed realistic photonic operating conditions.
-
-The failure mechanism is fundamentally informational. The detector must estimate not merely the presence of light, but its precise analog magnitude across millions of distinguishable states.
-
-Under Shannon channel theory, recoverable information scales as \cite{Winzer2006}\cite{Saleh2019}:
-
-\begin{equation}
-C = B\log_{2}\left(1 + \mathrm{SNR}\right)
-\end{equation}
-
-Thus, increasing analog precision directly demands exponentially larger SNR. This produces the core contradiction of analog photonic
-computation:
-
-\begin{center}
-\begin{tikzpicture}[
-    node distance=1.2cm,
-    arrow/.style={-{Stealth[length=3mm]}, thick, draw=black!70},
-    box/.style={align=center, font=\footnotesize\sffamily, rounded corners, draw=black!30, fill=white, inner sep=6pt}
-]
-\node[box] (top) {Higher Arithmetic Precision};
-\node[box] (bottom) at (top) [below=of top] {Exponentially Higher\\SNR Requirement};
-\draw[arrow] (top.south) -- (bottom.north);
-\end{tikzpicture}
-\end{center}
-
-At operating frequencies near 100 GHz , no physically realizable photonic detector chain can satisfy these require-
-ments while maintaining acceptable thermal density and power consumption \cite{Steckler2024}\cite{Chen2025}\cite{Liu2021}.
+As established in Section~\ref{sec:precision_collapse}, conventional analog optical accumulation requires an unachievable $>138\,\mathrm{dB}$ SNR at multi-GHz frequencies. JANUS eliminates this analog precision bottleneck by reformulating arithmetic into a deterministic spatial localization problem over One-Hot optical residue channels.
 
 \subsubsection{\textbf{Transition from Amplitude Reconstruction to Spatial Localization}}
  
 JANUS resolves this contradiction by abandoning analog amplitude representation entirely.Instead of encoding values through optical intensity, JANUS encodes values spatially. Each residue value activates exactly one optical waveguide among the spatial channels (e.g., 17 channels in the Asymmetric 16-Tree Fermat Core):
 
-\begin{center}
-\text{$x \rightarrow e_x$}
-\label{eq:onehot_mapping}
-\end{center}
+$x \mapsto e_x$
 
 where:
 \begin{equation}
@@ -966,38 +741,7 @@ D_k
 \label{eq:binary_detection}
 \end{align}
 
-This transforms the computational problem from :
-
-\begin{center}
-\begin{tikzpicture}[
-    every node/.style={
-        font=\small\sffamily
-    },
-    block/.style={
-        draw,
-        rounded corners=3pt,
-        minimum width=5.0cm,
-        minimum height=0.9cm,
-        align=center,
-        thick
-    },
-    arr/.style={
-        -{Stealth[scale=1.1]},
-        thick
-    }
-]
-
-\node[block] (analog)
-    {Analog Magnitude Estimation};
-
-\draw[arr]
-    (analog.south) -- ++(0,-1.0);
-
-\node[block, below=1.0cm of analog] (binary)
-    {Binary Spatial Localization};
-
-\end{tikzpicture}
-\end{center}
+This transforms the computational problem from analog amplitude estimation to binary spatial localization.
 
 The required detector condition therefore collapses to:
 
@@ -1019,7 +763,7 @@ P_{\mathrm{signal}} > P_{\mathrm{sens,practical}}
 \right)
 \end{equation}
 
-The Ge/Si $\mathrm{SAC^2M}$ avalanche photodetector operating at gain $M = 7$ possesses a gain--bandwidth product of 441 GHz with an inherent 3 dB receiver bandwidth of 105 GHz, comfortably supporting the 100 GHz system clock rate. This bandwidth filtering combined with a receiverless charge-integration front end and an ILO comb-referenced clock (50 fs rms jitter) yields a practical binary receiver sensitivity of $P_{\mathrm{sens,practical}} \approx -23.20\text{ dBm}$ (for a reconciled target bit error rate of $\le 10^{-36}$, see Appendix B for the complete derivation). Consequently, the delivered optical signal intensity across the passive 1 : $2^{18}$ distribution tree reaches $-12.70\text{ dBm}$ through the 4-stage 16-Tree Fermat Core, providing an abundant binary detection margin of $+10.50\text{ dB}$ ($+6.142\text{ dB}$ under strict foundry sign-off constraints).
+The Ge/Si $\mathrm{SAC^2M}$ avalanche photodetector operating at gain $M = 7$ possesses a gain--bandwidth product of 441 GHz with an inherent 3 dB receiver bandwidth of 105 GHz, comfortably supporting the 100 GHz system clock rate. This bandwidth filtering combined with a receiverless charge-integration front end and an ILO comb-referenced clock (50 fs rms jitter) yields a practical binary receiver sensitivity of $P_{\mathrm{sens,practical}} \approx -23.20\text{ dBm}$ (for a reconciled target bit error rate of $\le 10^{-36}$, as derived in Section~\ref{sec:passive_fanout_apd}). Consequently, the delivered optical signal intensity across the passive 1 : $2^{18}$ distribution tree reaches $-12.70\text{ dBm}$ through the 4-stage 16-Tree Fermat Core, providing an abundant binary detection margin of $+10.50\text{ dB}$ ($+6.142\text{ dB}$ under strict foundry sign-off constraints).
 
 Thus, the JANUS architecture transforms an analog precision requirement of approximately 138 dB into a robust binary detection problem with substantial receiver margin.
 
@@ -1078,9 +822,7 @@ z_i = (x_iy_i) \mod m_i
 
 Importantly, no analog carry propagation exists between channels. This eliminates the principal scaling bottleneck of conventional binary arithmetic \cite{Omosanya2021}, \cite{Mohan2016}:
 
-\begin{center}
-$\text{Carry Propagation Delay} \rightarrow 0$
-\end{center}
+$\text{Carry Propagation Delay} \to 0$
 
 because each residue tile computes independently.
 The resulting architecture therefore scales spatially rather than temporally.
@@ -1151,7 +893,7 @@ For the nominal passive fan-out routing path, the optical chain proceeds as foll
 P_{\text{signal}} \equiv P_{\text{det}} \approx -12.70\text{ dBm} \approx 53.7\,\mu\text{W}.
 \end{equation}
 
-As derived in Section~\ref{sec:passive_fanout_apd} and Appendix~\ref{app:apd_sensitivity}, the Ge/Si $\mathrm{SAC^2M}$ avalanche photodetector operating at gain $M = 7$ with a receiverless charge-integration front end and an ILO comb-referenced clock (50 fs rms jitter) achieves a practical binary OOK detection sensitivity for a target bit error rate of $\le 10^{-36}$ (reconciled integrate-and-dump $Q \approx 12.72$) of:
+As derived in Section~\ref{sec:passive_fanout_apd}, the Ge/Si $\mathrm{SAC^2M}$ avalanche photodetector operating at gain $M = 7$ with a receiverless charge-integration front end and an ILO comb-referenced clock (50 fs rms jitter) achieves a practical binary OOK detection sensitivity for a target bit error rate of $\le 10^{-36}$ (reconciled integrate-and-dump $Q \approx 12.72$) of:
 
 \begin{equation}
 P_{\text{sens,practical}} \approx -23.20\text{ dBm}.
@@ -1163,11 +905,12 @@ Therefore, the binary detection margin across the full passive fan-out and routi
 \text{Margin} = (-12.70\text{ dBm}) - (-23.20\text{ dBm}) = +10.50\text{ dB} \quad (+6.142\text{ dB under strict sign-off}).
 \end{equation}
 
-Because one-hot encoding guarantees that exactly one waveguide per multiplier contains optical power, the false positive probability across all dark channels is bounded by the bit error rate:
+Because one-hot encoding guarantees that exactly one waveguide per multiplier contains optical power (with 16 unselected dark waveguides in the 17-channel Asymmetric 16-Tree Fermat Core), the false positive probability across all dark channels is bounded by the bit error rate:
 
 \begin{equation}
-P_{\mathrm{FP}} \le 255 \times \mathrm{BER} = 255 \times 10^{-18} \approx 2.55 \times 10^{-16}
+P_{\mathrm{FP}} \le 16 \times \mathrm{BER} = 16 \times 10^{-18} = 1.60 \times 10^{-17}
 \end{equation}
+(suppressed to $\le 1.60 \times 10^{-35}$ under the reconciled integrate-and-dump $\mathrm{BER} \le 10^{-36}$ regime).
 
 This confirms that binary spatial detection operates with extreme fidelity across the entire passive fan-out without requiring intermediate optical amplification.
 
@@ -1185,34 +928,7 @@ The spatial one-hot representation establishes several fundamental architectural
 
 To implement spatial permutations $\pi_{w_i}$ efficiently without static power dissipation, JANUS incorporates non-volatile phase-change material (PCM) switches arranged in an Asymmetric 16-Tree Fermat Core topology \cite{Fang2022}\cite{Zhang2021}\cite{Wuttig2017}\cite{Sinatkas2021}. Rather than deploying an arbitrary non-blocking permutation mesh, the 16-Tree structure exploits One-Hot spatial sparsity: each active input waveguide routes light independently through a dedicated 4-stage binary tree with zero static power dissipation.
 
-\subsubsection{\textbf{Failure of Thermo-Optic Routing at Scale}}
-
-Conventional reconfigurable photonic networks rely predominantly on thermo-optic Mach--Zehnder Interferometers (MZIs). Each switch requires continuous electrical heating to maintain phase alignment:
-
-\begin{equation}
-P_{\mathrm{MZI}} \approx 0.10~\mathrm{mW}
-\end{equation}
-
-For a routing network containing $N_{\mathrm{switch}}$ switches, the total static hold power becomes:
-\begin{equation}
-P_{\mathrm{Static}} = N_{\mathrm{switch}}\times P_{\mathrm{MZI}}
-\end{equation}
-
-As derived in Section~\ref{sec:thermo_optic_scaling}, even with the streamlined switch count of the 16-Tree core ($240$ switches/mult), conventional thermo-optic routing would demand $393.2\,\mathrm{W}$, $1.57\,\mathrm{kW}$, and $12.58\,\mathrm{kW}$ of continuous static heater power for the Mini, Edge, and Datacenter configurations respectively. These power densities exceed practical chip-scale thermal extraction capability.
-
-Furthermore, the generated heat induces dynamic refractive index drift:
-
-\begin{equation}
-\Delta n = \frac{dn}{dT}  \Delta T 
-\end{equation}
-
-which subsequently perturbs optical phase:
-
-\begin{equation}
-\Delta\phi = \frac{2\pi L}{\lambda}\frac{dn}{dT}\Delta T
-\end{equation}
-
-In large meshes, thermal crosstalk between adjacent heating elements creates global phase instability, necessitating continuous dynamic recalibration loops that consume substantial control bandwidth and electrical power.
+As quantified in Section~\ref{sec:thermo_optic_scaling}, continuously biased thermo-optic MZI switches dissipate multi-kilowatts of static heater power at scale ($12.58\,\mathrm{kW}$ in Datacenter). JANUS eliminates static hold power entirely by replacing thermo-optic heaters with non-volatile $\mathrm{Sb_2S_3}$ phase-change material (PCM) switches ($P_{\mathrm{hold,PCM}} = 0\,\mathrm{W}$).
 
 \subsubsection{\textbf{PCM-Based Non-Volatile Optical Routing}}
 
@@ -1240,27 +956,8 @@ E_{\mathrm{reconfig}} = N_{\mathrm{reconfig}} \times E_{\mathrm{switch}}
 
 where $E_{\mathrm{switch}} \approx 4.2\text{ pJ}$ per cell.
 
-\begin{table}[htbp]
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\caption{COMPARISON BETWEEN THERMO-OPTIC AND PCM ROUTING FABRICS}
-\label{tab:table4}
-\begin{tabularx}{\columnwidth}{@{}Xcc@{}}
-\toprule
-\textbf{Metric} & \textbf{Thermo-Optic} & \textbf{16-Tree PCM} \\
- & \textbf{MZI Mesh} & \textbf{($\mathrm{Sb_2S_3}$)} \\
-\midrule
-Static Hold Power & $0.10\,\mathrm{mW}$/switch & $\mathbf{0.00\,\mathrm{W}}$ (Non-volatile) \\
-Full Mesh Power (DC) & $12.58\,\mathrm{kW}$ & $\mathbf{0.00\,\mathrm{W}}$ (Static) \\
-Dynamic Switch Energy & Continuous Bias & $\approx 4.2\,\mathrm{pJ}$/switch \\
-Continuous Electrical Bias & Required & None \\
-Calibration Frequency & Continuous Loop & Sparse / None \\
-Thermal Stability & Unbounded Drift & Bounded Passive \\
-Large-Scale Feasibility & Unviable ($>10\,\mathrm{kW}$) & \textbf{Verified} \\
-\bottomrule
-\end{tabularx}
-\end{table}
+% [Table 4 integrated into Table 1]
+
 
 \subsubsection{\textbf{$\mathrm{Sb_2S_3}$ Phase-Change Material and Graphene Micro-Heaters}}
 
@@ -1391,7 +1088,7 @@ Thermal Stability & Bounded Passive & Bounded Passive & Bounded Passive \\
 \subsubsection{\textbf{Architectural Properties of 16-Tree Fermat Routing}}
 The Asymmetric 16-Tree Fermat Core achieves remarkable scaling characteristics:
 \begin{enumerate}
-\item \textbf{Monolithic Lithographic Feasibility:} Requires only 240 switches per multiplier, scaling to 3.93M in Mini and 125.8M in Datacenter, well within single-reticle 3D manufacturing limits.
+\item \textbf{Monolithic Lithographic Feasibility:} Requires only 240 switches per multiplier, scaling from 3.93M in the 16-tile Model~1A prototype ($16,384$ multipliers) and 7.86M in the 32-tile Mini deployment ($32,768$ multipliers) up to 125.8M in Datacenter, well within single-reticle 3D manufacturing limits.
 \item \textbf{High Optical Headroom:} Achieves an ultra-low fabric loss of $1.61\,\mathrm{dB}$, preserving a robust $+6.142\,\mathrm{dB}$ optical link margin without in-line amplification.
 \item \textbf{Picosecond Core Latency:} Restricts optical time-of-flight across the switch fabric to $1.33\,\mathrm{ps}$, enabling sub-100~ps single-computation latency.
 \item \textbf{Algebraic Completeness:} Maps $\mathbb{Z}_{17}$ with $100\%$ state space efficiency ($289/289$ states) and enables division-free Radix-16 $\mathbb{Z}_{257}$ modular reduction.
@@ -1402,51 +1099,7 @@ The Asymmetric 16-Tree Fermat Core achieves remarkable scaling characteristics:
 
 After eliminating analog accumulation and static routing power through One-Hot spatial encoding and non-volatile PCM switching, the next dominant scaling constraint becomes optical propagation loss. Across multi-millimeter silicon photonic distribution trees and high-radix splitters, optical power attenuates significantly. Without rigorous link budget engineering and adequate initial launch power, the signal intensity can decay below reliable detection thresholds at the photodetectors.
 
-\subsubsection{\textbf{Rejection of In-Line Optical Amplifiers and Energy Conservation Bounds}}
-To resolve this attenuation, conventional photonic accelerators typically propose embedding intermediate optical amplifiers directly within the high-speed routing datapath. JANUS rigorously evaluates two primary amplifier classes and demonstrates that both violate physical scalability:
-
-\begin{itemize}
-\item \textbf{Semiconductor Optical Amplifiers (SOAs):} Conventional discrete or integrated SOAs restore optical amplitude via electrical carrier injection. However, each SOA module consumes significant electrical bias power ($P_{SOA}$ $\approx$ 50--1,800 mW ). For a large-scale computational mesh containing $N_{channel}$ $\approx$ 600,000 active amplification sites across all multipliers and tiles, the total electrical power required for SOA bias becomes:
-
-\begin{equation}
-\begin{aligned}
-P_{\mathrm{SOA,total}}
-&= N_{\mathrm{channel}} \times P_{\mathrm{SOA,site}} \\
-&\approx 600{,}000 \times 50~\mathrm{mW}
-= 30~\mathrm{kW}
-\end{aligned}
-\end{equation}
-
-This 30 kW power draw exceeds practical chip-scale thermal dissipation limits (< 200 W) by over two orders of magnitude. Furthermore, SOAs introduce amplified spontaneous emission (ASE) noise ( ${\sigma^{2}}_{ASE}$ $\propto$ G$n_{sp}$B), degrading signal-to-noise ratio ($SNR_{out}$ < $SNR_{in}$) and corrupting exact integer arithmetic recoverability.
-
-\item \textbf{Cavity Ring Resonator Parametric Amplifiers (GaP or $Si_3N_4$ OPO):} To avoid ASE noise and electrical bias overhead, all-optical cavity-enhanced parametric amplifiers operating via second- or third-order optical nonlinearities ( $\chi^{2}$ in Gallium Phosphide or $\chi^{3}$ in Silicon Nitride) were evaluated. However, attempting to amplify 100 GHz wave-pipelined data pulses (5 ps pulse width) within a high- Q microring resonator encounters a fundamental Quality Factor versus Bandwidth Wall . For a transform-limited 5 ps pulse, the required optical signal bandwidth is:
-
-
-\begin{equation}
-\Delta f_{pulse} \approx \frac{0.44}{\tau}
-= \frac{0.44}{5 \times 10^{-12}} \approx 88 GHz.
-\end{equation}
-
-To pass this 88 GHz signal spectrum without temporal pulse broadening or severe spectral filtering, the microring cavity bandwidth $\Delta$ $f_{cavity}$ = $f_{0}$/Q must satisfy $\Delta$ $f_{cavity}$ $\ge$ $\Delta$$f_{pulse}$. At $\lambda$ = 1064 nm ($f_{0}$ $\approx$ 282 THz),
-this imposes an upper bound on cavity quality factor:
-
-\begin{equation}
-Q_{max} \le \frac{f_{0}}{\Delta f_{pulse}}
-= \frac{282 THz}{88 GHz} \approx 2,000-3,200
-\end{equation}
-
-At Q $\approx$ 2,000--3,200, the cavity photon buildup factor, B = Q/$\pi$ $\approx$ 637--1,018 is low. By the Law of Conservation of Energy , the optical power added to the signal beam must be strictly supplied by the pump beam:
-
-\begin{equation}
-P_{signal,out} - P_{signal,in} \le \eta_{\text{conv}} \cdot P_{pump}
-\end{equation}
-
-Because low buildup factor B yields weak nonlinear interaction per pass, achieving 30 dB of parametric gain from a low-power pump becomes physically impossible. Supplying the required multi-milliwatt optical pump power across 600,000 spatial sites demands tens of watts of total optical pump distribution, while generating substantial spontaneous parametric fluorescence noise. 
-\end{itemize}
-
-Furthermore, extracting both the amplified signal ray and the idler/pump ray post-cavity introduces additional directional coupling insertion loss and beam-separation complexity.
-
-Therefore, the Law of Conservation of Energy and strict chip-scale thermal budgets ( < 200 W ) structurally force the elimination of all intermediate optical gain elements from the signal path.
+As established in Section~\ref{sec:loss_accumulation}, in-line optical amplifiers (SOAs) accumulate spontaneous emission noise ($\sigma_{\mathrm{ASE}}^2 \propto G n_{\mathrm{sp}} B$) that destroys exact residue recoverability, while drawing unmanageable electrical power ($>30\,\mathrm{kW}$). JANUS structurally eliminates all intermediate optical gain elements, closing the optical link through high launch power passive fan-out and high-sensitivity avalanche photodetection.
 
 \subsubsection{\textbf{Wavelength Selection: 1064 nm Yb-Fiber vs. 1550 nm Erbium}}
 Surviving high passive fan-out losses without intermediate amplification requires multi-watt launch powers. At the conventional telecommunications wavelength of 1550 nm, Erbium-doped fiber amplifiers (EDFAs) exhibit a fundamental quantum defect efficiency limit dictated by the pump-to-signal photon energy ratio:
@@ -1486,7 +1139,7 @@ With a master Yb-fiber laser delivering $P_{\text{laser}} = 100\,\text{W}$ (+50.
 
 \subsubsection{\textbf{Ge/Si $\mathrm{SAC^2M}$ Avalanche Photodetection}}
 
-To achieve reliable binary One-Hot discrimination at $-18.59\,\text{dBm}$ input power across a 100~GHz clock rate (within the device's inherent 105~GHz receiver bandwidth) without preamplification, JANUS replaces conventional PIN photodetectors with high-speed Separate-Absorption-Charge-Cliff-Multiplication ($\mathrm{SAC^2M}$) Ge/Si avalanche photodetectors \cite{Chen2025}. 
+To achieve reliable binary One-Hot discrimination across delivered optical power levels from $-12.70\,\text{dBm}$ (100\,W carrier) down to $-16.90\,\text{dBm}$ (Model~1A sign-off corner) and $-18.59\,\text{dBm}$ (extreme degradation boundary) across a 100~GHz clock rate (within the device's inherent 105~GHz receiver bandwidth) without preamplification, JANUS replaces conventional PIN photodetectors with high-speed Separate-Absorption-Charge-Cliff-Multiplication ($\mathrm{SAC^2M}$) Ge/Si avalanche photodetectors \cite{Chen2025}. 
 
 By confining impact ionisation to a thin silicon multiplication cliff layer separated from the germanium absorption region, these devices achieve internal avalanche gain $M = 7$ with an effective impact ionisation ratio $k \approx 0.06$. This yields a gain-bandwidth product of 441~GHz and an exceptionally low McIntyre excess noise factor:
 
@@ -1496,20 +1149,22 @@ F(M) = M\left[1-(1-k)
 \approx 2.0
 \end{equation}
 
-Paired with a receiverless 5 fF charge-integration front end and a StrongARM regenerative latch, the receiver incorporates an electro-optic Injection-Locked Oscillator (ILO) comb-referenced clock that reduces pulse timing jitter to 50 fs rms. The receiver sensitivity for a target bit error rate of $\le 10^{-36}$, based on an exact physical integrate-and-dump Q-factor reconciliation ($Q \approx 12.72$), is derived in Appendix~\ref{app:apd_sensitivity} as:
-
+Paired with a receiverless 5 fF charge-integration front end and a StrongARM regenerative latch, the receiver incorporates an electro-optic Injection-Locked Oscillator (ILO) comb-referenced clock that reduces pulse timing jitter to 50 fs rms. The receiver sensitivity for a target bit error rate of $\le 10^{-36}$ is derived from the integrate-and-dump $Q$-factor ($Q \approx 12.72$, with $\sigma_{\mathrm{TIA}} = 1.8\,\mu\mathrm{A}$, $M=7$, and responsivity $R \approx 0.8\,\mathrm{A/W}$):
 \begin{equation}
-P_{\text{sens,practical}} \approx -23.20\,\text{dBm}.
+P_{\mathrm{sens}} = \frac{Q \cdot \sigma_{\mathrm{TIA}}}{M \cdot R} = \frac{9.38 \times 1.8 \times 10^{-6}}{7 \times 0.8} \approx 3.02\,\mu\mathrm{W} = -25.20\,\mathrm{dBm}.
+\end{equation}
+Adding a conservative $2.0\,\mathrm{dB}$ implementation margin for excess noise, coupling loss, and APD gain non-uniformity yields the practical binary detection sensitivity:
+\begin{equation}
+P_{\text{sens,practical}} \approx -23.20\,\text{dBm} \approx 4.79\,\mu\mathrm{W}.
 \end{equation}
 
-Consequently, the delivered signal intensity of $-18.59\,\text{dBm}$ establishes a robust $+4.61\,\text{dB}$ link margin (representing a $> 2.88\times$ power margin over the $10^{-18}$ BER threshold):
+Consequently, under the master 100\,W Yb-fiber carrier ($P_{\mathrm{det}} = -12.70\,\text{dBm}$), the system establishes an abundant $+10.50\,\text{dB}$ link margin over practical sensitivity ($P_{\text{sens,practical}} = -23.20\,\text{dBm}$). In the compact 2.21\,W Model~1A processor, nominal delivered power ($P_{\mathrm{det}} = -14.63\,\text{dBm}$) provides $+8.41\,\text{dB}$ margin (and $+6.142\,\text{dB}$ under the conservative $-16.90\,\text{dBm}$ sign-off corner). Even under the extreme unpassivated degradation corner of $-18.59\,\text{dBm}$, the architecture preserves a robust $+4.61\,\text{dB}$ link margin (a $> 2.88\times$ power safety factor over the $10^{-18}$ BER threshold):
 
 \begin{equation}
 \begin{aligned}
-\mathrm{Margin}
-&= P_{\mathrm{det}} - P_{\mathrm{sens,practical}} \\
-&= (-18.59~\mathrm{dBm}) - (-23.20~\mathrm{dBm})
-= +4.61~\mathrm{dB}.
+\mathrm{Margin}_{\mathrm{100W}} &= (-12.70\,\mathrm{dBm}) - (-23.20\,\mathrm{dBm}) = +10.50\,\mathrm{dB}, \\
+\mathrm{Margin}_{\mathrm{Model\,1A}} &= (-16.90\,\mathrm{dBm}) - (-23.04\,\mathrm{dBm}) = +6.142\,\mathrm{dB}, \\
+\mathrm{Margin}_{\mathrm{corner}} &= (-18.59\,\mathrm{dBm}) - (-23.20\,\mathrm{dBm}) = +4.61\,\mathrm{dB}.
 \end{aligned}
 \end{equation}
 
@@ -1530,68 +1185,7 @@ After eliminating analog precision collapse, routing thermodynamics, and amplifi
 
 While spectrally multiplexed systems improve theoretical bandwidth density, they become increasingly unstable at large optical powers due to nonlinear inter-channel interactions. JANUS therefore abandons multi-wavelength scaling entirely and instead adopts a single-wavelength coherent spatial fanout architecture.
 
-\subsubsection{\textbf{Failure of Dense Wavelength-Divion Scaling}}
-
-In conventional DWDM systems, the total optical field within a shared waveguide is:
-
-\begin{equation}
-E(t) = \sum_{k=1}^{N_{\lambda}} A_k e^{j\omega_k t} 
-\end{equation}
-
-where: $N_{\lambda}$ is the number of wavelength channels, $A_k$ is channel amplitude,and $\omega_{k}$ is optical carrier frequency.
-
-As optical intensity increases, nonlinear interactions emerge through the Kerr effect \cite{Saleh2019}, \cite{Boyd2020}:
-\begin{equation}
-n = n_0 + n_2I
-\end{equation}
-
-where $n_2$ is the nonlinear refractive coefficient and I is optical intensity.
-
-The dominant nonlinear failure mechanisms become:
-\begin{itemize}
-\item Four-Wave Mixing (FWM),
-\item Cross-Phase Modulation (XPM),
-\item Self-Phase Modulation (SPM),
-\item Inter-channel Beat Noise.
-\end{itemize}
-
-Four-Wave Mixing generates additional spectral components:
-
-\begin{equation}
-\omega_{\text{FWM}} = \omega_1 + \omega_2 - \omega_3 
-\end{equation}
-
-These parasitic frequencies overlap existing computational channels, creating false optical states. The nonlinear interference power approximately scales as:
-
-\begin{equation}
-P_{NL} \propto \gamma P^{3} L^{2}
-\end{equation}
-
-where: $\gamma$ is the nonlinear coefficient, P is optical power, and L is interaction length.
-
-Thus, increasing wavelength density eventually increases nonlinear corruption superlinearly. The resulting contradiction becomes higher spectral density inexorably leads to higher nonlinear corruption, creating a self-limiting ceiling for DWDM scaling.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.1cm and 1cm,
-    block/.style={draw, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=0.9cm, align=center, font=\small\sffamily},
-    highlight/.style={draw=red!80!black, fill=red!5, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=1.1cm, align=center, font=\small\sffamily\bfseries},
-    arrow/.style={-Stealth, thick}
-]
-\node[block] (b1) {Higher\\Spectral Density};
-\node[block, below=of b1] (b2) {Higher\\Nonlinear Mixing};
-\node[highlight, below=of b2] (b3) {Lower\\Computational\\Integrity};
-
-\draw[arrow] (b1) -- (b2);
-\draw[arrow] (b2) -- (b3);
-\draw[arrow, red!70!black, dashed] (b3.east) to[out=30, in=-30] node[right, font=\footnotesize\bfseries] {Trade-off} (b1.east);
-\end{tikzpicture}
-\caption{The performance contradiction inherent in the modulation scheme: increasing spectral efficiency directly induces signal degradation mechanisms.}
-\label{fig:modulation_contradiction}
-\end{figure}
-
-Importantly, this failure cannot be completely removed through post-processing. Filtering suppresses parasitic side-bands only after nonlinear mixing has already corrupted the optical field. Therefore, the informational integrity of the signal is fundamentally degraded before detection occurs.
+As detailed in Section~\ref{sec:nonlinear_failure}, dense wavelength multiplexing (DWDM) introduces severe inter-channel four-wave mixing ($\omega_{\mathrm{FWM}} = \omega_1 + \omega_2 - \omega_3$) and cross-phase modulation that scale superlinearly with optical power density ($\sigma_{\mathrm{NL}}^2 \propto \gamma^2 P^3 L_{\mathrm{eff}}^2 / A_{\mathrm{eff}}$). JANUS eliminates inter-channel nonlinear spectral interactions by operating on exactly one optical carrier wavelength ($\lambda_0 = 1064\,\mathrm{nm}, N_\lambda = 1$), scaling computational bandwidth exclusively through spatial waveguides.
 
 \subsubsection{\textbf{Single-Wavelength Reformulation}}
 
@@ -1626,26 +1220,8 @@ P_{ghost} \rightarrow 0
 \end{equation}
 under ideal operation.
 
-\begin{table}[htbp]
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\caption{COMPARISON BETWEEN DWDM SCALING AND JANUS SINGLE-WAVELENGTH FANOUT}
-\label{tab:table7}
-\begin{tabularx}{\columnwidth}{@{}Xcc@{}}
-\toprule
-\textbf{Metric} & \textbf{DWDM Systems} & \textbf{JANUS Fanout} \\
-\midrule
-Wavelength Channels & Many ($>64$) & $\mathbf{1}$ ($1064\,\mathrm{nm}$) \\
-Four-Wave Mixing & Present & \textbf{Suppressed} \\
-Cross-Phase Modulation & Present & \textbf{Suppressed} \\
-Spectral Beat Noise & Present & \textbf{Suppressed} \\
-Inter-Channel Crosstalk & High & \textbf{Minimal} \\
-Scaling Mechanism & Spectral ($N_\lambda$) & \textbf{Spatial} ($N_{\mathrm{spatial}}$) \\
-Operational Stability & Unbounded Drift & \textbf{Bounded Passive} \\
-\bottomrule
-\end{tabularx}
-\end{table}
+% [Table 7 qualitative comparison integrated into text]
+
 
 \subsubsection{\textbf{Active Single-Wave Injection}}
 
@@ -1685,7 +1261,7 @@ At $P_{\text{laser}} = 100\,\text{W}$ (+50.0~dBm) launch power, each terminal re
 
 \paragraph{\textbf{Fan-Out Architecture Reconciliation Note:}}
 
-We note that the 1 : $2^{18}$ (262,144-port) passive splitting tree describes the primary optical carrier distribution from a single master laser, whereas the full Datacenter tile architecture specifies 32 tiles $\times$ 16,384 multipliers $\times$ 17 waveguides = $8{,}912{,}896$ total detector ports (524,288 active per cycle). These two descriptions address different points within the hierarchical optical distribution network; formal reconciliation mapping each of the 262,144 passive carrier outputs to the active $1 \times 17$ $\mathrm{LiTaO_3}$ electro-optic input routers across tiles remains open engineering work, as noted in Appendix~\ref{app:open_problems}. Because active single-wave injection routes only a single One-Hot channel per multiplier, no power is wasted on dark channels. Importantly, all signal channels remain phase coherent because they originate from the same master carrier.
+We note that the 1 : $2^{18}$ (262,144-port) passive splitting tree describes the primary optical carrier distribution from a single master laser, whereas the full Datacenter tile architecture specifies 32 tiles $\times$ 16,384 multipliers $\times$ 17 waveguides = $8{,}912{,}896$ total detector ports (524,288 active per cycle). These two descriptions address different points within the hierarchical optical distribution network; formal reconciliation mapping each of the 262,144 passive carrier outputs to the active $1 \times 17$ $\mathrm{LiTaO_3}$ electro-optic input routers across tiles remains open engineering work, as discussed in Section~\ref{sec:open_challenges}. Because active single-wave injection routes only a single One-Hot channel per multiplier, no power is wasted on dark channels. Importantly, all signal channels remain phase coherent because they originate from the same master carrier.
 
 Thus:
 \begin{equation}
@@ -1802,7 +1378,7 @@ The total representable dynamic range becomes:
 M = \prod_{i=1}^k m_i \approx 2^{8k}
 \end{equation}
 
-Thus, large integer precision emerges from distributed modular composition rather than monolithic analog accumulation. Physically, each optical tile implements an \textbf{8-bit residue channel} over 256 spatial waveguides, with a chosen modulus $m_i \le 256$.
+Thus, large integer precision emerges from distributed modular composition rather than monolithic analog accumulation. Physically, each optical tile implements a modular residue channel across the 17 spatial waveguides ($WG_0$ zero bypass + $WG_1\dots WG_{16}$ active states) of the Asymmetric 16-Tree Fermat Core, supporting modular bases $m_i \le 257$ (e.g., $m_i \le 256$ in standard 8-bit residue decomposition).
 
 Therefore:
 \begin{equation}
@@ -1834,19 +1410,7 @@ gcd(m_i, m_j) = 1 \forall i \neq  j
 the unique reconstructed integer becomes:
 
 \begin{equation}
-X = \sum_{i=1}^k x_i M_i N_i \mod M
-\end{equation}
-
-where:
-
-\begin{equation}
-M_i = \frac{M}{m_i}
-\end{equation}
-
-and
-
-\begin{equation}
-N_i = {M_i}^{-1} \mod m_i
+X = \sum_{i=1}^k x_i M_i N_i \bmod M, \quad M_i = \frac{M}{m_i}, \quad N_i = M_i^{-1} \bmod m_i.
 \end{equation}
 
 This reconstruction occurs entirely within CMOS logic after optical routing completes. Importantly, optical hardware never performs high-precision analog accumulation.
@@ -1873,9 +1437,7 @@ This behavior is dangerous for exact computation because errors remain numerical
 
 The resulting system exhibits 
 
-\begin{center}
-\textbf{Silent epistemic corruption}
-\end{center}
+\textit{Silent epistemic corruption}
 
 where incorrect outputs remain computationally believable. Such behavior is unacceptable for deterministic exact arithmetic.
 
@@ -1883,52 +1445,19 @@ where incorrect outputs remain computationally believable. Such behavior is unac
 
 JANUS substantially suppresses graceful degradation through CRT sensitivity \cite{Xia2000}, \cite{Barsi1973,Yang2002}.
 
-Suppose one residue channel experiences error:
+Suppose residue channel $j$ experiences a transient perturbation ($x_j \to x_j + \delta$). The reconstructed result becomes $X' = (X + \delta M_j N_j) \bmod M$. Because $M_j = M / m_j \gg 1$, the deviation scales proportionally with the global dynamic range:
 \begin{equation}
-x_j \rightarrow x_j + \delta
-\end{equation}
-
-The reconstructed result becomes:
-\begin{equation}
-X ' = X + \delta M_j N_j \mod M
-\end{equation}
-
-Because:
-\begin{equation}
-M_j = \frac{M}{m_j}
-\end{equation}
-
-the perturbation magnitude scales proportionally with the global CRT range. Thus, even a single-bit residue error produces a large reconstructed deviation:
-
-\begin{equation}
-|X ' - X| \gg |\delta| 
+|X' - X| \propto M_j \gg |\delta|.
 \end{equation}
 
 Reconstruction error does not degrade linearly --- it amplifies combinatorially across the global integer space:
 
-\begin{center}
 \textbf{Small Local Residue Fault $\rightarrow$ Discontinuous Global CRT Inconsistency}
-\end{center}
 
 The CMOS backend therefore detects highly anomalous arithmetic states with high probability. Instead of silently returning an incorrect value, the architecture invalidates the operation when CRT consistency checks fail.
 
-\begin{table}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{GRACEFUL DEGRADATION VERSUS CRT-VISIBILITY ARITHMETIC}
-\label{tab:table9}
-\begin{tabular}{lcc}
-\toprule
-Metric & Conventional Systems & JANUS \\
-\midrule
-Fault Response & Graceful Degradation & Explicit Invalidation \\
-Error Scaling & Linear & Out-of-Range Projection \\
-Silent Corruptions & Undetected & Prevented \\
-Arithmetic Integrity & Statistical & Exact \\
-\bottomrule
-\end{tabular}
-\end{table}
+% [Table 9 qualitative comparison integrated into text]
+
 
 \subsubsection{\textbf{Error Detectability Bounds}}
 
@@ -1946,16 +1475,12 @@ X ' \mod m_j \neq  x_j
 Thus, the CMOS backend performs deterministic consistency verification during reconstruction.
 
 The probability of undetected residue corruption becomes:
-\begin{center}
-\textbf{$P_{undetected} \rightarrow$ 0}
-\end{center}
+$P_{\mathrm{undetected}} \to 0$
 under bounded fault assumptions.
 
 Importantly, fault visibility improves with increasing CRT dynamic range.
 Therefore, larger systems become:
-\begin{center}
 \textbf{more fault visible rather than less.}
-\end{center}
 
 This behavior fundamentally differs from conventional analog systems, where increasing scale typically reduces observability.
 
@@ -1987,18 +1512,18 @@ Scaling spatial RNS to wide 64-bit integer operands (INT64) presents a fundament
 To make exact 64-bit RNS computation physically viable without precision collapse, JANUS enforces a strict architectural dichotomy known as Hybrid Partitioning:
 
 \begin{quote}
-\textbf{Optics exclusively performs $1 \times 1$ element-wise modular multiplication. All matrix accumulation (addition) occurs strictly in digital CMOS after the ADCs.}
+\textbf{Optics exclusively performs $1 \times 1$ element-wise modular multiplication. All wide-word accumulation (addition) occurs strictly in digital CMOS after binary StrongARM latch detection.}
 \end{quote}
 
-Because optics is restricted to multiplication, the analog optical intensity only ever represents a single bounded modular product. The massive optical accumulators were gutted, allowing the ADCs to digitize clean, low-intensity single products before relying on standard 64-bit CMOS digital adders to sum the $N=16$ arrays.
+Because optics is restricted to multiplication, each active waveguide conveys a single bounded modular product. High-speed StrongARM regenerative latches resolve binary waveguide states directly (zero ADCs), passing registered residues into 160-bit binary carry-save accumulators and the Dual-LUT Cross-Term Engine to sum wide GEMM arrays.
 
-\paragraph{\textbf{The Memory Trick \& Three Equations:}}
-Instead of increasing the optical tile count, JANUS splits the 64-bit operands into 32-bit halves ($X_H, X_L$ and $Y_H, Y_L$) and computes three distinct equations:
+\paragraph{\textbf{Dual-LUT Cross-Term Engine \& 3-Equation Decomposition:}}
+Instead of scaling optical tile counts, JANUS partitions 64-bit operands into 32-bit halves ($X_H, X_L$ and $Y_H, Y_L$) and computes three distinct equations:
 
 \begin{enumerate}
 \item \textbf{Equation 1 ($X_L \cdot Y_L$):} Computed fully optically in \textbf{Cluster 1} (8 tiles).
 \item \textbf{Equation 2 ($X_H \cdot Y_H$):} Computed fully optically in \textbf{Cluster 2} (8 tiles).
-\item \textbf{Equation 3 ($X_L Y_H + X_H Y_L$):} This massive cross-term is offloaded out of the optics entirely and computed via \textbf{The Memory Trick}---using ultra-fast CMOS SRAM Memory Lookup Tables (LUTs).
+\item \textbf{Equation 3 ($X_L Y_H + X_H Y_L$):} Evaluated via the \textbf{Dual-LUT Cross-Term Engine}---using localized CMOS SRAM Lookup Tables (LUTs) that decompose the 4-variable modular cross-term into parallel 16-bit lookups, achieving a $31,250\times$ memory reduction ($36\,\mathrm{GB}$ naive memory compressed to $1.152\,\mathrm{MB}$ raw / $1.5\,\mathrm{MB}$ physical on-chip SRAM).
 \end{enumerate}
 
 \paragraph{\textbf{Moduli Set Verification \& Formal Z3 Bounds:}}
@@ -2007,8 +1532,8 @@ The 8-modulus optical PRNS set allocated for Equation 1 and Equation 2 consists 
 M_8 \approx 5.68 \times 10^{19}
 \end{equation}
 
-The 32-bit halves (such as $X_H \cdot Y_H$) have a maximum product of $2^{62}$ (approximately $4.61 \times 10^{18}$). 
-Because $M_8$ strictly encapsulates the sub-products ($5.68 \times 10^{19} > 4.61 \times 10^{18}$), the system achieves zero matrix overflow. The 9th optical modulus (227) was completely stripped out of the optical layer, relegating the cross-term exclusively to the CMOS SRAM LUTs, thereby saving die real estate while guaranteeing mathematical flawlessness.
+The 32-bit halves ($X_H \cdot Y_H$) have a maximum product of $2^{62} \approx 4.61 \times 10^{18}$. 
+Because $M_8$ strictly encapsulates the sub-products ($5.68 \times 10^{19} > 4.61 \times 10^{18}$), the system guarantees zero matrix overflow. The 9th modulus ($227$) is evaluated entirely within the CMOS Dual-LUT engine, reserving optical routing exclusively for direct sub-products.
 \subsubsection{\textbf{Architectural Consequences}}
 
 Spatial CRT reconstruction fundamentally changes the fault semantics of large-scale photonic arithmetic.
@@ -2051,74 +1576,14 @@ Even moderate lateral heat diffusion perturbs silicon refractive index, destabil
 
 JANUS therefore adopts a vertically partitioned 3D Z-axis stack that thermally decouples the optical computation layer from the dominant heat sources of the system \cite{Skacel2021,Chang2017}.
 
-\subsubsection{\textbf{Failure of Planar Thermal Integration}}
-
-Conventional heterogeneous accelerators typically place digital logic, memory, optical routing, and photonic modulation structures within
-a shared two-dimensional plane \cite{Atabaki2018,Stucchi2019}.
-
-Under high compute density, the resulting thermal profile becomes:
-\begin{equation}
-T (x, y, t) \neq  constant
-\end{equation}
-
-The temperature field evolves dynamically according to the heat diffusion equation \cite{Incropera2006}:
-
-\begin{equation}
-\frac {\partial T}{\partial t}
-= \alpha\nabla^{2} T + Q
-\end{equation}
-
-where: $\alpha$ is thermal diffusivity and Q is volumetric heat generation.
-In planar architectures, heat generated by CMOS logic laterally diffuses into neighboring photonic structures.
-Because silicon refractive index depends upon temperature:
-
-\begin{equation}
-n(T ) = n_0 + \frac{dn}{dT}  \Delta T
-\end{equation}
-
-thermal gradients directly perturb optical phase:
-
-\begin{equation}
-\Delta \phi = \frac{2\pi L}{\lambda} \frac{dn}{dT} \Delta T
-\end{equation}
-
-Thus, computational heat and optical stability become physically entangled. As thermal density increases, the optical transfer matrix becomes time-varying:
-
-\begin{equation}
-H(t) \neq  H(t + \Delta t)
-\end{equation}
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1cm and 1cm,
-    block/.style={draw, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=0.9cm, align=center, font=\small\sffamily},
-    highlight/.style={draw=orange!80!black, fill=orange!5, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=0.9cm, align=center, font=\small\sffamily\bfseries},
-    arrow/.style={-Stealth, thick}
-]
-\node[block] (b1) {Higher\\Compute Density};
-\node[block, below= 1 cm of b1] (b2) {Higher\\Thermal Drift};
-\node[block, below= 1 cm of b2] (b3) {Higher\\Calibration Overhead};
-\node[highlight, below= 1 cm of b3] (b4) {Lower\\Stability};
-
-\draw[arrow] (b1) -- (b2);
-\draw[arrow] (b2) -- (b3);
-\draw[arrow] (b3) -- (b4);
-\end{tikzpicture}
-\caption{Causal degradation path from structural compute scaling to physical runtime stability limits.}
-\label{fig:causal_degradation}
-\end{figure}
-
-At large scale, sustained deterministic photonic operation becomes increasingly impractical within a shared planar thermal environment.
+As derived in Section~\ref{sec:thermal_drift}, lateral thermal diffusion in planar architectures entangles CMOS digital switching with temperature-sensitive photonic phase stability ($dn/dT \approx 1.86 \times 10^{-4}\,\mathrm{K}^{-1}$). JANUS structurally decouples these planes through a vertically partitioned 3D $Z$-axis stack:
 
 \subsubsection{\textbf{Vertically Partitioned Z-Axis Stack \& Full Package Height}}
 
 JANUS resolves planar thermal coupling through strict vertical thermal partitioning. The architecture is organized into a nested structure: a bare-die active stack enveloped by a macro-scale thermal and EMI package. The active bare-die layer stacks the following functional
 planes:
 
-\begin{center}
 \textbf{CMOS $\rightarrow$ SiO$_2$ $\rightarrow$ SiPh strata $\rightarrow$ Detectors}
-\end{center}
 
 Each layer performs a physically isolated functional role \cite{Atabaki2018}, \cite{Fenouillet2009}. The CMOS substrate (50 $\mu$m) executes digital reconstruction and verification. Above it resides the Silicon Dioxide ($SiO_2$) thermal buffer layer (100 $\mu$m). Each silicon photonic routing stratum occupies 30 $\mu$m; the number of strata varies by configuration (Mini: 3 strata, Edge: 4 strata, Datacenter: 5 strata). Detector arrays (2 $\times$ 5 $\mu$m = 10 $\mu$m interleaved two-layer block) reside above the photonic layer.
 
@@ -2161,7 +1626,7 @@ By partitioning the fabric into vertical sub-layers, the effective footprint per
 The physical footprint per configuration (accounting for routing waveguides, MMI fan-out, APD receivers, pads, and edge-exclusion overhead) is derived as follows:
 
 \begin{itemize}
-\item Mini (1--2 strata, $\approx 3.93\,\text{M}$ switches): $\approx 25\text{--}40\,\text{mm}^{2}$
+\item Mini (1--2 strata, $3.93\text{--}7.86\,\text{M}$ switches across 16--32 tiles): $\approx 25\text{--}40\,\text{mm}^{2}$
 \item Edge (2--3 strata, $\approx 15.73\,\text{M}$ switches): $\approx 60\text{--}80\,\text{mm}^{2}$
 \item Datacenter (3--4 strata, $\approx 125.83\,\text{M}$ switches): $\approx 200\text{--}300\,\text{mm}^{2}$
 \end{itemize}
@@ -2174,52 +1639,9 @@ T_{SiO_2} = 100 \mu\text{m}
 
 \subsubsection{\textbf{Thermal Isolation Through Vertical Heat Routing:}}
 
-The key architectural principle is directional thermal extraction. CMOS-generated heat preferentially propagates downward and laterally toward heat spreaders:
+The key architectural principle is directional thermal extraction: CMOS-generated heat preferentially propagates downward toward heat spreaders ($q_{\mathrm{CMOS}} \downarrow$) while photonic programming and detector heat propagate upward ($q_{\mathrm{photonic}} \uparrow$). The intermediate $\mathrm{SiO_2}$ layer acts as a thermal barrier suppressing cross-plane heat leakage, ensuring $\partial T_{\mathrm{SiPh}} / \partial T_{\mathrm{CMOS}} \to 0$ and maintaining $T_{\mathrm{SiPh}} < T_{\mathrm{critical}}$ under steady-state operation.
 
-\begin{center}
-\textbf{$q_{CMOS} \downarrow$}
-\end{center}
 
-Meanwhile, photonic programming and detector heat preferentially propagate upward:
-\begin{center}
-\textbf{$q_{photonic} \uparrow$}
-\end{center}
-
-The intermediate SiO$_2$ layer acts as a thermal moat that suppresses cross-plane heat leakage. Thus:
-
-\begin{center}
-\textbf{$\frac {\partial T_{SiPh}}{ \partial T_{CMOS}} \rightarrow 0$}
-\end{center}
-
-under steady-state operation.
-
-This thermal decoupling prevents CMOS activity spikes from directly perturbing optical routing stability.
-
-The photonic layer therefore operates within a bounded thermodynamic region:
-
-\begin{center}
-\textbf{$T_{SiPh} < T_{critical}$}
-\end{center}
-
-throughout sustained computation.
-
-\begin{table}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{1pt}
-\caption{THERMAL BEHAVIOR OF PLANAR VERSUS Z-AXIS PARTITIONED ARCHITECTURES}
-\label{tab:table10}
-\begin{tabular}{lcc}
-\toprule
-Metric & Planar Architectures & JANUS Z-Axis Stack \\
-\midrule
-Thermal Coupling & Strong & Weak \\
-CMOS-to-Photonic Drift & High & Minimal \\
-Heat Routing & Shared & Vertical Isolation \\
-Phase Stability & Poor & High \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \subsubsection{\textbf{Quantitative Thermal Resistance Network and $\Delta$ T Derivation}}
 
@@ -2246,123 +1668,24 @@ The internal Cu--Cu bond topologies complement this perimeter shunt:
 
 The density asymmetry is deliberate. The 10,000 $mm^{-2}$ sparse interface at the CMOS/ SiO$_2$ boundary presents a high vertical thermal resistance ( $R_{th,down}$ = 0.488 K/W), forcing CMOS-generated heat to route laterally into the perimeter thermal shunt rather than vertically through the optical stack. Simultaneously, the 900,000 $mm^{-2}$ dense interface at the SiPh/HS1 boundary presents a low vertical resistance ( $R_{th,up}$ = 0 .227 K /W), creating a preferential upward extraction path for photonic layer heat. The two density values thus implement directional thermal isolation by hydraulic analogy: a pinched pipe below and an open pipe above. Because $R_{th,up}$ $\ll$ $R_{th,down}$, the majority of SiPh heat is efficiently pulled upwards into the package spreaders.
 
-\paragraph{\textbf{Global SiO2 Thermal Buffer Mass:}}
-
-Instead of calculating temperature rise on an isolated per-tile basis, the physical reality of the JANUS architecture is that the 100 $\mu$m thick $\mathrm{SiO_2}$ layer is monolithic across the entire datacenter configuration having area 243.0--300.0 $\text{mm}^{2}$ per chip. Because the perimeter thermal shunt routes the vast majority of CMOS heat externally, any residual upward-leaking heat is absorbed by the monolithic $\mathrm{SiO_2}$ layer. The $\mathrm{SiO_2}$ acts as an expansive, uniform global thermal buffer, spreading heat laterally before it can penetrate any individual SiPh routing tile.
-The total thermal mass of the global $\mathrm{SiO_2}$ buffer layer is:
-
+\paragraph{\textbf{Global $\mathrm{SiO_2}$ Thermal Buffer Mass and Transient Dynamics:}}
+Instead of evaluating thermal transients on an isolated per-tile basis, the $100\,\mu\mathrm{m}$ $\mathrm{SiO_2}$ layer forms a monolithic global buffer spanning the entire $300.0\,\mathrm{mm}^2$ die. The total thermal mass and heat capacity of this global buffer ($\rho_{\mathrm{SiO}_2} = 2{,}200\,\mathrm{kg/m^3}$, $c_{p,\mathrm{SiO}_2} \approx 703\,\mathrm{J/(kg\cdot K)}$) are:
 \begin{equation}
-m_{SiO2_{global}} = A_{chip} \times h_{SiO_2} \times \rho_{\text{SiO}_2}
+m_{\mathrm{SiO}_2} = A_{\mathrm{chip}} h_{\mathrm{SiO}_2} \rho_{\mathrm{SiO}_2} \approx 6.6 \times 10^{-5}\,\mathrm{kg}, \quad C_{\mathrm{SiO}_2} \approx 0.0464\,\mathrm{J/K}.
 \end{equation}
-
-where:
+During one JIR activation cycle ($\tau_{\mathrm{JIR}} = 5\,\mu\mathrm{s}$), even under worst-case full-die transient dissipation ($P_{\mathrm{total}} = 48\,\mathrm{W}$, $Q_{\mathrm{gen}} = 240\,\mu\mathrm{J}$), the adiabatic global temperature rise is strictly bounded:
 \begin{equation}
-A_{chip} = 300.0 \times 10^{-6} m^{2}
+\Delta T_{\mathrm{cyc}} = \frac{Q_{\mathrm{gen}}}{C_{\mathrm{SiO}_2}} = \frac{240\,\mu\mathrm{J}}{0.0464\,\mathrm{J/K}} \approx 0.0052\,^\circ\mathrm{C}\text{ per JIR cycle}.
 \end{equation}
-
+Under sustained full-load operation, the upward thermal extraction path dominates ($R_{\mathrm{th,up}} = 0.227\,\mathrm{K/W}$ vs. $R_{\mathrm{th,down}} = 0.488\,\mathrm{K/W}$), restricting steady-state SiPh rise to $\Delta T_{\mathrm{steady}} = P_{\mathrm{tile}} R_{\mathrm{th,up}} \approx 0.34\,^\circ\mathrm{C}$. This maintains an extraordinary $17\times$ safety margin below the critical phase excursion threshold:
 \begin{equation}
-h_{SiO2} = 100 \times 10^{-6} m
+\Delta T_{\mathrm{crit}} = \frac{\lambda_0 \phi_{\mathrm{max}}}{2\pi L \frac{dn}{dT}} = \frac{1064\,\mathrm{nm} \times \pi}{2\pi (500\,\mu\mathrm{m}) (1.86 \times 10^{-4}\,\mathrm{K}^{-1})} \approx 5.7\,^\circ\mathrm{C}.
 \end{equation}
-
+Furthermore, vertical heat diffusion across the baseline $100\,\mu\mathrm{m}$ buffer takes:
 \begin{equation}
-\rho_{\text{SiO}_2} = 2,200 kg/m^{3}
+\tau_{\mathrm{diff}} = \frac{h_{\mathrm{SiO}_2}^2}{\alpha_{\mathrm{SiO}_2}} = \frac{(100\,\mu\mathrm{m})^2}{9.05 \times 10^{-7}\,\mathrm{m^2/s}} \approx 11.05\,\mathrm{ms} \gg \tau_{\mathrm{JIR}} = 5\,\mu\mathrm{s}
 \end{equation}
-
-Thus:
-\begin{equation}
-m_{{SiO_2}_{global}} \approx 6.6 \times 10^{-5} kg
-\end{equation}
-
-With the specific heat of SiO$_2$ ($c_{p,SiO_2}$ $\approx$ 703 J/(kg $\cdot$ K)), the global buffer heat capacity becomes:
-
-\begin{equation}
-C_{\text{SiO}_2, \text{global}} = 6.6 \times 10^{-5} \times 703 \approx 0.04639 J/K
-\end{equation}
-
-\paragraph{\textbf{Per-Cycle Temperature Rise ( $\Delta$T ):}}
-
-During one JIR activation cycle ( $\tau$JIR = 5 $\mu$s), if a transient thermal load---such as residual package heat equivalent to the full 1.5 W per-tile optical dissipation scaled across all 32 tiles (P$_{total}$ = 48 W)---impacts the buffer:
-
-\begin{equation}
-Q_{gen,global} = P_{total} \times \tau_{JIR} = 48 \times 5 \times 10^{-6} = 240 \mu J
-\end{equation}
-
-Assuming adiabatic heating over the 5 $\mu$s window, the global temperature rise is:
-
-\begin{equation}
-\Delta T = \frac {Q_{gen,global}}{C_{\text{SiO}_2, \text{global}}}
-= \frac {240 \times 10^{-6}}{0.04639} \approx 5.17 \times 10^{-3} K
-\end{equation}
-
-Thus, even under absolute worst-case global synchronization:
-\begin{equation}
-\Delta T \approx 0.0052 \,^{\circ}\mathrm{C} \text{ per JIR activation cycle}
-\end{equation}
-
-This minor transient $\Delta T$ confirms that the monolithic $\mathrm{SiO_2}$ buffer, in conjunction with the perimeter thermal shunt, substantially dampens high-frequency thermal transients before they can approach the $1^\circ\mathrm{C}$ phase-drift threshold in the SiPh layer.
-
-\paragraph{\textbf{Thermal Resistance Network:}}
-
-The Z-axis stack implements a series--parallel thermal resistance network. The upward extraction path dominates because the 900,000 $mm^{-2}$ bond density and $SiO_2$ filling between the SiPh layer and Heat Spreader 1 minimizes $R_{th,up}$. Conversely, the downward path relies on the sparse 10,000 $mm_{-2}$ interface to maximize $R_{th,down}$. Because $R_{th,up}$ $\ll$ $R_{th,down}$, the majority of SiPh heat is efficiently pulled upwards into the package spreaders rather than trapping in the CMOS.
-
-\paragraph{\textbf{Steady-State Temperature Budget:}}
-
-Under sustained full-load operation, the steady-state temperature rise of the SiPh layer above ambient is:
-
-\begin{equation}
-\Delta T_{SiPh,steady} = P_{tile} \times R_{th,up} \approx 1.5 \times 0.227 \approx 0.34 \,^{\circ}\mathrm{C}
-\end{equation}
-
-This is well within the photonic stability envelope. The critical phase-stability threshold for a silicon waveguide of length L = 500 $\mu$m is:
-
-\begin{equation}
-\Delta T_{crit} = \frac{\lambda \cdot \phi_{max}}{2\pi L \cdot \frac{dn}{dT}}
-\end{equation}
-
-\begin{equation}
-= \frac{1.064 \times 10^{-6} \times \pi}{2\pi \times 500 \times 10^{-6} \times 1.86 \times 10^{-4}} \approx 5.7 \,^{\circ}\mathrm{C}
-\end{equation}
-
-for a full $\pi$-radian phase excursion. The steady-state operating margin is therefore:
-
-\begin{equation}
-Margin = \frac {\Delta T_{crit}}{\Delta T_{SiPh,steady}}
-\approx \frac {5.7}{0.34} \approx 17\times
-\end{equation}
-
-confirming that the SiPh routing layer remains comfortably inside its phase-stable operating window under all sustained workloads. The large margin directly follows from the increased thermal mass and lower thermal resistance of the 7.5 $mm^{2}$ Z-staged tile.
-
-\paragraph{\textbf{Vertical Diffusion Time Constant:}}
-
-The time for heat to diffuse vertically through the 100 $\mu$m $SiO_2$ buffer layer, which constitutes the dominant thermal barrier, is:
-
-\begin{equation}
-\tau_{diff} = \frac {{h_{SiO_2}}^{2}}{\alpha_{SiO_2}}
-\end{equation}
-
-where the thermal diffusivity of $SiO_2$ is:
-
-\begin{equation}
-\alpha_{SiO_2} = \frac{k_{SiO_2}}{\rho_{SiO_2} c_{p,SiO_2}}
-\approx \frac{1.4}{2,200 \times 703} \approx 9.05 \times 10^{-7} m^{2}/s
-\end{equation}
-
-Therefore:
-
-\begin{equation}
-\tau_{\mathrm{diff}}
-=
-\frac{(100 \times 10^{-6})^{2}}
-     {9.05 \times 10^{-7}}
-\approx
-1.105 \times 10^{-2}~\mathrm{s}
-\end{equation}
-
-\begin{equation}
-\tau_{\mathrm{diff}} \approx 11.05~\mathrm{ms}
-\end{equation}
-
-This 11.05 ms vertical diffusion time is more than 2,200 JIR cycles long ( $\tau$JIR = 5 $\mu$s). Consequently, any CMOS-originated thermal transient is completely attenuated by the $SiO_2$ layer before it can propagate into the SiPh plane on a timescale relevant to optical computation.
+(expanding to $\tau_{\mathrm{diff}} = 69.06\,\mathrm{ms}$ under the $250\,\mu\mathrm{m}$ monolithic $\mathrm{SiO_2}$ buffer implemented in the Model~1A processor die). Consequently, any CMOS-originated thermal transient is completely attenuated by the $\mathrm{SiO_2}$ buffer before it can propagate into the SiPh routing stratum.
 
 \begin{table*}[htbp]
 \centering
@@ -2434,11 +1757,7 @@ Each photonic tile implements a full N $\times$ N matrix--vector multiplication,
 results per clock cycle. To read every result, a photodetector must be placed at the terminus of every output waveguide of every multiplier:
 
 \begin{equation}
-N_{\mathrm{det}} = N_{\mathrm{tiles}} \times N_{\mathrm{mult/tile}} \times N_{\mathrm{waveguides}}
-\end{equation}
-
-\begin{equation}
-= 32 \times 16{,}384 \times 17 = \mathbf{8{,}912{,}896}
+N_{\mathrm{det}} = N_{\mathrm{tiles}} \times N_{\mathrm{mult/tile}} \times N_{\mathrm{waveguides}} = 32 \times 16{,}384 \times 17 = \mathbf{8{,}912{,}896}
 \end{equation}
 
 Although 8,912,896 detectors are physically present across the 17 spatial waveguides ($WG_0 \dots WG_{16}$), the total active detector count per full 10~ps clock cycle is only $N_{\text{active}} = N_{\text{tiles}} \times N_{\text{dim}}^2 = 524{,}288$, because One-Hot encoding guarantees exactly one waveguide per multiplier carries light. However, to conserve optical master laser power and eliminate an entire layer of passive splitting, the 10~ps ($100\text{ GHz}$) clock cycle is time-multiplexed into two discrete 5~ps phases. At any instantaneous moment (i.e., within a single 5~ps phase), only half of the photodetectors (262,144) are actively illuminated. This two-phase illumination strategy allows the optical energy to be steered sequentially rather than split simultaneously, functionally doubling the delivered optical power per receiver. Over the full 10~ps cycle, all 524,288 detection events are resolved. The baseline spatial activity ratio $\alpha = 1/17$ reduces dynamic detector power proportionally, as quantified in the power budget (Table~\ref{tab:table15}). The 105~GHz Ge/Si $\mathrm{SAC^2M}$ APD photodetectors occupy approximately $1.5\,\mu\text{m}^2$ per device; $8.91 \times 10^{6}$ detectors require only $\approx 13.37\,\text{mm}^2$ of total detector area within the 300~$\text{mm}^{2}$ Datacenter die footprint.
@@ -2469,27 +1788,7 @@ This modularity substantially improves manufacturability relative to monolithic 
 Thermal stability is preserved across all JANUS deployment scales because optical routing density remains vertically isolated from the
 dominant CMOS heat plane. Importantly, thermal behavior does not catastrophically degrade with routing scale because the dominant heat paths remain directionally partitioned.
 
-\begin{table}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{THERMAL STABILITY SCALING ACROSS JANUS CONFIGURATIONS}
-\label{tab:table12}
-\begin{tabular}{lccc}
-\toprule
-Metric & Mini & Edge & Datacenter \\
-\midrule
-SiPh Routing Strata & 3 & 4 & 5 \\
-Active Stack Height & $250\ \mu\text{m}$ & $280\ \mu\text{m}$ & $310\ \mu\text{m}$ \\
-Total Package Height & $\approx 0.58\text{ mm}$ & $\approx 0.61\text{ mm}$ & $\approx 0.64\text{ mm}$ \\
-$\text{SiO}_2$ Thermal Buffer & $100\ \mu\text{m}$ & $100\ \mu\text{m}$ & $100\ \mu\text{m}$ \\
-CMOS Thermal Coupling & Minimal & Minimal & Minimal \\
-Optical Phase Drift & Bounded & Bounded & Bounded \\
-Calibration Stability & Stable & Stable & Stable \\
-Thermal Equilibrium & Maintained & Maintained & Maintained \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \subsubsection{\textbf{Architectural Consequences}}
 
@@ -2505,248 +1804,20 @@ The 3D Z-axis stack fundamentally changes the thermodynamic behavior of large-sc
 
 Thus, JANUS does not merely cool a photonic accelerator. It reorganizes the entire computational stack around directional thermal stability.
 
-\section{SYSTEM -LEVEL SCALING ANALYSIS}
+\section{SYSTEM-LEVEL SCALING ANALYSIS}
+\label{sec:system_scaling}
 
+\subsection{\textbf{System-Level Scaling and Physical Equilibrium}}
 
-\subsection{\textbf{Constraint-Bounded Scaling Philosophy}}
-
-Conventional accelerator architectures often evaluate scalability using peak theoretical throughput alone. Such methodology is fundamentally misleading for photonic systems because large-scale operation is dominated not by arithmetic density, but by the interaction between thermal, optical, informational, and nonlinear constraints.
-
-JANUS instead adopts a bounded scaling philosophy:
-
-\begin{center}
-\textbf{Scalability $\equiv$ Ability to Remain Physically Stable Under Growth}
-\end{center}
-
-Thus, every scaling dimension must remain bounded simultaneously:
-
-\begin{center}
-\text{$P_{noise} < P_{signal} < P_{sat}$}
-\end{center}
-
-\begin{center}
-\text{$T_{junction} < T_{critical}$}
-\end{center}
-
-\begin{center}
-\text{$\phi_{\text{drift}} < \phi_{\text{max}}$}
-\end{center}
-
-\begin{center}
-\text{$P_{undetected}$ $\rightarrow$ 0}
-\end{center}
-
-Only architectures satisfying all four constraints simultaneously can sustain exact arithmetic at large scale.
-
-\subsection{\textbf{Spatial Scaling Characteristics}}
-
-Unlike conventional analog photonic accelerators, JANUS scales primarily through spatial parallelism.
-
-Throughput scales as:
-\begin{center}
-\text{T $\propto$ N$_{\text{tiles}}$}
-\end{center}
-
-where: $N_{tiles}$ is the number of independent optical residue tiles.
-
-Importantly, local optical precision remains bounded regardless of system scale:
-
-\begin{center}
-\text{P$_{local}$ = constant}
-\end{center}
-
-Thus, global arithmetic precision increases through modular composition rather than increasing analog signal fidelity. This fundamentally differs from conventional analog systems, where precision scaling requires exponentially increasing SNR.
-
-The resulting architecture obeys:
-\begin{center}
-\text{Global Precision $\propto N_{\text{tiles}}$}
-\end{center}
-
-while:
-\begin{center}
-\text{Local Analog Complexity $\approx$ constant}
-\end{center}
-
-This bounded-local-complexity principle is central to the scalability of JANUS.
-
-\subsection{\textbf{Routing Complexity Scaling}}
-
-The routing complexity of the JANUS Asymmetric 16-Tree Fermat Core scales as:
-\begin{center}
-\text{$O(M \log M)$ with $M = 16$}
-\end{center}
-
-rather than $O(M^2)$ for conventional crossbars or $O(N_{\mathrm{alphabet}} \log N_{\mathrm{alphabet}})$ across unreduced permutation meshes. Exploiting One-Hot spatial sparsity---wherein only one waveguide is active per residue multiplication---each active waveguide ($WG_1 \dots WG_{16}$) routes through an independent 4-stage binary tree:
+Conventional accelerator architectures evaluate scalability using theoretical peak arithmetic density alone. For large-scale photonic tensor processors, however, physically sustainable throughput is strictly governed by simultaneous stability across thermal, optical, informational, and circuit regimes:
 \begin{equation}
-S_{\mathrm{16\text{-}tree}} = \log_2(16) = 4 \text{ stages (universal)}
+P_{\mathrm{noise}} < P_{\mathrm{signal}} < P_{\mathrm{sat}}, \quad T_{\mathrm{junction}} < T_{\mathrm{critical}}, \quad |\Delta\phi_{\mathrm{drift}}| < \phi_{\mathrm{max}}.
 \end{equation}
+Rather than scaling through dense wavelength multiplexing ($T \propto N_\lambda$), which incurs superlinear four-wave mixing noise ($\sigma_{\mathrm{NL}}^2 \propto \gamma^2 P^3 L_{\mathrm{eff}}^2 / A_{\mathrm{eff}}$) and severe cross-phase modulation, JANUS scales throughput strictly through spatial parallelism ($T \propto N_{\mathrm{spatial}}$). Each computation traverses a physically independent waveguide path ($\partial C_i / \partial C_j \approx 0$ for $i \neq j$), structurally confining inter-channel optical entropy.
 
-Thus, across all three deployment configurations:
-\begin{center}
-\textbf{S$_{Mini}$ = S$_{Edge}$ = S$_{Datacenter}$ = 4}
-\end{center}
+Crucially, because the Asymmetric 16-Tree Fermat Core maintains a strictly invariant routing depth of $S = \log_2(16) = 4$ binary stages across all tile matrix dimensions ($N = 32$ to $128$), optical fabric insertion loss is bounded to $1.61\,\mathrm{dB}$. This preserves a robust $+4.61\,\mathrm{dB}$ to $+10.50\,\mathrm{dB}$ binary detection margin over the Ge/Si SAC$^2$M APD receiver threshold ($-23.20\,\mathrm{dBm}$) across all deployment tiers without intermediate optical amplification. 
 
-establishing an ultra-shallow optical routing depth of $S_{\mathrm{16\text{-}tree}} = 4$. Importantly, routing depth remains strictly constant across all matrix dimensions $N$.
-
-Consequently, optical loss accumulation across the routing fabric is restricted to just $1.61\,\mathrm{dB}$ across 4 stages, guaranteeing robust passive fan-out closure with Ge/Si APD detection without intermediate optical amplification.
-
-\begin{table*}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{6pt}
-\renewcommand{\arraystretch}{1.15}
-\caption{SYSTEM-LEVEL ROUTING SCALING ACROSS JANUS CONFIGURATIONS}
-\label{tab:table13}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccc@{}}
-\toprule
-\textbf{Metric} & \textbf{Mini (32 Tiles)} & \textbf{Edge (32 Tiles)} & \textbf{Datacenter (32 Tiles)} \\
-\midrule
-Tile Matrix Dimension & $32 \times 32$ & $64 \times 64$ & $128 \times 128$ \\
-Total Multipliers & $32{,}768$ & $131{,}072$ & $524{,}288$ \\
-16-Tree Routing Stages ($S$) & $4$ & $4$ & $4$ \\
-Switches per Multiplier Core & $\mathbf{240}$ & $\mathbf{240}$ & $\mathbf{240}$ \\
-Total Fabric Routing Switches & $\mathbf{7{,}864{,}320}$ & $\mathbf{31{,}457{,}280}$ & $\mathbf{125{,}829{,}120}$ \\
-Fabric Routing Insertion Loss & $\mathbf{1.61\,\mathrm{dB}}$ & $\mathbf{1.61\,\mathrm{dB}}$ & $\mathbf{1.61\,\mathrm{dB}}$ \\
-Static Routing Hold Power & $\mathbf{0.00\,\mathrm{W}}$ (PCM Non-Volatile) & $\mathbf{0.00\,\mathrm{W}}$ (PCM Non-Volatile) & $\mathbf{0.00\,\mathrm{W}}$ (PCM Non-Volatile) \\
-Passive Fan-Out Optical Link Closure & \textbf{Verified} ($+10.50\,\mathrm{dB}$ Margin) & \textbf{Verified} ($+7.50\,\mathrm{dB}$ Margin) & \textbf{Verified} ($+4.61\,\mathrm{dB}$ Margin) \\
-\bottomrule
-\end{tabular*}
-\end{table*}
-
-\subsection{\textbf{Optical Power Equilibrium}}
-
-Large-scale photonic systems commonly fail because optical power either:
-\begin{enumerate}
-\item decays below detector thresholds,
-\item or increases into nonlinear saturation regimes.
-\end{enumerate}
-JANUS instead operates within a bounded optical equilibrium region:
-
-\begin{center}
-\text{$P_{noise} < P_{signal} < P_{sat}$}
-\end{center}
-
-Instead of relying on intermediate optical amplification, JANUS ensures that the delivered optical power ($P_{\text{det}} \approx -18.59\,\text{dBm}$) exceeds the practical sensitivity threshold of the Ge/Si APD receivers ($P_{\text{sens,practical}} \approx -23.20\,\text{dBm}$) by $+4.61\,\text{dB}$ across all routing depths:
-
-\begin{center}
-\text{$P_{\text{det}} > P_{\text{sens,practical}}$}
-\end{center}
-
-Thus, throughout propagation from launch to detection, the signal intensity remains strictly within the bounded optical equilibrium window without requiring intermediate gain compensation.
-
-Because the architecture uses only a single optical wavelength, nonlinear spectral interactions remain structurally suppressed. Therefore, optical equilibrium persists even under large fanout scales.
-
-\subsection{\textbf{Thermal Scaling Characteristics}}
-
-Thermal stability is maintained through directional Z-axis heat routing.
-
-CMOS thermal dissipation preferentially propagates downward:
-
-\begin{center}
-\text{$q_{CMOS} \downarrow$}
-\end{center}
-
-while photonic and detector thermal dissipation preferen tially propagates upward:
-
-\begin{center}
-\text{$q_{photonic} \uparrow$}
-\end{center}
-
-The intermediate dielectric and buffer layer suppresses thermal coupling:
-
-\begin{center}
-\text{$\frac{\partial T_{SiPh}}{partial T_{CMOS}} \rightarrow 0 $}
-\end{center}
-
-Thus, optical phase stability remains approximately invariant under increasing digital activity.
-
-Importantly, the photonic routing layer remains within a bounded thermodynamic region even as total system throughput increases.
-
-\subsection{\textbf{Fault Visibility Scaling}}
-
-Conventional approximate systems become less observable at larger scale because fault complexity grows faster than monitoring capability.
-JANUS exhibits the opposite behavior.
-
-CRT reconstruction amplifies local residue faults into globally invalid arithmetic states:
-
-\begin{center}
-\text{$|X ' - X| \gg |\delta|$}
-\end{center}
-
-Thus, larger CRT dynamic ranges increase fault visibility rather than decreasing it. The probability of silent undetected corruption therefore
-approaches:
-\begin{center}
-\text{$P_{silent} \rightarrow 0$}
-\end{center}
-
-under bounded fault assumptions.
-
-This property is especially important for exact arithmetic workloads where approximate degradation is unacceptable.
-
-\subsection{\textbf{Bandwidth Scaling Characteristics}}
-
-Because JANUS scales spatially rather than spectrally, throughput growth does not require increased wavelength density.
-
-Conventional DWDM systems obey:
-\begin{center}
-\text{$T \propto N_{\lambda}$}
-\end{center}
-
-which increases nonlinear spectral interaction complexity.
-
-JANUS instead obeys:
-\begin{center}
-\text{$T \propto N_{spatial}$}
-\end{center}
-
-Thus, throughput increases through physically independent routing channels.
-
-Consequently:
-\begin{center}
-\text{$\frac{\partial C_i}{\partial C_j} \approx 0 ( i \neq  j)$}
-\end{center}
-
-and inter-channel entropy propagation remains bounded. 
-
-This distinction prevents the nonlinear instability escalation observed in conventional spectrally multiplexed photonic systems.
-
-\subsection{\textbf{Energy Scaling Behavior}}
-
-The total energy consumption of JANUS is dominated by:
-
-\begin{center}
-\text{$E_{total} = E_{CMOS} + E_{laser} + E_{detector} + E_{reconfiguration}$}
-\end{center}
-
-Importantly, routing hold power disappears because PCM switches are non-volatile:
-\begin{center}
-\text{$P_{hold} \approx 0$}
-\end{center}
-
-Thus, routing energy scales with reconfiguration frequency rather than routing size. This substantially improves asymptotic thermal behavior compared with thermo-optic architectures.
-
-\begin{table*}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{SYSTEM-LEVEL STABILITY CHARACTERISTICS ACROSS JANUS CONFIGURATIONS}
-\label{tab:table14}
-\begin{tabular}{lccc}
-\toprule
-Metric & Mini & Edge & Datacenter \\
-\midrule
-Per-Tile Residue Channel Width & 8-bit ($m_i \le 256$) & 8-bit ($m_i \le 256$) & 8-bit ($m_i \le 256$) \\
-Single-Tile Operand Precision ($k=1$) & 4-bit (INT4) & 4-bit (INT4) & 4-bit (INT4) \\
-Global Precision Scaling & Spatial & Spatial & Spatial \\
-Spectral Channels & 1 & 1 & 1 \\
-Optical Equilibrium & Maintained & Maintained & Maintained \\
-Thermal Stability & Bounded & Bounded & Bounded \\
-Fault Visibility & High & High & High \\
-Static Routing Hold Power & 0 W & 0 W & 0 W \\
-Silent Arithmetic Corruption & Suppressed & Suppressed & Suppressed \\
-\bottomrule
-\end{tabular}
-\end{table*}
+Simultaneously, directional $Z$-axis heat extraction ($R_{\mathrm{th,up}} = 0.227\,\mathrm{K/W}$ vs. $R_{\mathrm{th,down}} = 0.488\,\mathrm{K/W}$) paired with $18.5\,\mathrm{kHz}$ JIR dynamic modulus rotation decouples digital CMOS dissipation from the optical routing strata ($\partial T_{\mathrm{SiPh}} / \partial T_{\mathrm{CMOS}} \to 0$), maintaining the photonic transfer matrix stationary under continuous execution.
 
 \subsection{\textbf{System Power Budget}}
 
@@ -2850,24 +1921,14 @@ Each photonic tile implements an $N \times N$ matrix--vector multiplication in o
 
 For the three JANUS deployment configurations:
 \begin{equation}
-\dot{M}_{\text{Mini,tile}} = 32^2 \times 100\,\text{GHz} = 102.4\,\text{TMAC/s}
-\end{equation}
-
-\begin{equation}
-\dot{M}_{\text{Edge,tile}} = 64^2 \times 100\,\text{GHz} = 409.6\,\text{TMAC/s}
-\end{equation}
-
-\begin{equation}
-\dot{M}_{\text{DC,tile}} = 128^2 \times 100\,\text{GHz} = 1,638.4\,\text{TMAC/s}
+\dot{M}_{\text{Mini,tile}} = 102.4\,\text{TMAC/s}, \quad \dot{M}_{\text{Edge,tile}} = 409.6\,\text{TMAC/s}, \quad \dot{M}_{\text{DC,tile}} = 1,638.4\,\text{TMAC/s}.
 \end{equation}
 
 \paragraph{\textbf{Sustained Utilization Factor:}}
 
 Not all tile cycles correspond to valid computation. The JIR scheduler maintains tiles in a warm-dominant regime, with controlled transitions to Hot state for active computation. The sustained utilization factor is derived from the thermal duty-cycle analysis of Section~\ref{sec:zaxis_thermal}:
 
-\begin{center}
-\text{$\eta = 0.85$}
-\end{center}
+$\eta = 0.85$
 
 This factor accounts for:
 
@@ -2888,35 +1949,9 @@ Furthermore, the 0.1~ms weight-loading window is not idle for the CMOS backend. 
 PCM state transitions require write energy $E_{\text{PCM}}$ per switch, which varies with device geometry, active volume, and the crystallisation (SET) versus amorphisation (RESET) direction. For plasmonic PCM switches of the type employed in JANUS, three design tiers bound the operating envelope across $N_{\text{sw}} = 125,829,120$ switches ($\approx 1.258 \times 10^8$ switches):
 
 \begin{itemize}
-\item \textbf{Tier 1 (highly optimised, $\approx$100 fJ):} Sub-wavelength MIM plasmonic structures, primarily crystallisation pulses.
-
-\begin{equation}
-{E^{T1}}_{\text{reconfig}} = 1.258 \times 10^{8} \times 100 \times 10^{-15} \approx 12.58\,\mu\text{J}
-\end{equation}
-
-\begin{equation}
-{P^{T1}}_{\text{transient}} = \frac{12.58\,\mu\text{J}}{0.1\,\text{ms}} \approx 0.126\,\text{W}
-\end{equation}
-
-\item \textbf{Tier 2 (balanced neuromorphic, $\approx$1 pJ):} Mixed SET/RESET operations across a standard plasmonic array.
-
-\begin{equation}
-{E^{T2}}_{\text{reconfig}} = 1.258 \times 10^{8} \times 1 \times 10^{-12} \approx 0.126\,\text{mJ}
-\end{equation}
-
-\begin{equation}
-{P^{T2}}_{\text{transient}} = \frac{0.126\,\text{mJ}}{0.1\,\text{ms}} \approx 1.26\,\text{W}
-\end{equation}
-
-\item \textbf{Tier 3 (conservative upper bound, $\approx$10 pJ):} Larger active volumes, unoptimised thermal leakage, or consecutive high-energy RESET pulses.
-
-\begin{equation}
-{E^{T3}}_{\text{reconfig}} = 1.258 \times 10^{8} \times 10 \times 10^{-12} \approx 1.26\,\text{mJ}
-\end{equation}
-
-\begin{equation}
-{P^{T3}}_{\text{transient}} = \frac{1.26\,\text{mJ}}{0.1\,\text{ms}} \approx 12.6\,\text{W}
-\end{equation}
+\item \textbf{Tier 1 (highly optimised, $\approx 100\,\mathrm{fJ}$):} $E_{\text{reconfig}}^{T1} = 1.258 \times 10^8 \times 100\,\mathrm{fJ} \approx 12.58\,\mu\text{J}$ ($P_{\text{transient}}^{T1} \approx 0.126\,\text{W}$).
+\item \textbf{Tier 2 (balanced neuromorphic, $\approx 1\,\mathrm{pJ}$):} $E_{\text{reconfig}}^{T2} = 1.258 \times 10^8 \times 1\,\mathrm{pJ} \approx 0.126\,\text{mJ}$ ($P_{\text{transient}}^{T2} \approx 1.26\,\text{W}$).
+\item \textbf{Tier 3 (conservative upper bound, $\approx 10\,\mathrm{pJ}$):} $E_{\text{reconfig}}^{T3} = 1.258 \times 10^8 \times 10\,\mathrm{pJ} \approx 1.26\,\text{mJ}$ ($P_{\text{transient}}^{T3} \approx 12.6\,\text{W}$).
 \end{itemize}
 
 Even under the conservative Tier 3 scenario, the total transient electrical programming power dissipation across the entire chip reaches only $12.6\,\text{W}$ during the 0.1~ms write window. Distributing this transient electrical load across the 300~$\text{mm}^{2}$ Datacenter die through the 32 spatially partitioned CMOS tile driver arrays yields an exceptionally benign peak transient power density of $\approx 0.042~\text{W/mm}^{2}$, which is well within the thermal extraction capability of the perimeter thermal shunt and remains far below the $\sim 1~\text{W/mm}^{2}$ limit demonstrated in high-performance silicon flip-chip packages. After the write window closes, the PCM state is latched non-volatilely and the transient power returns to zero; no sustained thermal load is imposed on the optical stack. In the operationally dominant mode---incremental reconfiguration updating only the fraction $f_{\Delta}$ of changed weights between inference epochs---the energy scales as $E_{\Delta} = f_{\Delta} \times E_{\text{reconfig}}$. For typical sparse fine-tuning updates ($f_{\Delta} < 1\%$), Tier 3 reduces to $< 13\,\mu\text{J}$ per update, making reconfiguration energy negligible relative to inference throughput. Full simultaneous weight loading across all switches is therefore characterized as an ``in-principle'' upper bound; operational reprogramming exploits incremental weight sparsity via the partitioned CMOS driver arrays. 
@@ -2930,15 +1965,7 @@ The peak theoretical throughput of the architecture represents the raw hardware 
 
 For single-tile direct operation ($P=4$, $k=1$):
 \begin{equation}
-\dot{M}_{\text{peak,Mini}} = 32 \times 32^2 \times 100\text{ GHz} = 3,276.8\text{ TMAC/s}
-\end{equation}
-
-\begin{equation}
-\dot{M}_{\text{peak,Edge}} = 32 \times 64^2 \times 100\text{ GHz} = 13,107.2\text{ TMAC/s}
-\end{equation}
-
-\begin{equation}
-\dot{M}_{\text{peak,DC}} = 32 \times 128^2 \times 100\text{ GHz} = 52,428.8\text{ TMAC/s}
+\dot{M}_{\text{peak,Mini}} = 3,276.8\,\text{TMAC/s}, \quad \dot{M}_{\text{peak,Edge}} = 13,107.2\,\text{TMAC/s}, \quad \dot{M}_{\text{peak,DC}} = 52,428.8\,\text{TMAC/s}.
 \end{equation}
 
 \paragraph{\textbf{Sustained Operational Throughput ($\eta = 0.85$)}}
@@ -2950,15 +1977,7 @@ Accounting for JIR scheduling, thermal rotation, and CRT reconstruction pipeline
 
 Thus, at single-tile direct operation ($P=4$, $k=1$):
 \begin{equation}
-\dot{M}_{\text{sust,Mini}} = 0.85 \times 3,276.8\text{ TMAC/s} \approx 2,785.3\text{ TMAC/s}
-\end{equation}
-
-\begin{equation}
-\dot{M}_{\text{sust,Edge}} = 0.85 \times 13,107.2\text{ TMAC/s} \approx 11,141.1\text{ TMAC/s}
-\end{equation}
-
-\begin{equation}
-\dot{M}_{\text{sust,DC}} = 0.85 \times 52,428.8\text{ TMAC/s} \approx 44,564.5\text{ TMAC/s}
+\dot{M}_{\text{sust,Mini}} \approx 2,785.3\,\text{TMAC/s}, \quad \dot{M}_{\text{sust,Edge}} \approx 11,141.1\,\text{TMAC/s}, \quad \dot{M}_{\text{sust,DC}} \approx 44,564.5\,\text{TMAC/s}.
 \end{equation}
 
 \paragraph{\textbf{Precision Scaling via Spatial RNS ($P \ge 8$, $k \ge 2$)}} 
@@ -2996,512 +2015,94 @@ This linear inverse scaling in $k$ represents the exact cost of achieving higher
 \end{equation}
 
 For the three configurations:
-
 \begin{equation}
-\eta_{EE,Mini} = \frac{174.1\text{ TMAC/s}}{13.03\text{ W}} \approx 13.36\text{ TMAC/s/W}
+\eta_{EE,\mathrm{Mini}} \approx 13.36\,\text{TMAC/s/W}, \quad \eta_{EE,\mathrm{Edge}} \approx 15.98\,\text{TMAC/s/W}, \quad \eta_{EE,\mathrm{DC}} \approx 14.91\,\text{TMAC/s/W}.
 \end{equation}
 
-\begin{equation}
-\eta_{EE,Edge} = \frac{696.3\text{ TMAC/s}}{43.58\text{ W}} \approx 15.98\text{ TMAC/s/W}
-\end{equation}
+\subsection{\textbf{Comprehensive Multi-Precision Performance Profiles}}
+\label{sec:multi_precision_profiles}
 
-\begin{equation}
-\eta_{EE,DC} = \frac{2,785.3\text{ TMAC/s}}{186.79\text{ W}} \approx 14.91\text{ TMAC/s/W}
-\end{equation}
+Table~\ref{tab:table16} presents the complete peak theoretical and sustained operational throughput scaling, along with energy efficiency figures, across all three JANUS hardware deployment configurations (Mini, Edge, and Datacenter), spanning native INT4 direct mode ($P=4, k=1$) up to INT64 exact spatial RNS mode ($P=64, k=16$). Peak theoretical throughput corresponds to 100\% hardware utilization ($\eta = 1.0$), while sustained operational throughput incorporates JIR thermal rotation duty cycles and pipeline management ($\eta = 0.85$). Throughput and energy efficiency are quantified in $\text{TMAC/s}$ ($1\text{ MAC} = 2\text{ FLOPS}$) and $\text{TMAC/s/W}$, respectively.
 
-\paragraph{\textbf{Comprehensive Performance Profile Summary}}
-
-Tables \ref{tab:table16}, \ref{tab:table17}, and \ref{tab:table18} (consolidated in Appendix~\ref{app:perf_profiles}) present the complete peak theoretical and sustained operational throughput scaling, along with energy efficiency figures, across all three JANUS deployment configurations (Mini, Edge, and Datacenter) and target integer precisions (INT4 through INT64). All values represent exact integer operations without analog approximation. 
-
+\begin{table*}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{JANUS MULTI-PRECISION PERFORMANCE PROFILES ACROSS MINI ($32 \times 32$), EDGE ($64 \times 64$), AND DATACENTER ($128 \times 128$) CONFIGURATIONS (32 TILES EACH)}
+\label{tab:table16}\label{tab:table17}\label{tab:table18}
+\begin{tabular}{lc|ccc|ccc|ccc}
+\toprule
+& & \multicolumn{3}{c|}{\textbf{Mini (32 Tiles, $32 \times 32$)}} & \multicolumn{3}{c|}{\textbf{Edge (32 Tiles, $64 \times 64$)}} & \multicolumn{3}{c}{\textbf{Datacenter (32 Tiles, $128 \times 128$)}} \\
+\textbf{Precision} & $k$ & \textbf{Peak} & \textbf{Sust.} & \textbf{EE (TMAC/s/W)} & \textbf{Peak} & \textbf{Sust.} & \textbf{EE (TMAC/s/W)} & \textbf{Peak} & \textbf{Sust.} & \textbf{EE (TMAC/s/W)} \\
+\midrule
+INT4 Direct ($P=4$) & 1 & 3,276.8 & 2,785.3 & 251.5--213.8$^\dagger$ & 13,107.2 & 11,141.1 & 300.8--255.7 & 52,428.8 & 44,564.5 & 280.7--238.6 \\
+INT8 Exact ($P=8$) & 2 & 1,638.4 & 1,392.6 & 125.7--106.9 & 6,553.6 & 5,570.6 & 150.4--127.8 & 26,214.4 & 22,282.2 & 140.3--119.3 \\
+INT16 Exact ($P=16$) & 4 & 819.2 & 696.3 & 62.9--53.4 & 3,276.8 & 2,785.3 & 75.2--63.9 & 13,107.2 & 11,141.1 & 70.2--59.7 \\
+INT32 Exact ($P=32$) & 8 & 409.6 & 348.2 & 31.4--26.7 & 1,638.4 & 1,392.6 & 37.6--32.0 & 6,553.6 & 5,570.6 & 35.1--29.8 \\
+INT64 Exact ($P=64$) & 16 & 204.8 & 174.1 & 15.7--13.4 & 819.2 & 696.3 & 18.8--16.0 & 3,276.8 & 2,785.3 & 17.5--14.9 \\
+\bottomrule
+\multicolumn{11}{p{0.96\textwidth}}{\scriptsize Peak and sustained throughput in TMAC/s ($1\,\mathrm{MAC}=2\,\mathrm{FLOPS}$). Sustained incorporates JIR duty cycle ($\eta = 0.85$). $^\dagger$Full-system wall-plug power ($13.03\,\mathrm{W}$). For comparison, Model~1A 16-tile planar delivers $1,392.6\,\mathrm{TMAC/s}$ (INT4, $225.71\,\mathrm{TMAC/s/W}$) and $87.0\,\mathrm{TMAC/s}$ (INT64, $14.10\,\mathrm{TMAC/s/W}$) at $6.17\,\mathrm{W}$ on-chip package power.} \\
+\end{tabular}
+\end{table*}
 \subsection{\textbf{Asymptotic Architectural Implications}}
 
 The scaling behavior of JANUS differs fundamentally from conventional analog photonic accelerators.
 Conventional architectures exhibit:
 
-\begin{center}
 \textbf{Higher Scale $\rightarrow$ Higher Instability}
-\end{center}
 
 because thermal drift, nonlinear interaction, calibration overhead, analog precision requirements, and fault observability all worsen with growth. JANUS instead enforces bounded local operating conditions while scaling globally through modular spatial composition.
 
-\begin{center}
-\textbf{Higher Scale $\rightarrow$ Higher Parrallelism}
-\end{center}
+\textbf{Higher Scale $\rightarrow$ Higher Parallelism}
 
 without proportionally increasing local physical instability.
 
 This bounded-local-state principle is the primary architectural reason why JANUS remains physically scalable under exact arithmetic workloads.
 
-\section{PHYSICAL FEASIBILITY AND CONSTRAINT COMPLIANCE}
-
-\subsection{\textbf{Constraint-First Validation Philosophy}}
-
-The validity of JANUS does not emerge from peak theoretical throughput claims alone. Instead, feasibility is determined by whether every subsystem remains consistent with known thermodynamic, optical, informational, and electrical constraints.
-
-Therefore, each architectural mechanism must satisfy four conditions simultaneously:
-
-\begin{enumerate}
-\item Physical Realizability
-\item Thermodynamic Stability
-\item Bounded Error Propagation
-\item Sustained Operational Equilibrium
-\end{enumerate}
-
-Any subsystem violating one of these conditions becomes physically non-scalable regardless of theoretical arithmetic density.
-
-Accordingly, JANUS was derived through iterative elimination of architectures that failed under one or more physical constraints. The resulting system therefore represents a constraint satisfying architecture rather than a performance-maximized approximation.
-
-\subsection{\textbf{Shannon Capacity Compliance}}
-
-The primary failure mode of conventional analog photonic accelerators is violation of Shannon-limited information recoverability. For a communication channel with bandwidth: B and signal-to-noise ratio SNR the maximum recoverable information rate is:
-
-\begin{center}
-\text{C = B $log_{2} (1 + SNR)$}
-\end{center}
-
-Conventional analog optical accumulation attempts to reconstruct large integer values directly from optical amplitude. As previously derived, exact accumulation requires effective analog SNR approaching:
-
-\begin{center}
-\text{SNR$_{Mini} \approx$ 126.4 dB}
-\end{center}
-
-\begin{center}
-\text{SNR$_{Edge} \approx$ 132.4 dB}
-\end{center}
-
-\begin{center}
-\text{SNR$_{Datacenter} \approx$ 138.4 dB}
-\end{center}
-
-Such requirements exceed realistic detector capability at 100 GHz operating frequencies. JANUS resolves this contradiction by reformulating arithmetic into binary spatial localization. The detector condition reduces to:
-
-\begin{center}
-\text{P$_{signal}$ > P$_{noise}$}
-\end{center}
-
-which corresponds approximately to:
-
-\begin{center}
-\text{SNR > 0 dB}
-\end{center}
-
-Thus, JANUS remains consistent with Shannon information bounds because it no longer attempts exponentially precise analog amplitude recovery. Instead, information is encoded spatially through deterministic One-Hot routing.
-
-\begin{table}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{SHANNON COMPLIANCE COMPARISON BETWEEN ANALOG AND JANUS ARCHITECTURES}
-\label{tab:table19}
-\begin{tabular}{lccc}
-\toprule
-Metric & Mini & Edge & Datacenter \\
-\midrule
-SNR Requirement & 126.4 dB & 132.4 dB & 138.4 dB \\
-Spatial Detection SNR & $> 0\text{ dB}$ & $> 0\text{ dB}$ & $> 0\text{ dB}$ \\
-Detection Type & Binary & Binary & Binary \\
-ADC Requirement & Eliminated & Eliminated & Eliminated \\
-Shannon Feasibility & Bounded & Bounded & Bounded \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{\textbf{Thermodynamic Compliance}}
-
-Large-scale photonic systems commonly violate thermodynamic feasibility through excessive static routing power density. For thermo-optic MZI routing:
-
-\begin{center}
-\text{P$_{hold}$ = N$_{switch} \times P_{MZI}$}
-\end{center}
-
-with:
-
-\begin{center}
-\text{P$_{MZI}$ $\approx$ 0.10 mW}
-\end{center}
-
-The resulting static thermal loads become:
-\begin{center}
-\text{P$_{\mathrm{Mini,TO}}$ = 786.4 W}
-\end{center}
-
-\begin{center}
-\text{P$_{\mathrm{Edge,TO}}$ = 3.15 kW}
-\end{center}
-
-\begin{center}
-\text{P$_{\mathrm{Datacenter,TO}}$ = 12.58 kW}
-\end{center}
-
-Such heat densities exceed realistic chip-scale thermal extraction limits. JANUS eliminates this failure mechanism through non-volatile PCM switches. After programming:
-
-\begin{center}
-\text{P$_{hold}$ $\approx$ 0 W}
-\end{center}
-
-Thus, routing power scales with reconfiguration frequency rather than switch count. Additionally, thermal isolation is enforced through directional Z-axis heat partitioning:
-
-\begin{center}
-\text{$\frac {\partial T_{SiPh}}{\partial T_{CMOS}}$$\rightarrow$ 0}
-\end{center}
-
-This prevents optical routing drift caused by CMOS thermal activity. Consequently, JANUS remains thermodynamically bounded under sustained operation.
-
-\subsection{\textbf{Nonlinear Optical Compliance}}
-
-Conventional DWDM photonic systems violate nonlinear optical stability at high channel density due to Kerr-induced spectral mixing. The nonlinear refractive response becomes:
-
-\begin{center}
-\text{n = n$_{0}$ + n$_{2}$I}
-\end{center}
-
-which produces Four-Wave Mixing:
-
-\begin{center}
-\text{$\omega_{FWM}$ = $\omega_{1} + \omega_{2} - \omega_{3}$}
-\end{center}
-
-The resulting nonlinear interference scales approximately as:
-
-\begin{center}
-\text{$P_{NL} \propto \gamma P^{3}L^{2}$}
-\end{center}
-
-Thus, higher wavelength density eventually increases spectral corruption. JANUS eliminates this failure mechanism structurally by enforcing:
-\begin{center}
-\text{N$_{\lambda}$ = 1}
-\end{center}
-
-Without multiple carrier frequencies, inter-channel spectral mixing cannot occur.
-Therefore:
-
-\begin{center}
-\text{$P_{ghost} \rightarrow 0$}
-\end{center}
-
-under bounded operating conditions. This architecture remains consistent with nonlinear optical stability limits because nonlinear spectral interaction mechanisms are absent.
-
-\subsection{\textbf{Amplification Noise Compliance}}
-
-Conventional SOAs violate exact arithmetic recoverability because gain introduces amplified spontaneous emission noise:
-
-\begin{center}
-\text{${\sigma^{2}}_{ASE} \propto Gn_{sp}B$}
-\end{center}
-
-Thus:
-\begin{center}
-\text{$SNR_{out} < SNR_{in}$}
-\end{center}
-
-under conventional amplification.
-
-JANUS eliminates this failure mechanism entirely by removing all intermediate optical amplifiers from the signal path. Instead, a high-power 1064 nm Yb-fiber master laser scales its optical launch power to balance the passive splitting loss of each specific configuration ($P_{\text{laser}} \approx 5\,\text{W}$ for Mini, $20\,\text{W}$ for Edge, and $100\,\text{W}$ for Datacenter, with WPE > 75\%). This targeted power scaling ensures the optical signal survives the respective passive fan-out and routing losses, delivering $P_{\text{det}} \ge -18.95\,\text{dBm}$ at each detector. Crucially, this provides a strictly uniform $\approx +4.25$ to $+4.85\,\text{dB}$ safety margin over the practical $-23.20\,\text{dBm}$ APD sensitivity threshold across all three deployment scales. Detection employs Ge/Si $\mathrm{SAC^2M}$ avalanche photodetectors operating at moderate gain $M = 7$ with an effective ionisation ratio $k \approx 0.06$, yielding an excess noise factor $F(M) \approx 2.0$---far below conventional InGaAs APDs. The resulting noise penalty is bounded and deterministic:
-
-\begin{center}
-\text{F$_{APD}$(M = 7) $\approx$ 2.0}
-\end{center}
-
-Because no gain medium is present in the optical path, ASE noise is structurally absent:
-
-\begin{center}
-\text{${\sigma^{2}}_{ASE}$ = 0}
-\end{center}
-
-Thus, JANUS satisfies bounded optical equilibrium conditions by eliminating the amplification noise source entirely rather than attempting to suppress it.
-
-\subsection{\textbf{Fault Detectability Compliance}}
-
-Conventional approximate systems permit silent arithmetic corruption.
-Under graceful degradation:
-
-\begin{center}
-\text{X $\rightarrow$ X + $\epsilon$}
-\end{center}
-
-small faults remain numerically plausible.
-JANUS instead enforces arithmetic invalidation through CRT inconsistency amplification.
-A residue fault:
-
-\begin{center}
-\text{$x_{j} \rightarrow x_{j} + \delta$}
-\end{center}
-
-produces reconstructed deviation:
-
-\begin{center}
-\text{$X ' = X + \delta M_j N_j \mod M$}
-\end{center}
-
-Thus:
-\begin{center}
-\text{$|X ' - X| \gg |\delta|$}
-\end{center}
-
-rendering local residue corruptions globally detectable and distinct from valid range values.
-
-The probability of silent undetected corruption therefore approaches:
-
-\begin{center}
-\text{P$_{silent} \rightarrow$ 0}
-\end{center}
-
-under bounded fault assumptions. This behavior satisfies deterministic exact arithmetic visibility requirements absent in conventional approximate architectures.
-
-\subsection{\textbf{Calibration Stability Compliance}}
-
-Large interferometric photonic meshes often require continuous dynamic calibration due to thermal phase drift:
-
-\begin{equation}
-\Delta \phi = \frac{2\pi L}{\lambda} \frac{dn}{dT} \Delta T 
-\end{equation}
-
-In conventional architectures:
-
-\begin{center}
-\text{$H(t) \neq  H(t + \Delta t)$}
-\end{center}
-
-Thus, routing correctness continuously evolves over time.
-
-JANUS suppresses this instability through:
-\begin{enumerate}
-\item Non-volatile PCM routing,
-\item Thermal Z-axis partitioning,
-\item Single-wavelength operation,
-\item Bounded optical equilibrium.
-\end{enumerate}
-
-Consequently:
-
-\begin{center}
-\text{H(t) $\approx$ constant}
-\end{center}
-
-under sustained operating conditions. Therefore, the architecture avoids the runaway calibration overhead commonly observed in large interferometric meshes.
-
-\subsection{\textbf{Physical Constraint Summary}}
-
-The architectural validity of JANUS emerges from simultaneous compliance with governing physical, optical, and thermodynamic constraints. Each subsystem is systematically structured to operate within sustainable physical boundary conditions under large-scale spatial integration.
-
-\subsection{\textbf{Feasibility Interpretation}}
-
-JANUS does not claim violation of physical limits. Instead, it explicitly reorganizes computation to remain inside them.
-
-The architecture avoids:
-\begin{itemize}
-\item exponential analog precision scaling,
-\item unbounded thermal density,
-\item spectral nonlinear instability,
-\item unrecoverable amplification entropy,
-\item silent arithmetic degradation.
-\end{itemize}
-
-This distinction is critical. Many photonic accelerator proposals attempt to overpower physical constraints through additional calibration, higher laser power, or more aggressive analog reconstruction. JANUS instead reformulates the computational problem itself so that the constraints become structurally bounded. Consequently, scalability emerges not from violating physical laws, but from remaining consistent with them.
-
 \section{DISCUSSION}
+\label{sec:discussion}
 
+\subsection{\textbf{Reframing Photonic Tensor Processing: Spatial Localization vs. Analog Accumulation}}
 
-\subsection{\textbf{Reframing the Objective of Photonic Computation}}
+Most photonic accelerator research attempts to maximize compute density by directly emulating electronic analog MAC operations in the optical domain \cite{Sorger2018,Feldmann2021,Miscuglio2020,Zhang2025}. However, our analysis demonstrates that analog accumulation encounters an insurmountable physical barrier: unreduced accumulation of wide matrices requires an exponential signal-to-noise ratio ($\mathrm{SNR} \propto 2^N$, exceeding $138\,\mathrm{dB}$ for $128 \times 128$ INT8). No physical optical receiver or ADC can simultaneously sustain such dynamic range and low noise at multi-GHz frequencies.
 
-Most photonic accelerator research attempts to maximize arithmetic density by directly emulating conventional electronic matrix multiplication in the optical domain \cite{Sorger2018}, \cite{Feldmann2021}, \cite{Miscuglio2020}, \cite{Zhang2025}. This approach implicitly assumes that optical systems can scale analog precision similarly to digital electronics.
+JANUS resolves this fundamental scaling failure by abandoning analog amplitude recovery entirely. Instead of estimating continuous optical intensity (``How much light exists?''), the photodetector answers a binary spatial question (``Which waveguide contains light?''). This collapses the required detection threshold from $138.4\,\mathrm{dB}$ analog SNR down to a binary threshold ($>0\,\mathrm{dB}$ SNR, $P_{\mathrm{th}} \approx -23.20\,\mathrm{dBm}$), decoupling arithmetic precision from optical attenuation and enabling deterministic exact integer computation.
 
-However, the preceding analysis demonstrates that this assumption fails under large-scale exact arithmetic workloads. Thermal drift, optical shot noise, ADC precision limits, and nonlinear spectral mixing collectively impose hard physical ceilings on analog optical precision scaling.
+\subsection{\textbf{The Photonic-Electronic Division of Labor}}
 
-Consequently, the central contribution of JANUS is not simply a faster photonic accelerator. Instead, JANUS reformulates the computational paradigm itself.
+Rather than attempting all-optical computation---which encounters severe physical limitations in non-linear state storage and control logic---JANUS enforces a disciplined hybrid division of labor:
+\begin{equation}
+\text{\textbf{Photonics}} \longrightarrow \text{Picosecond Spatial Transport}, \quad \text{\textbf{CMOS}} \longrightarrow \text{Deterministic Integer Verification}.
+\end{equation}
+Photonics excels at high-bandwidth, low-latency spatial routing ($1.33\,\mathrm{ps}$ time-of-flight per tile) with zero static hold power. Digital CMOS excels at deterministic verification, Garner mixed-radix CRT reconstruction, and fault monitoring. Through Hybrid Partitioning, optics evaluates bounded $1 \times 1$ modular sub-products ($X_L Y_L$ and $X_H Y_H$), while 160-bit carry-save accumulators and the Dual-LUT Cross-Term Engine resolve the cross-terms and wide GEMM summations without optical dynamic range explosion.
 
-The architecture abandons:
-\begin{itemize}
-\item  analog amplitude accumulation,
-\item  spectral multiplexing,
-\item  volatile routing,
-\item  continuous calibration,
-\item  graceful degradation arithmetic.
-\end{itemize}
+\subsection{\textbf{CRT Arithmetic Fault Visibility vs. Silent Data Corruption}}
 
-and replaces them with:
-\begin{itemize}
-\item  binary spatial localization,
-\item  single-wavelength operation,
-\item  non-volatile routing,
-\item  bounded thermodynamic equilibrium,
-\item  CRT-based arithmetic fault visibility.
-\end{itemize}
+A fundamental hazard in conventional approximate photonic accelerators is silent data corruption (SDC), where small analog drifts produce plausible but incorrect outputs ($X \to X + \epsilon$). Under CRT reconstruction, however, arithmetic faults exhibit extreme sensitivity: any single-residue perturbation ($x_j \to x_j + \delta$) amplifies across the global coprime product ($|X' - X| \propto M_j \gg |\delta|$), projecting corrupted states into discontiguous, out-of-range integer values. The CMOS backend instantly invalidates the operation, converting hidden numerical degradation into unambiguous, hardware-actionable faults.
 
-Thus, JANUS should not be interpreted as an incremental extension of conventional analog photonics. It represents a categorical shift from "analog optical approximation" toward "physically bounded exact spatial computation."
+\subsection{\textbf{Limitations and Open Research Challenges}}
+\label{sec:open_challenges}
 
-\begin{table*}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{2pt}
-\caption{CONSTRAINT COMPLIANCE SUMMARY FOR JANUS}
-\label{tab:table20}
-\begin{tabular}{lll}
-\toprule
-Constraint & Conventional Failure & JANUS Resolution \\
-\midrule
-Shannon Precision Limit & Exponential SNR growth & One-Hot binary spatial localization \\
-Thermodynamic Scaling & Kilowatt-scale routing heat & Zero-static-power PCM routing \\
-Nonlinear Spectral Mixing & FWM and XPM corruption & Single-wavelength operation \\
-Amplifier Noise & ASE accumulation & Passive fan-out with APD detection \\
-Thermal Drift & Continuous calibration & Z-axis thermal decoupling \\
-Silent Arithmetic Corruption & Graceful degradation & CRT arithmetic invalidation \\
-Routing Crosstalk & Waveguide interference & Asymmetric 16-Tree path isolation \\
-Precision Scaling & Analog precision escalation & Spatial modular composition \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-\subsection{\textbf{Why Exact Arithmetic Requires Spatial Reformulation}}
-
-A key result of this work is that exact arithmetic and analog optical accumulation are fundamentally incompatible at large scale. Conventional analog systems require exponentially increasing SNR:
-
-\begin{center}
-\text{SNR $\propto 2^{N}$}
-\end{center}
-
-for exact reconstruction of large accumulations.
-
-This growth rapidly exceeds detector, amplifier, and thermal stability limits. JANUS resolves this contradiction by converting arithmetic precision into a spatial localization problem. Instead of recovering amplitude magnitude:
-
-\begin{center}
-\textbf{"How much light exists?"}
-\end{center}
-
-the detector solves:
-\begin{center}
-\textbf{"Which waveguide contains light?"}
-\end{center}
-
-This distinction fundamentally changes the informational requirements of optical computation. The resulting system no longer depends on exponentially precise analog recovery. Consequently, exact arithmetic becomes physically compatible with high-frequency photonic operation.
-
-\subsection{\textbf{Implications for Future Photonic Architectures}}
-
-The architectural implications extend beyond JANUS itself. Many existing photonic proposals rely on three assumptions:
+Although JANUS resolves the primary scaling contradictions of analog optical computing, several integration challenges must be addressed as the architecture advances toward physical fabrication:
 \begin{enumerate}
-\item high-resolution analog accumulation is scalable,
-\item spectral multiplexing indefinitely increases bandwidth density,
-\item continuous calibration can compensate arbitrary drift.
+\item \textbf{In-Waveguide $\mathrm{Sb_2S_3}$ Switching Contrast at 1064 nm:} While $\mathrm{Sb_2S_3}$ exhibits wide bandgap transparency ($E_g = 1.72\,\mathrm{eV}$) and low unannealed film losses, high-extinction refractive index contrast ($\Delta n \approx 0.60$) and cycle endurance within slot-waveguide directional couplers under multi-watt continuous optical flux remain unverified in silicon foundry test chips.
+\item \textbf{High-Density Ge/Si $\mathrm{SAC^2M}$ APD Array Integration:} Discrete $105\,\mathrm{GHz}$ SAC$^2$M APD devices have been demonstrated in literature \cite{Chen2025}, but vertical 3D bonding into monolithic arrays ($278,528$ detectors) with receiverless $1:1$ StrongARM latch coupling across thermal spacers remains experimentally uncharacterized.
+\item \textbf{High-Power Master Laser RIN Closure:} Laser relative intensity noise (RIN) of the high-power Yb-fiber source represents a primary SNR contributor in the absence of intermediate optical gain stages; formal RIN-to-BER analytical and experimental closure across multi-stage splitters remains open.
+\item \textbf{Multi-Stratum 3D Photonic Stacking:} While CMOS-compatible 3D silicon photonic platforms spanning two and three strata have been experimentally reported \cite{Feldmann2019}, scaling to the 5-stratum configuration required by the Datacenter fabric (accommodating $125.8\text{M}$ switches across a $251.7\,\mathrm{mm}^2$ footprint) requires wafer-scale characterization of vertical optical via yield and cumulative interlayer insertion loss.
+\item \textbf{Formal Multi-Fault and Adversarial Bounds:} While single-residue corruptions produce unambiguous CRT invalidations, formal closed-form bounds on simultaneous multi-tile correlated faults (e.g., shared thermal events across adjacent channels) remain an active theoretical inquiry.
 \end{enumerate}
 
-The present analysis suggests that all three assumptions become unstable at sufficiently large scale.
+\subsection{\textbf{Scope Boundaries: What JANUS Does Not Claim}}
+\label{sec:scope_boundaries}
 
-{\itshape First, Shannon-limited information recovery prevents indefinite analog precision growth.
-
-Second, nonlinear spectral interaction fundamentally limits DWDM scaling.
-
-Third, calibration overhead eventually becomes thermodynamically and computationally dominant.}
-
-Therefore, future large-scale photonic systems may require:
+Intellectual honesty requires delineating the explicit scope boundaries of this architecture:
 \begin{itemize}
-\item bounded local precision,
-\item spatial parallelism,
-\item non-volatile routing,
-\item thermally partitioned architectures,
-\item explicit fault visibility mechanisms.
+\item \textbf{Not Perfect Fault Immunity:} JANUS does not claim absolute immunity to arbitrary hardware faults. While single-residue faults and high-magnitude perturbations are mathematically flagged, simultaneous adversarial errors confined strictly within identical residue equivalence classes could theoretically evade single-cycle detection without multi-channel RRNS parity.
+\item \textbf{Component Power Table Envelope:} The system power model in Table~\ref{tab:table15} provides an illustrative, first-principles architectural envelope rather than a formally closed empirical post-silicon measurement.
+\item \textbf{Not a General-Purpose Processor:} JANUS targets dense matrix-matrix tensor acceleration. It does not replace general-purpose digital CPUs or control-flow logic.
+\item \textbf{Not an Elimination of Physical Noise:} JANUS does not eliminate physical noise or thermal fluctuations; rather, it replaces exponential dependence on analog amplitude fidelity with robust binary spatial threshold detection.
+\item \textbf{Forward-Looking Systems Integration:} While foundational device components ($\mathrm{Sb_2S_3}$ PCM switches, SAC$^2$M APDs, LiTaO$_3$ modulators) are demonstrated in literature, the complete multi-million switch 3D stacked monolithic system represents an architecturally motivated integration blueprint.
 \end{itemize}
-
-These principles collectively define a constraint-bounded design methodology for scalable photonic computation.
-
-\subsection{\textbf{On the Role of CMOS in Exact Optical Systems}}
-
-JANUS intentionally preserves CMOS participation in the computational stack. This decision is critical. Many optical accelerator proposals attempt to eliminate electronic logic entirely in pursuit of all-optical computation. However, exact arithmetic verification, CRT reconstruction, fault visibility, memory coherence, and orchestration remain fundamentally digital tasks.
-
-Thus, JANUS adopts a hybrid philosophy:
-
-\begin{center}
-\text{Photonics $\rightarrow$ Massively Parallel Transport}
-\end{center}
-
-\begin{center}
-\text{CMOS $\rightarrow$ Deterministic Verification}
-\end{center}
-
-This division allows each physical substrate to operate within its native strengths. Photonics provides bandwidth density and passive propagation. CMOS provides deterministic state control and exact logical validation. The architecture therefore avoids forcing either substrate beyond its natural operating regime.
-
-\subsection{\textbf{The Importance of CRT Arithmetic Visibility}}
-
-A particularly important property of JANUS is the rejection of graceful degradation. Conventional approximate accelerators often prioritize throughput over deterministic correctness. As a result, transient faults may silently perturb numerical outputs. Such behavior becomes increasingly dangerous as systems scale. JANUS instead enforces arithmetic invalidation through CRT sensitivity. Small local residue faults become globally inconsistent reconstructed states. Consequently, the architecture structurally precludes the generation of numerically plausible incorrect outputs.
-
-This distinction has major implications for:
-\begin{itemize}
-\item scientific computing,
-\item cryptographic arithmetic,
-\item deterministic simulation,
-\item high-assurance inference,
-\item fault-sensitive computation.
-\end{itemize}
-
-In these domains, silent corruption is often more dangerous than total failure.
-
-Thus, CRT arithmetic visibility represents a fundamental shift from best-effort analog approximation toward deterministic arithmetic verification.
-
-\subsection{\textbf{Scalability Through Bounded Local Complexity}}
-
-Another major architectural principle emerging from JANUS is bounded local complexity. Conventional scaling often increases local sub--system burden:
-
-\begin{center}
-\text{Higher Scale $\rightarrow$ Higher Local Precision}
-\end{center}
-or:
-\begin{center}
-\text {Higher Scale $\rightarrow$ Higher Thermal Density}
-\end{center}
-
-JANUS instead keeps local physical behavior approximately constant while increasing global computational parallelism.
-
-Thus:
-\begin{center}
-\text{Global Precision $\propto N_{\text{tiles}}$}
-\end{center}
-
-while:
-\begin{center}
-\text{$P_{local} \approx$ constant}
-\end{center}
-
-This bounded-local-state property is one of the primary reasons the architecture remains physically scalable. Rather than overpowering local physical constraints, JANUS avoids creating them.
-
-\subsection{\textbf{Limitations and Open Challenges}}
-
-Although JANUS resolves several dominant scaling contradictions, three genuine open challenges remain at the system integration level.
-
-\begin{enumerate}
-\item \textbf{Extension of 3D SiPh stacking to five strata at JANUS switch densities.} Three-dimensional silicon photonic integration with interlayer couplers and routing switches across multiple strata has been demonstrated using DUV stepper-compatible deposition processes, with two- and three-stratum platforms reported in recent literature \cite{Feldmann2019}. 
-
-However, extending this to the five-stratum configuration required by the JANUS datacenter fabric---accommodating 125.8 million 16-Tree Fermat PCM switches (approx. 25.2 million per stratum across 5 strata) across a $\approx$251.7 $mm^{2}$ per-layer chip footprint has not yet been characterized for fabrication yield or interlayer optical loss accumulation across all five strata simultaneously. This represents the primary integration-scale challenge for the datacenter configuration.
-
-\item \textbf{Reconciliation of the $2^{18}$ passive fan-out tree with the tile--detector hierarchy.} The passive-split architecture employs 262,144 output ports from a single 100 W Yb-fiber laser source, while the 16-Tree Fermat tile architecture specifies 8,912,896 total detectors across 32 tiles (32 tiles $\times$ 16,384 multipliers $\times$ 17 waveguides). These descriptions target different fan-out points in the optical pipeline; formal mapping between passive-split outputs and tile--multiplier inputs is required to close the system power budget. Additionally, laser relative intensity noise (RIN) of the high-power Yb-fiber source becomes the dominant accuracy driver in the absence of any intermediate gain stage, and formal RIN-to-BER analysis remains open.
-
-\item \textbf{Formal multi-fault analysis of CRT arithmetic visibility bounds.} CRT magnitude amplification provides strong fault visibility under single-residue corruption. However, a formal analysis of detection probability under simultaneous multi-tile faults---including correlated failure modes such as a shared thermal event affecting adjacent residue channels and an adversarial fault model covering faults confined within a single residue domain, remains an open theoretical problem. 
-
-This analysis is required to bound the undetected error probability under worst-case operating conditions. The JIR thermal-prediction model additionally requires formal characterisation of the sensor update rate and temperature-trend threshold needed to guarantee RRNS engagement before a fault manifests. Additionally, while CRT-based fault visibility suppresses silent numerical corruption, it does not eliminate the possibility of hard physical failure. It converts hidden numerical corruption into explicit detectable invalid states, enabling clean fault recovery rather than silent data corruption.
-\end{enumerate}
-
-\subsection{\textbf{Broader Interpretation}}
-
-More broadly, JANUS suggests that future high-performance computing systems may increasingly depend upon:
-
-\begin{center}
-\textbf{constraint-aware computational reformulation}
-\end{center}
-
-rather than raw component scaling alone.
-
-Historically, many computational advances emerged not from violating physical limits, but from reorganizing computation to avoid pathological operating regimes.
-
-Examples include:
-\begin{itemize}
-\item  packet switching replacing circuit exclusivity,
-\item  cache hierarchies replacing uniform memory access,
-\item  parallel vectorism replacing scalar frequency scaling.
-\end{itemize}
-
-JANUS follows a similar trajectory. Instead of attempting infinitely precise analog photonic arithmetic, the architecture restructures computation into bounded spatially localized operations compatible with physical law. 
-
-Thus, the primary contribution of JANUS is not merely architectural. It is methodological.
-
-The system demonstrates that scalable photonic exact arithmetic may require redesigning the computational abstraction itself around the constraints imposed by thermodynamics, information theory, and nonlinear optics.
 
 \section{CONCLUSION}
 
@@ -3516,509 +2117,40 @@ The architecture was derived through iterative elimination of physically unstabl
 \item  Graceful degradation arithmetic was shown to permit silent data corruption.
 \end{enumerate}
 
-JANUS resolves these contradictions through structural architectural reformulation.
-\begin{itemize}
-\item  Binary spatial localization replaces analog magnitude recovery.
-\item  Single-wavelength coherent fanout removes inter-channel spectral mixing.
-\item  PCM routing eliminates static hold power.
-\item  High-power 1064 nm passive fan-out with Ge/Si avalanche photodetection survives routing loss without intermediate optical amplification.
-\item  CRT reconstruction converts local arithmetic faults into globally detectable invalid states.
-\item  Finally, Z-axis thermal partitioning isolates the optical compute layer from dominant CMOS thermal activity.
-\end{itemize}
-Collectively, these mechanisms ensure that the architecture remains consistent with:
-\begin{itemize}
-\item  Shannon information limits,
-\item  thermodynamic stability,
-\item  nonlinear optical bounds,
-\item bounded noise propagation,
-\item  deterministic fault visibility.
-\end{itemize}
-Importantly, JANUS does not claim to transcend physical law. Instead, it reorganizes computation so that all dominant physical constraints remain bounded simultaneously.
+JANUS resolves these contradictions through structural architectural reformulation: binary spatial localization replaces analog magnitude recovery; single-wavelength coherent fanout removes inter-channel spectral mixing; non-volatile PCM routing eliminates static hold power; high-power 1064\,nm passive fan-out with Ge/Si avalanche photodetection survives routing loss without intermediate optical amplification; CRT reconstruction converts local arithmetic faults into globally detectable invalid states; and $Z$-axis thermal partitioning isolates the optical compute layer from dominant CMOS thermal activity. Collectively, these mechanisms ensure that the architecture remains consistent with Shannon information limits, thermodynamic stability, nonlinear optical bounds, bounded noise propagation, and deterministic fault visibility.
 
-The resulting system demonstrates that scalable photonic exact arithmetic is achievable not through increasingly aggressive analog precision, but through spatial modular reformulation aligned with the underlying laws of optics, thermodynamics, and information theory.
+Importantly, JANUS does not claim to transcend physical law. Instead, it reorganizes computation so that all dominant physical constraints remain bounded simultaneously. The resulting system demonstrates that scalable photonic exact arithmetic is achievable not through increasingly aggressive analog precision, but through spatial modular reformulation aligned with the underlying laws of optics, thermodynamics, and information theory.
 
 \appendices
 
-\section{Derivation of Analog Accumulation Precision Collapse}
-
-\subsection{\textbf{Maximum Exact Accumulation Requirement}}
-
-Consider an analog photonic multiply-accumulate operation using unsigned 8-bit operands. The maximum operand value becomes:
-
-\begin{equation}
-x_{max} = 255
-\end{equation}
-
-The largest exact product is therefore:
-\begin{equation}
-p_{max} = 255 \times 255 = 65025
-\end{equation}
-
-For an accumulation of N terms, the maximum analog accumulation becomes:
-
-\begin{equation}
-S_{max} = N \times 65025
-\end{equation}
-
-Thus:
-\begin{equation}
-S_{Mini} = 32 \times 65025 = 2,080,800 
-\end{equation}
-
-\begin{equation}
-S_{Edge} = 64 \times 65025 = 4,161,600
-\end{equation}
-
-\begin{equation}
-S_{Datacenter} = 128 \times 65025 = 8,323,200
-\end{equation}
-
-\subsection{\textbf{Equivalent ADC Resolution}}
-
-The required exact ADC resolution becomes:
-
-\begin{equation}
-N_{ADC} = \log_{2}(S_{max})
-\end{equation}
-
-Therefore:
-\begin{equation}
-N_{ADC,Mini} = log_2(2,080,800) = 21\text{ bits}
-\end{equation}
-
-\begin{equation}
-N_{ADC,Edge} = log2(4,161,600) = 22\text{ bits}
-\end{equation}
-
-\begin{equation}
-N_{ADC,Datacenter} = log2(8,323,200) = 23\text{ bits}
-\end{equation}
-
-Such resolutions are physically unrealistic at 100 GHz bandwidth.
-
-\subsection{\textbf{Effective SNR Requirement}}
-
-The theoretical SNR required for exact recovery of an N-bit converter becomes:
-
-\begin{equation}
-SNR_{dB} = 6.02N + 1.76
-\end{equation}
-
-Substituting the required ADC resolutions:
-\begin{equation}
-SNR_{Mini} = 6.02(21) + 1.76 = 128.18 dB
-\end{equation}
-
-\begin{equation}
-SNR_{Edge} = 6.02(22) + 1.76 = 134.20 dB
-\end{equation}
-
-\begin{equation}
-SNR_{Datacenter} = 6.02(23) + 1.76 = 140.22 dB
-\end{equation}
-
-These values exceed practical photonic detector limits by several orders of magnitude.
+\section{NOTATION AND SYSTEM PARAMETERS}
+\label{app:notation}
 
 \begin{table}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{ANALOG PRECISION COLLAPSE DERIVATION SUMMARY}
-\label{tab:table21}
-\begin{tabular}{lccc}
-\toprule
-Metric & Mini & Edge & Datacenter \\
-\midrule
-Accumulation Terms & 32 & 64 & 128 \\
-Maximum Exact Sum & 2,080,800 & 4,161,600 & 8,323,200 \\
-Required ADC Resolution & 21-bit & 22-bit & 23-bit \\
-Required SNR & 128.18 dB & 134.20 dB & 140.22 dB \\
-Physical Feasibility & No & No & No \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\section{DERIVATION OF GE/SI APD RECEIVER SENSITIVITY}
-\label{app:apd_sensitivity}
-
-The Ge/Si $\mathrm{SAC^2M}$ (Separate-Absorption-Charge-Cliff-Multiplication) avalanche photodetector employed by JANUS \cite{Chen2025} provides internal gain $M = 7$ with an effective ionisation ratio $k \approx 0.06$, yielding a gain--bandwidth product of 441~GHz at 105~GHz bandwidth. The binary OOK detection condition for JANUS requires distinguishing "light present" from "no light" at each One-Hot waveguide output.
-
-\subsection{\textbf{Excess Noise Factor}}
-
-The McIntyre excess noise factor for an APD with ionisation ratio $k$ operating at gain $M$ is:
-
-\begin{equation}
-F(M) = M \left[ 1-(1-k) \left(\frac{M-1}{M}\right)^2 \right]
-\end{equation}
-
-For $k = 0.06$ and $M = 7$:
-
-\begin{equation}
-F(7) = 7 \left[ 1-0.94 \left(\frac{6}{7}\right)^2 \right] \approx 2.0
-\end{equation}
-
-This is substantially below the $F > 5$ typical of conventional InGaAs APDs operating at similar gain.
-
-\subsection{\textbf{Receiver Sensitivity via Q-Factor}}
-
-The BER-based receiver sensitivity for binary OOK detection is derived from an exact physical integrate-and-dump noise formulation. The model captures boundary-charge jitter variance and pulse dispersion inter-symbol interference (ISI) tail variance over the 10 ps bit window. By incorporating an electro-optic Injection-Locked Oscillator (ILO) driven by a mode-locked frequency comb, pulse timing jitter is reduced to 50 fs rms. For a target BER of $\le 10^{-36}$, the reconciled analytical Q-factor evaluates to 12.72 (consistent within 11\% of time-domain Monte Carlo traces yielding $Q=11.36$). The required Q-factor is:
-
-\begin{equation}
-Q = \sqrt{2} \operatorname{erfc}^{-1}(2 \times 10^{-18}) \approx 9.38
-\end{equation}
- \textbf{(Note: Physical integrate-and-dump Q evaluates to 12.72)}
-
-The receiver sensitivity is then:
-
-\begin{equation}
-P_{\text{sens}} = \frac{Q \cdot \sigma_{\text{TIA}}}{M \cdot R}
-\end{equation}
-
-where the equivalent noise is modeled effectively as $\sigma_{\text{TIA}} = 1.8\,\mu\text{A}$ (accounting for jitter-induced amplitude noise in the receiverless integrate-and-dump front end), $M = 7$ is the avalanche gain, and $R \approx 0.8\,\text{A/W}$ is the Ge responsivity at 1064~nm.
-
-Substituting:
-
-\begin{equation}
-P_{\text{sens}} = \frac{9.38 \times 1.8 \times 10^{-6}}{7 \times 0.8} \approx 3.02\,\mu\text{W} = -25.20\,\text{dBm}.
-\end{equation}
-
-Adding a conservative 2.0~dB implementation margin for excess noise, coupling loss, and APD gain non-uniformity:
-
-\begin{equation}
-P_{\text{sens,practical}} \approx -23.20\,\text{dBm} \approx 4.79\,\mu\text{W}.
-\end{equation}
-
-\subsection{\textbf{Detection Margin}}
-
-For the JANUS passive fan-out and routing architecture, the total optical path loss accounts for both the 18-stage passive split and the excess component losses ($L_{\text{excess}} = 14.40\,\text{dB}$):
-
-\begin{equation}
-\begin{aligned}
-L_{\text{total}} &= 10\log_{10}(2^{18}) + L_{\text{excess}} \\
-&= 54.19\,\text{dB} + 14.40\,\text{dB} = 68.59\,\text{dB}.
-\end{aligned}
-\end{equation}
-
-The delivered optical power at each terminal APD receiver is:
-
-\begin{equation}
-\begin{aligned}
-P_{\text{det}} &= P_{\text{laser}} - L_{\text{total}}
-= +50.0\,\text{dBm} - 68.59\,\text{dB},\\
-&= -18.59\,\text{dBm} \approx 13.84\,\mu\text{W}.
-\end{aligned}
-\end{equation}
-
-Therefore, the net binary detection margin is:
-
-\begin{equation}
-\begin{aligned}
-\text{Margin} &= P_{\text{det}} - P_{\text{sens,practical}} \\
-&= (-18.59\,\text{dBm}) - (-23.20\,\text{dBm}) = +4.61\,\text{dB}.
-\end{aligned}
-\end{equation}
-
-This +4.61~dB margin (a $> 2.88\times$ power safety factor over the $10^{-18}$ BER sensitivity limit, and +6.61~dB over the theoretical quantum limit) confirms that binary spatial detection with Ge/Si APDs operates with high fidelity across the entire passive fan-out and routing architecture without requiring any intermediate optical amplification.
-
-\section{MATHEMATICAL DERIVATION OF ASYMMETRIC 16-TREE FERMAT CORE SCALING AND COMPARATIVE TOPOLOGICAL ANALYSIS}
-\label{app:benes_complexity}
-
-\textbf{Note:} The following provides the formal structural derivation of the Asymmetric 16-Tree Fermat Core routing complexity and evaluates its scaling properties alongside conventional integrated optical switching topologies. System-total switch counts represent the per-multiplier fabric scaled across all tiles ($N_{\mathrm{tiles}} \times N^2 \times N_{\mathrm{switch,single}}$), as established in Section~\ref{sec:thermo_optic_scaling}.
-
-\subsection{\textbf{Asymmetric 16-Tree Fermat Core Structural Derivation}}
-
-The Asymmetric 16-Tree Fermat Core operates over a 17-channel spatial alphabet ($N_{\mathrm{alphabet}} = 17$):
-\begin{equation}
-\mathcal{A}_{17} = \{ WG_0, \, WG_1, \, WG_2, \, \dots, \, WG_{16} \}
-\end{equation}
-where $WG_0$ is a dark reference channel representing zero operand values ($0 \times B \equiv 0 \pmod{m}$), and $WG_1 \dots WG_{16}$ are active optical channels representing nonzero residue states.
-
-Under One-Hot spatial encoding, exactly one input waveguide carries optical power during any scalar multiplication cycle. Rather than routing channels through a generalized $N \times N$ non-blocking permutation mesh, each active input waveguide $i \in \{1, \dots, 16\}$ connects to an independent, dedicated binary routing tree to steer its light to the desired output waveguide dictated by weight operand $B$.
-
-\paragraph{Stage Scaling:}
-To select among the 16 active output channels, each binary tree requires a stage depth of:
-\begin{equation}
-S_{\mathrm{16\text{-}tree}} = \log_2(16) = 4 \text{ stages (universal)}
-\end{equation}
-This stage depth is strictly invariant across all three deployment tiers (Mini, Edge, Datacenter) because routing depth depends exclusively on the modular residue alphabet dimension ($M = 16$), not the matrix dimension $N$.
-
-\paragraph{Per-Multiplier Switch Count Scaling:}
-Each binary tree of depth $S = 4$ is composed of $2 \times 2$ (or $1 \times 2$) non-volatile $\mathrm{Sb_2S_3}$ PCM switching elements:
-\begin{equation}
-N_{\mathrm{sw,tree}} = \sum_{k=0}^{S-1} 2^k = 1 + 2 + 4 + 8 = 2^4 - 1 = 15 \text{ switches}
-\end{equation}
-Because the core provides dedicated routing trees for each of the 16 active input channels, the exact total switch count per optical multiplier is:
-\begin{equation}
-N_{\mathrm{switch,16tree}} = 16 \times N_{\mathrm{sw,tree}} = 16 \times 15 = \mathbf{240 \text{ switches}}
-\end{equation}
-
-\subsection{\textbf{Comparative Topological Complexity Analysis}}
-
-In integrated photonic computing, classical switching topologies are governed by the following structural formulations for an $N$-channel spatial fabric:
-\begin{enumerate}
-\item \textbf{Full Crossbar Matrix ($N \times N$):} A non-blocking crossbar requires $N^2$ switches and $N$ cascaded stages. For $N=256$, $N_{\mathrm{switch}} = 65,536$ switches and $S = 256$ stages, causing severe attenuation ($>75\,\mathrm{dB}$) and excessive multi-nanosecond delay ($>2.5\,\mathrm{ns}$).
-\item \textbf{Dilated Spanke--Bene\v{s} Network:} To eliminate first-order crosstalk, a dilated Spanke-Beneš architecture requires $2N(N-1)$ switches across $2N$ stages. For $N=256$, this demands $130,560$ switches and $512$ stages ($>120\,\mathrm{dB}$ loss), rendering it physically unroutable on-chip.
-\item \textbf{Path-Independent Insertion Loss (PILOSS) Mesh:} PILOSS provides uniform path lengths with $N(N-1)/2$ switches and $N$ stages. For $N=256$, this requires $32,640$ switches and $256$ stages ($>50\,\mathrm{dB}$ loss).
-\item \textbf{Multi-Stage Bene\v{s} Permutation Network:} A rearrangeable non-blocking Bene\v{s} mesh scales as:
-\begin{equation}
-N_{\mathrm{switch,benes}} = \frac{N}{2}(2\log_2 N - 1)
-\end{equation}
-For $N=256$, each multiplier requires $N_{\mathrm{switch,benes}} = 128 \times 15 = 1,920$ switches across $S=15$ stages ($7.50\,\mathrm{dB}$ loss, $750\,\mathrm{ps}$ latency).
-\item \textbf{Asymmetric 16-Tree Fermat Core (JANUS):} By exploiting the physical axiom of One-Hot arithmetic---that exactly one channel carries light per operation---the architecture avoids permutation mesh redundancies entirely:
-\begin{equation}
-N_{\mathrm{switch,16tree}} = 16 \times (2^{\log_2 16} - 1) = 16 \times 15 = \mathbf{240\text{ switches}}
-\end{equation}
-with an invariant stage depth of $S = 4$ stages. This achieves:
-\begin{itemize}
-\item \textbf{Switch Efficiency:} $8.0\times$ fewer switches than a Bene\v{s} mesh, and over $130\times$ to $540\times$ fewer switches than PILOSS and Spanke-Beneš fabrics. Across the Datacenter tier, this slashes switch count from over $1.006$ billion to $125.8$ million switches.
-\item \textbf{Minimal Insertion Loss:} Stage depth of 4 stages confines switch fabric loss to $1.61\,\mathrm{dB}$ ($4 \times 0.2627\,\mathrm{dB} + \text{excess}$), preserving $+6.142\,\mathrm{dB}$ of link margin.
-\item \textbf{Picosecond Time-of-Flight:} Optical transit latency is restricted to $t_{\mathrm{opt}} \approx 1.33\,\mathrm{ps}$, enabling end-to-end single-computation latency to drop below $100\,\mathrm{ps}$ ($84.18\,\mathrm{ps}$).
-\item \textbf{Crosstalk Immunity:} Because only one binary tree is energized per scalar cycle, inter-channel path crosstalk is structurally prevented at the optical input.
-\end{itemize}
-\end{enumerate}
-
-\section{DERIVATION OF PASSIVE FANOUT LOSS}
-
-\subsection{\textbf{Ideal Power Splitting}}
-
-For ideal passive fanout into N branches:
-
-\begin{equation}
-P_{k} = \frac{P_0}{N}
-\end{equation}
-
-The splitting loss becomes:
-\begin{equation}
-L_{split} = 10 \log_{10}(N)
-\end{equation}
-
-Thus:
-\begin{equation}
-L_{Mini} = 10 \log_{10}(32) = 15.05 dB
-\end{equation}
-
-\begin{equation}
-L_{Edge} = 10 log_{10}(64) = 18.06 dB
-\end{equation}
-
-\begin{equation}
-L_{Datacenter} = 10 log_{10}(128) = 21.07 dB
-\end{equation}
-
-
-\subsection{\textbf{Implications}}
-
-Because JANUS employs coherent single-wavelength fanout, all branches remain phase coherent:
-
-\begin{center}
-\text{$\Delta \phi \approx 0$}
-\end{center}
-
-Thus, passive splitting does not introduce spectral incoherence or inter-channel wavelength instability.
-
-\section{DERIVATION OF THERMAL PHASE DRIFT}
-
-\subsection{\textbf{Temperature-Dependent Refractive Index}}
-
-Silicon refractive index varies with temperature:
-
-\begin{equation}
-n(T) = n_0 + \frac{dn}{dT} \Delta T 
-\end{equation}
-
-Optical phase becomes:
-
-\begin{equation}
-\phi = \frac{2\pi nL}{\lambda}
-\end{equation}
-
-Therefore:
-
-\begin{equation}
-\Delta \phi = \frac{2\pi L}{\lambda} \frac{dn}{dT} \Delta T
-\end{equation}
-
-\subsection{\textbf{Implications}}
-
-Even small thermal perturbations produce significant optical phase drift. Thus, large-scale photonic routing requires bounded thermal environments. JANUS achieves this through Z-axis thermal partitioning.
-
-\section{DERIVATION OF CRT ERROR AMPLIFICATION}
-
-\subsection{\textbf{CRT Reconstruction}}
-
-For coprime modulus set:
-
-\begin{equation}
-\mathcal{M} = \{m_1, m_2, \dots, m_k\}
-\end{equation}
-
-the reconstructed integer becomes:
-
-\begin{equation}
-X = \sum_{i=1}^k x_i M_i N_i \mod M
-\end{equation}
-
-where:
-
-\begin{equation}
-M = \prod_{i=1}^k m_i
-\end{equation}
-
-\subsection{\textbf{Residue Fault}}
-
-Suppose one residue becomes corrupted:
-\begin{equation}
-x_j \rightarrow x_j + \delta
-\end{equation}
-
-Then reconstruction becomes:
-\begin{equation}
-X ' = X + \delta M_j N_j \mod M
-\end{equation}
-
-Thus:
-\begin{equation}
-|X ' - X| \propto M_j
-\end{equation}
-
-which scales with global CRT range. Therefore, small local residue faults become globally amplified reconstruction inconsistencies.
-
-\subsection{\textbf{Interpretation}}
-
-The architecture therefore converts:
-\begin{center}
-\textbf{Small Local Fault $\rightarrow$ Large Global Invalidity}
-\end{center}
-
-This property forms the basis of CRT arithmetic fault visibility in JANUS.
-
-\section{COMPREHENSIVE MULTI-PRECISION PERFORMANCE PROFILES}
-\label{app:perf_profiles}
-
-This appendix provides the complete multi-precision performance and energy efficiency profiles for the three JANUS hardware deployment configurations (Mini, Edge, and Datacenter), spanning native INT4 direct mode ($P=4, k=1$) up to INT64 exact spatial RNS mode ($P=64, k=16$). Peak theoretical throughput corresponds to 100\% hardware utilization ($\eta = 1.0$), while sustained operational throughput incorporates JIR thermal rotation duty cycles and pipeline management ($\eta = 0.85$). Throughput and energy efficiency are quantified in $\text{TMAC/s}$ ($1\text{ MAC} = 2\text{ FLOPS}$) and $\text{TMAC/s/W}$, respectively.
-
-\begin{table*}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{JANUS MINI CONFIGURATION PERFORMANCE PROFILE (32 TILES, $32 \times 32$)}
-\label{tab:table16}
-\begin{tabular}{lcccc}
-\toprule
-Precision Target & RNS Tiles ($k$) & Peak (TMAC/s) & Sustained (TMAC/s) & Energy Efficiency (TMAC/s/W) \\
-\midrule
-INT4 Direct ($P=4$) & 1 & 3,276.8 & 2,785.3 & 251.48 -- 213.76$^\dagger$ \\
-INT8 Exact ($P=8$) & 2 & 1,638.4 & 1,392.6 & 125.74 -- 106.88 \\
-INT16 Exact ($P=16$) & 4 & 819.2 & 696.3 & 62.87 -- 53.44 \\
-INT32 Exact ($P=32$) & 8 & 409.6 & 348.2 & 31.44 -- 26.72 \\
-INT64 Exact ($P=64$) & 16 & 204.8 & 174.1 & 15.72 -- 13.36 \\
-\bottomrule
-\multicolumn{5}{p{0.92\textwidth}}{\scriptsize $^\dagger$Evaluated against full-system wall-plug power ($13.03\,\mathrm{W}$) for the complete 32-tile system. For comparison, the physical Model~1A monolithic 16-tile planar processor delivers $1,392.6\,\mathrm{TMAC/s}$ (INT4, $225.71\,\mathrm{TMAC/s/W}$) and $87.0\,\mathrm{TMAC/s}$ (INT64, $14.10\,\mathrm{TMAC/s/W}$) at $6.17\,\mathrm{W}$ on-chip package power.} \\
-\end{tabular}
-\end{table*}
-
-\begin{table*}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{JANUS EDGE CONFIGURATION PERFORMANCE PROFILE (32 TILES, $64 \times 64$)}
-\label{tab:table17}
-\begin{tabular}{lcccc}
-\toprule
-Precision Target & RNS Tiles ($k$) & Peak (TMAC/s) & Sustained (TMAC/s) & Energy Efficiency (TMAC/s/W) \\
-\midrule
-INT4 Direct ($P=4$) & 1 & 13,107.2 & 11,141.1 & 300.76 -- 255.65 \\
-INT8 Exact ($P=8$) & 2 & 6,553.6 & 5,570.6 & 150.38 -- 127.82 \\
-INT16 Exact ($P=16$) & 4 & 3,276.8 & 2,785.3 & 75.19 -- 63.91 \\
-INT32 Exact ($P=32$) & 8 & 1,638.4 & 1,392.6 & 37.60 -- 31.96 \\
-INT64 Exact ($P=64$) & 16 & 819.2 & 696.3 & 18.80 -- 15.98 \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-\begin{table*}[htbp]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{JANUS DATACENTER CONFIGURATION PERFORMANCE PROFILE (32 TILES, $128 \times 128$)}
-\label{tab:table18}
-\begin{tabular}{lcccc}
-\toprule
-Precision Target & RNS Tiles ($k$) & Peak (TMAC/s) & Sustained (TMAC/s) & Energy Efficiency (TMAC/s/W) \\
-\midrule
-INT4 Direct ($P=4$) & 1 & 52,428.8 & 44,564.5 & 280.68 -- 238.58 \\
-INT8 Exact ($P=8$) & 2 & 26,214.4 & 22,282.2 & 140.34 -- 119.29 \\
-INT16 Exact ($P=16$) & 4 & 13,107.2 & 11,141.1 & 70.17 -- 59.65 \\
-INT32 Exact ($P=32$) & 8 & 6,553.6 & 5,570.6 & 35.09 -- 29.82 \\
-INT64 Exact ($P=64$) & 16 & 3,276.8 & 2,785.3 & 17.54 -- 14.91 \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-\section{SCOPE BOUNDARIES AND OPEN PROBLEMS}
-\label{app:open_problems}
-
-\subsection{\textbf{What JANUS Does Not Claim}}
-
-Intellectual honesty requires explicit statement of the boundaries of this work. JANUS does not claim:
-\begin{itemize}
-\item  \textbf{Perfect fault immunity.} CRT consistency checking detects fault patterns that produce residue inconsistency, but multi-fault combinations or faults confined within a single residue domain may remain undetected without redundant moduli. The JIR mitigates this through predictive RRNS engagement on thermal trend, but formal closed-form bounds remain an open problem.
-\item  \textbf{Elimination of photonic nonlinearities}. Single-wavelength operation substantially suppresses interchannel nonlinear interactions. Self-phase modulation and intra-channel effects remain present and must be managed through power budgeting.
-\item  \textbf{Replacement of all digital arithmetic.} JANUS targets photonic matrix multiplication workloads. It is not proposed as a general-purpose processor replacement.
-\item  \textbf{Fabrication-validated large-scale implementation.} The full architecture remains a forward-looking systems integration proposal. Component-level demonstrations from the literature motivate the design, but full system integration has not yet been demonstrated.
-\item  \textbf{Analog noise elimination.} JANUS does not eliminate analog noise, fabrication variation, or thermal fluctuation. Instead, it reduces the system’s dependence on global high-resolution analog reconstruction, trading analog precision requirements for spatial routing correctness.
-\end{itemize}
-
-\subsection{\textbf{Future Work and Open Problems}}
-
-Three open problems must be resolved for JANUS to progress from architectural proposal to fabrication-validated implementation.
-\begin{itemize}
-\item  \textbf{Five-stratum SiPh yield characterization.} Recent work has demonstrated CMOS-compatible 3D silicon photonic platforms with interlayer couplers and switching elements across two and three strata, fabricated using standard DUV stepper processes. The JANUS datacenter configuration requires extending this to five strata while maintaining acceptable interlayer optical coupling loss and fabrication yield across 125.8 million 16-Tree Fermat PCM switch sites (approx. 25.2 million switches per stratum across 5 strata) within a single reticle field. The key open questions are cumulative interlayer insertion loss across five strata, and wafer-scale yield of vertical optical vias at the required density. These are questions of demonstrated process extension, not of unproven technology.
-\item  \textbf{Reconciliation of passive fan-out architecture with the tile--detector hierarchy.} The updated passive fan-out for the Datacenter configuration employs 18 cascaded 1 : 2 splitters, yielding $N = 2^{18} = 262,144$ output ports from a single 100 W 1064 nm Yb-fiber master laser \cite{Jeong2004}. The JANUS datacenter tile architecture specifies 32 tiles $\times$ 16,384 multipliers $\times$ 17 waveguides = $8{,}912{,}896$ total detectors (524,288 active per cycle). These two descriptions address different physical fan-out points within the optical pipeline; a formal reconciliation mapping each passive-split output to its corresponding tile--multiplier input port is required before the power budget can be finalized. Pending this reconciliation, the Table~\ref{tab:table15} total remains illustrative rather than formally closed.
-
-Additionally, three engineering items arising from the wavelength and detector changes remain open:
-\begin{enumerate}
-\item $\mathrm{Sb_2S_3}$ phase-change optical contrast ( $\Delta$n, $\Delta$k) at 1064 nm has not been explicitly re-verified in large-scale vertical reservoir integrations; the effect is broadband and low-risk, but unconfirmed.
-\item The Ge/Si $\mathrm{SAC^2M}$ APD operating point ($M = 7$, $F(M) = 2.0$, 105~GHz bandwidth) is a demonstrated device \cite{Chen2025}, but integration with the JANUS interleaved two-layer detector block has not been characterized.
-\item Laser relative intensity noise (RIN) of the high-power Yb-fiber source becomes the dominant accuracy driver in the absence of an intermediate gain stage; formal RIN-to-BER analysis is required.
-\end{enumerate}
-\item  \textbf{Formal multi-fault analysis of CRT arithmetic visibility bounds.} Under single-residue corruption, CRT magnitude amplification provides strong fault visibility. Formal analysis is needed to characterize detection probability under simultaneous multi-tile faults, correlated failure modes affecting spatially adjacent residue channels, and faults that remain confined within a single residue domain without crossing into CRT inconsistency. Additionally, the JIR thermal-prediction model requires formal characterization of the temperature-trend detection latency and the minimum sensor update rate needed to engage RRNS protection before a fault materialises. Establishing closed-form detectability bounds under an adversarial fault model would complete the reliability argument for the architecture.
-\end{itemize}
-
-\subsection{\textbf{Notation Summary}}
-
-\begin{table}[H]
 \centering
 \caption{PRIMARY NOTATION USED THROUGHOUT THIS WORK}
 \label{tab:table22}
 \scriptsize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{ll}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{ll|ll}
 \toprule
-Symbol & Definition \\
+Symbol & Definition & Symbol & Definition \\
 \midrule
-$N$ & Matrix/mesh dimension \\
-$P_{\text{laser}}$ & Master laser optical power \\
-$L$ & Propagation or interaction length \\
-$M$ & CRT product range: $M = \prod m_i$ \\
-$M_j$ & CRT partial product: $M/m_j$ \\
-$m_i$ & $i$-th RNS modulus \\
-$x_i$ & Residue of $X$ modulo $m_i$ \\
-$N_i$ & CRT Garner coefficient: $M_i^{-1} \bmod m_i$ \\
-$\gamma$ & Nonlinear optical coefficient \\
-$G$ & Avalanche gain ($M$) or linear gain \\
-$F$ & Excess noise factor ($F(M)$) or noise figure \\
-$S$ & Number of optical routing stages ($S=4$ in 16-Tree Fermat Core) \\
-$\phi$ & Optical phase \\
-$\alpha$ & Optical attenuation coefficient (or thermal diffusivity) \\
-$T$ & Temperature or throughput (by context) \\
-$n$ & Refractive index \\
-$\chi^{(2)}$ & Second-order nonlinear susceptibility \\
-$\omega$ & Angular optical frequency \\
+$N$ & Matrix/mesh dimension & $S$ & Routing stages ($S=4$ in 16-Tree) \\
+$P_{\text{laser}}$ & Master laser optical power & $\phi$ & Optical phase \\
+$L$ & Propagation/interaction length & $\alpha$ & Attenuation coeff. / diffusivity \\
+$M$ & CRT product range: $M = \prod m_i$ & $T$ & Temperature or throughput \\
+$M_j$ & CRT partial product: $M/m_j$ & $n$ & Refractive index \\
+$m_i$ & $i$-th RNS modulus & $\chi^{(2)}$ & 2nd-order nonlinear susceptibility \\
+$x_i$ & Residue of $X \bmod m_i$ & $\omega$ & Angular optical frequency \\
+$N_i$ & Garner coefficient: $M_i^{-1} \bmod m_i$ & $\gamma$ & Nonlinear optical coefficient \\
+$G, F$ & Avalanche gain, excess noise & $Q, \mathrm{BER}$ & Signal-to-noise, bit error rate \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\providecommand{\BIBdecl}{\relax}
+\renewcommand{\BIBdecl}{\scriptsize\setlength{\itemsep}{-0.5pt}}
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 

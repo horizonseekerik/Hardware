@@ -71,9 +71,9 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
 
     def __init__(self, activity_factor: float = 1.0):
         self.activity_factor = max(0.0, min(1.0, activity_factor))
-        self.die_width_um = DIE_WIDTH_UM      # 3200 um = 3.2 mm
-        self.die_height_um = DIE_HEIGHT_UM    # 3200 um = 3.2 mm
-        self.total_die_area_mm2 = (self.die_width_um * self.die_height_um) * 1e-6  # 10.24 mm^2
+        self.die_width_um = DIE_WIDTH_UM      # 10000 um = 10.0 mm
+        self.die_height_um = DIE_HEIGHT_UM    # 10000 um = 10.0 mm
+        self.total_die_area_mm2 = (self.die_width_um * self.die_height_um) * 1e-6  # 100.0 mm^2
 
         # Universal parameters
         self.num_tiles = 16                   # 16 spatial RNS residue tiles (4x4)
@@ -525,7 +525,7 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # 12. Global Power Ring & Decoupling Mesh
-        # 40 um width along die perimeter: (3200*4 - 4*40) * 40 = 505,600 um^2 = 0.506 mm^2.
+        # 40 um width along die perimeter: (10000*4 - 4*40) * 40 = 1,593,600 um^2 = 1.594 mm^2.
         tot_pwr_ring_um2 = 4.0 * (self.die_width_um - PWR_RING_WIDTH_UM) * PWR_RING_WIDTH_UM
         area_items.append(ComponentAreaSpec(
             name="Global VDD/VSS Power Ring & Decap Mesh",
@@ -539,7 +539,7 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # 13. 4-Layer Concentric Moisture Barrier Chip Seal Ring
-        # 40 um width around outer die edge: (3200*4 - 4*40) * 40 = 505,600 um^2 = 0.506 mm^2.
+        # 40 um width around outer die edge: (10000*4 - 4*40) * 40 = 1,593,600 um^2 = 1.594 mm^2.
         tot_seal_ring_um2 = 4.0 * (self.die_width_um - 40.0) * 40.0
         area_items.append(ComponentAreaSpec(
             name="4-Layer Moisture Seal Ring & Dicing Border",

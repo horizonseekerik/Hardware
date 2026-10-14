@@ -489,7 +489,7 @@ class CloudGraphGenerator:
         ber_theory = np.clip(ber_theory, 1e-35, 1.0)
 
         fig, ax = plt.subplots(figsize=(9, 5), dpi=self.dpi)
-        ax.semilogy(P_rx_dBm, ber_theory, color='#0284c7', lw=2.2, label=r"Gaussian-Fit Model ($Q=16.11$): $\mathrm{BER} = \frac{1}{2}\mathrm{erfc}(Q/\sqrt{2})$")
+        ax.semilogy(P_rx_dBm, ber_theory, color='#0284c7', lw=2.2, label=r"Gaussian-Fit Model ($Q=13.41$): $\mathrm{BER} = \frac{1}{2}\mathrm{erfc}(Q/\sqrt{2})$")
 
         # Empirical simulation checkpoints (0 errors in simulated bits)
         empirical_powers = [-25.05, -24.0, -22.0, -20.0]
@@ -670,7 +670,7 @@ class CloudGraphGenerator:
         ax.axhline(30, color='white', linestyle='--', alpha=0.5, label="Photonic / Waveguide Boundary (30 um)")
         ax.axhline(280, color='cyan', linestyle='--', alpha=0.5, label="SiO2 Buffer / CMOS Boundary (280 um)")
 
-        ax.set_title(r"5M-Element Elmer 3D FEM: Through-Thickness Temperature Stratum Profile", fontsize=11, weight='bold', pad=10)
+        ax.set_title(r"2.4M-Element Elmer 3D FEM: Through-Thickness Temperature Stratum Profile", fontsize=11, weight='bold', pad=10)
         ax.set_xlabel("Lateral Die Dimension $x$ (mm)", fontsize=10)
         ax.set_ylabel(r"Depth from Top Surface $z$ ($\mu\mathrm{m}$)", fontsize=10)
         ax.invert_yaxis()
@@ -778,7 +778,7 @@ class CloudGraphGenerator:
             v = 0.4 if b == 1 else -0.4
             ax_a.plot(t_eye, v * np.cos(t_eye * math.pi / 10.0) + np.random.normal(0, 0.02, len(t_eye)),
                       color='#38bdf8', alpha=0.1, lw=1.0)
-        ax_a.set_title(r"(a) 100 GHz Eye ($73.9\%$ Opening)", fontsize=10, weight='bold', color='#0f172a')
+        ax_a.set_title(r"(a) 100 GHz Eye ($77.3\%$ Opening)", fontsize=10, weight='bold', color='#0f172a')
         ax_a.set_xlabel("Time (ps)", fontsize=8.5, color='#0f172a')
         ax_a.set_ylabel(r"$V_{\mathrm{in}}$ (V)", fontsize=8.5, color='#0f172a')
         ax_a.tick_params(colors='#0f172a', labelsize=8)

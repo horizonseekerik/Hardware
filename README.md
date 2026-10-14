@@ -2,7 +2,7 @@
 
 [![Live Platform](https://img.shields.io/badge/Live%20Platform-Vercel%20Deployed-00f2fe.svg)](https://janus-photonic-hardware.vercel.app/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22733656.svg)](https://doi.org/10.5281/zenodo.22733656)
-[![Architecture Treatise](https://img.shields.io/badge/Architecture%20Treatise-39%20Pages%20(IEEEtran)-blue.svg)](./JANUS_IEEE_Manuscript.pdf)
+[![Architecture Treatise](https://img.shields.io/badge/Architecture%20Treatise-24%20Pages%20(IEEEtran)-blue.svg)](./JANUS_IEEE_Manuscript.pdf)
 [![Patent Pending](https://img.shields.io/badge/Indian%20Patent-App%20202611052791-gold.svg)](#-patent--intellectual-property)
 [![TRL Readiness](https://img.shields.io/badge/TRL-4.0%20(Co--Sim%20Validated)-green.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![Peak Compute](https://img.shields.io/badge/Peak%20Compute-1.64%20PMAC%2Fs%20(3.28%20Peta--OPS%20INT4)-gold.svg)](#-ai-workload-benchmarks--gpu-comparison)
@@ -108,7 +108,7 @@ Janus Update/
 ├── janus_100m_results.tar.gz                  # 100,000,000-Run Cloud HPC Production Archive (11.78 MB)
 │
 ├── 📄 Primary Academic Manuscripts & Reports
-│   ├── documentation_reports/JANUS_IEEE_Manuscript.pdf              # Complete 39-page formally verified IEEE manuscript
+│   ├── documentation_reports/JANUS_IEEE_Manuscript.pdf              # Complete 24-page formally verified IEEE manuscript
 │   ├── documentation_reports/JANUS_Mini16_Simulation_Report.pdf     # Multi-physics co-simulation sign-off report (1M & 100M verified)
 │   ├── documentation_reports/JANUS_Mini16_CMOS_Architecture.pdf     # 65nm CMOS digital backend architecture blueprint
 │   ├── documentation_reports/deep-research-report.md                # In-depth architectural synthesis research report
@@ -128,7 +128,7 @@ Janus Update/
 │   └── apple-touch-icon.png / favicon*                           # High-DPI browser tab icons and mobile app badges
 │
 ├── 📂 Academic Paper LaTeX Source Repositories
-│   ├── research_paper_sources/                           # 39-Page Primary IEEE Architecture Manuscript (IEEEtran)
+│   ├── research_paper_sources/                           # 24-Page Primary IEEE Architecture Manuscript (IEEEtran)
 │   │   ├── full manuscript sources                           # Full manuscript LaTeX source code
 │   │   ├── references.bib                     # Comprehensive academic bibliography database
 │   │   ├── main.pdf                           # Compiled IEEE manuscript PDF
