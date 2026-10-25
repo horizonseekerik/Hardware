@@ -1,6 +1,14 @@
 import math
 import numpy as np
-import meep as mp
+try:
+    import meep as mp
+except ImportError:
+    try:
+        import pytest
+        pytest.skip('MEEP is not installed on this system', allow_module_level=True)
+    except Exception:
+        pass
+    mp = None
 from dc_geom_utils import make_true_sbend_polygon, make_parabolic_patch_polygon
 
 LAMBDA_0 = 1.064

@@ -11,7 +11,15 @@ Physics Principle:
 """
 
 import math
-import meep as mp
+try:
+    import meep as mp
+except ImportError:
+    try:
+        import pytest
+        pytest.skip('MEEP is not installed on this system', allow_module_level=True)
+    except Exception:
+        pass
+    mp = None
 
 LAMBDA_0 = 1.064
 FCEN = 1.0 / LAMBDA_0
