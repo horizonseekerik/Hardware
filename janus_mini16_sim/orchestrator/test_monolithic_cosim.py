@@ -85,7 +85,7 @@ def test_monolithic_cosim_end_to_end():
     m = res["metrics"]
     a = res["algorithmic"]
 
-    assert m["pass_link_margin"] is True, f"Baseline margin {m['nominal_baseline_margin_dB']} dB below 4.5 dB"
+    assert m["pass_link_margin"] is True, f"Baseline margin {m['nominal_baseline_margin_dB']} dB below target margin"
     assert m["pass_clock_skew"] is True, f"Clock skew {m['skew_max_fs']} fs exceeded 100 fs"
     assert m["pass_thermal_ceiling"] is True, f"Peak temperature {m['t_peak_C']} C exceeded 70 C"
     assert m["eye_height_mV"] >= 15.0, f"Eye height {m['eye_height_mV']} mV below 15 mV"

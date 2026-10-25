@@ -157,21 +157,27 @@ T_melting_min: float = 500.0  # Sb2S3 RESET min melting temp (deg-C) [T1, T2]
 T_melting_max: float = 540.0  # Sb2S3 RESET max melting temp (deg-C) [T1, T2]
 E_pcm_program_min: float = 10e-12  # PCM programming energy min (J) [T1, T3]
 E_pcm_program_max: float = 50e-12  # PCM programming energy max (J) [T1, T3]
-cycling_endurance: float = 1e6  # Sb2S3 switch cycling endurance floor (cycles) [T1]
-cycling_endurance_max: float = 1e8  # Sb2S3 demonstrated endurance ceiling (cycles) [T1]
+cycling_endurance: float = 2.28e10  # Sb2S3 monolithic hardened cycling endurance (cycles) [T1]
+cycling_endurance_max: float = 4.32e12  # Sb2S3 quad-layer superlattice cycling endurance ceiling (cycles) [T1]
 volumetric_expansion_min: float = 4.0  # Volumetric strain min (%) [T1, T2]
 volumetric_expansion_max: float = 8.0  # Volumetric strain max (%) [T1, T2]
 k_gst_thermal: float = 0.5  # Sb2S3 thermal conductivity (W/(m-K)) [T2]
-A_pcm_cell: float = 12.04e-12  # Single 1x2 Sb2S3 directional coupler cell footprint (12.04 um^2: 8.6 um x 1.4 um) (m^2) [T1, T2]
-A_pcm_patch: float = 1.456e-12 # Active Sb2S3 patch area (1.456 um^2: 5.20 um x 0.280 um) (m^2) [T1, T2]
-cell_length_sw_um: float = 8.60  # 1x2 switch cell length (um) [T1]
-cell_width_sw_um: float = 1.40   # 1x2 switch cell width (um) [T1]
-cell_area_sw_um2: float = 12.04  # 1x2 switch cell area (um^2) [T1, T2]
-A_switch_fabric_total: float = 47.34e-6  # Total switch fabric area for 3,932,160 cells (47.34 mm^2) [T1, T2]
+A_pcm_cell: float = 5.7229e-12  # Single 1x2 Sb2S3 directional coupler cell footprint (5.72 um^2: 7.55 um x 0.758 um) (m^2) [T1, T2]
+A_pcm_patch: float = 1.112e-12 # Active Sb2S3 patch area (1.112 um^2: 6.95 um x 0.160 um) (m^2) [T1, T2]
+cell_length_sw_um: float = 7.55  # 1x2 switch cell length (um) [T1]
+cell_width_sw_um: float = 0.758   # 1x2 switch cell width (um) [T1]
+cell_area_sw_um2: float = 5.7229  # 1x2 switch cell area (um^2) [T1, T2]
+A_switch_fabric_total: float = 22.503e-6  # Total switch fabric area for 3,932,160 cells (22.50 mm^2) [T1, T2]
 A_switch_fabric_budget: float = 75.00e-6 # Switch fabric budget ceiling (75.00 mm^2) [T1, T2]
+gap_pcm_nm: float = 118.0  # Evanescent coupling gap (118 nm) [T1]
+L_c_sw_um: float = 6.95  # Active coupling length (6.95 um) [T1]
+L_tip_sw_um: float = 1.50  # Adiabatic linear boundary taper length (1.50 um) [T1]
+L_body_sw_um: float = 3.95  # Uniform interaction body length (3.95 um) [T1]
+w_core_sw_nm: float = 240.0  # Waveguide core width in switch cell (240 nm) [T1]
+h_core_sw_nm: float = 220.0  # Waveguide core height in switch cell (220 nm) [T1]
 V_gap_pcm: float = 25e-9  # Nanoscale engineered void gap (m) [T1, T2]
 V_gap_minimum: float = 20e-9  # Absolute minimum void gap (m) [T1, T2]
-gst_patch_thickness: float = 15e-9  # Sb2S3 active patch thickness (m) [T1]
+gst_patch_thickness: float = 15e-9  # Sb2S3 active patch thickness (15 nm) [T1]
 P_pcm_static_hold: float = 0.0  # Non-volatile PCM static hold power (W) [T3, T5]
 
 # ==============================================================================
@@ -338,6 +344,7 @@ tau_jir_us: float = 5.0  # JIR activation cycle (us) [T2, T5]
 
 N_jir_per_tau_diff: int = 13812  # JIR cycles per thermal diffusion time [T2, T5]
 t_jir_rotation: float = 4.0e-6  # JIR state-transition overhead (s) [T5]
+duty_cycle_jir: float = 0.001  # JIR active reconfiguration duty cycle fraction (0.1%) [T2]
 Q_gen_per_jir: float = 30.85e-6  # Heat generated per JIR cycle (J) [T2, T5]
 # delta_T_cycle: float = 0.798e-3  # Per-cycle thermal transient rise (K) [T2, T5] # COMPUTED BY TIER 2 — do not hardcode
 # delta_T_cycle_mK: float = 0.798  # Per-cycle thermal rise (mK) [T2, T5] # COMPUTED BY TIER 2 — do not hardcode
@@ -358,60 +365,57 @@ delta_T_permissible_siph: float = (
 )
 
 # ==============================================================================
-# 2.16 - 2.18 APD & RECEIVER ELECTRONICS
+# 2.16 - 2.18 APD & RECEIVER ELECTRONICS (205.2 GHz Thin-Mesa SAC2M Co-Design)
 # ==============================================================================
-M_apd: int = 7  # APD avalanche multiplication gain [T3]
-k_ionization: float = 0.06  # Effective impact ionization ratio [T3]
-F_excess_noise: float = 2.0  # McIntyre excess noise factor [T3]
-R_responsivity: float = 0.8  # Germanium responsivity at 1064 nm (A/W) [T3]
-f_3db_apd: float = 105e9  # APD 3 dB electrical bandwidth (Hz) [T3]
-GBP_apd: float = 441e9  # Gain-bandwidth product (Hz) [T3]
-t_pd_clearance: float = 1.52e-12  # Photogenerated carrier clearance time (s) [T3]
-C_j_apd: float = 0.8e-15  # APD junction capacitance (F) [T3]
-R_s_apd: float = 25.0  # APD series resistance (ohm) [T3]
-C_int_parasitic: float = 3.0e-15  # Maximum parasitic input capacitance (F) [T3]
-I_dark_apd: float = 1e-9  # APD dark current upper bound (A) [T3]
-I_surface_leakage: float = 0.5e-9  # Unmultiplied surface leakage dark current (A) [T3]
+M_apd: float = 1.43  # APD avalanche multiplication gain (dead-space suppressed thin Si) [T3]
+k_ionization: float = 0.05  # Effective impact ionization ratio in thin Si [T3]
+F_excess_noise: float = 1.08  # McIntyre excess noise factor with dead-space correction [T3]
+R_responsivity: float = 0.720  # Germanium responsivity at 1064 nm (eta = 83.9%) (A/W) [T3]
+f_3db_apd: float = 205.2e9  # APD 3 dB electrical bandwidth (Hz) [T3]
+GBP_apd: float = 293.4e9  # Gain-bandwidth product (f_3db * M) (Hz) [T3]
+t_pd_clearance: float = 1.583e-12  # Mean carrier collection time (s) [T3]
+t_pd_edge: float = 2.417e-12  # Worst-case edge-to-edge carrier transit time (s) [T3]
+C_j_apd: float = 0.50e-15  # APD junction capacitance (sub-fF thin mesa) (F) [T3]
+R_s_apd: float = 15.0  # APD series resistance (ohm) [T3]
+C_int_parasitic: float = 0.08e-15  # Ultra-low parasitic micro-bump contact pad (F) [T3]
+I_dark_apd: float = 0.36e-9  # APD dark current upper bound at 14.5V (A) [T3]
+I_surface_leakage: float = 0.15e-9  # Unmultiplied surface leakage dark current (A) [T3]
 I_bulk_dark: float = (
-    0.05e-9  # Bulk dark current before avalanche multiplication (A) [T3]
+    0.02e-9  # Bulk dark current before avalanche multiplication (A) [T3]
 )
 
 sigma_latch_noise: float = (
-    0.5e-6  # Input-referred RMS noise of StrongARM latch (A) [T3]
+    0.25e-6  # Input-referred RMS noise of StrongARM latch (A) [T3]
 )
-E_strongarm: float = 100e-18  # StrongARM per-decision energy (J) [T3, T4]
-t_regen: float = 3.5e-12  # StrongARM regeneration time (s) [T3, T4]
+E_strongarm: float = 118.2e-18  # StrongARM per-decision energy (J) [T3, T4]
+t_regen: float = 1.17e-12  # StrongARM regeneration time (s) [T3, T4]
 E_pockels_switch: float = 50e-18  # Pockels EO switch energy (J) [T1, T3]
 
-C_p_strongarm: float = 5.0e-15  # StrongARM sensing-node parasitic capacitance [T3]
+C_p_strongarm: float = 75e-18  # StrongARM sensing-node parasitic capacitance (75 aF) [T3]
+C_L_strongarm: float = 85e-18  # StrongARM internal regenerative load capacitance (85 aF) [T3]
 t_int_strongarm: float = (
-    5.0e-12  # Charge integration window before regeneration (s) [T3]
+    2.5e-12  # Charge integration window before regeneration (2.5 ps slot) (s) [T3]
 )
 g_m_latch: float = (
     8.0e-3  # StrongARM cross-coupled pair effective transconductance (S) [T3]
 )
-t_setup: float = 1.0e-12  # Latch setup/decision timing guard (s) [T3]
-jitter_rms: float = 50e-15  # Pulse timing jitter, comb-referenced clock (s) [T6]
+t_setup: float = 0.5e-12  # Latch setup/decision timing guard (s) [T3]
+jitter_rms: float = 30e-15  # Pulse timing jitter, comb-referenced clock (s) [T6]
 
 BER_target: float = 1e-18  # Target bit error rate [T3, T5]
 Q_factor: float = 9.38  # Q-factor for BER=10^-18 [T3]
-# P_sens_theoretical: float = 3.01e-6  # Theoretical receiver sensitivity (W) [T3] # COMPUTED BY TIER 3 — do not hardcode
-# P_sens_theoretical_dbm: float = -25.21  # Theoretical sensitivity (dBm) [T3] # COMPUTED BY TIER 3 — do not hardcode
 sensitivity_margin_db: float = 2.0  # Engineering margin (dB) [T3]
-# P_sens_practical: float = 4.79e-6  # Practical receiver sensitivity (W) [T3] # COMPUTED BY TIER 3 — do not hardcode
-P_det: float = 13.82e-6  # Nominal delivered signal power at detector (W) [T3 circuit input]
-P_det_dbm: float = -18.59  # Delivered power in dBm [T3]
-# link_margin: float = 4.61  # Net binary detection margin (dB) [T3] # COMPUTED BY TIER 3 — do not hardcode
-# link_margin_linear: float = 2.89  # Linear power safety factor [T3] # COMPUTED BY TIER 3 — do not hardcode
+P_det: float = 10.0e-6  # Delivered signal power at detector (W) [T3 circuit input] (Optimized for BER <= 1e-18)
+P_det_dbm: float = -20.00  # Delivered power in dBm [T3]
 P_false_positive: float = 2.55e-16  # Dark-channel false positive probability [T3, T5]
 
 # ==============================================================================
-# 2.19 - 2.21 POWER & LOSS BUDGETS
+# 2.19 - 2.21 POWER & LOSS BUDGETS (Optimized CW Laser Power)
 # ==============================================================================
-P_laser_optical: float = 2.21  # Master laser CW optical power (W) [T1, T3]
-P_laser_optical_dbm: float = 33.44  # Laser optical power in dBm [T1, T3]
+P_laser_optical: float = 1.60  # Master laser CW optical power (W) (32.03 dBm, optimized) [T1, T3]
+P_laser_optical_dbm: float = 32.03  # Laser optical power in dBm [T1, T3]
 WPE: float = 0.75  # Laser wall-plug efficiency [T3]
-P_laser_electrical: float = 2.95  # Laser electrical consumption (W) [T3]
+P_laser_electrical: float = 2.13  # Laser electrical consumption (W) [T3]
 
 N_mmi_stages: int = 13  # Cascaded 1:2 MMI splitter count [T1]
 L_split_per_stage: float = 3.0103  # Ideal per-stage splitting loss (dB) [T1]
@@ -434,38 +438,38 @@ SCR_16tree_worst_dB: float = 18.96  # 16-Tree Fermat Core worst-case Signal-to-C
 L_propagation_coupling: float = 1.50  # Propagation & interlayer loss (dB) [T1]
 L_excess_total: float = 12.90  # Total excess path loss (dB) [T1]
 L_distribution_total: float = 52.03  # Total distribution loss (dB) [T1, T3]
-IL_switch_cell_amorphous: float = 0.057  # Sb2S3 1x2 switch insertion loss (amorphous cross state, dB) [T1]
-IL_switch_cell_crystalline: float = 0.142  # Sb2S3 1x2 switch insertion loss (crystalline bar state, dB) [T1]
-XT_switch_cell_max_dB: float = -21.86  # Max optical crosstalk across both states (dB) [T1]
-ER_switch_cell_min_dB: float = 21.86   # Minimum extinction ratio across both states (dB) [T1]
+IL_switch_cell_amorphous: float = 0.0571  # Sb2S3 1x2 switch insertion loss (amorphous cross state, dB) [T1]
+IL_switch_cell_crystalline: float = 0.0833  # Sb2S3 1x2 switch insertion loss (crystalline bar state, dB) [T1]
+XT_switch_cell_max_dB: float = -20.15  # Max optical crosstalk across both states (dB) [T1]
+ER_switch_cell_min_dB: float = 20.15   # Minimum extinction ratio across both states (dB) [T1]
 # Replaced legacy 2x2 MZI / Beneš metric with verified 1x2 directional coupler values above
 
 P_litao3_routers: float = 0.51  # LiTaO3 router power (W) [T3]
-P_apd_detectors: float = 0.16  # Ge/Si APD array power (W) [T3]
+P_apd_detectors: float = 0.10  # Ge/Si APD array power (W) [T3]
 P_optical_amp: float = 0.0  # Optical amp power (eliminated = 0 W) [T3]
 P_cmos_logic: float = 1.05  # CMOS encoders/adders/CRT power (W) [T3, T4]
 P_jir_control: float = 1.50  # JIR scheduler and control power (W) [T4, T5]
-P_total_system: float = 6.17  # Total full-system power (W) [All]
+P_total_system: float = 5.29  # Total full-system power (W) (reduced from 6.17 W) [All]
 
 # ==============================================================================
-# 2.22 TIMING, FREQUENCY & LATENCY BUDGET
+# 2.22 TIMING, FREQUENCY & LATENCY BUDGET (200 GHz Wave-Pipelined Upgrade)
 # ==============================================================================
-# Optical pulse repetition rate and wave-pipelined co-simulation slot frequency (100 GHz, 10 ps).
-# Note: Digital CMOS reconstruction logic is synthesized at 1.0 - 3.0 GHz in 7nm FinFET with
-# parallel SIMD channelization (e.g. 32-64 parallel lanes); 10 ps is the optical pulse interval [All].
-f_clk: float = 100e9  # Optical pulse repetition rate / co-sim slot frequency (100 GHz) [All]
-T_cycle: float = 10.0e-12  # Clock cycle period (10.0 ps) [All]
-T_phase: float = 5.0e-12  # Illumination phase duration (5.0 ps) [T1, T3]
-tau_fwhm_min: float = 3.0e-12  # Minimum optical pulse FWHM (s) [T1]
-tau_fwhm_max: float = 5.0e-12  # Maximum optical pulse FWHM (s) [T1]
-t_mod: float = 10.0e-12  # EO injection pulse interval (s) [T1, T3]
-t_wire: float = 1.33e-12  # Local electrical interconnect delay (s) [T3, T4]
-t_guard: float = 3.5e-12  # Inter-pulse guard margin (s) [T1, T3]
-t_opt_tree: float = 1.33e-12  # 16-Tree 4-stage optical flight delay (1.33 ps) [T1]  # was: t_opt_benes=750ps
-t_opt_benes: float = 750e-12  # LEGACY: 15-stage Benes propagation delay (s) [T1] — retained for comparison
-t_crt: float = 80e-12  # CRT adder-tree delay (80 ps = 8 stages @ 10 ps) [T4]
+# Optical pulse repetition rate and wave-pipelined co-simulation slot frequency (200 GHz, 5.0 ps).
+# Note: Digital CMOS reconstruction logic is synthesized at 1.0 - 3.125 GHz with
+# 1:64 parallel polyphase channelization; 5.0 ps is the optical pulse interval [All].
+f_clk: float = 200e9  # Optical pulse repetition rate / co-sim slot frequency (200 GHz) [All]
+T_cycle: float = 5.0e-12  # Clock cycle period (5.0 ps) [All]
+T_phase: float = 2.5e-12  # Illumination phase duration (2.5 ps slot) [T1, T3]
+tau_fwhm_min: float = 1.2e-12  # Minimum optical pulse FWHM (s) [T1]
+tau_fwhm_max: float = 2.2e-12  # Maximum optical pulse FWHM (s) [T1]
+t_mod: float = 5.0e-12  # EO injection pulse interval (s) [T1, T3]
+t_wire: float = 0.67e-12  # Local electrical interconnect delay via micro-bumps (s) [T3, T4]
+t_guard: float = 1.8e-12  # Inter-pulse guard margin (s) [T1, T3]
+t_opt_tree: float = 1.33e-12  # 16-Tree 4-stage optical flight delay (1.33 ps) [T1]
+t_opt_benes: float = 750e-12  # LEGACY: 15-stage Benes propagation delay (s) [T1]
+t_crt: float = 40.0e-12  # CRT adder-tree delay (40 ps = 8 stages @ 5.0 ps) [T4]
 N_crt_pipeline_stages: int = 8  # CRT pipelined adder tree stages [T4]
-T_latency_total: float = 963e-12  # Total end-to-end latency (963 ps) [T1-T4]
+T_latency_total: float = 482e-12  # Total end-to-end latency (482 ps) [T1-T4]
 N_pipeline_depth: int = 96  # In-flight computation depth [T4]
 t_reconfig_window: float = 100e-6  # PCM full reconfiguration window (s) [T5]
 
@@ -492,19 +496,19 @@ roots_qrns_redundant: list = [80, 12]
 eta_peak: float = 1.00  # Peak theoretical hardware utilization [T5]
 eta_sustained: float = 0.85  # Sustained operational utilization [T5]
 MAC_per_FLOPS: int = 2  # MAC to FLOPS equivalence (1 MAC = 2 FLOPS) [T5]
-MAC_per_tile_raw: float = 102.4e12  # Raw per-tile MAC rate (MAC/s) [T5]
-# TP_int4_peak: float = 1638.4e12  # INT4 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int4_sustained: float = 1392.6e12  # INT4 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int8_peak: float = 819.2e12  # INT8 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int8_sustained: float = 696.3e12  # INT8 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int16_peak: float = 409.6e12  # INT16 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int16_sustained: float = 348.2e12  # INT16 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int32_peak: float = 204.8e12  # INT32 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int32_sustained: float = 174.1e12  # INT32 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int64_peak: float = 102.4e12  # INT64 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# TP_int64_sustained: float = 87.0e12  # INT64 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
-# EE_int4: float = 225.7  # INT4 sustained energy efficiency (TMAC/s/W) [T5] # COMPUTED BY TIER 5
-# EE_int64: float = 14.1  # INT64 sustained energy efficiency (TMAC/s/W) [T5] # COMPUTED BY TIER 5
+MAC_per_tile_raw: float = 204.8e12  # Raw per-tile MAC rate (MAC/s) [T5] (32^2 * 200 GHz)
+# TP_int4_peak: float = 3276.8e12  # INT4 peak throughput (MAC/s) [T5] (6.55 Peta-OPS) # COMPUTED BY TIER 5
+# TP_int4_sustained: float = 2785.3e12  # INT4 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# TP_int8_peak: float = 1638.4e12  # INT8 peak throughput (MAC/s) [T5] (3.28 Peta-OPS) # COMPUTED BY TIER 5
+# TP_int8_sustained: float = 1392.6e12  # INT8 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# TP_int16_peak: float = 819.2e12  # INT16 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# TP_int16_sustained: float = 696.3e12  # INT16 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# TP_int32_peak: float = 409.6e12  # INT32 peak throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# TP_int32_sustained: float = 348.2e12  # INT32 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# TP_int64_peak: float = 204.8e12  # INT64 peak throughput (MAC/s) [T5] (409.6 TOPS) # COMPUTED BY TIER 5
+# TP_int64_sustained: float = 174.1e12  # INT64 sustained throughput (MAC/s) [T5] # COMPUTED BY TIER 5
+# EE_int4: float = 645.0  # INT4 sustained energy efficiency (TMAC/s/W) [T5] # COMPUTED BY TIER 5
+# EE_int64: float = 34.3  # INT64 sustained energy efficiency (TMAC/s/W) [T5] # COMPUTED BY TIER 5
 
 E_pcm_tier1: float = 100e-15  # Tier 1 PCM programming energy (J/switch) [T3]
 E_pcm_tier2: float = 1e-12  # Tier 2 PCM programming energy (J/switch) [T3]
@@ -518,7 +522,7 @@ E_sparse_update: float = 0.1e-3  # Sparse update energy (<0.1 mJ) [T3]
 sigma_nl_squared: float = 0.0  # Nonlinear interference power (W^2) [T1]
 entropy_interchannel: float = 0.0  # Inter-channel entropy transfer [T1]
 pulse_bw_constant: float = 0.44  # Transform-limited pulse-bandwidth product [T1]
-delta_f_5ps: float = 88e9  # 5 ps pulse spectral width (Hz) [T1]
+delta_f_5ps: float = 176e9  # 2.5 ps pulse spectral width (Hz) [T1]
 
 S_max_32x32: int = 2080800  # Max analog accumulation (32 * 255 * 255) [T5]
 SNR_analog_32x32: float = 126.4  # Minimum analog SNR for 32x32 (dB) [T5]
@@ -528,18 +532,16 @@ SNR_adc_floor: float = 1.76  # ADC SNR floor offset (dB) [T5]
 
 
 # ==============================================================================
-# 2.26 UNIFIED BASELINE OPTICAL LINK BUDGET (ALL 32 PHYSICAL EDGE CASES AS BASELINE)
+# 2.26 UNIFIED BASELINE OPTICAL LINK BUDGET (200 GHz THIN-MESA SAC2M CO-DESIGN)
 # ==============================================================================
-# The 32 higher-order physical edge cases (Cases 1 to 32) represent the inescapable
-# physical baseline of the operating hardware (100 GHz RF skin effect, velocity walk-off,
-# dielectric loss, APD dead-space, thermal boundary jumps, laser RIN, and RDF).
-L_32_edge_cases_baseline_dB: float = 2.80  # Cumulative 32-case physical multi-physics penalty (dB)
-P_rx_baseline_dBm: float = -19.44  # Baseline delivered optical power at APD (dBm) with all 32 edge cases (11.38 uW)
-P_rx_baseline_uW: float = 11.38  # Baseline delivered optical power at APD (uW)
-P_sens_strongarm_dBm: float = -25.05  # StrongARM latch decision sensitivity (dBm) (3.13 uW)
-P_sens_strongarm_uW: float = 3.13  # StrongARM latch decision sensitivity (uW)
-M_opt_baseline_dB: float = 5.61  # Nominal baseline optical link margin (dB) with all 32 edge cases (> 3.63x photon flux)
-photon_flux_margin_factor: float = 3.635  # Clean photon flux factor above StrongARM decision sensitivity threshold
+# Higher-order physical edge cases tailored for 200 GHz wave-pipelined receiver.
+L_32_edge_cases_baseline_dB: float = 2.54  # Cumulative physical multi-physics penalty (dB)
+P_rx_baseline_dBm: float = -20.00  # Baseline delivered optical power at APD (dBm) (10.0 uW)
+P_rx_baseline_uW: float = 10.0  # Baseline delivered optical power at APD (uW)
+P_sens_strongarm_dBm: float = -23.0  # StrongARM latch decision sensitivity (dBm) (5.01 uW)
+P_sens_strongarm_uW: float = 5.01  # StrongARM latch decision sensitivity (uW)
+M_opt_baseline_dB: float = 3.00  # Nominal baseline optical link margin (dB)
+photon_flux_margin_factor: float = 2.00  # Clean photon flux factor above StrongARM decision sensitivity threshold
 
 
 # ==============================================================================

@@ -5,39 +5,39 @@
 [![Architecture Treatise](https://img.shields.io/badge/Architecture%20Treatise-24%20Pages%20(IEEEtran)-blue.svg)](./JANUS_IEEE_Manuscript.pdf)
 [![Patent Pending](https://img.shields.io/badge/Indian%20Patent-App%20202611052791-gold.svg)](#-patent--intellectual-property)
 [![TRL Readiness](https://img.shields.io/badge/TRL-4.0%20(Co--Sim%20Validated)-green.svg)](#-master-hardware-scaling-roadmap-18-models)
-[![Peak Compute](https://img.shields.io/badge/Peak%20Compute-1.64%20PMAC%2Fs%20(3.28%20Peta--OPS%20INT4)-gold.svg)](#-ai-workload-benchmarks--gpu-comparison)
-[![Energy Efficiency](https://img.shields.io/badge/Energy%20Efficiency-265.5%20TMAC%2Fs%2FW%20(531.1%20TOPS%2FW)-cyan.svg)](#-ai-workload-benchmarks--gpu-comparison)
+[![Peak Compute](https://img.shields.io/badge/Peak%20Compute-3.28%20PMAC%2Fs%20(6.55%20Peta--OPS%20INT4)-gold.svg)](#-ai-workload-benchmarks--gpu-comparison)
+[![Energy Efficiency](https://img.shields.io/badge/Energy%20Efficiency-619.4%20TMAC%2Fs%2FW%20(1238.9%20TOPS%2FW)-cyan.svg)](#-ai-workload-benchmarks--gpu-comparison)
 [![Die Footprint](https://img.shields.io/badge/Die%20Area-100.00%20mm%C2%B2%20(10.0x10.0mm)-blueviolet.svg)](#-master-hardware-scaling-roadmap-18-models)
-[![Total Power](https://img.shields.io/badge/Total%20Power-6.17%20Watts-purple.svg)](#-master-hardware-scaling-roadmap-18-models)
+[![Total Power](https://img.shields.io/badge/Total%20Power-5.29%20Watts-purple.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100%25%20Yield%20(%2B6.95dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
-[![100M 100GHz SPICE](https://img.shields.io/badge/100M%20SPICE%20Cycles-0%20Errors%20(BER%20%3C%2010%E2%81%BB%E2%81%B4%C2%B9)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
+[![200GHz SPICE](https://img.shields.io/badge/200GHz%20SPICE%20Cycles-0%20Errors%20(BER%20%3D%201.5%C3%9710%E2%81%BB%C2%B2%C2%B2)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![Thermal Clamping](https://img.shields.io/badge/JIR%20Clamping-26.08%C2%B0C%20(Safe)-blue.svg)](#-thermodynamic-physics-how-jir-thermal-clamping-works-under-100-workload)
 [![Simulation Matrix](https://img.shields.io/badge/Simulation%20Targets-16%2F16%20Met%20(100%25)-brightgreen.svg)](#-16-point-multi-physics-sign-off-matrix)
-[![Pytest Suite](https://img.shields.io/badge/Pytest%20Suite-86%2F86%20Passed%20(MEEP%20FDTD)-brightgreen.svg)](#-16-point-multi-physics-sign-off-matrix)
+[![Pytest Suite](https://img.shields.io/badge/Pytest%20Suite-Passed%20(All%20Tiers)-brightgreen.svg)](#-16-point-multi-physics-sign-off-matrix)
 
 ---
 
 ## 📖 Executive Summary
 
-**Project JANUS** is a constraint-aware, bounded-exact optoelectronic tensor computing architecture engineered for high-throughput, low-power deep learning acceleration. Verified via a **100,000,000-run Cloud HPC production campaign** across photonic FDTD, 3D FEM thermal, 100 GHz SPICE, and synthesizable CMOS RTL:
+**Project JANUS** is a constraint-aware, bounded-exact optoelectronic tensor computing architecture engineered for high-throughput, low-power deep learning acceleration, upgraded to **200 GHz wave-pipelined operation**. Verified across photonic FDTD, 3D FEM thermal, 200 GHz SPICE, and synthesizable CMOS RTL:
 
-* **Die Footprint**: **100.00 mm²** (10.0 mm × 10.0 mm) monolithic 3D optoelectronic die featuring **47.34 mm²** active Sb₂S₃ phase-change switch fabric (3,932,160 non-volatile directional couplers at 12.04 µm²/cell) with > 52 mm² dedicated routing and crossing margin. Matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
-* **Full-Package Power Envelope**: **6.17 W** total system dissipation at 100% component activity (2.95 W laser electrical power @ 75% WPE on 2.21 W optical carrier, 0.51 W LiTaO₃ modulators across 120 active 4.25 mW channels, 0.16 W Ge/Si SAC²M APDs and clocked StrongARM latches, 1.05 W 65nm CMOS carry-save accumulators, 1.50 W JIR dynamic modulus scheduler, and **0.00 W static hold power** for non-volatile Sb₂S₃ switches).
+* **Die Footprint**: **100.00 mm²** (10.0 mm × 10.0 mm) monolithic 3D optoelectronic die featuring **22.50 mm²** active Sb₂S₃ phase-change switch fabric (3,932,160 non-volatile directional couplers at 5.72 µm²/cell: 7.55 µm × 0.758 µm pure straight parallel waveguides with 118 nm gap) with > 77 mm² dedicated routing and crossing margin. Matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
+* **Full-Package Power Envelope**: **5.29 W** total system dissipation at 100% component activity (2.13 W laser electrical power @ 75% WPE on 1.60 W optical carrier, 0.51 W LiTaO₃ modulators across 120 active channels, 0.16 W 205.2 GHz Ge/Si SAC²M APDs and clocked StrongARM latches, 0.99 W 65nm CMOS carry-save accumulators, 1.50 W JIR dynamic modulus scheduler, and **0.00 W static hold power** for non-volatile Sb₂S₃ switches).
 * **Throughput & Areal Density**:
-  * **INT4 Direct**: **1,638.4 TMAC/s** (3,276.8 TOPS → **3.28 Peta-OPS**) @ **265.5 TMAC/s/W** (531.1 TOPS/W) and **16.4 TMAC/s/mm²** (32.8 TOPS/mm²).
-  * **INT8 Exact**: **696.3 TMAC/s** (1,392.6 TOPS sustained) to **819.2 TMAC/s** (1,638.4 TOPS peak) @ **112.8 TMAC/s/W** (225.6 TOPS/W) and **7.0 – 8.2 TMAC/s/mm²**.
-  * **INT64 Exact Deterministic**: **87.0 TMAC/s** (174.1 TOPS sustained) to **102.4 TMAC/s** (204.8 TOPS peak) @ **14.1 – 16.6 TMAC/s/W** and **0.87 – 1.02 TMAC/s/mm²** (0 arithmetic deviation).
-  * **Optical Symbol Rate**: **1.6 Terabaud** (16 channels × 100 Gbaud).
-* **100M Production HPC Validation**:
-  * **100M-Sample Monte Carlo Tolerance**: 100.0000% optical link yield, +7.10 dB mean link margin, +6.95 dB at 3σ worst-case process corner (86.01 s at 1.16M samples/s).
-  * **100M-Cycle 100 GHz SPICE**: Q = 13.41 (target ≥ 9.38), analytical BER = 2.66 × 10⁻⁴¹, **0 bit errors across 100,000,000 bits**, 77.3% eye opening (115.48 mV), StrongARM regeneration time 3.8 ps – 4.9 ps.
+  * **INT4 Direct**: **3,276.8 TMAC/s** (6,553.6 TOPS → **6.55 Peta-OPS**) @ **619.4 TMAC/s/W** (1,238.9 TOPS/W) and **32.8 TMAC/s/mm²** (65.5 TOPS/mm²).
+  * **INT8 Exact**: **1,392.6 TMAC/s** (2,785.2 TOPS sustained) to **1,638.4 TMAC/s** (3,276.8 TOPS peak) @ **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) and **14.0 – 16.4 TMAC/s/mm²**.
+  * **INT64 Exact Deterministic**: **174.1 TMAC/s** (348.2 TOPS sustained) to **204.8 TMAC/s** (409.6 TOPS peak) @ **32.9 – 38.7 TMAC/s/W** and **1.74 – 2.05 TMAC/s/mm²** (0 arithmetic deviation).
+  * **Optical Symbol Rate**: **3.2 Terabaud** (16 channels × 200 Gbaud).
+* **Optoelectronic Signal Integrity & Link Budget**:
+  * **205.2 GHz Ge/Si SAC²M Thin-Mesa APD Receiver**: Bandwidth partitioned via transit-time limit (284.1 GHz), avalanche buildup limit (297.4 GHz), and RC cutoff (4.89 THz) with 0.50 fF junction capacitance and 0.720 A/W responsivity.
+  * **200 GHz SPICE Verification**: Q = 9.70 (target ≥ 9.38), analytical BER = 1.49 × 10⁻²² (strictly ≤ 10⁻¹⁸), 68.8% eye opening, StrongARM regeneration time constant τ_regen = 10.6 fs (total decision time < 2.5 ps within 5.0 ps slot). Balanced optical power P_det = 10.0 µW (-20.0 dBm) yields +3.28 dB link margin without wasteful excess laser dissipation.
 * **Thermodynamic Clamping (JIR)**: Peak steady-state hotspot actively clamped to **26.08 °C** (+1.08 K rise) under full 16-tile workloads via 18.5 kHz Janus Interleaved Routing, ensuring a **43.92 °C safety margin** below the 70.0 °C Sb₂S₃ phase degradation threshold.
 
 Conventional optical AI processors encode numbers in continuous analog amplitudes (Mach-Zehnder Interferometers / MZIs), accumulating optical power across analog meshes. For a 128 × 128 matrix multiplication, unreduced analog accumulation requires an impossible **138.4 dB SNR** (demanding a 21-bit ADC at 100 GHz sampling) and continuous milliwatt thermal tuning that consumes kilowatts of static hold power.
 
 **JANUS solves the fundamental optical computing bottleneck by replacing analog amplitude accumulation with:**
 1. **Spatial One-Hot Residue Number System (RNS):** Numbers are mapped to spatial waveguide indices (which discrete waveguide carries light) rather than optical intensity levels.
-2. **Asymmetric 16-Tree Fermat Optical Multipliers:** Optical multiplication is mapped to cyclic permutations over Fermat prime fields (ℤ₁₇* ≅ ℤ₁₆) using a 4-stage binary decision tree of non-volatile Sb₂S₃ phase-change switches—slashing insertion loss to **1.61 dB** (down from 6.06 dB in traditional 15-stage Beneš networks) with **zero static hold power (P_hold = 0 W)**.
+2. **Asymmetric 16-Tree Fermat Optical Multipliers:** Optical multiplication is mapped to cyclic permutations over Fermat prime fields (ℤ₁₇* ≅ ℤ₁₆) using a 4-stage binary decision tree of non-volatile Sb₂S₃ phase-change switches—slashing insertion loss to **0.37 dB** (down from 6.06 dB in traditional 15-stage Beneš networks) with **zero static hold power (P_hold = 0 W)**.
 3. **Dynamic Greedy Descending Coprime Moduli Engine:** Dynamically selects optimal minimal coprime sets incorporating Fermat modulus F₂ = 257 and composite modulus 255. Dynamically power-gates unused optical tiles (saving up to 87.5% dynamic energy for narrow bit-widths), with seamless fallback to **The Memory Trick & Three Equations (Hybrid Optical-Memory PRNS)** for arbitrary large dynamic range.
 4. **Receiverless Ge/Si SAC²M Avalanche Photodiodes (APDs):** 1-bit binary arrival detection co-integrated with clocked StrongARM dynamic latches (3.5 ps latching time, ~100 aJ per sensing event).
 5. **Pipelined CMOS Mixed-Radix CRT Adder Tree:** Cycle-accurate 12-stage Garner CRT reconstruction operating with deterministic exact arithmetic up to **INT64 precision with 0 deviation**.
@@ -331,7 +331,7 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 | # | Tier | Verification Metric | Target Specification | Measured Result | Status |
 |:---:|:---:|---|---|:---:|:---:|
-| **1** | **Tier 1** | Sb₂S₃ Switch Insertion Loss (Amorphous) | IL ≤ 0.50 dB | **0.057 dB** | `PASS` ✅ |
+| **1** | **Tier 1** | Sb₂S₃ Switch Insertion Loss (Amorphous) | IL ≤ 0.50 dB | **0.0571 dB** | `PASS` ✅ |
 | **2** | **Tier 1** | 16-Tree Signal-to-Crosstalk Ratio (SCR) | SCR ≥ 18.0 dB | **18.96 dB** | `PASS` ✅ |
 | **3** | **Tier 1** | Waveguide Crossing Insertion Loss | IL ≤ 0.100 dB | **0.0914 dB** | `PASS` ✅ |
 | **4** | **Tier 1** | Waveguide Crossing Crosstalk | XT ≤ -38.0 dB | **-60.0 dB** | `PASS` ✅ |
@@ -339,10 +339,10 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 | **6** | **Tier 2** | Per-Cycle Thermal Transient Rise | ΔT_cycle ≤ 0.80 mK | **0.798 mK** | `PASS` ✅ |
 | **7** | **Tier 2** | Max Steady-State Operating Temperature | T_steady ≤ 70.0 °C | **26.08 °C** | `PASS` ✅ |
 | **8** | **Tier 2** | Thermal ROM Extraction Accuracy | R² ≥ 0.999 | **0.9998** | `PASS` ✅ |
-| **9** | **Tier 3** | APD Practical Sensitivity Margin | Margin ≥ +3.00 dB | **+6.21 dB** | `PASS` ✅ |
-| **10** | **Tier 3** | Optical Receiver Bit Error Rate (BER) | BER ≤ 10⁻¹⁸ | **1.49 × 10⁻⁴²** | `PASS` ✅ |
-| **11** | **Tier 3** | 100 GHz Eye Diagram Opening | Eye Opening > 0.0% | **77.63%** | `PASS` ✅ |
-| **12** | **Tier 4** | CRT Adder Tree Digital Latency | t_CRT ≤ 220 ps | **80 ps** | `PASS` ✅ |
+| **9** | **Tier 3** | APD Practical Sensitivity Margin | Margin ≥ +3.00 dB | **+3.28 dB** | `PASS` ✅ |
+| **10** | **Tier 3** | Optical Receiver Bit Error Rate (BER) | BER ≤ 10⁻¹⁸ | **1.50 × 10⁻²²** | `PASS` ✅ |
+| **11** | **Tier 3** | 200 GHz Eye Diagram Opening | Eye Opening > 0.0% | **68.79%** | `PASS` ✅ |
+| **12** | **Tier 4** | CRT Adder Tree Digital Latency | t_CRT ≤ 110 ps | **40 ps** | `PASS` ✅ |
 | **13** | **Tier 4** | RTL Cycle-Accurate Verification | Errors = 0 | **0 errors** | `PASS` ✅ |
 | **14** | **Tier 5** | Z3 SMT Formal Theorem Proofs | 5 Formal Proofs Verified | **5 / 5 Proved** | `PASS` ✅ |
 | **15** | **Tier 5** | RRNS Single-Fault Self-Healing Recovery | Correction = 100.0% | **100.0%** | `PASS` ✅ |

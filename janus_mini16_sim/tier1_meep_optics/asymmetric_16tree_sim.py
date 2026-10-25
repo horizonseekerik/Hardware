@@ -13,7 +13,7 @@ from typing import Dict, Tuple, List
 
 @dataclass
 class OpticalSwitchSpecs:
-    loss_per_switch_db: float = 0.40      # Insertion loss per 1x2 or 2x2 switch stage (dB)
+    loss_per_switch_db: float = 0.0833    # Insertion loss per 1x2 switch stage (dB, certified 3D FDTD Sub-6 um2 DC)
     extinction_ratio_db: float = 25.0     # On/Off extinction ratio (dB)
     waveguide_loss_db_per_cm: float = 0.10 # Silicon Nitride (Si3N4) core propagation loss (dB/cm)
     taper_loss_db: float = 0.035          # Inter-layer adiabatic taper loss Si3N4-to-Si (dB)

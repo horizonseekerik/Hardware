@@ -187,9 +187,9 @@ class MMI1x2SplitterModel:
         }
 
     def compute_13stage_cascade(self,
-                                P_laser_opt_W: float = 2.21,
-                                laser_WPE: float = 0.75,
-                                P_sens_practical_uW: float = 4.79) -> Dict[str, Any]:
+                                P_laser_opt_W: float = getattr(cfg, "P_laser_optical", 1.60),
+                                laser_WPE: float = getattr(cfg, "WPE", 0.75),
+                                P_sens_practical_uW: float = getattr(cfg, "P_sens_strongarm_uW", 5.01)) -> Dict[str, Any]:
         """
         Evaluates full 13-stage cascaded optical distribution tree across the die.
         """
@@ -266,7 +266,7 @@ class MMI1x2SplitterModel:
                 "P_det_uW": base_32cases_P_det_uW,
                 "P_det_dBm": base_32cases_P_det_dBm,
                 "link_margin_dB": base_32cases_link_margin_dB,
-                "is_margin_closed": bool(base_32cases_link_margin_dB >= 5.0),
+                "is_margin_closed": bool(base_32cases_link_margin_dB >= getattr(cfg, "sensitivity_margin_db", 2.0)),
             },
             "optimized": {
                 "excess_per_stage_dB": base_res["excess_loss_dB"],

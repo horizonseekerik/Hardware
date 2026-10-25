@@ -599,11 +599,12 @@ class Elmer3DThermalPipeline:
         self.T_ambient_C = self.T_ambient - 273.15
         self.P_total = self.macro_1d.P_total
         
-        # Explicit binding to config active switches
+        # Explicit binding to config active switches and JIR duty cycle
         self.N_switches_total = getattr(cfg, "N_ACTIVE_SWITCHES_TOTAL", 256)
         self.N_switches_per_tile = getattr(cfg, "N_ACTIVE_SWITCHES_PER_TILE", 16)
-        self.P_tile = getattr(cfg, "P_per_tile", self.P_total / 16.0)  # Electrical power per tile (0.386 W)
-        self.P_cell = self.P_total / float(self.N_switches_total)  # Average optical power per active switch
+        self.P_tile = getattr(cfg, "P_per_tile", self.P_total / 16.0)  # Electrical power per tile
+        self.duty_cycle_jir = getattr(cfg, "duty_cycle_jir", 0.001)    # JIR active reconfiguration duty cycle
+        self.P_cell = (self.P_total / float(self.N_switches_total)) * self.duty_cycle_jir  # Average dynamic active power per switch cell
         
         # Power & Area Normalization between 3D Tile Domain and 1D Stack:
         # Full die: A_die = 100 mm^2, P_total = 6.176 W -> q'' = 61.76 kW/m^2

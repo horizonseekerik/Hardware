@@ -12,10 +12,10 @@ class ILOCombLockModel:
     """Injection-Locked Oscillator (ILO) physical solver."""
 
     def __init__(self,
-                 f_rep_Hz: float = 100.0e9,
+                 f_rep_Hz: float = getattr(cfg, "f_clk", 200.0e9),
                  Q_tank: float = 15.0,
                  I_osc_A: float = 2.0e-3,
-                 P_comb_avg_W: float = 100.0e-6):
+                 P_comb_avg_W: float = 150.0e-6):
         self.f_rep = f_rep_Hz
         self.omega_rep = 2.0 * math.pi * self.f_rep
         self.Q_tank = Q_tank
@@ -31,7 +31,7 @@ class ILOCombLockModel:
         self.omega_L = (self.omega_rep / (2.0 * self.Q_tank)) * (self.I_inj / self.I_osc)
         self.f_lock_Hz = self.omega_L / (2.0 * math.pi)
 
-    def simulate_phase_locking_transient(self, delta_f0_Hz: float = 150.0e6, t_sim_s: float = 1.0e-9) -> Dict[str, Any]:
+    def simulate_phase_locking_transient(self, delta_f0_Hz: float = 150.0e6, t_sim_s: float = 2.5e-9) -> Dict[str, Any]:
         """Solve Adler's eq using solve_ivp and verify dynamic convergence."""
         delta_omega_0 = 2.0 * math.pi * delta_f0_Hz
         

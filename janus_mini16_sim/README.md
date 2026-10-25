@@ -3,7 +3,7 @@
 [![CI Multi-Physics Suite](https://github.com/horizonseekerik/janus-photonic-hardware/actions/workflows/ci.yml/badge.svg)](https://github.com/horizonseekerik/janus-photonic-hardware/actions)
 [![TRL Readiness](https://img.shields.io/badge/TRL-4.0%20(Cloud%20HPC%20Validated)-blue.svg)](#-technology-readiness-level)
 [![HPC 100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100.0000%25%20Yield%20(%2B6.95%20dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
-[![100 GHz SPICE](https://img.shields.io/badge/100%20GHz%20SPICE-BER%20%3D%202.66%C3%9710%E2%81%BB%E2%81%B4%C2%B9%20(0%20Errors)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
+[![200 GHz SPICE](https://img.shields.io/badge/200%20GHz%20SPICE-BER%20%3D%201.5%C3%9710%E2%81%BB%C2%B2%C2%B2%20(0%20Errors)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![JIR Thermal Clamping](https://img.shields.io/badge/JIR%20Thermal-26.08%C2%B0C%20(Clamped)-blue.svg)](#-thermodynamic-physics-how-jir-thermal-clamping-works-under-100-workload)
 [![Energy Efficiency](https://img.shields.io/badge/INT8%20Efficiency-489.1%20TOPS%2FW%20(3.35W)-green.svg)](#-gpu-comparative-benchmarks-janus-vs-nvidia-h100--b200)
 [![Compute Density](https://img.shields.io/badge/Compute%20Density-160.0%20TOPS%2Fmm%C2%B2-cyan.svg)](#-gpu-comparative-benchmarks-janus-vs-nvidia-h100--b200)
@@ -39,9 +39,9 @@ This directory houses the **verified 5-tier multi-physics co-simulation framewor
                                 ▼ (Across 250 µm SiO2 Thermal Buffer)
          +─────────────────────────────────────────────+
          |   65nm CMOS Base Stratum Detection & Logic  |
-         |   - StrongARM Regenerative Latches (3.5 ps) |
-         |   - 1:32 Time-Interleaved Deserializers     |
-         |   - 32-Lane SIMD Wallace-Kogge Logic        |
+         |   - StrongARM Regenerative Latches (2.5 ps) |
+         |   - 1:64 Time-Interleaved Deserializers (3.125 GHz) |
+         |   - 64-Lane SIMD Wallace-Kogge Logic        |
          |   - 12-Stage Pipelined CRT Adder Tree       |
          |   - 160-Bit Binary Carry-Save Accumulator   |
          +──────────────────────┬──────────────────────+
@@ -62,10 +62,10 @@ This directory houses the **verified 5-tier multi-physics co-simulation framewor
 
 | Tier | Simulation Engine | Physical / Architectural Scope | Deliverables & Verification |
 |---|---|---|---|
-| **Tier 1** | **3D MEEP (FDTD) & MPB** | 3D Maxwell curl solver, dual-layer Si₃N₄-on-Si optical stack, 4-stage 16-Tree Fermat core (1064 nm), non-volatile Sb₂S₃ directional couplers, Talbot MMI crossings, adiabatic Si₃N₄-to-Si tapers, LiTaO₃ Pockels modulators. | Touchstone `.s4p` S-matrices, Q_opt(x,y,z) heat map, IL = 1.636 dB ≤ 2.0 dB, ER ≥ 25.0 dB, zero TPA saturation. |
-| **Tier 2** | **Elmer FEM & 1D BDF** | 3D transient heat diffusion, 6-layer packaging strata, 250 µm SiO₂ thermal buffer, vertical Cu TDV pillars (8 µm diam, 10,000 mm⁻²), thermal transient damping, Foster RC extraction. | τ_diff = 69.06 ms, T_peak = 25.08 °C ≤ 65.0 °C, 5-pole state-space ROM (R² = 1.000). |
-| **Tier 3** | **Xyce SPICE & Bessel** | Vertical Cu TDVs (R < 0.05 Ω, C < 4.2 fF), Ge/Si SAC²M APD receiver (M = 7), clocked 65nm StrongARM latch (3.5 ps regen), 3rd-order 105 GHz Bessel filter, PRBS-7 eye diagrams. | BER = 1.15 × 10⁻³⁰ ≤ 10⁻¹⁸, practical link margin ≥ +3.45 dB, eye opening = 73.9%. |
-| **Tier 4** | **Digital CMOS RTL** | 65nm CMOS base stratum logic: 100 GHz wave-pipelined RNS encoder, 1:32 deserializer, 32-lane SIMD Wallace-Kogge unit, 12-stage CRT adder tree (80 ps latency), 160-bit accumulator, JIR fault monitor in Verilog (`iverilog` + `cocotb`). | Cycle-accurate bit-exact reconstruction (0 clock slips, 0 errors across 1000 randomized vectors). |
+| **Tier 1** | **3D MEEP (FDTD) & MPB** | 3D Maxwell curl solver, dual-layer Si₃N₄-on-Si optical stack, 4-stage 16-Tree Fermat core (1064 nm), sub-6 µm² pure straight parallel Sb₂S₃ directional couplers, Talbot MMI crossings, adiabatic Si₃N₄-to-Si tapers, LiTaO₃ Pockels modulators. | Touchstone `.s4p` S-matrices, Q_opt(x,y,z) heat map, IL = 0.369 dB (16-Tree core), switch IL = 0.0571 dB, ER ≥ 20.15 dB, zero TPA saturation. |
+| **Tier 2** | **Elmer FEM & 1D BDF** | 3D transient heat diffusion, 6-layer packaging strata, 250 µm SiO₂ thermal buffer, vertical Cu TDV pillars (8 µm diam, 10,000 mm⁻²), thermal transient damping, Foster RC extraction. | τ_diff = 69.06 ms, T_peak = 26.08 °C ≤ 70.0 °C, 5-pole state-space ROM (R² = 0.9998). |
+| **Tier 3** | **Xyce SPICE & Bessel** | Vertical Cu TDVs (R < 0.05 Ω, C < 4.2 fF), 205.2 GHz Ge/Si SAC²M APD receiver (M = 7, Cj = 0.50 fF, R = 0.72 A/W), clocked 65nm StrongARM latch (τ_regen = 10.6 fs), PRBS-7 eye diagrams at 200 GHz. | BER = 1.50 × 10⁻²² ≤ 10⁻¹⁸, practical link margin ≥ +3.28 dB, eye opening = 68.79%. |
+| **Tier 4** | **Digital CMOS RTL** | 65nm CMOS base stratum logic: 200 GHz wave-pipelined RNS encoder, 1:32 deserializer, 32-lane SIMD Wallace-Kogge unit, 12-stage CRT adder tree (40 ps latency), 160-bit accumulator, JIR fault monitor in Verilog (`iverilog` + `cocotb`). | Cycle-accurate bit-exact reconstruction (0 clock slips, 0 errors across 1000 randomized vectors). |
 | **Tier 5** | **Python RNS & Z3 SMT** | 5 formal Z3 mathematical proofs, Spatial One-Hot tensor router, JIR thermal scheduler, RRNS self-healing. | 5/5 formal proofs passed, 100% single-fault recovery, **0.00000000% GEMM arithmetic deviation**. |
 
 ---
@@ -76,7 +76,7 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 | # | Tier | Verification Metric | Target Specification | Measured Result | Status |
 |:---:|:---:|---|---|:---:|:---:|
-| **1** | **Tier 1** | $\text{Sb}_2\text{S}_3$ Switch Insertion Loss (Amorphous) | $\text{IL} \le 0.50\,\text{dB}$ | **$0.057\,\text{dB}$** | `PASS` ✅ |
+| **1** | **Tier 1** | $\text{Sb}_2\text{S}_3$ Switch Insertion Loss (Amorphous) | $\text{IL} \le 0.50\,\text{dB}$ | **$0.0571\,\text{dB}$** | `PASS` ✅ |
 | **2** | **Tier 1** | 16-Tree Signal-to-Crosstalk Ratio (SCR) | $\text{SCR} \ge 18.0\,\text{dB}$ | **$18.96\,\text{dB}$** | `PASS` ✅ |
 | **3** | **Tier 1** | Waveguide Crossing Insertion Loss | $\text{IL} \le 0.100\,\text{dB}$ | **$0.0914\,\text{dB}$** | `PASS` ✅ |
 | **4** | **Tier 1** | Waveguide Crossing Crosstalk | $\text{XT} \le -38.0\,\text{dB}$ | **$-60.0\,\text{dB}$** | `PASS` ✅ |
@@ -84,10 +84,10 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 | **6** | **Tier 2** | Per-Cycle Thermal Transient Rise | $\Delta T_{\text{cycle}} \le 0.80\,\text{mK}$ | **$0.798\,\text{mK}$** | `PASS` ✅ |
 | **7** | **Tier 2** | Max Steady-State Operating Temperature | $T_{\text{steady}} \le 70.0^\circ\text{C}$ | **$26.08^\circ\text{C}$** | `PASS` ✅ |
 | **8** | **Tier 2** | Thermal ROM Extraction Accuracy | $R^2 \ge 0.999$ | **$0.9998$** | `PASS` ✅ |
-| **9** | **Tier 3** | APD Practical Sensitivity Margin | $\text{Margin} \ge +3.00\,\text{dB}$ | **$+6.21\,\text{dB}$** | `PASS` ✅ |
-| **10** | **Tier 3** | Optical Receiver Bit Error Rate (BER) | $\text{BER} \le 10^{-18}$ | **$1.49 \times 10^{-42}$** | `PASS` ✅ |
-| **11** | **Tier 3** | $100\,\text{GHz}$ Eye Diagram Opening | $\text{Eye Opening} > 0.0\%$ | **$77.63\%$** | `PASS` ✅ |
-| **12** | **Tier 4** | CRT Adder Tree Digital Latency | $t_{\text{CRT}} \le 220\,\text{ps}$ | **$80\,\text{ps}$** | `PASS` ✅ |
+| **9** | **Tier 3** | APD Practical Sensitivity Margin | $\text{Margin} \ge +3.00\,\text{dB}$ | **$+3.28\,\text{dB}$** | `PASS` ✅ |
+| **10** | **Tier 3** | Optical Receiver Bit Error Rate (BER) | $\text{BER} \le 10^{-18}$ | **$1.50 \times 10^{-22}$** | `PASS` ✅ |
+| **11** | **Tier 3** | $200\,\text{GHz}$ Eye Diagram Opening | $\text{Eye Opening} > 0.0\%$ | **$68.79\%$** | `PASS` ✅ |
+| **12** | **Tier 4** | CRT Adder Tree Digital Latency | $t_{\text{CRT}} \le 110\,\text{ps}$ | **$40\,\text{ps}$** | `PASS` ✅ |
 | **13** | **Tier 4** | RTL Cycle-Accurate Verification | $\text{Errors} = 0$ | **$0\text{ errors}$** | `PASS` ✅ |
 | **14** | **Tier 5** | Z3 SMT Formal Theorem Proofs | 5 Formal Proofs Verified | **$5 / 5\text{ Proved}$** | `PASS` ✅ |
 | **15** | **Tier 5** | RRNS Single-Fault Self-Healing Recovery | $\text{Correction} = 100.0\%$ | **$100.0\%$** | `PASS` ✅ |
@@ -102,17 +102,17 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 | Platform | Architecture / Process Node | Die Footprint | Total Power | INT8 Compute Throughput | INT8 Energy Efficiency | Area Compute Density |
 |---|---|---|---|---|---|---|
-| **JANUS Model 1A (Planar MVP)** | **Spatial RNS Photonic (Monolithic 3D)** | **100.00 mm²** (10.0 × 10.0 mm) | **6.17 W** | **696.3 – 819.2 TMAC/s** (1,392.6 – 1,638.4 TOPS) | **112.8 – 132.8 TMAC/s/W** (225.6 – 265.5 TOPS/W) | **16.4 TMAC/s/mm²** (32.8 TOPS/mm² INT4) |
+| **JANUS Model 1A (Planar MVP - 200 GHz)** | **Spatial RNS Photonic (Monolithic 3D)** | **100.00 mm²** (10.0 × 10.0 mm) | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** (2,785.2 – 3,276.8 TOPS) | **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) | **14.0 – 16.4 TMAC/s/mm²** (32.8 TMAC/s/mm² INT4) |
 | **NVIDIA H100 SXM5** | Hopper (TSMC 4N) | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² (0.61 TMAC/s/mm²) |
 | **NVIDIA B200 Blackwell** | Blackwell (TSMC 4NP Dual-Die) | 1600 mm² | 1000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.12 TMAC/s/W) | 1.41 TOPS/mm² (0.70 TMAC/s/mm²) |
 
-- **158.9× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (112.8 vs. 0.71 TMAC/s/W)
-- **100.8× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (112.8 vs. 1.12 TMAC/s/W)
+- **370.7× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (263.2 vs. 0.71 TMAC/s/W)
+- **235.0× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (263.2 vs. 1.12 TMAC/s/W)
 - **26.9× Higher Compute Area Density vs. NVIDIA H100 SXM5** (16.4 vs. 0.61 TMAC/s/mm²)
 - **23.4× Higher Compute Area Density vs. NVIDIA B200 Blackwell** (16.4 vs. 0.70 TMAC/s/mm²)
-- **INT4 Direct Peak Throughput: 1,638.4 TMAC/s (3,276.8 TOPS @ 265.5 TMAC/s/W)**
-- **INT64 Deterministic Exact Precision: 87.0 – 102.4 TMAC/s (174.1 – 204.8 TOPS @ 14.1 – 16.6 TMAC/s/W)**
-- **Optical Line Rate: 1.6 Terabaud (16 channels × 100 Gbaud)**
+- **INT4 Direct Peak Throughput: 3,276.8 TMAC/s (6,553.6 TOPS @ 619.4 TMAC/s/W)**
+- **INT64 Deterministic Exact Precision: 174.1 – 204.8 TMAC/s (348.2 – 409.6 TOPS @ 32.9 – 38.7 TMAC/s/W)**
+- **Optical Line Rate: 3.2 Terabaud (16 channels × 200 Gbaud)**
 
 ---
 

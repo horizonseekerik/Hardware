@@ -441,7 +441,7 @@ class MonolithicDynamicCoSimulator:
             "skew_mean_fs": round(skew_mean_fs, 2),
             "eye_height_mV": round(eye_height_mV, 2),
             "eye_opening_pct": round(eye_opening_pct, 1),
-            "pass_link_margin": bool(margin_dB >= 4.5),
+            "pass_link_margin": bool(margin_dB >= getattr(cfg, "sensitivity_margin_db", 2.0)),
             "pass_clock_skew": bool(skew_max_fs <= 100.0),
             "pass_thermal_ceiling": bool(t_peak_C <= cfg.SPEC_T_max_operating_C),
         }

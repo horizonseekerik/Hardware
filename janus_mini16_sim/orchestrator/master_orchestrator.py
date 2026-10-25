@@ -118,7 +118,7 @@ class JanusMasterOrchestrator:
         """Validates that all immutable global simulation parameters are within physically sound ranges."""
         self.log("Validating global constants registry (mini_16t_constants.py)...", "SETUP")
         assert cfg.lambda_0_nm == 1064, "Operating wavelength must be 1064 nm"
-        assert cfg.f_clk == 100e9, "Operating clock frequency must be 100 GHz"
+        assert cfg.f_clk == 200e9, "Operating clock frequency must be 200 GHz"
         assert cfg.N_tiles == 16, "Must be configured for 16-tile architecture"
         assert cfg.N_dim == 32, "Tile dimension must be 32x32"
         assert cfg.T_max_operating <= 70.0, "Operating temperature ceiling must be <= 70 C"
@@ -262,7 +262,7 @@ class JanusMasterOrchestrator:
         latch = StrongArmLatchModel()
         latch_res = latch.simulate_decision(I_diff_A=50e-6, noise_sigma_A=cfg.sigma_latch_noise)
 
-        # 4. 100 GHz Eye Diagram & Bit Error Rate Extraction (Algorithms 3D & 3E)
+        # 4. 200 GHz Eye Diagram & Bit Error Rate Extraction (Algorithms 3D & 3E)
         ber_solver = EyeDiagramAndBERSolver()
         ber_sim_res = ber_solver.run_simulation(num_bits=500)
         link_margin = 10 * np.log10(max(cfg.P_det / max(apd.calculate_sensitivity(), 1e-12), 1e-12))
@@ -480,7 +480,7 @@ class JanusMasterOrchestrator:
         spec_xt_cross = getattr(cfg, "SPEC_XT_crossing_min_dB", -38.0)
         spec_scr_16tree = getattr(cfg, "SPEC_SCR_16tree_min_dB", getattr(cfg, "SPEC_SCR_15tree_min_dB", 18.0))
         make_check(1, "Sb2S3 Switch Insertion Loss (Amorphous)", "Tier 1", f"IL <= {spec_il_switch:.2f} dB", f"<= {spec_il_switch:.2f} dB", 
-                   il_am, lambda v: v <= spec_il_switch, "Amorphous low-loss state transmission (1x2 directional coupler with filter)")
+                   il_am, lambda v: v <= spec_il_switch, "Amorphous low-loss cross state (Sub-6 um2 Pure Straight Parallel Directional Coupler)")
         make_check(2, "16-Tree Signal-to-Crosstalk Ratio (SCR)", "Tier 1", f"SCR >= {spec_scr_16tree:.1f} dB", f">= {spec_scr_16tree:.1f} dB", 
                    scr_16tree, lambda v: v >= spec_scr_16tree, "16-Tree Fermat Core worst-case signal vs total leakage across non-target leaves")
         make_check(3, "Waveguide Crossing Insertion Loss", "Tier 1", f"IL <= {spec_il_cross:.3f} dB", f"<= {spec_il_cross:.3f} dB", 
@@ -523,15 +523,15 @@ class JanusMasterOrchestrator:
                    link_res.get("link_margin_dB"), lambda v: v >= 3.0, "Net margin over practical sensitivity with jitter")
         make_check(10, "Optical Receiver Bit Error Rate", "Tier 3", "BER <= 10^-18", "<= 1.00e-18",
                    link_res.get("BER_measured"), lambda v: v <= 1.00e-18, "Calculated with Q=9.38 error bound")
-        make_check(11, "100 GHz Eye Diagram Opening", "Tier 3", "Eye Opening > 0%", "> 0.0%",
-                   eye_trace.get("eye_opening_pct"), lambda v: v > 0.0, "Clear binary spatial discrimination at 100 GHz")
+        make_check(11, "200 GHz Eye Diagram Opening", "Tier 3", "Eye Opening > 0%", "> 0.0%",
+                   eye_trace.get("eye_opening_pct"), lambda v: v > 0.0, "Clear binary spatial discrimination at 200 GHz")
 
         # Tier 4 Checks
         t_crt_ps = self.tier4_results.get("t_crt_ps")
         rtl_errors = self.tier4_results.get("errors")
 
-        make_check(12, "CRT Adder Tree Digital Latency", "Tier 4", "t_CRT <= 220 ps", "<= 220.0 ps",
-                   t_crt_ps, lambda v: v <= 220.0, "8-stage 100 GHz wave-pipelined reconstruction tree")
+        make_check(12, "CRT Adder Tree Digital Latency", "Tier 4", "t_CRT <= 110 ps", "<= 110.0 ps",
+                   t_crt_ps, lambda v: v <= 110.0, "8-stage 200 GHz wave-pipelined reconstruction tree")
         make_check(13, "RTL Cycle-Accurate Verification", "Tier 4", "Errors == 0", "== 0 errors",
                    rtl_errors, lambda v: v == 0, "Icarus Verilog + VVP cycle accuracy pass")
 
@@ -1172,7 +1172,7 @@ class JanusMasterOrchestrator:
             f.write(
                 "The automated multi-physics co-simulation stack executes across all 5 verification tiers, "
                 "spanning nanophotonic Maxwell field equations (MEEP 3D FDTD), 3D multi-stratum transient heat diffusion (Elmer FEM), "
-                "circuit and signal integrity modeling (Xyce SPICE), 100 GHz cycle-accurate digital RTL (Icarus Verilog), "
+                "circuit and signal integrity modeling (Xyce SPICE), 200 GHz cycle-accurate digital RTL (Icarus Verilog), "
                 "and algorithmic architecture validation (Python RNS Engine).\n\n"
             )
 

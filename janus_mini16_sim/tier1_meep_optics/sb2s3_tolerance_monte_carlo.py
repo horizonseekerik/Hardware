@@ -25,6 +25,7 @@ import numpy as np
 import math
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from configs import mini_16t_constants as cfg
 try:
     from tier1_meep_optics.sb2s3_1x2_switch_cell import Sb2S3_1x2_SwitchCellMeep, Sb2S3SwitchCellMeep, HAS_MEEP
 except ImportError:
@@ -48,10 +49,10 @@ class Sb2S3MonteCarlo:
         self.IL_target_max = 0.50   # dB: Maximum allowable switch insertion loss (target <= 0.50 dB)
         self.XT_target_max = -15.0  # dB: Maximum allowable crosstalk leakage
         
-        # 1x2 Directional coupler geometry parameters
-        self.L_patch_mean = 3.80   # 3.80 um nominal active coupling length L_c (satisfies kappa * L_c = pi/2)
+        # 1x2 Directional coupler geometry parameters (Sub-6 um2 Straight Parallel Coupler)
+        self.L_patch_mean = getattr(cfg, "L_c_sw_um", 6.950)       # 6.95 um nominal active coupling length L_c
         self.L_patch_std = 0.05    # 50 nm lithographic length variation
-        self.gap_mean = 0.080      # 80 nm inter-waveguide gap
+        self.gap_mean = getattr(cfg, "gap_pcm_nm", 118.0) / 1000.0 # 118 nm inter-waveguide gap (0.118 um)
         self.gap_std = 0.003       # 3 nm dry-etch variation
 
     def _run_single_mzi(
@@ -134,14 +135,16 @@ class Sb2S3MonteCarlo:
             cr_xt = res_cr["crosstalk_dB"]
             fidelity = res_am["fidelity"]
         else:
-            # Physical Coupled-Mode Theory (CMT) for 1x2 Directional Coupler
+            # Physical Coupled-Mode Theory (CMT) for Sub-6 um2 Directional Coupler (Task-6990)
             gamma_clad = 8.4  # um^-1 (cladding decay factor)
-            kappa_0 = 0.4134  # rad/um at nominal 80 nm gap
-            kappa = kappa_0 * np.exp(-gamma_clad * (gap - 0.080))
+            gap_nom = getattr(cfg, "gap_pcm_nm", 118.0) / 1000.0
+            L_nom = getattr(cfg, "L_c_sw_um", 6.950)
+            kappa_0 = np.pi / (2.0 * L_nom)  # rad/um at nominal 118 nm gap (~0.226 rad/um)
+            kappa = kappa_0 * np.exp(-gamma_clad * (gap - gap_nom))
             
             # Amorphous state: Delta_beta = 0
-            p_cross_am = np.sin(kappa * L)**2 * 0.9869
-            p_bar_am = np.cos(kappa * L)**2 * 0.9869 + 0.00603
+            p_cross_am = np.sin(kappa * L)**2 * 0.986933
+            p_bar_am = np.cos(kappa * L)**2 * 0.986933 + 0.008812
             am_il = -10.0 * np.log10(max(p_cross_am, 1e-12))
             am_xt = 10.0 * np.log10(max(p_bar_am / max(p_cross_am, 1e-12), 1e-12))
             
@@ -151,11 +154,11 @@ class Sb2S3MonteCarlo:
             S_cr = np.sqrt(kappa**2 + delta**2)
             F = (kappa / S_cr)**2
             
-            p_bar_cr = (np.cos(S_cr * L)**2 + (delta / S_cr)**2 * np.sin(S_cr * L)**2) * 0.9678
-            p_cross_cr = F * np.sin(S_cr * L)**2 * 0.9678 + 0.00630
+            p_bar_cr = (np.cos(S_cr * L)**2 + (delta / S_cr)**2 * np.sin(S_cr * L)**2) * 0.981004
+            p_cross_cr = F * np.sin(S_cr * L)**2 * 0.981004 + 0.009467
             cr_il = -10.0 * np.log10(max(p_bar_cr, 1e-12))
             cr_xt = 10.0 * np.log10(max(p_cross_cr / max(p_bar_cr, 1e-12), 1e-12))
-            fidelity = "analytical-cmt-1x2"
+            fidelity = "analytical-cmt-1x2-sub6um2"
 
         passed = (
             (am_il <= self.IL_target_max) and (am_xt <= self.XT_target_max) and

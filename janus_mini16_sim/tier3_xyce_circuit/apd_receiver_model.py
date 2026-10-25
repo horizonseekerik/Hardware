@@ -7,14 +7,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from configs import mini_16t_constants as cfg
 
 class APDReceiverAnalytical:
-    """SAC2M Ge/Si Avalanche Photodetector (APD) Physical Equivalent Circuit."""
+    """Waveguide-Coupled Thin-Mesa SAC2M Ge/Si Avalanche Photodetector (APD) Physical Model (205.2 GHz)."""
 
     def __init__(self,
-                 eta: float = 0.932, # Quantum efficiency yielding R = 0.80 A/W at 1064 nm
-                 M_gain: int = cfg.M_apd,
+                 eta: float = 0.839, # Quantum efficiency (83.9%) yielding R0 = 0.720 A/W at 1064 nm
+                 M_gain: float = cfg.M_apd,
                  k_ion: float = cfg.k_ionization,
-                 tau_transit_s: float = getattr(cfg, "t_pd_clearance", 1.52e-12), # Thin SAC2M clearance time
-                 v_sat: float = 5e4, # Carrier saturation velocity (m/s)
+                 tau_transit_s: float = getattr(cfg, "t_pd_clearance", 1.583e-12), # Thin-mesa clearance time
+                 v_sat: float = 6e4, # Carrier saturation velocity in Ge (m/s)
                  C_j_fF: float = cfg.C_j_apd * 1e15,
                  R_s_ohm: float = cfg.R_s_apd,
                  I_surface_nA: float = cfg.I_surface_leakage * 1e9,
@@ -26,15 +26,15 @@ class APDReceiverAnalytical:
         self.k = k_ion
         self.tau_transit = tau_transit_s
         self.v_sat = v_sat
-        self.W_i = self.v_sat * self.tau_transit  # Thin high-field SAC2M depletion width (~76 nm)
+        self.W_i = self.v_sat * self.tau_transit  # Thin high-field SAC2M depletion width (~95-100 nm)
         self.C_j = C_j_fF * 1e-15
         self.R_s = R_s_ohm
         self.I_surface = I_surface_nA * 1e-9
         self.I_bulk = I_bulk_nA * 1e-9
 
         # Physical Edge Case 4: Band-to-Band (BBT) & Trap-Assisted Tunneling in Ge/Si APD
-        # Kane's quantum tunneling model at E_field > 5e5 V/cm across 76 nm mesa
-        self.E_field_V_per_m = 4.0 / max(self.W_i, 1e-9)  # ~5.26e7 V/m = 5.26e5 V/cm
+        # Kane's quantum tunneling model at E_field > 5e5 V/cm across thin mesa
+        self.E_field_V_per_m = 4.0 / max(self.W_i, 1e-9)
         self.I_tunnel = self._calculate_bbt_tunneling_current(self.E_field_V_per_m)
         self.I_dark = self.I_surface + (self.I_bulk + self.I_tunnel) * self.M
         self.sigma_latch_noise = sigma_latch_noise_uA * 1e-6
@@ -43,16 +43,27 @@ class APDReceiverAnalytical:
         self.lambda_0 = cfg.lambda_0
         self.h = cfg.h_planck
         self.c = cfg.c_vacuum
-        self.A_apd = getattr(cfg, "A_apd_single", 1.5e-12)
+        self.A_apd = getattr(cfg, "A_apd_single", 0.60e-12)
 
         # Derive responsivity from material absorption (R = eta * q * lambda / (h * c))
         self.R_base = self.eta * self.q * self.lambda_0 / (self.h * self.c)
         # Physical Edge Case 5: Franz-Keldysh Electro-Absorption in APD Mesa
         self.R = self.calculate_franz_keldysh_responsivity(self.E_field_V_per_m)["R_field_perturbed"]
         
-        # Derive 3 dB electrical bandwidth from transit time and RC parasitic pole
-        self.tau_RC = self.C_j * self.R_s
-        self.f_3db = 1.0 / (2.0 * math.pi * math.sqrt(self.tau_transit**2 + self.tau_RC**2))
+        # Derive 3 dB electrical bandwidth via quadrature decomposition:
+        # 1. Transit-time limited bandwidth (0.45 / tau_transit)
+        self.f_transit = 0.45 / max(self.tau_transit, 1e-15)  # ~284 GHz
+        # 2. RC-limited bandwidth (with 65 Ohm series + load)
+        r_load = max(self.R_s + 50.0, 25.0)
+        self.f_rc = 1.0 / (2.0 * math.pi * r_load * max(self.C_j, 1e-18))  # ~4.9 THz
+        # 3. Avalanche buildup bandwidth (k_eff = 0.05, thin-layer dead-space suppressed)
+        tau_mult = 0.500e-12  # 50 nm Si multiplication transit
+        self.tau_buildup = self.k * self.M * tau_mult + tau_mult
+        self.f_avalanche = 1.0 / (2.0 * math.pi * self.tau_buildup)  # ~297 GHz
+        
+        # Quadrature combination: 1 / f_3dB^2 = 1 / f_tr^2 + 1 / f_rc^2 + 1 / f_av^2
+        inv_sq_sum = (1.0 / self.f_transit)**2 + (1.0 / self.f_rc)**2 + (1.0 / self.f_avalanche)**2
+        self.f_3db = 1.0 / math.sqrt(inv_sq_sum)  # ~205.2 GHz
         self.GBP = self.f_3db * self.M
 
         # McIntyre Excess Noise Factor: F(M) = k*M + (1-k)*(2 - 1/M)

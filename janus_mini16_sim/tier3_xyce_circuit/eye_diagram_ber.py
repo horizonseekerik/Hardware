@@ -248,16 +248,16 @@ class EyeDiagramAndBERSolver:
         fs = oversampling * self.f_clk
         dt = 1.0 / fs
 
-        # 1. Generate smooth NRZ optical pulses (2 ps optical rise/fall time)
+        # 1. Generate smooth NRZ optical pulses (1.0 ps optical rise/fall time for 200 GHz)
         pulse_shape = np.ones(oversampling)
-        t_edge = 2.0e-12
+        t_edge = 1.0e-12
         edge_samples = int(round(t_edge / dt))
         if edge_samples > 0:
             edge_ramp = 0.5 * (1.0 - np.cos(np.pi * np.arange(edge_samples) / edge_samples))
             pulse_shape[:edge_samples] = edge_ramp
             pulse_shape[-edge_samples:] = edge_ramp[::-1]
 
-        # 2. Setup Bessel filter (105 GHz APD bandwidth)
+        # 2. Setup Bessel filter (205.2 GHz APD bandwidth)
         cutoff = min(self.apd.f_3db / (0.5 * fs), 0.99)
         b, a = signal.bessel(3, cutoff, btype='low', norm='mag')
         _, gd = signal.group_delay((b, a))
@@ -320,7 +320,7 @@ class EyeDiagramAndBERSolver:
         sigma_V_jitter_eff = math.sqrt(0.5) * sigma_V_jitter
 
         # 7. StrongARM circuit imperfections (capacitive kickback & RDF threshold mismatch, Edge Cases 24 & 25)
-        C_gd = 0.80e-15
+        C_gd = 0.015e-15  # Scaled gate-drain capacitance (15 aF)
         V_dd = 0.80
         delta_mismatch = 0.10
         sigma_V_kick = (C_gd / (C_p + C_gd)) * V_dd * 0.10 * delta_mismatch

@@ -15,7 +15,7 @@ class StrongArmLatchModel:
                  I_bias: float = 400e-6):
         self.V_dd = V_dd
         self.C_p = cfg.C_p_strongarm
-        self.C_L = 31.25e-18 # Derived effective load capacitance
+        self.C_L = getattr(cfg, "C_L_strongarm", 85e-18) # 85 aF load capacitance
         self.g_m = cfg.g_m_latch
         self.I_bias = I_bias
         self.f_clk = cfg.f_clk
@@ -60,7 +60,7 @@ class StrongArmLatchModel:
             # Analytical asymptotic fallback if threshold not crossed in window
             t_regeneration = float(tau_regen * math.log(self.V_dd / max(abs(V_offset), 1e-9)))
             
-        t_setup = getattr(cfg, "t_setup", 1.0e-12)
+        t_setup = getattr(cfg, "t_setup", 0.5e-12)
         t_total = t_int_window + t_regeneration + t_setup  # Slew & setup time
         
         # Metastability probability: P_meta = f_clk * t_window * exp(-t_avail / tau_regen)
@@ -83,7 +83,7 @@ class StrongArmLatchModel:
             "t_regen_ode_ps": float(t_regeneration * 1e12),
             "E_decision_aJ": float(E_total * 1e18),
             "P_meta": P_meta,
-            "pass_regen_time": bool(t_regeneration <= 4.0e-12),
+            "pass_regen_time": bool(t_regeneration <= 2.0e-12),
             "pass_cycle_budget": bool(t_total <= cfg.T_cycle),
         }
 
@@ -103,7 +103,7 @@ class StrongArmLatchModel:
         
         t_int_window = cfg.t_int_strongarm
         tau_regen = self.C_L / self.g_m
-        t_setup = getattr(cfg, "t_setup", 1.0e-12)
+        t_setup = getattr(cfg, "t_setup", 0.5e-12)
 
         # Initial offset voltages on sensing node C_p
         V_offset_init = (net_diff_currents * t_int_window) / self.C_p
@@ -149,7 +149,7 @@ class StrongArmLatchModel:
             "std_t_regen_ps": float(std_t_regen * 1e12),
             "E_decision_aJ": E_total_aJ,
             "P_meta": P_meta,
-            "pass_regen_time": bool(mean_t_regen <= 4.0e-12),
+            "pass_regen_time": bool(mean_t_regen <= 2.0e-12),
             "pass_cycle_budget": bool(mean_t_total <= cfg.T_cycle),
             "pass_jitter": bool(jitter_rms_fs <= 50.0),
         }
@@ -157,7 +157,7 @@ class StrongArmLatchModel:
     def evaluate_metastability_tail(
         self,
         delta_V_in_mV: float = 5.0,
-        T_cycle_ps: float = 10.0,
+        T_cycle_ps: float = 5.0,
     ) -> Dict[str, float]:
         """
         Edge Case 23: StrongARM Latch Metastability Tail.
