@@ -545,6 +545,63 @@ photon_flux_margin_factor: float = 2.00  # Clean photon flux factor above Strong
 
 
 # ==============================================================================
+# 2.27 UNIFIED APU + NPU + GPU ARCHITECTURE (36.00 mm^2 CMOS BASE DIE)
+# ==============================================================================
+# 1-2-8-8 Two-Phase Antiphase Control Hierarchy
+NUM_MASTER_CORES: int = 1  # 64-bit Master RISC-V orchestration core (macro-descriptor dispatcher)
+NUM_MANAGER_CORES: int = 2  # Phase 1 & Phase 2 managers (2.5 ps antiphase synchronizers)
+NUM_TILE_CORES: int = 16  # Decentralized tile controller cores (1 per residue tile)
+NUM_TILE_CORES_PER_PHASE: int = 8  # 8 tile cores per 2.5 ps antiphase half-cycle
+T_PHASE_1: float = 2.5e-12  # Phase 1 slot: Tiles 0-7 active, Tiles 8-15 latch/IO (s)
+T_PHASE_2: float = 2.5e-12  # Phase 2 slot: Tiles 8-15 active, Tiles 0-7 latch/IO (s)
+f_clk_cmos_base: float = 3.125e9  # 65nm CMOS digital control core clock (3.125 GHz)
+time_interleaving_ratio: int = 64  # Time-interleaving ratio (200 GHz optical line rate / 3.125 GHz CMOS)
+
+# Multi-Precision Floating-Point & Scientific FP64 Engine
+SUPPORTED_PRECISIONS: list = [
+    "INT4", "INT8", "INT16", "INT32", "INT64",
+    "FP4", "FP8", "BF16", "FP16", "FP32", "FP64"
+]
+HAS_FP64_ENGINE: bool = True  # Native IEEE 754 Double Precision support
+FP64_EXPONENT_BITS: int = 11  # IEEE 754 Double Precision exponent bit-width
+FP64_MANTISSA_BITS: int = 53  # 52 explicit bits + 1 hidden leading bit
+FP64_CHANNELS: int = 16  # Evaluated across all 16 parallel residue channels (> 64-bit dynamic range)
+A_FP64_SCIENTIFIC_ENGINE_MM2: float = 0.80  # 11-bit dual-rail exponent aligners & normalizers (mm^2)
+A_FLOAT_ENGINE_MULTI_PRECISION_MM2: float = 1.95  # Multi-precision floating-point unpacked logic (mm^2)
+A_VECTOR_SFU_ARRAY_MM2: float = 3.20  # 16x Vector Special Function Units (Softmax, GELU, RoPE) (mm^2)
+VECTOR_SFU_UNITS: int = 16  # 16 parallel vector transcendentals / normalization lanes
+
+# Dual-Mode 3D Graphics & Hardware Ray-Tracing Subsystem
+SUPPORT_APPROACH_A_NEURAL_RENDERING: bool = True  # Approach A: 3DGS & NeRFs via 200 GHz optical matrix core
+SUPPORT_APPROACH_B_TRADITIONAL_GRAPHICS: bool = True  # Approach B: Fixed-function RT BVH, rasterizer, TMUs & eDP
+RAY_TRACING_BVH_ENGINES: int = 4  # 4x Hardware Bounding Volume Hierarchy (BVH) AABB traversal engines
+AABB_TRAVERSAL_PIPELINES: int = 16  # 16-way ray-box test pipelines in CMOS
+MOLLER_TRUMBORE_OPTICAL: bool = True  # Möller-Trumbore ray-triangle 3x3 linear system solved on 200 GHz optical core
+A_RAY_TRACING_BVH_ENGINE_MM2: float = 1.50  # Hardware BVH AABB box test & traversal engines (mm^2)
+A_RASTERIZER_TMU_DISPLAY_MM2: float = 3.90  # Fixed-function rasterizer, 16x TMUs & DisplayPort 2.1 PHY (mm^2)
+RASTERIZER_TRIANGLE_RATE_GTRI_S: float = 12.8  # Peak triangle rasterization throughput (GigaTriangles/s)
+TMU_COUNT: int = 16  # Texture Mapping Units (bilinear, trilinear, anisotropic filtering)
+DISPLAY_INTERFACE: str = "DisplayPort 2.1 / eDP (UHBR20)"  # Integrated high-speed display PHY
+DISPLAY_BANDWIDTH_GBPS: float = 80.0  # DisplayPort 2.1 UHBR20 aggregate physical bandwidth (Gbps)
+
+# Open Memory Interface (OMI) Co-Packaged High-Speed Memory Subsystem
+OMI_BANDWIDTH_TB_S: float = 25.6  # Aggregate OMI co-packaged memory bandwidth (25.6 TB/s)
+OMI_ACCESS_LATENCY_PS: float = 990.0  # Cold memory access latency (990 ps)
+OMI_MICROBUMP_PILLARS: int = 256  # 256-pillar dedicated OMI microbump grid
+A_OMI_INTERFACE_ECC_MM2: float = 1.50  # OMI high-speed PHY controller, SERDES & Reed-Solomon ECC (mm^2)
+
+# 36.00 mm^2 Unified CMOS Base Die Floorplan Budget (6.0 mm x 6.0 mm)
+A_DIE_UNIFIED_MM2: float = 36.00  # Total physical 65nm CMOS base die footprint (mm^2)
+L_DIE_UNIFIED_MM: float = 6.00  # Die side length (6.0 mm)
+A_CMOS_BASE_ACTIVE_MM2: float = 29.78  # Total active silicon area across all subsystems (mm^2)
+A_CMOS_WHITESPACE_MM2: float = 6.22  # Free whitespace for H-tree clock, thermal buffer, decaps (mm^2)
+CMOS_ACTIVE_OCCUPANCY_PCT: float = 82.72  # Active area occupancy percentage (29.78 / 36.00 * 100%)
+CMOS_WHITESPACE_PCT: float = 17.28  # Free whitespace routing / decap margin percentage
+A_CONTROL_HIERARCHY_1_2_8_8_MM2: float = 6.30  # 1 Master + 2 Phase Managers + 16 Tile Cores (mm^2)
+A_BASELINE_CMOS_LOGIC_MM2: float = 10.63  # StrongARM latches, CRT trees, RNS encoders, TDV pads, rings (mm^2)
+
+
+# ==============================================================================
 # SPECIFICATION TARGETS (design goals, not validated results)
 # ==============================================================================
 SPEC_IL_switch_cell_max_dB: float = 0.50  # Target: MZI switch cell IL <= 0.50 dB (Method 1A + 1B)

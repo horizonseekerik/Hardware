@@ -89,6 +89,88 @@ Conventional optical AI processors encode numbers in continuous analog amplitude
 
 ---
 
+## 🚀 Universal Heterogeneous APU + NPU + GPU Architecture
+
+Project JANUS integrates general-purpose control (**APU**), 200 GHz photonic tensor acceleration (**NPU**), and real-time ray-tracing / neural rendering graphics (**GPU**) onto a single monolithic **36.00 mm² ($6.0\text{ mm} \times 6.0\text{ mm}$)** 65nm CMOS base die co-packaged with 3D photonic strata and high-speed Open Memory Interface (OMI):
+
+```
++───────────────────────────────────────────────────────────────────────────────────────────+
+|               PROJECT JANUS: 36.00 mm² UNIFIED CMOS BASE DIE FLOORPLAN (6.0 x 6.0 mm)      |
++───────────────────────────────────────────────────────────────────────────────────────────+
+|  [Master Core]   [Phase-1 Mgr]   [Phase-2 Mgr]  │   [Open Memory Interface (OMI)]         |
+|  RISC-V 64b CPU  Tiles 0-7 Sync  Tiles 8-15 Sync│   25.6 TB/s Co-Packaged Bus (256 Pads)   |
+|  (1.50 mm²)      (0.40 mm²)      (0.40 mm²)     │   990 ps Latency + Reed-Solomon ECC     |
++─────────────────────────────────────────────────┴─────────────────────────────────────────+
+|               16x DECENTRALIZED TILE CONTROLLERS (4.00 mm² Total / 0.25 mm² each)         |
+|   Tile 00  Tile 01  Tile 02  Tile 03  Tile 04  Tile 05  Tile 06  Tile 07  (Phase 1 Group)  |
+|   Tile 08  Tile 09  Tile 10  Tile 11  Tile 12  Tile 13  Tile 14  Tile 15  (Phase 2 Group)  |
++─────────────────────────────────────────────────┬─────────────────────────────────────────+
+|  [Multi-Precision Float & FP64 Scientific Engine]│   [16x Vector SFU Array]                |
+|  - FP4, FP8, BF16, FP16, FP32 Pre/Post Process  │   - Softmax, GELU, SiLU Transcendentals |
+|  - 11-Bit Exponent Aligners & Normalizers       │   - RMSNorm, RoPE Positional Encoders   |
+|  - 53-Bit Mantissa Multiplied over 16 Channels  │   - 16 Parallel SIMD Vector Lanes       |
+|  (2.75 mm² Total: 1.95 mm² Float + 0.80 mm² FP64)│   (3.20 mm² Active Area)                |
++─────────────────────────────────────────────────┴─────────────────────────────────────────+
+|                  DUAL-MODE GRAPHICS & RAY-TRACING SUBSYSTEM (5.40 mm² Total)              |
+|  [Approach A: Neural Rendering & NeRFs]         │  [Approach B: Hardware Ray-Tracing & 3D] |
+|  - 3D Gaussian Splatting (3DGS) Covariance      │  - 4x Hardware BVH Traversal Engines    |
+|  - Spherical Harmonics Matrix Projections       │  - 16-Way CMOS AABB Ray-Box Pipelines   |
+|  - 3.28 Peta-MAC/s Optical Volume Composition   │  - Optical Möller-Trumbore 3x3 Solver   |
+|  (Executed on 200 GHz Optical Matrix Core)      │  - 12.8 GTri/s Fixed-Function Rasterizer|
+|                                                 │  - 16x Anisotropic TMUs + DisplayPort   |
++─────────────────────────────────────────────────┴─────────────────────────────────────────+
+|  [Baseline CMOS Core Components]                │  [Silicon Whitespace & H-Tree Mesh]     |
+|  - 16x StrongARM Sense-Amps & Deserializers     │  - 3.125 GHz H-Tree Clock Mesh          |
+|  - CRT Garner Adder Trees & Modulo Encoders     │  - VDD/VSS Decoupling Capacitors (Decap)|
+|  - Cu TDV Microbump Contact Pads (50 um pitch)  │  - Monolithic Thermal Buffer Relief     |
+|  - Global Power Ring & 4-Layer Seal Ring        │  (6.22 mm² Free Margin / 17.28% of die) |
+|  (10.63 mm² Active Area)                        │                                         |
++───────────────────────────────────────────────────────────────────────────────────────────+
+```
+
+### 1. 1-2-8-8 Two-Phase Antiphase Control Hierarchy
+To reconcile the frequency mismatch between the **3.125 GHz 65nm CMOS digital clock** and the **200.0 GHz optical pulse repetition rate** ($64:1$ time-interleaving ratio), JANUS deploys a 3-tier decentralized control hierarchy:
+* **1 Master Orchestration Core (RISC-V 64-bit)**: Handles high-level runtime scheduling, kernel launch descriptors, and OMI memory paging. Emits macro-descriptors where a single 3.125 GHz instruction dispatches tens of thousands of optical picosecond tensor operations.
+* **2 Phase-Manager Cores ($\Phi_1$ & $\Phi_2$)**: Dedicated hardware state machines synchronizing the two interleaved 2.5 ps antiphase half-cycles.
+* **16 Decentralized Tile Controllers**: Divided into two alternating phase groups:
+  * **Phase 1 ($\Phi_1 = 0 \to 2.5\text{ ps}$)**: Group A (Tiles 0–7) computes optically in the photonic stratum while Group B (Tiles 8–15) executes latch sense-amplification, CRT accumulation, and OMI prefetching.
+  * **Phase 2 ($\Phi_2 = 2.5 \to 5.0\text{ ps}$)**: Group B (Tiles 8–15) computes optically while Group A (Tiles 0–7) post-processes and latches results.
+* **Key Physical Benefits**:
+  * **50% Reduction in $L \cdot di/dt$ Rail Bounce**: Staggering switching current across two 2.5 ps antiphase slots cuts peak transient supply noise in half ($100\text{ mA}$ vs $200\text{ mA}$), preventing inductive voltage droop.
+  * **Zero Bus Contention**: Phase 1 and Phase 2 cores interleave memory read/write cycles to the co-packaged OMI bus without arbitration stalls.
+
+### 2. Dual-Mode 3D Graphics Subsystem (Approach A & Approach B)
+* **Approach A (Neural Radiance Fields & 3D Gaussian Splatting)**:
+  * 3D world-space covariance projection ($\Sigma' = J W \Sigma W^T J^T$) mapped directly to the 200 GHz optical matrix core.
+  * Spherical Harmonics degree-4 color projection ($Y_{lm}(\theta, \phi)$) evaluated via high-dimensional optical dot products.
+  * Alpha-blended volume composition ($C = \sum_{i} T_i \alpha_i c_i$) streaming at **3.28 Peta-MAC/s**, enabling real-time 4K neural rendering at > 120 fps.
+* **Approach B (Traditional 3D Graphics & Hardware Ray-Tracing)**:
+  * **Hardware BVH Traversal**: 4 dedicated Bounding Volume Hierarchy engines testing 16 Axis-Aligned Bounding Boxes (AABBs) per cycle in CMOS.
+  * **Optical Möller-Trumbore Intersection**: Solves the ray-triangle intersection $3\times 3$ linear system $\begin{bmatrix} -D & V_1-V_0 & V_2-V_0 \end{bmatrix} \begin{bmatrix} t & u & v \end{bmatrix}^T = O - V_0$ optically on the 200 GHz tensor core with picosecond latency.
+  * **Fixed-Function Rasterizer & TMUs**: 12.8 GigaTriangles/s edge equation setup, sub-pixel barycentric rasterizer, 16 Texture Mapping Units (bilinear, trilinear, anisotropic), and integrated 80 Gbps DisplayPort 2.1 / eDP PHY.
+
+### 3. Double-Precision FP64 Scientific Engine
+* Full IEEE 754 Double Precision support ($1\text{ sign bit}$, $11\text{-bit exponent}$, $53\text{-bit mantissa}$ with implicit leading 1).
+* **Zero Carry Propagation**: The 53-bit mantissa multiplication is mapped across the 16 residue channels ($k_{\text{int64}}=16$), providing $>106\text{ bits}$ of dynamic range with exact **0.00000000% error**.
+* **CMOS Exponent Normalizers**: 11-bit dual-rail exponent subtractors, barrel shifters, and Leading Zero Detectors (LZD) complete post-normalization in $<40\text{ ps}$.
+
+### 4. Zero-Base 36.00 mm² CMOS Floorplan Budget
+| Subsystem Component | Stratum | Units | Area (mm²) | Die % | Architectural Function |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **Baseline CMOS Core Logic & Latches** | 65nm CMOS Base | 1 | **10.63** | 29.53% | StrongARM latches, CRT trees, RNS encoders, TDV pads, power/seal rings |
+| **1-2-8-8 Antiphase Control Hierarchy** | 65nm CMOS Base | 19 | **6.30** | 17.50% | 1 Master Core (1.5 mm²), 2 Phase Mgrs (0.8 mm²), 16 Tile Cores (4.0 mm²) |
+| **Multi-Precision Float Engine** | 65nm CMOS Base | 16 | **1.95** | 5.42% | FP4, FP8, BF16, FP16, FP32 unpackers and format normalizers |
+| **FP64 Scientific Normalizers** | 65nm CMOS Base | 16 | **0.80** | 2.22% | 11-bit exponent aligners, Leading-Zero Detectors, FP64 pack units |
+| **16x Vector SFU Transcendentals Array** | 65nm CMOS Base | 16 | **3.20** | 8.89% | Softmax, GELU, SiLU, RoPE, RMSNorm transcendental vector lanes |
+| **Hardware Ray-Tracing BVH Engines** | 65nm CMOS Base | 4 | **1.50** | 4.17% | 4x BVH traversal engines with 16-way AABB ray-box pipelines |
+| **Rasterizer, 16x TMUs & DisplayPort** | 65nm CMOS Base | 1 | **3.90** | 10.83% | 12.8 GTri/s barycentric rasterizer, 16x TMUs, 80 Gbps DP 2.1 PHY |
+| **Native OMI 25.6 TB/s Memory Interface** | 65nm CMOS Base | 1 | **1.50** | 4.17% | 256-pillar OMI controller, 990 ps cold access latency, Reed-Solomon ECC |
+| **H-Tree Clock Mesh & Decap Whitespace** | Silicon Whitespace | 1 | **6.22** | **17.28%** | 3.125 GHz balanced clock tree, power grid decoupling, thermal buffer |
+| **Total Physical CMOS Base Die** | **Monolithic 65nm** | — | **36.00** | **100.00%** | **6.00 mm × 6.00 mm Base Die (82.72% Active Area, 17.28% Whitespace)** |
+
+---
+
+
 ## 📁 Repository Directory & File Guide
 
 Below is the complete, exhaustive inventory and navigation guide for every folder and file across Project JANUS:

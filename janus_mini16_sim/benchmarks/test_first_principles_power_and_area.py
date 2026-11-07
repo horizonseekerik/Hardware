@@ -121,3 +121,68 @@ def test_run_first_principles_audit():
     assert "reports" in res
     assert res["power"]["total_power_W"] > 0
     assert res["area"]["total_die_area_mm2"] == 100.0
+
+
+def test_unified_36mm2_die_area_and_whitespace():
+    """Verifies physical area allocation and whitespace on 36.00 mm^2 (6.0x6.0 mm) die."""
+    analyzer = FirstPrinciplesPowerAndAreaAnalyzer(die_model="unified_36mm2")
+    res = analyzer.calculate_area()
+
+    assert res["total_die_area_mm2"] == 36.00
+    assert res["die_dimensions_mm"] == "6.00 x 6.00"
+    assert res["active_cmos_area_mm2"] == pytest.approx(29.78, abs=0.01)
+    assert res["active_cmos_occupancy_pct"] == pytest.approx(82.72, abs=0.05)
+    assert res["whitespace_area_mm2"] == pytest.approx(6.22, abs=0.01)
+    assert res["whitespace_pct"] == pytest.approx(17.28, abs=0.05)
+
+    comp_map = {c["name"]: c for c in res["components"]}
+    # Check all key components
+    assert comp_map["Baseline 65nm CMOS Core Logic & Latches"]["total_area_mm2"] == 10.63
+    assert comp_map["1-2-8-8 Two-Phase Antiphase Control Hierarchy"]["total_area_mm2"] == 6.30
+    assert comp_map["1-2-8-8 Two-Phase Antiphase Control Hierarchy"]["unit_count"] == 19
+    assert comp_map["Multi-Precision Floating-Point Engine"]["total_area_mm2"] == 1.95
+    assert comp_map["FP64 Scientific Engine (Dual-Rail Normalizers)"]["total_area_mm2"] == 0.80
+    assert comp_map["16x Vector Special Function Unit (SFU) Array"]["total_area_mm2"] == 3.20
+    assert comp_map["Hardware Ray-Tracing BVH Traversal Engine"]["total_area_mm2"] == 1.50
+    assert comp_map["Hardware Ray-Tracing BVH Traversal Engine"]["unit_count"] == 4
+    assert comp_map["Fixed-Function Rasterizer, 16x TMUs & DisplayPort PHY"]["total_area_mm2"] == 3.90
+    assert comp_map["Native OMI 25.6 TB/s Interface & ECC Controller"]["total_area_mm2"] == 1.50
+    assert comp_map["H-Tree Clock Mesh & Decoupling Whitespace"]["total_area_mm2"] == 6.22
+
+
+def test_unified_36mm2_power_and_cooling():
+    """Verifies that unified 36 mm^2 die operates well within passive thermal envelope (< 5 W)."""
+    analyzer = FirstPrinciplesPowerAndAreaAnalyzer(die_model="unified_36mm2", activity_factor=1.0)
+    p_res = analyzer.calculate_power()
+
+    assert p_res["total_power_W"] == pytest.approx(4.37, abs=0.10)
+    assert p_res["total_power_mW"] < 5000.0  # Under 5 W
+
+    subs = p_res["subsystems_mW"]
+    assert subs["Optical Source"] == pytest.approx(2133.33, rel=1e-2)
+    assert subs["65nm CMOS Digital"] > 1000.0  # Hierarchy + SFU + Normalizers + Clock
+    assert subs["65nm CMOS Graphics"] == pytest.approx(670.0, rel=1e-2)  # BVH + Rasterizer/TMU
+    assert subs["65nm CMOS Memory"] == pytest.approx(380.0, rel=1e-2)  # OMI controller
+
+
+def test_unified_36mm2_report_generation(tmp_path):
+    """Verifies generation of both standard and unified 36 mm^2 audit reports."""
+    analyzer = FirstPrinciplesPowerAndAreaAnalyzer(activity_factor=1.0)
+    reports = analyzer.export_report(output_dir=str(tmp_path))
+
+    assert os.path.exists(reports["unified_json_path"])
+    assert os.path.exists(reports["unified_md_path"])
+
+    with open(reports["unified_json_path"], "r", encoding="utf-8") as f:
+        data = json.load(f)
+        assert data["area_audit"]["total_die_area_mm2"] == 36.00
+        assert data["area_audit"]["active_cmos_area_mm2"] == 29.78
+        assert data["power_audit"]["total_power_W"] == pytest.approx(4.37, abs=0.10)
+
+    with open(reports["unified_md_path"], "r", encoding="utf-8") as f:
+        content = f.read()
+        assert "Unified 36 mm² APU+NPU+GPU Power & Area Audit" in content
+        assert "36.00 mm²" in content
+        assert "29.78 mm²" in content
+        assert "17.28%" in content
+
