@@ -585,10 +585,14 @@ DISPLAY_INTERFACE: str = "DisplayPort 2.1 / eDP (UHBR20)"  # Integrated high-spe
 DISPLAY_BANDWIDTH_GBPS: float = 80.0  # DisplayPort 2.1 UHBR20 aggregate physical bandwidth (Gbps)
 
 # Open Memory Interface (OMI) Co-Packaged High-Speed Memory Subsystem
-OMI_BANDWIDTH_TB_S: float = 25.6  # Aggregate OMI co-packaged memory bandwidth (25.6 TB/s)
+OMI_MEMORY_CAPACITY_GB: float = 500.0  # Co-packaged 500 GB high-density memory stack
+OMI_BANDWIDTH_TB_S: float = 25.6  # Baseline OMI co-packaged memory bandwidth (25.6 TB/s)
+OMI_SCALED_BANDWIDTH_TB_S: float = 256.0  # Ultra-high bandwidth mode (256 TB/s @ +10W)
 OMI_ACCESS_LATENCY_PS: float = 990.0  # Cold memory access latency (990 ps)
 OMI_MICROBUMP_PILLARS: int = 256  # 256-pillar dedicated OMI microbump grid
 A_OMI_INTERFACE_ECC_MM2: float = 1.50  # OMI high-speed PHY controller, SERDES & Reed-Solomon ECC (mm^2)
+P_TOTAL_UNIFIED_BASELINE_W: float = 15.0  # Full system baseline dissipation with 500 GB memory (15.0 W)
+P_TOTAL_UNIFIED_SCALED_W: float = 25.0  # Full system dissipation in 256 TB/s mode (+10 W = 25.0 W)
 
 # 36.00 mm^2 Unified CMOS Base Die Floorplan Budget (6.0 mm x 6.0 mm)
 A_DIE_UNIFIED_MM2: float = 36.00  # Total physical 65nm CMOS base die footprint (mm^2)

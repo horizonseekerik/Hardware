@@ -151,18 +151,26 @@ def test_unified_36mm2_die_area_and_whitespace():
 
 
 def test_unified_36mm2_power_and_cooling():
-    """Verifies that unified 36 mm^2 die operates well within passive thermal envelope (< 5 W)."""
+    """Verifies that unified 36 mm^2 die with 500 GB co-packaged memory operates at ~15 W (and ~25 W @ 256 TB/s)."""
     analyzer = FirstPrinciplesPowerAndAreaAnalyzer(die_model="unified_36mm2", activity_factor=1.0)
+    
+    # 1. Baseline 500 GB @ 25.6 TB/s mode
     p_res = analyzer.calculate_power()
-
-    assert p_res["total_power_W"] == pytest.approx(4.37, abs=0.10)
-    assert p_res["total_power_mW"] < 5000.0  # Under 5 W
+    assert p_res["total_power_W"] == pytest.approx(15.00, abs=0.15)
+    assert p_res["total_power_mW"] == pytest.approx(15000.0, abs=150.0)
 
     subs = p_res["subsystems_mW"]
+    assert subs["Co-Packaged 3D Memory"] == pytest.approx(10632.19, rel=1e-2)
     assert subs["Optical Source"] == pytest.approx(2133.33, rel=1e-2)
     assert subs["65nm CMOS Digital"] > 1000.0  # Hierarchy + SFU + Normalizers + Clock
     assert subs["65nm CMOS Graphics"] == pytest.approx(670.0, rel=1e-2)  # BVH + Rasterizer/TMU
     assert subs["65nm CMOS Memory"] == pytest.approx(380.0, rel=1e-2)  # OMI controller
+
+    # 2. Ultra-high bandwidth 256 TB/s mode (+10 W power draw)
+    p_scaled = analyzer.calculate_unified_36mm2_power(bandwidth_mode="256TB_s")
+    assert p_scaled["total_power_W"] == pytest.approx(25.00, abs=0.15)
+    assert p_scaled["total_power_mW"] == pytest.approx(25000.0, abs=150.0)
+    assert p_scaled["subsystems_mW"]["Co-Packaged 3D Memory"] == pytest.approx(20632.19, rel=1e-2)
 
 
 def test_unified_36mm2_report_generation(tmp_path):
@@ -177,7 +185,7 @@ def test_unified_36mm2_report_generation(tmp_path):
         data = json.load(f)
         assert data["area_audit"]["total_die_area_mm2"] == 36.00
         assert data["area_audit"]["active_cmos_area_mm2"] == 29.78
-        assert data["power_audit"]["total_power_W"] == pytest.approx(4.37, abs=0.10)
+        assert data["power_audit"]["total_power_W"] == pytest.approx(15.00, abs=0.15)
 
     with open(reports["unified_md_path"], "r", encoding="utf-8") as f:
         content = f.read()

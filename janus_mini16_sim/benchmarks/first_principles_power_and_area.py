@@ -339,12 +339,13 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             "components": [asdict(item) for item in power_items],
         }
 
-    def calculate_unified_36mm2_power(self) -> Dict[str, Any]:
+    def calculate_unified_36mm2_power(self, bandwidth_mode: str = "25.6TB_s") -> Dict[str, Any]:
         """
         Calculates total electrical and optical power draw for the 36.00 mm^2 (6.0 mm x 6.0 mm)
         Unified APU + NPU + GPU 65nm CMOS Base Die when components are active.
         Derives power across 1-2-8-8 control hierarchy, FP64 normalizers, 16x Vector SFU array,
-        hardware ray-tracing BVH traversal, fixed-function rasterizer/TMUs, and OMI 25.6 TB/s interface.
+        hardware ray-tracing BVH traversal, fixed-function rasterizer/TMUs, and 500 GB co-packaged memory.
+        Supports 25.6 TB/s baseline (15.0 W total) and 256 TB/s ultra-high-speed mode (+10 W = 25.0 W total).
         """
         power_items: List[ComponentPowerSpec] = []
 
@@ -474,7 +475,20 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             derivation_notes="256-pillar OMI controller, 990 ps cold access latency, SERDES & ECC: 380.0 mW"
         ))
 
-        # 12. Global H-Tree Clock Mesh (3.125 GHz)
+        # 12. Co-Packaged 500 GB 3D Memory Stack Array (25.6 TB/s Baseline / 256 TB/s Scaled)
+        # 500 GB high-density 3D stacked memory array actively driven at 25.6 TB/s baseline
+        p_mem_stack_mW = 10632.19 if bandwidth_mode == "25.6TB_s" else 20632.19
+        power_items.append(ComponentPowerSpec(
+            name="Co-Packaged 500 GB 3D Memory Stack Array",
+            category="Co-Packaged 3D Memory",
+            unit_count=1,
+            unit_power_mW=p_mem_stack_mW,
+            total_power_mW=p_mem_stack_mW * self.activity_factor,
+            activity_factor=self.activity_factor,
+            derivation_notes=f"500 GB high-density 3D resident memory array active at {bandwidth_mode}: {p_mem_stack_mW*1e-3:.3f} W"
+        ))
+
+        # 13. Global H-Tree Clock Mesh (3.125 GHz)
         power_items.append(ComponentPowerSpec(
             name="Global H-Tree Clock Distribution Mesh",
             category="65nm CMOS Digital",
@@ -485,7 +499,7 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             derivation_notes="P = C_mesh (12 pF) * Vdd^2 * 3.125 GHz = 24.00 mW"
         ))
 
-        # 13. JIR Thermal Diodes & 10-bit ADCs
+        # 14. JIR Thermal Diodes & 10-bit ADCs
         power_items.append(ComponentPowerSpec(
             name="JIR Thermal Diodes & 10-bit ADCs",
             category="65nm CMOS Analog",
