@@ -4,7 +4,9 @@ PROJECT JANUS MINI-16: 65nm CMOS BASE DIE PHYSICAL GDS II SYNTHESIZER
 Target Hardware: JANUS Mini 16-Tile Monolithic MVP (Model 1A)
 Foundry Process: Standard 65nm LP/GP CMOS (1P7M to 1P9M)
 Operating Freq : 3.125 GHz (320.0 ps clock period, 32-lane SIMD)
-Die Dimensions : 10.00 mm x 10.00 mm (100.0 mm^2, 1:1 match with SiPh top stratum)
+Die Dimensions : 6.00 mm x 6.00 mm (36.00 mm^2, 1:1 match with SiPh top stratum)
+Operating Freq : 3.125 GHz (320.0 ps clock period, 64-lane SIMD / FP)
+Optical Core   : 200.0 GHz (5.0 ps symbol period, 2.5 ps antiphase half-cycles)
 
 This script synthesizes the standalone 65nm CMOS base die mask layout:
   - StrongARM Regenerative Sensing Latch Array (1:1 vertically under APD TDVs,
@@ -153,41 +155,42 @@ def add_balanced_htree_4x4(comp, origin_x, origin_y, pitch, layer):
 @gf.cell
 def pcell_cmos_strongarm_latch_unit() -> gf.Component:
     """
-    Single StrongARM Regenerative Dynamic Latch Cell:
+    Single StrongARM Regenerative Dynamic Latch Cell (TSMC 65nm):
       - Differential cross-coupled inverters (M1-M4)
       - Input differential NMOS pair (M5-M6)
       - Clock tail current source (M7)
       - UBM Micro-Bump pad landing directly on sense node (centered at 0, 0)
+      - Fits strictly within the 8.0 um x 16.0 um leaf sub-grid envelope
     Physical CMOS layers: 101/0 (NW_DIFF), 102/0 (POLY_GATE), 106/0 (CONTACT),
                           111/0 (M1), 112/0 (VIA1), 121/0 (M2), 181/0 (UBM).
     """
     c = gf.Component("STRONGARM_LATCH_UNIT")
 
-    # Active Diffusion centered around (0, 0)
-    c.add_polygon([(-12.5, -9.0), (12.5, -9.0), (12.5, 9.0), (-12.5, 9.0)], layer=LAYER_NW_DIFF)
-    for g in range(4):
-        xg = -12.5 + 3.0 + g * 5.5
-        c.add_polygon([(xg, -10.0), (xg + 1.2, -10.0), (xg + 1.2, 10.0), (xg, 10.0)],
+    # Active Diffusion centered around (0, 0) - 6.0 um wide x 10.0 um high
+    c.add_polygon([(-3.0, -5.0), (3.0, -5.0), (3.0, 5.0), (-3.0, 5.0)], layer=LAYER_NW_DIFF)
+    for g in range(2):
+        xg = -1.8 + g * 2.4
+        c.add_polygon([(xg, -5.5), (xg + 0.6, -5.5), (xg + 0.6, 5.5), (xg, 5.5)],
                       layer=LAYER_POLY_GATE)
         # Tungsten contact plugs on S/D nodes
-        c.add_polygon([(xg - 1.2, -6.0), (xg - 0.2, -6.0), (xg - 0.2, -4.0), (xg - 1.2, -4.0)],
+        c.add_polygon([(xg - 0.5, -3.5), (xg - 0.1, -3.5), (xg - 0.1, -2.5), (xg - 0.5, -2.5)],
                       layer=LAYER_CONTACT)
-        c.add_polygon([(xg - 1.2, 3.0), (xg - 0.2, 3.0), (xg - 0.2, 5.0), (xg - 1.2, 5.0)],
+        c.add_polygon([(xg - 0.5, 2.5), (xg - 0.1, 2.5), (xg - 0.1, 3.5), (xg - 0.5, 3.5)],
                       layer=LAYER_CONTACT)
 
     # Metal 1 Cross-Coupled Connections
-    c.add_polygon([(-10.5, -7.0), (10.5, -7.0), (10.5, -3.0), (-10.5, -3.0)], layer=LAYER_METAL1)
-    c.add_polygon([(-10.5, 3.0), (10.5, 3.0), (10.5, 7.0), (-10.5, 7.0)], layer=LAYER_METAL1)
+    c.add_polygon([(-2.5, -4.0), (2.5, -4.0), (2.5, -1.8), (-2.5, -1.8)], layer=LAYER_METAL1)
+    c.add_polygon([(-2.5, 1.8), (2.5, 1.8), (2.5, 4.0), (-2.5, 4.0)], layer=LAYER_METAL1)
 
     # Via 1 & Metal 2 Output Rails
-    c.add_polygon([(-8.5, -4.0), (-5.5, -4.0), (-5.5, -2.0), (-8.5, -2.0)], layer=LAYER_VIA1)
-    c.add_polygon([(5.5, 2.0), (8.5, 2.0), (8.5, 4.0), (5.5, 4.0)], layer=LAYER_VIA1)
-    c.add_polygon([(-8.5, -4.0), (-5.5, -4.0), (-5.5, 4.0), (-8.5, 4.0)], layer=LAYER_METAL2)
-    c.add_polygon([(5.5, -4.0), (8.5, -4.0), (8.5, 4.0), (5.5, 4.0)], layer=LAYER_METAL2)
+    c.add_polygon([(-2.5, -2.5), (-1.5, -2.5), (-1.5, -1.5), (-2.5, -1.5)], layer=LAYER_VIA1)
+    c.add_polygon([(1.5, 1.5), (2.5, 1.5), (2.5, 2.5), (1.5, 2.5)], layer=LAYER_VIA1)
+    c.add_polygon([(-2.5, -3.0), (-1.5, -3.0), (-1.5, 3.0), (-2.5, 3.0)], layer=LAYER_METAL2)
+    c.add_polygon([(1.5, -3.0), (2.5, -3.0), (2.5, 3.0), (1.5, 3.0)], layer=LAYER_METAL2)
 
     # UBM Landing Pad for Cu TDV from APD anode (Centered exactly at 0.0, 0.0)
-    # Diameter = TDV_DIAMETER_UM = 8 um; pad radius = TDV/2 + UBM_OVERHANG = 4+1.5 = 5.5 um
-    r_pad = TDV_DIAMETER_UM / 2.0 + TDV_UBM_OVERHANG_UM   # 5.5 um
+    # Diameter = TDV_DIAMETER_UM = 4.0 um; pad radius = TDV/2 + UBM_OVERHANG = 2.0 + 0.75 = 2.75 um (5.5 um diam)
+    r_pad = TDV_DIAMETER_UM / 2.0 + TDV_UBM_OVERHANG_UM   # 2.75 um
     pts_ubm = [
         (r_pad * np.cos(np.deg2rad(deg)), r_pad * np.sin(np.deg2rad(deg)))
         for deg in range(0, 360, 45)
@@ -195,7 +198,7 @@ def pcell_cmos_strongarm_latch_unit() -> gf.Component:
     c.add_polygon(pts_ubm, layer=LAYER_PASSIVATION_UBM)
 
     # Architectural annotation
-    c.add_polygon([(-12.5, -9.0), (12.5, -9.0), (12.5, 9.0), (-12.5, 9.0)], layer=LAYER_ARCH_STRONGARM)
+    c.add_polygon([(-3.5, -6.0), (3.5, -6.0), (3.5, 6.0), (-3.5, 6.0)], layer=LAYER_ARCH_STRONGARM)
     c.add_label("STRONGARM_LATCH", position=(0.0, 0.0), layer=LAYER_ARCH_STRONGARM)
     return c
 
@@ -205,15 +208,15 @@ def pcell_cmos_strongarm_latch_bay() -> gf.Component:
     """
     16-Latch StrongARM Bay corresponding to 1 binary switch tree.
     Contains a 4x4 array of StrongARM latches placed at the exact relative offsets
-    (col - 1.5)*16.0 um in X and (row - 1.5)*32.0 um in Y, matching the optical TDVs.
+    (col - 1.5)*8.0 um in X and (row - 1.5)*16.0 um in Y, matching the optical TDVs.
     """
     c = gf.Component("CMOS_STRONGARM_LATCH_BAY")
     latch = pcell_cmos_strongarm_latch_unit()
     for leaf in range(16):
         col = leaf % 4
         row = leaf // 4
-        dx = (col - 1.5) * 16.0
-        dy = (row - 1.5) * 32.0
+        dx = (col - 1.5) * 8.0
+        dy = (row - 1.5) * 16.0
         ref = c.add_ref(latch)
         ref.move((dx, dy))
     return c
@@ -238,37 +241,38 @@ def pcell_cmos_strongarm_lane() -> gf.Component:
 def pcell_cmos_deserializer_bank() -> gf.Component:
     """
     1:64 Polyphase Time-Interleaved Deserializer Bank (64:1 gearing):
-      - 5-bit master binary ring counter & 32-phase latch clock generators
-      - 32-bit register shift register array (height = 16*32 = 512 um core)
+      - 6-bit master binary ring counter & 64-phase latch clock generators
+      - 64-bit register shift register array (height = 64 * 7.5 = 480.0 um core)
+      - Translates 200 GHz serial optical pulses to 3.125 GHz parallel CMOS words
     """
-    c = gf.Component("DESERIALIZER_1TO32_BANK")
-    w, h = 45.0, 512.0
+    c = gf.Component("DESERIALIZER_1TO64_BANK")
+    w, h = 45.0, 480.0
 
     c.add_polygon([(0, 0), (w, 0), (w, h), (0, h)], layer=LAYER_NW_DIFF)
 
-    for i in range(32):
-        y_sec = 8.0 + i * 16.0
+    for i in range(64):
+        y_sec = 6.0 + i * 7.3
         c.add_polygon([(2.0, y_sec), (w - 2.0, y_sec),
-                       (w - 2.0, y_sec + 3.0), (2.0, y_sec + 3.0)], layer=LAYER_POLY_GATE)
+                       (w - 2.0, y_sec + 2.0), (2.0, y_sec + 2.0)], layer=LAYER_POLY_GATE)
         # Metal 1 Clock & Data taps
-        c.add_polygon([(5.0, y_sec - 2.0), (15.0, y_sec - 2.0),
-                       (15.0, y_sec + 5.0), (5.0, y_sec + 5.0)], layer=LAYER_METAL1)
-        c.add_polygon([(25.0, y_sec - 2.0), (40.0, y_sec - 2.0),
-                       (40.0, y_sec + 5.0), (25.0, y_sec + 5.0)], layer=LAYER_METAL2)
+        c.add_polygon([(4.0, y_sec - 1.0), (14.0, y_sec - 1.0),
+                       (14.0, y_sec + 3.0), (4.0, y_sec + 3.0)], layer=LAYER_METAL1)
+        c.add_polygon([(24.0, y_sec - 1.0), (38.0, y_sec - 1.0),
+                       (38.0, y_sec + 3.0), (24.0, y_sec + 3.0)], layer=LAYER_METAL2)
         # Via 1 & 2 interconnects
-        c.add_polygon([(10.0, y_sec), (12.0, y_sec), (12.0, y_sec + 2.0), (10.0, y_sec + 2.0)],
+        c.add_polygon([(8.0, y_sec), (10.0, y_sec), (10.0, y_sec + 1.5), (8.0, y_sec + 1.5)],
                       layer=LAYER_VIA1)
-        c.add_polygon([(30.0, y_sec), (32.0, y_sec), (32.0, y_sec + 2.0), (30.0, y_sec + 2.0)],
+        c.add_polygon([(28.0, y_sec), (30.0, y_sec), (30.0, y_sec + 1.5), (28.0, y_sec + 1.5)],
                       layer=LAYER_VIA2)
 
-    # Metal 3 32-bit parallel bus output
-    for b in range(8):
-        xb = 6.0 + b * 4.5
-        c.add_polygon([(xb, 5.0), (xb + 2.0, 5.0), (xb + 2.0, h - 5.0), (xb, h - 5.0)],
+    # Metal 3 64-bit parallel bus output
+    for b in range(12):
+        xb = 4.0 + b * 3.2
+        c.add_polygon([(xb, 4.0), (xb + 1.5, 4.0), (xb + 1.5, h - 4.0), (xb, h - 4.0)],
                       layer=LAYER_METAL3)
 
     c.add_polygon([(0, 0), (w, 0), (w, h), (0, h)], layer=LAYER_ARCH_DESER)
-    c.add_label("1TO32_DESERIALIZER_BANK", position=(w / 2, h / 2), layer=LAYER_ARCH_DESER)
+    c.add_label("1TO64_DESERIALIZER_BANK", position=(w / 2, h / 2), layer=LAYER_ARCH_DESER)
     return c
 
 
@@ -470,22 +474,22 @@ def build_cmos_base_tile(tile_id: int = 0) -> gf.Component:
         ref.move((xl, 0.0))
 
     # 2. Digital compute macros placed in base die
-    tile.add_ref(pcell_cmos_deserializer_bank()).move((40.0, 40.0))
-    tile.add_ref(pcell_cmos_simd_wallace_kogge_array()).move((120.0, 40.0))
-    tile.add_ref(pcell_cmos_duallut_sram_macro()).move((350.0, 40.0))
-    tile.add_ref(pcell_cmos_central_rom_jir_macro()).move((650.0, 40.0))
-    tile.add_ref(pcell_cmos_accumulator_160bit()).move((800.0, 40.0))
+    tile.add_ref(pcell_cmos_deserializer_bank()).move((30.0, 30.0))
+    tile.add_ref(pcell_cmos_simd_wallace_kogge_array()).move((85.0, 30.0))
+    tile.add_ref(pcell_cmos_duallut_sram_macro()).move((275.0, 30.0))
+    tile.add_ref(pcell_cmos_central_rom_jir_macro()).move((525.0, 30.0))
+    tile.add_ref(pcell_cmos_accumulator_160bit()).move((635.0, 30.0))
 
     # 4x Distributed JIR Thermal Diode Sensors
     sensor_cell = pcell_cmos_thermal_sensor_unit()
     for td in range(4):
-        xt = 200.0 + td * 500.0
-        tile.add_ref(sensor_cell).move((xt, 2400.0))
+        xt = 150.0 + td * 280.0
+        tile.add_ref(sensor_cell).move((xt, tile_h - 40.0))
 
     # Inter-Block Signal Buses (Metal 2, 3, 4, 5)
     for b in range(16):
         yb = 55.0 + b * 18.0
-        tile.add_polygon([(310.0, yb), (350.0, yb), (350.0, yb + 2.0), (310.0, yb + 2.0)],
+        tile.add_polygon([(265.0, yb), (275.0, yb), (275.0, yb + 2.0), (265.0, yb + 2.0)],
                          layer=LAYER_METAL3)
     for w_idx in range(12):
         xw = 260.0 + w_idx * 12.0
@@ -493,19 +497,21 @@ def build_cmos_base_tile(tile_id: int = 0) -> gf.Component:
                           (xw + 2.0, 240.0), (xw, 240.0)], layer=LAYER_METAL4)
     for a_idx in range(8):
         ya = 60.0 + a_idx * 16.0
-        tile.add_polygon([(780.0, ya), (800.0, ya), (800.0, ya + 2.5), (780.0, ya + 2.5)],
+        tile.add_polygon([(625.0, ya), (635.0, ya), (635.0, ya + 2.5), (625.0, ya + 2.5)],
                          layer=LAYER_METAL5)
 
-    # Local Power Grid Mesh (Top Metal 171/0: VDD / VSS Stripes across 2500x2500 um)
-    for p in range(11):
-        yp = 50.0 + p * 240.0
+    # Local Power Grid Mesh (Top Metal 171/0: VDD / VSS Stripes across 1250x1250 um)
+    num_pwr_stripes_y = int((tile_h - 60.0) / 120.0) + 1
+    for p in range(num_pwr_stripes_y):
+        yp = 40.0 + p * 120.0
         tile.add_polygon([(10.0, yp), (tile_w - 10.0, yp),
-                          (tile_w - 10.0, yp + 12.0), (10.0, yp + 12.0)],
+                          (tile_w - 10.0, yp + 10.0), (10.0, yp + 10.0)],
                          layer=LAYER_TOP_METAL_PWR)
-    for p in range(11):
-        xp = 50.0 + p * 240.0
-        tile.add_polygon([(xp, 10.0), (xp + 12.0, 10.0),
-                          (xp + 12.0, tile_h - 10.0), (xp, tile_h - 10.0)],
+    num_pwr_stripes_x = int((tile_w - 60.0) / 120.0) + 1
+    for p in range(num_pwr_stripes_x):
+        xp = 40.0 + p * 120.0
+        tile.add_polygon([(xp, 10.0), (xp + 10.0, 10.0),
+                          (xp + 10.0, tile_h - 10.0), (xp, tile_h - 10.0)],
                          layer=LAYER_TOP_METAL_PWR)
 
     # In-tile Clock Trunk (Metal 6: cross-shaped local distribution)
@@ -538,7 +544,7 @@ def generate_janus_mini16_cmos_top_layout() -> gf.Component:
       - 4-side wire-bond / solder bump I/O pad ring
       - 4-layer concentric moisture seal ring
 
-    Die: 10000 x 10000 um (100.0 mm^2) | Tiles: 4x4 @ 2500 um pitch | Origin: (0, 0)
+    Die: 6000 x 6000 um (36.00 mm^2) | Tiles: 4x4 @ 1400 um pitch (1250 um core) | Origin: (200, 200)
     """
     top = gf.Component("JANUS_MINI16_CMOS_BASE_DIE")
 
@@ -584,7 +590,7 @@ def generate_janus_mini16_cmos_top_layout() -> gf.Component:
             tile_ref = top.add_ref(build_cmos_base_tile(tile_id=tile_id))
             tile_ref.move((x_pos, y_pos))
             top.add_label(f"CMOS_TILE_{tile_id}_LOC",
-                          position=(x_pos + 1250.0, y_pos + 1250.0),
+                          position=(x_pos + TILE_CORE_UM / 2.0, y_pos + TILE_CORE_UM / 2.0),
                           layer=LAYER_FLOORPLAN)
 
     # 4. Global VDD/VSS Power Ring (Top Metal 171/0)
@@ -657,9 +663,9 @@ def main():
     print("=" * 75)
     print("PROJECT JANUS: 65nm LP/GP CMOS DIGITAL BASE DIE GDS II SYNTHESIZER")
     print("=" * 75)
-    print("[*] Synthesizing 16x 65nm CMOS Compute Tiles (2.5x2.5 mm each)...")
+    print("[*] Synthesizing 16x 65nm CMOS Compute Tiles (1.25x1.25 mm core @ 1.4 mm pitch, 36.00 mm^2 die)...")
     print("[*] Synthesizing StrongARM Latches (32 lanes x 16 trees x 16 leaves = 8,192 per tile)...")
-    print("[*] Synthesizing 1:64 Deserializers (64:1 Gearing) & SIMD Wallace-Kogge Arithmetic...")
+    print("[*] Synthesizing 1:64 Deserializers (64:1 Gearing @ 200 GHz) & SIMD Wallace-Kogge Arithmetic...")
     print("[*] Synthesizing 1.5MB Dual-LUT SRAM & Central ROM Macros...")
     print("[*] Synthesizing 160-Bit Carry-Save Accumulator & JIR Thermal Diodes...")
     print("[*] Synthesizing UBM Micro-Bump Pads, 4-Level H-Tree Clock & Power Rings...")
@@ -677,6 +683,12 @@ def main():
     lyp_cmos = os.path.join(out_dir, "janus_mini16_cmos_base_layout.lyp")
     if os.path.exists(lyp_src):
         shutil.copyfile(lyp_src, lyp_cmos)
+
+    public_dir = os.path.abspath(os.path.join(_ws_root, "public"))
+    if os.path.exists(public_dir):
+        pub_gds = os.path.join(public_dir, "janus_mini16_cmos_base_layout.gds")
+        shutil.copyfile(cmos_gds_path, pub_gds)
+        print(f"[*] Synchronized GDS to public directory: {pub_gds}")
 
     gds_size = os.path.getsize(cmos_gds_path)
     print(f"[+] SUCCESS! 65nm CMOS Base Die GDS II layout generated.")

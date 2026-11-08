@@ -199,8 +199,8 @@ Janus Update/
 │   └── documentation_reports/JANUS_ASYMMETRIC_16TREE_ARCHITECTURE.md # 4-Stage Fermat Core mathematical & physical specification
 │
 ├── 📐 Physical Layout & Fabrication Mask Sets
-│   ├── janus_mini16_sim/layout/janus_mini16_layout.gds           # Tapeout-grade photonic 3D top-die GDS II stream file (955 KB)
-│   ├── janus_mini16_sim/layout/janus_mini16_cmos_base_layout.gds # 65nm CMOS digital base-die GDS II stream file (169 KB)
+│   ├── janus_mini16_sim/layout/janus_mini16_layout.gds           # Tapeout-grade photonic 3D top-die GDS II stream file (266 KB)
+│   ├── janus_mini16_sim/layout/janus_mini16_cmos_base_layout.gds # 65nm CMOS digital base-die GDS II stream file (180 KB)
 │   ├── janus_mini16_sim/layout/janus_mini16_layout.lyp           # KLayout layer color palette & visual styling definition
 │   └── fig_gds_die_and_tile_floorplan.png                        # 300 DPI composite full-die & single-tile mask floorplan
 │
@@ -284,8 +284,8 @@ Janus Update/
     │   ├── generate_mini16_gds.py             # Automated 3D monolithic photonic top-die GDS II synthesizer
     │   ├── generate_cmos_base_gds.py          # Automated 65nm CMOS digital base-die GDS II synthesizer
     │   ├── janus_layer_constants.py           # Unified physical mask layer constants & canonical dimensions
-    │   ├── janus_mini16_layout.gds            # 16-Tile monolithic 3D top-die GDS II stream file (955 KB)
-    │   ├── janus_mini16_cmos_base_layout.gds  # 65nm LP/GP CMOS base-die GDS II stream file (169 KB)
+    │   ├── janus_mini16_layout.gds            # 16-Tile monolithic 3D top-die GDS II stream file (266 KB)
+    │   ├── janus_mini16_cmos_base_layout.gds  # 65nm LP/GP CMOS base-die GDS II stream file (180 KB)
     │   ├── janus_mini16_layout.lyp            # Top-die KLayout layer properties & styling file
     │   ├── janus_mini16_cmos_base_layout.lyp  # CMOS base-die KLayout layer properties file
     │   └── README.md                          # Layout & packaging architectural specification
@@ -837,7 +837,7 @@ python janus_mini16_sim/layout/generate_mini16_gds.py
 # Synthesize 65nm LP/GP CMOS Digital Base Die GDS II (StrongARM, Deserializers, SIMD, Dual-LUT SRAM)
 python janus_mini16_sim/layout/generate_cmos_base_gds.py
 ```
-Outputs `janus_mini16_layout.gds` (955 KB) and `janus_mini16_cmos_base_layout.gds` (169 KB) with companion `.lyp` layer styling files viewable directly in **KLayout**.
+Outputs `janus_mini16_layout.gds` (266 KB) and `janus_mini16_cmos_base_layout.gds` (180 KB) with companion `.lyp` layer styling files viewable directly in **KLayout**.
 
 ### 6. Launching the Interactive Local Web Dashboard
 To launch the web dashboard locally:

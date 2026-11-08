@@ -79,24 +79,24 @@ LAYER_FLOORPLAN       = (199, 0)  # Die Boundary & Tile Keep-Out Margins
 # ==============================================================================
 # CANONICAL PHYSICAL DIMENSIONS  (micrometers, consistent across both scripts)
 # ==============================================================================
-# --- Die geometry (100.0 mm^2 total chip area) ---
-DIE_WIDTH_UM          = 10000.0   # 10.00 mm (identical for both strata)
-DIE_HEIGHT_UM         = 10000.0   # 10.00 mm (identical for both strata)
+# --- Die geometry (36.00 mm^2 monolithic die footprint) ---
+DIE_WIDTH_UM          = 6000.0    # 6.00 mm (identical for both strata)
+DIE_HEIGHT_UM         = 6000.0    # 6.00 mm (identical for both strata)
 
-# --- Tile array geometry (4x4 = 16 tiles, 6.25 mm^2 each) ---
+# --- Tile array geometry (4x4 = 16 tiles, 1.25 mm x 1.25 mm core on 1.40 mm pitch) ---
 NUM_TILES_X           = 4
 NUM_TILES_Y           = 4
-TILE_CORE_UM          = 2500.0    # 2.50 mm x 2.50 mm core active area per tile (6.25 mm^2)
-TILE_PITCH_UM         = 2500.0    # 2.50 mm center-to-center pitch
-TILE_ARRAY_ORIGIN_X   = 0.0       # Tiled array origin
-TILE_ARRAY_ORIGIN_Y   = 0.0
+TILE_CORE_UM          = 1250.0    # 1.25 mm x 1.25 mm active core area per tile (1.5625 mm^2)
+TILE_PITCH_UM         = 1400.0    # 1.40 mm center-to-center pitch (150 um routing channel)
+TILE_ARRAY_ORIGIN_X   = 200.0     # 200 um margin for moisture seal ring and pad ring
+TILE_ARRAY_ORIGIN_Y   = 200.0     # 200 um margin for moisture seal ring and pad ring
 
 # --- SIMD Lane & Tree Bay Geometry ---
 NUM_LANES_PER_TILE    = 32        # 32 parallel SIMD lanes per tile
 NUM_TREES_PER_LANE    = 16        # 16 binary switch trees per lane (one per residue state)
-LANE_PITCH_UM         = TILE_CORE_UM / NUM_LANES_PER_TILE  # 78.125 um column pitch
-TREE_BAY_HEIGHT_UM    = TILE_CORE_UM / NUM_TREES_PER_LANE  # 156.25 um tree bay height
-CHANNEL_PITCH_UM      = LANE_PITCH_UM  # 78.125 um inter-channel pitch (54 um clear dielectric gap)
+LANE_PITCH_UM         = TILE_CORE_UM / NUM_LANES_PER_TILE  # 39.0625 um column pitch
+TREE_BAY_HEIGHT_UM    = TILE_CORE_UM / NUM_TREES_PER_LANE  # 78.125 um tree bay height
+CHANNEL_PITCH_UM      = LANE_PITCH_UM  # 39.0625 um inter-channel pitch
 
 # --- Optical waveguide dimensions ---
 # Conventional port waveguide (Si3N4 strip at ports, outside switch cell)
@@ -126,15 +126,15 @@ MMI_L_UM              = 5.800     # 5.8 um self-imaging center length
 MMI_TAPER_UM          = 6.000     # 6.0 um MMI access taper length
 
 # Modulator (compact LiTaO3)
-LITAO3_LEN_UM         = 120.0     # 120 um LiTaO3 modulator active region length
+LITAO3_LEN_UM         = 60.0      # 60 um LiTaO3 200 GHz modulator active region length
 LITAO3_W_UM           = 2.000     # 2.0 um LiTaO3 waveguide rib width
 
 # --- Photodetector & 3D interconnect ---
-APD_LEN_UM            = 10.00     # 10 um Ge absorption mesa length
+APD_LEN_UM            = 4.00      # 4 um Ge absorption mesa length (200 GHz / 2.5 ps transit time)
 APD_W_UM              = 1.200     # 1.2 um Ge mesa width
 THERMAL_BUF_THICKNESS_UM = 50.0   # 50 um SiO2 thermal buffer (6.25:1 aspect ratio, C_via = 5.92 fF)
-TDV_DIAMETER_UM       = 8.000     # 8 um Cu-pillar via diameter
-TDV_UBM_OVERHANG_UM   = 1.500     # UBM pad extends 1.5 um beyond TDV radius per side (11 um pad diam)
+TDV_DIAMETER_UM       = 4.000     # 4 um Cu-pillar via diameter (scaled for 36 mm^2 3D monolithic stack)
+TDV_UBM_OVERHANG_UM   = 0.750     # UBM pad extends 0.75 um beyond TDV radius per side (5.5 um pad diam)
 BUMP_PITCH_UM         = 50.00     # 50 um micro-bump pitch
 
 # --- Grating coupler (2nd-order Si3N4 coupler at operating wavelength) ---
@@ -162,7 +162,7 @@ def get_leaf_tdv_coordinate(tile_x_idx: int, tile_y_idx: int,
                            leaf_idx: int) -> tuple[float, float]:
     """
     Deterministic mathematical source of truth for the absolute (X, Y)
-    coordinates of every TDV pillar and CMOS UBM landing pad across the 100 mm^2 die.
+    coordinates of every TDV pillar and CMOS UBM landing pad across the 36.00 mm^2 die.
     Guarantees 0.00 nm misalignment between strata.
 
     Args:
@@ -175,17 +175,17 @@ def get_leaf_tdv_coordinate(tile_x_idx: int, tile_y_idx: int,
     Returns:
         (x_abs, y_abs) coordinate tuple in micrometers.
     """
-    tile_origin_x = tile_x_idx * TILE_PITCH_UM
-    tile_origin_y = tile_y_idx * TILE_PITCH_UM
+    tile_origin_x = TILE_ARRAY_ORIGIN_X + tile_x_idx * TILE_PITCH_UM
+    tile_origin_y = TILE_ARRAY_ORIGIN_Y + tile_y_idx * TILE_PITCH_UM
 
     lane_x = tile_origin_x + (lane_idx + 0.5) * LANE_PITCH_UM
     tree_y = tile_origin_y + (tree_idx + 0.5) * TREE_BAY_HEIGHT_UM
 
-    # 4x4 leaf sub-grid inside the tree bay (sub-pitch: 16 um in X, 32 um in Y)
+    # 4x4 leaf sub-grid inside the tree bay (sub-pitch: 8.0 um in X, 16.0 um in Y)
     col = leaf_idx % 4
     row = leaf_idx // 4
-    dx_leaf = (col - 1.5) * 16.0
-    dy_leaf = (row - 1.5) * 32.0
+    dx_leaf = (col - 1.5) * 8.0
+    dy_leaf = (row - 1.5) * 16.0
 
     return (lane_x + dx_leaf, tree_y + dy_leaf)
 

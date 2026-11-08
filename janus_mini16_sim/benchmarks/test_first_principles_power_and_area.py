@@ -124,30 +124,31 @@ def test_run_first_principles_audit():
 
 
 def test_unified_36mm2_die_area_and_whitespace():
-    """Verifies physical area allocation and whitespace on 36.00 mm^2 (6.0x6.0 mm) die."""
+    """Verifies physical area allocation and whitespace on 36.00 mm^2 (6.00x6.00 mm) die."""
     analyzer = FirstPrinciplesPowerAndAreaAnalyzer(die_model="unified_36mm2")
     res = analyzer.calculate_area()
 
     assert res["total_die_area_mm2"] == 36.00
     assert res["die_dimensions_mm"] == "6.00 x 6.00"
-    assert res["active_cmos_area_mm2"] == pytest.approx(29.78, abs=0.01)
-    assert res["active_cmos_occupancy_pct"] == pytest.approx(82.72, abs=0.05)
-    assert res["whitespace_area_mm2"] == pytest.approx(6.22, abs=0.01)
-    assert res["whitespace_pct"] == pytest.approx(17.28, abs=0.05)
+    assert res["active_cmos_area_mm2"] == pytest.approx(31.78, abs=0.01)
+    assert res["active_cmos_occupancy_pct"] == pytest.approx(88.28, abs=0.05)
+    assert res["whitespace_area_mm2"] == pytest.approx(4.22, abs=0.01)
+    assert res["whitespace_pct"] == pytest.approx(11.72, abs=0.05)
 
     comp_map = {c["name"]: c for c in res["components"]}
     # Check all key components
-    assert comp_map["Baseline 65nm CMOS Core Logic & Latches"]["total_area_mm2"] == 10.63
-    assert comp_map["1-2-8-8 Two-Phase Antiphase Control Hierarchy"]["total_area_mm2"] == 6.30
+    assert comp_map["Baseline 65nm CMOS Core Logic & Latches"]["total_area_mm2"] == 10.630
+    assert comp_map["1-2-8-8 Two-Phase Antiphase Control Hierarchy"]["total_area_mm2"] == 6.300
     assert comp_map["1-2-8-8 Two-Phase Antiphase Control Hierarchy"]["unit_count"] == 19
-    assert comp_map["Multi-Precision Floating-Point Engine"]["total_area_mm2"] == 1.95
-    assert comp_map["FP64 Scientific Engine (Dual-Rail Normalizers)"]["total_area_mm2"] == 0.80
-    assert comp_map["16x Vector Special Function Unit (SFU) Array"]["total_area_mm2"] == 3.20
-    assert comp_map["Hardware Ray-Tracing BVH Traversal Engine"]["total_area_mm2"] == 1.50
-    assert comp_map["Hardware Ray-Tracing BVH Traversal Engine"]["unit_count"] == 4
-    assert comp_map["Fixed-Function Rasterizer, 16x TMUs & DisplayPort PHY"]["total_area_mm2"] == 3.90
-    assert comp_map["Native OMI 25.6 TB/s Interface & ECC Controller"]["total_area_mm2"] == 1.50
-    assert comp_map["H-Tree Clock Mesh & Decoupling Whitespace"]["total_area_mm2"] == 6.22
+    assert comp_map["64-Lane Multi-Precision Floating-Point Engine"]["total_area_mm2"] == 2.450
+    assert comp_map["64-Lane FP64 Dual-Rail Normalizers"]["total_area_mm2"] == 1.300
+    assert comp_map["Dual-LUT SRAM & Central ROM Macros (RAM)"]["total_area_mm2"] == 1.500
+    assert comp_map["Fixed-Function Rasterizer & 8x TMUs"]["total_area_mm2"] == 2.700
+    assert comp_map["16x Vector SFU Transcendentals Array"]["total_area_mm2"] == 2.400
+    assert comp_map["Hardware Ray-Tracing BVH Traversal Engines"]["total_area_mm2"] == 1.000
+    assert comp_map["Hardware Ray-Tracing BVH Traversal Engines"]["unit_count"] == 4
+    assert comp_map["4-Level Balanced H-Tree Clock Mesh"]["total_area_mm2"] == 3.500
+    assert comp_map["MIM/MOS Decap & Thermal Whitespace"]["total_area_mm2"] == 4.220
 
 
 def test_unified_36mm2_power_and_cooling():
@@ -184,13 +185,13 @@ def test_unified_36mm2_report_generation(tmp_path):
     with open(reports["unified_json_path"], "r", encoding="utf-8") as f:
         data = json.load(f)
         assert data["area_audit"]["total_die_area_mm2"] == 36.00
-        assert data["area_audit"]["active_cmos_area_mm2"] == 29.78
+        assert data["area_audit"]["active_cmos_area_mm2"] == 31.78
         assert data["power_audit"]["total_power_W"] == pytest.approx(15.00, abs=0.15)
 
     with open(reports["unified_md_path"], "r", encoding="utf-8") as f:
         content = f.read()
         assert "Unified 36 mm² APU+NPU+GPU Power & Area Audit" in content
         assert "36.00 mm²" in content
-        assert "29.78 mm²" in content
-        assert "17.28%" in content
+        assert "31.78 mm²" in content
+        assert "11.72%" in content
 

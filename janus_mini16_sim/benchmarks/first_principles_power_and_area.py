@@ -74,13 +74,13 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         self.die_model = die_model
 
         if self.die_model == "unified_36mm2":
-            self.die_width_um = 6000.0        # 6000 um = 6.0 mm
-            self.die_height_um = 6000.0       # 6000 um = 6.0 mm
-            self.total_die_area_mm2 = 36.00   # 36.0 mm^2
+            self.die_width_um = DIE_WIDTH_UM      # 6000.0 um = 6.0 mm Model 1A
+            self.die_height_um = DIE_HEIGHT_UM    # 6000.0 um = 6.0 mm Model 1A
+            self.total_die_area_mm2 = (self.die_width_um * self.die_height_um) * 1e-6  # 36.00 mm^2
         else:
-            self.die_width_um = DIE_WIDTH_UM      # 10000 um = 10.0 mm
-            self.die_height_um = DIE_HEIGHT_UM    # 10000 um = 10.0 mm
-            self.total_die_area_mm2 = (self.die_width_um * self.die_height_um) * 1e-6  # 100.0 mm^2
+            self.die_width_um = 10000.0       # 10000.0 um = 10.0 mm legacy baseline prototype
+            self.die_height_um = 10000.0      # 10000.0 um = 10.0 mm legacy baseline prototype
+            self.total_die_area_mm2 = 100.00  # 100.0 mm^2
 
         # Universal parameters
         self.num_tiles = 16                   # 16 spatial RNS residue tiles (4x4)
@@ -685,7 +685,8 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         # ----------------------------------------------------------------------
         # 9. 16 Tile Cores (600 um x 600 um = 0.360 mm^2 per tile)
         # Contains StrongARM, Deserializer, SIMD, SRAM, Accumulator, Thermal sensor.
-        tile_core_area_um2 = TILE_CORE_UM * TILE_CORE_UM  # 360,000 um^2
+        tile_core_um = 2500.0 if self.die_model == "baseline_100mm2" else TILE_CORE_UM
+        tile_core_area_um2 = tile_core_um * tile_core_um
         tot_tile_core_um2 = self.num_tiles * tile_core_area_um2  # 5,760,000 um^2 = 5.760 mm^2
         area_items.append(ComponentAreaSpec(
             name="16x Active Tile Core Modules (65nm CMOS)",
@@ -788,9 +789,9 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
 
     def calculate_unified_36mm2_area(self) -> Dict[str, Any]:
         """
-        Calculates zero-base physical area for the 36.00 mm^2 (6.0 mm x 6.0 mm)
+        Calculates zero-base physical area for the 36.00 mm^2 (6.00 mm x 6.00 mm)
         Unified APU + NPU + GPU 65nm CMOS Base Die.
-        Derives active silicon area (29.78 mm^2, 82.72%) and whitespace (6.22 mm^2, 17.28%).
+        Derives active silicon area (31.78 mm^2, 88.28%) and MIM/MOS decap whitespace (4.22 mm^2, 11.72%).
         """
         area_items: List[ComponentAreaSpec] = []
         die_total_mm2 = 36.00
@@ -802,9 +803,9 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             unit_count=1,
             unit_area_um2=10630000.0,
             total_area_um2=10630000.0,
-            total_area_mm2=10.63,
-            percent_die_area=round((10.63 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="StrongARM latches, CRT trees, RNS encoders, TDV pads, power rings, moisture seal ring"
+            total_area_mm2=10.630,
+            percent_die_area=round((10.630 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="8,192 StrongARM sense latches/tile, 1:64 deserializers (64:1 gearing @ 200 GHz), CRT adders"
         ))
 
         # 2. 1-2-8-8 Two-Phase Antiphase Control Hierarchy
@@ -814,96 +815,108 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             unit_count=19,
             unit_area_um2=6300000.0,
             total_area_um2=6300000.0,
-            total_area_mm2=6.30,
-            percent_die_area=round((6.30 / die_total_mm2) * 100.0, 2),
+            total_area_mm2=6.300,
+            percent_die_area=round((6.300 / die_total_mm2) * 100.0, 2),
             dimensions_notes="1x Master Core (1.50 mm²), 2x Phase Managers (0.80 mm²), 16x Tile Controllers (4.00 mm²)"
         ))
 
-        # 3. Multi-Precision Floating-Point Engine (FP4/FP8/BF16/FP16/FP32)
+        # 3. 64-Lane Multi-Precision Floating-Point Engine (FP4/FP8/BF16/FP16/FP32)
         area_items.append(ComponentAreaSpec(
-            name="Multi-Precision Floating-Point Engine",
+            name="64-Lane Multi-Precision Floating-Point Engine",
             stratum="65nm CMOS Base",
             unit_count=16,
-            unit_area_um2=121875.0,
-            total_area_um2=1950000.0,
-            total_area_mm2=1.95,
-            percent_die_area=round((1.95 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="16x unpacked floating-point arithmetic pre/post-processors for optical core"
+            unit_area_um2=153125.0,
+            total_area_um2=2450000.0,
+            total_area_mm2=2.450,
+            percent_die_area=round((2.450 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="64-lane FP4/FP8/BF16/FP16/FP32 pre/post-processors (coordinated with 64:1 gearing)"
         ))
 
-        # 4. FP64 Scientific Engine (Dual-Rail Exponent Normalizers)
+        # 4. 64-Lane FP64 Dual-Rail Exponent Normalizers
         area_items.append(ComponentAreaSpec(
-            name="FP64 Scientific Engine (Dual-Rail Normalizers)",
+            name="64-Lane FP64 Dual-Rail Normalizers",
             stratum="65nm CMOS Base",
             unit_count=16,
-            unit_area_um2=50000.0,
-            total_area_um2=800000.0,
-            total_area_mm2=0.80,
-            percent_die_area=round((0.80 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="11-bit exponent subtractor, barrel shifters, and leading-zero normalizers (53b mantissa runs across 16 RNS channels)"
+            unit_area_um2=81250.0,
+            total_area_um2=1300000.0,
+            total_area_mm2=1.300,
+            percent_die_area=round((1.300 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="64-way 11-bit exponent aligners, dual-rail normalizers & barrel shifters (53b mantissa across 16 channels)"
         ))
 
-        # 5. 16x Vector Special Function Unit (SFU) Array
+        # 5. Dual-LUT SRAM & Central ROM Macros (RAM Preserved)
         area_items.append(ComponentAreaSpec(
-            name="16x Vector Special Function Unit (SFU) Array",
+            name="Dual-LUT SRAM & Central ROM Macros (RAM)",
+            stratum="65nm CMOS Base",
+            unit_count=17,
+            unit_area_um2=1500000.0,
+            total_area_um2=1500000.0,
+            total_area_mm2=1.500,
+            percent_die_area=round((1.500 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="1.50 MB Dual-LUT volatile SRAM + 0.25 MB central ROM (PRESERVED: 320 ps latency @ 3.125 GHz)"
+        ))
+
+        # 6. Fixed-Function Triangle Rasterizer & 8x TMUs
+        area_items.append(ComponentAreaSpec(
+            name="Fixed-Function Rasterizer & 8x TMUs",
+            stratum="65nm CMOS Base",
+            unit_count=1,
+            unit_area_um2=2700000.0,
+            total_area_um2=2700000.0,
+            total_area_mm2=2.700,
+            percent_die_area=round((2.700 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="12.8 GTri/s barycentric rasterizer, 8x anisotropic TMUs, 80 Gbps DisplayPort 2.1 / eDP PHY"
+        ))
+
+        # 7. 16x Vector SFU Transcendentals Array
+        area_items.append(ComponentAreaSpec(
+            name="16x Vector SFU Transcendentals Array",
             stratum="65nm CMOS Base",
             unit_count=16,
-            unit_area_um2=200000.0,
-            total_area_um2=3200000.0,
-            total_area_mm2=3.20,
-            percent_die_area=round((3.20 / die_total_mm2) * 100.0, 2),
+            unit_area_um2=150000.0,
+            total_area_um2=2400000.0,
+            total_area_mm2=2.400,
+            percent_die_area=round((2.400 / die_total_mm2) * 100.0, 2),
             dimensions_notes="16x vector lanes for Softmax, GELU, SiLU, RoPE, RMSNorm and transcendental functions"
         ))
 
-        # 6. Hardware Ray-Tracing BVH Traversal Engine
+        # 8. Hardware Ray-Tracing BVH Traversal Engines
         area_items.append(ComponentAreaSpec(
-            name="Hardware Ray-Tracing BVH Traversal Engine",
+            name="Hardware Ray-Tracing BVH Traversal Engines",
             stratum="65nm CMOS Base",
             unit_count=4,
-            unit_area_um2=375000.0,
-            total_area_um2=1500000.0,
-            total_area_mm2=1.50,
-            percent_die_area=round((1.50 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="4x BVH traversal engines with 16-way AABB ray-box tests; Möller-Trumbore linear system solved optically on 200 GHz core"
+            unit_area_um2=250000.0,
+            total_area_um2=1000000.0,
+            total_area_mm2=1.000,
+            percent_die_area=round((1.000 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="4x BVH traversal engines with 16-way AABB ray-box tests; Möller-Trumbore solved optically on 200 GHz core"
         ))
 
-        # 7. Fixed-Function Triangle Rasterizer, 16x TMUs & DisplayPort PHY
+        # 9. 4-Level Balanced H-Tree Clock Mesh (Preserved)
         area_items.append(ComponentAreaSpec(
-            name="Fixed-Function Rasterizer, 16x TMUs & DisplayPort PHY",
+            name="4-Level Balanced H-Tree Clock Mesh",
             stratum="65nm CMOS Base",
             unit_count=1,
-            unit_area_um2=3900000.0,
-            total_area_um2=3900000.0,
-            total_area_mm2=3.90,
-            percent_die_area=round((3.90 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="12.8 GTri/s barycentric rasterizer, 16x anisotropic TMUs, 80 Gbps DisplayPort 2.1 / eDP PHY"
+            unit_area_um2=3500000.0,
+            total_area_um2=3500000.0,
+            total_area_mm2=3.500,
+            percent_die_area=round((3.500 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="Metal 6 balanced H-tree delivering 3.125 GHz clock (< 1.5 ps skew across die, PRESERVED)"
         ))
 
-        # 8. Native Open Memory Interface (OMI 25.6 TB/s) & ECC Controller
+        # 10. MIM/MOS Decap & Thermal Whitespace
         area_items.append(ComponentAreaSpec(
-            name="Native OMI 25.6 TB/s Interface & ECC Controller",
-            stratum="65nm CMOS Base",
-            unit_count=1,
-            unit_area_um2=1500000.0,
-            total_area_um2=1500000.0,
-            total_area_mm2=1.50,
-            percent_die_area=round((1.50 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="256-pillar OMI controller, 990 ps cold access latency, 25.6 TB/s bandwidth with Reed-Solomon ECC"
-        ))
-
-        # 9. H-Tree Clock Mesh, Decoupling Capacitors & Thermal Whitespace
-        area_items.append(ComponentAreaSpec(
-            name="H-Tree Clock Mesh & Decoupling Whitespace",
+            name="MIM/MOS Decap & Thermal Whitespace",
             stratum="Silicon Whitespace",
             unit_count=1,
-            unit_area_um2=6220000.0,
-            total_area_um2=6220000.0,
-            total_area_mm2=6.22,
-            percent_die_area=round((6.22 / die_total_mm2) * 100.0, 2),
-            dimensions_notes="3.125 GHz H-tree clock distribution, power grid decoupling capacitance, and thermal relief whitespace"
+            unit_area_um2=4220000.0,
+            total_area_um2=4220000.0,
+            total_area_mm2=4.220,
+            percent_die_area=round((4.220 / die_total_mm2) * 100.0, 2),
+            dimensions_notes="High-density MIM/MOS decoupling capacitance (dI/dt suppression) and thermal relief whitespace"
         ))
 
-        tot_active_mm2 = 10.63 + 6.30 + 1.95 + 0.80 + 3.20 + 1.50 + 3.90 + 1.50  # 29.78 mm^2
+        tot_active_mm2 = 10.630 + 6.300 + 2.450 + 1.300 + 1.500 + 2.700 + 2.400 + 1.000 + 3.500  # 31.780 mm^2
         strata_area: Dict[str, float] = {}
         for item in area_items:
             strata_area[item.stratum] = strata_area.get(item.stratum, 0.0) + item.total_area_mm2
@@ -915,8 +928,8 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             "total_die_area_mm2": 36.00,
             "active_cmos_area_mm2": round(tot_active_mm2, 2),
             "active_cmos_occupancy_pct": round((tot_active_mm2 / die_total_mm2) * 100.0, 2),
-            "whitespace_area_mm2": 6.22,
-            "whitespace_pct": round((6.22 / die_total_mm2) * 100.0, 2),
+            "whitespace_area_mm2": 4.22,
+            "whitespace_pct": round((4.22 / die_total_mm2) * 100.0, 2),
             "strata_breakdown_mm2": {k: round(v, 4) for k, v in strata_area.items()},
             "components": [asdict(item) for item in area_items],
         }

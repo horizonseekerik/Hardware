@@ -273,10 +273,10 @@ N_switch_15tree_mult: int = 225  # Reference: 15-Tree baseline switches per mult
 # ==============================================================================
 # 2.7 DIE GEOMETRY & Z-AXIS PHYSICAL STACK
 # ==============================================================================
-A_die: float = 100.00e-6  # Die footprint area (m^2) [T2]
-A_die_mm2: float = 100.00  # Die footprint area (mm^2) [T2]
-L_die: float = 10.0e-3  # Die side length (m) [T2]
-A_tile: float = 6.25e-6  # Individual tile area (m^2) [T2]
+A_die: float = 36.00e-6  # Die footprint area (m^2) [T2]
+A_die_mm2: float = 36.00  # Die footprint area (mm^2) [T2]
+L_die: float = 6.0e-3  # Die side length (m) [T2]
+A_tile: float = 1.5625e-6  # Individual active tile area (m^2) [T2]
 A_apd_single: float = 1.5e-12  # Single Ge/Si APD device area (m^2) [T1, T3]
 h_cmos: float = 50e-6  # CMOS base substrate thickness (m) [T2]
 h_sio2_buffer: float = 250e-6  # SiO2 monolithic thermal buffer thickness (m) [T2]
@@ -568,7 +568,7 @@ FP64_MANTISSA_BITS: int = 53  # 52 explicit bits + 1 hidden leading bit
 FP64_CHANNELS: int = 16  # Evaluated across all 16 parallel residue channels (> 64-bit dynamic range)
 A_FP64_SCIENTIFIC_ENGINE_MM2: float = 0.80  # 11-bit dual-rail exponent aligners & normalizers (mm^2)
 A_FLOAT_ENGINE_MULTI_PRECISION_MM2: float = 1.95  # Multi-precision floating-point unpacked logic (mm^2)
-A_VECTOR_SFU_ARRAY_MM2: float = 3.20  # 16x Vector Special Function Units (Softmax, GELU, RoPE) (mm^2)
+A_VECTOR_SFU_ARRAY_MM2: float = 2.40  # 16x Vector Special Function Units (Softmax, GELU, RoPE, RMSNorm) (mm^2)
 VECTOR_SFU_UNITS: int = 16  # 16 parallel vector transcendentals / normalization lanes
 
 # Dual-Mode 3D Graphics & Hardware Ray-Tracing Subsystem
@@ -577,30 +577,35 @@ SUPPORT_APPROACH_B_TRADITIONAL_GRAPHICS: bool = True  # Approach B: Fixed-functi
 RAY_TRACING_BVH_ENGINES: int = 4  # 4x Hardware Bounding Volume Hierarchy (BVH) AABB traversal engines
 AABB_TRAVERSAL_PIPELINES: int = 16  # 16-way ray-box test pipelines in CMOS
 MOLLER_TRUMBORE_OPTICAL: bool = True  # Möller-Trumbore ray-triangle 3x3 linear system solved on 200 GHz optical core
-A_RAY_TRACING_BVH_ENGINE_MM2: float = 1.50  # Hardware BVH AABB box test & traversal engines (mm^2)
-A_RASTERIZER_TMU_DISPLAY_MM2: float = 3.90  # Fixed-function rasterizer, 16x TMUs & DisplayPort 2.1 PHY (mm^2)
+A_RAY_TRACING_BVH_ENGINE_MM2: float = 1.00  # Hardware BVH AABB box test & traversal engines (mm^2)
+A_RASTERIZER_TMU_DISPLAY_MM2: float = 2.70  # Fixed-function rasterizer, 8x TMUs & DisplayPort 2.1 PHY (mm^2)
 RASTERIZER_TRIANGLE_RATE_GTRI_S: float = 12.8  # Peak triangle rasterization throughput (GigaTriangles/s)
-TMU_COUNT: int = 16  # Texture Mapping Units (bilinear, trilinear, anisotropic filtering)
+TMU_COUNT: int = 8  # Texture Mapping Units (bilinear, trilinear, anisotropic filtering)
 DISPLAY_INTERFACE: str = "DisplayPort 2.1 / eDP (UHBR20)"  # Integrated high-speed display PHY
 DISPLAY_BANDWIDTH_GBPS: float = 80.0  # DisplayPort 2.1 UHBR20 aggregate physical bandwidth (Gbps)
 
-# Open Memory Interface (OMI) Co-Packaged High-Speed Memory Subsystem
-OMI_MEMORY_CAPACITY_GB: float = 500.0  # Co-packaged 500 GB high-density memory stack
-OMI_BANDWIDTH_TB_S: float = 25.6  # Baseline OMI co-packaged memory bandwidth (25.6 TB/s)
-OMI_SCALED_BANDWIDTH_TB_S: float = 256.0  # Ultra-high bandwidth mode (256 TB/s @ +10W)
-OMI_ACCESS_LATENCY_PS: float = 990.0  # Cold memory access latency (990 ps)
-OMI_MICROBUMP_PILLARS: int = 256  # 256-pillar dedicated OMI microbump grid
-A_OMI_INTERFACE_ECC_MM2: float = 1.50  # OMI high-speed PHY controller, SERDES & Reed-Solomon ECC (mm^2)
-P_TOTAL_UNIFIED_BASELINE_W: float = 15.0  # Full system baseline dissipation with 500 GB memory (15.0 W)
-P_TOTAL_UNIFIED_SCALED_W: float = 25.0  # Full system dissipation in 256 TB/s mode (+10 W = 25.0 W)
+# On-Die High-Density Dual-LUT SRAM & Central Non-Volatile ROM Subsystem (RAM Preserved)
+A_DUALLUT_SRAM_CENTRAL_ROM_MM2: float = 1.50  # 1.50 MB Dual-LUT SRAM & Central ROM Macros (mm^2)
+SRAM_TOTAL_CAPACITY_MB: float = 1.50  # Total on-die volatile Dual-LUT SRAM capacity (MB)
+ROM_TOTAL_CAPACITY_MB: float = 0.25  # Total central hardwired Via-ROM constants (MB)
+SRAM_ACCESS_LATENCY_PS: float = 320.0  # Single-cycle access latency at 3.125 GHz (320 ps)
+P_TOTAL_UNIFIED_BASELINE_W: float = 15.0  # Full system baseline dissipation with 200 GHz optical core (15.0 W)
 
-# 36.00 mm^2 Unified CMOS Base Die Floorplan Budget (6.0 mm x 6.0 mm)
+# 64-Lane Multi-Precision Floating-Point Subsystem
+A_FP_ENGINE_MULTI_PRECISION_MM2: float = 2.45  # 64-lane FP4/FP8/BF16/FP16/FP32 pre/post-processors (mm^2)
+A_FP64_NORMALIZER_DUALRAIL_MM2: float = 1.30  # 64-lane FP64 dual-rail exponent normalizers (mm^2)
+A_TOTAL_FP_SILICON_MM2: float = 3.75  # Total floating-point silicon budget (2.45 + 1.30 mm^2, 10.42%)
+FP_LANES_COUNT: int = 64  # 64 parallel FP execution lanes matching 64:1 polyphase deserializers
+
+# 36.00 mm^2 Unified CMOS Base Die Floorplan Budget (6.00 mm x 6.00 mm)
 A_DIE_UNIFIED_MM2: float = 36.00  # Total physical 65nm CMOS base die footprint (mm^2)
-L_DIE_UNIFIED_MM: float = 6.00  # Die side length (6.0 mm)
-A_CMOS_BASE_ACTIVE_MM2: float = 29.78  # Total active silicon area across all subsystems (mm^2)
-A_CMOS_WHITESPACE_MM2: float = 6.22  # Free whitespace for H-tree clock, thermal buffer, decaps (mm^2)
-CMOS_ACTIVE_OCCUPANCY_PCT: float = 82.72  # Active area occupancy percentage (29.78 / 36.00 * 100%)
-CMOS_WHITESPACE_PCT: float = 17.28  # Free whitespace routing / decap margin percentage
+L_DIE_UNIFIED_MM: float = 6.00  # Die side length (6.00 mm)
+A_CMOS_BASE_ACTIVE_MM2: float = 31.78  # Total active silicon area across all subsystems (mm^2)
+A_HTREE_CLOCK_MESH_MM2: float = 3.50  # Preserved 4-level balanced H-tree 3.125 GHz clock mesh (mm^2)
+A_MIM_MOS_DECAP_WHITESPACE_MM2: float = 4.22  # MIM/MOS decoupling capacitance & thermal relief whitespace (mm^2)
+CMOS_ACTIVE_OCCUPANCY_PCT: float = 88.28  # Active silicon area percentage (31.78 / 36.00 * 100%)
+CMOS_DECAP_WHITESPACE_PCT: float = 11.72  # MIM/MOS decap margin percentage (4.22 / 36.00 * 100%)
+CMOS_TOTAL_OCCUPANCY_PCT: float = 100.00  # 100.00% physical silicon floorplan closure
 A_CONTROL_HIERARCHY_1_2_8_8_MM2: float = 6.30  # 1 Master + 2 Phase Managers + 16 Tile Cores (mm^2)
 A_BASELINE_CMOS_LOGIC_MM2: float = 10.63  # StrongARM latches, CRT trees, RNS encoders, TDV pads, rings (mm^2)
 

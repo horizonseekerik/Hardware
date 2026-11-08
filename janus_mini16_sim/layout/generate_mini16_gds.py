@@ -9,7 +9,7 @@ Architecture:
      - Layer 5/0: Si3N4 Core (800x300 nm strip, low-loss routing, zero TPA)
      - Layer 1/0: Crystalline Silicon Core (450x220 nm, detector mesa base)
      - Adiabatic Inter-Layer Tapers (Si3N4 -> Si transition, IL < 0.05 dB)
-     - Layer 3/0: Thin-Film LiTaO3 100 GHz Pockels Modulators (capacitive lumped drive)
+     - Layer 3/0: Thin-Film LiTaO3 200 GHz Pockels Modulators (capacitive lumped drive)
      - Layer 4/0 & 4/1: Sb2S3 Non-Volatile Directional Coupler Switches
      - Layer 20/0: SAC2M Ge/Si Avalanche Photodiode (APD) Mesas
      - Layer 10/0 & 11/0: Metal 1 & Metal 2 Copper Power and RF Distribution
@@ -207,16 +207,16 @@ def pcell_sac2m_apd_with_tdv() -> gf.Component:
       - Crystalline Si base (Layer 1/0) with avalanche guard ring
       - Ge absorption mesa (Layer 20/0)
       - Anode/Cathode Cu Metal 1 contacts (Layer 10/0)
-      - Octagonal UBM Pad + 8 um diameter Cu TDV to CMOS StrongARM (Layers 30/0 & 31/0)
+      - Octagonal UBM Pad + 4 um diameter Cu TDV to CMOS StrongARM (Layers 30/0 & 31/0)
     UBM pad and TDV pillar are centered exactly at (0.0, 0.0) for 1:1 deterministic alignment.
     """
     c = gf.Component("SAC2M_APD_WITH_TDV")
-    l = APD_LEN_UM    # 10 um
+    l = APD_LEN_UM    # 4.0 um (transit-time optimized for 200 GHz / 2.5 ps pulses)
     w = APD_W_UM      # 1.2 um
 
     cx, cy = 0.0, 0.0
-    r_tdv = TDV_DIAMETER_UM / 2.0                          # 4.0 um
-    r_ubm = r_tdv + TDV_UBM_OVERHANG_UM                   # 5.5 um
+    r_tdv = TDV_DIAMETER_UM / 2.0                          # 2.0 um
+    r_ubm = r_tdv + TDV_UBM_OVERHANG_UM                   # 2.75 um
 
     pts_ubm = [(cx + r_ubm * math.cos(math.radians(deg)),
                 cy + r_ubm * math.sin(math.radians(deg))) for deg in range(0, 360, 45)]
@@ -226,28 +226,28 @@ def pcell_sac2m_apd_with_tdv() -> gf.Component:
                 cy + r_tdv * math.sin(math.radians(deg))) for deg in range(0, 360, 45)]
     c.add_polygon(pts_tdv, layer=LAYER_TDV_PILLAR)
 
-    y_mesa = 4.0
+    y_mesa = 3.5
     c.add_polygon([(-l / 2, y_mesa - SI_WIDTH_UM / 2), (l / 2, y_mesa - SI_WIDTH_UM / 2),
                    (l / 2, y_mesa + SI_WIDTH_UM / 2), (-l / 2, y_mesa + SI_WIDTH_UM / 2)],
                   layer=LAYER_SI_CORE)
-    c.add_polygon([(-l / 2 - 1.0, y_mesa - w / 2 - 1.5), (l / 2 + 1.0, y_mesa - w / 2 - 1.5),
-                   (l / 2 + 1.0, y_mesa + w / 2 + 1.5), (-l / 2 - 1.0, y_mesa + w / 2 + 1.5)],
+    c.add_polygon([(-l / 2 - 0.5, y_mesa - w / 2 - 0.8), (l / 2 + 0.5, y_mesa - w / 2 - 0.8),
+                   (l / 2 + 0.5, y_mesa + w / 2 + 0.8), (-l / 2 - 0.5, y_mesa + w / 2 + 0.8)],
                   layer=LAYER_SI_CORE)
 
-    c.add_polygon([(-l / 2 - 2.0, y_mesa - w / 2 - 2.8), (l / 2 + 2.0, y_mesa - w / 2 - 2.8),
-                   (l / 2 + 2.0, y_mesa - w / 2 - 2.0), (-l / 2 - 2.0, y_mesa - w / 2 - 2.0)],
+    c.add_polygon([(-l / 2 - 1.0, y_mesa - w / 2 - 1.4), (l / 2 + 1.0, y_mesa - w / 2 - 1.4),
+                   (l / 2 + 1.0, y_mesa - w / 2 - 0.8), (-l / 2 - 1.0, y_mesa - w / 2 - 0.8)],
                   layer=LAYER_SI_CORE)
-    c.add_polygon([(-l / 2 - 2.0, y_mesa + w / 2 + 2.0), (l / 2 + 2.0, y_mesa + w / 2 + 2.0),
-                   (l / 2 + 2.0, y_mesa + w / 2 + 2.8), (-l / 2 - 2.0, y_mesa + w / 2 + 2.8)],
+    c.add_polygon([(-l / 2 - 1.0, y_mesa + w / 2 + 0.8), (l / 2 + 1.0, y_mesa + w / 2 + 0.8),
+                   (l / 2 + 1.0, y_mesa + w / 2 + 1.4), (-l / 2 - 1.0, y_mesa + w / 2 + 1.4)],
                   layer=LAYER_SI_CORE)
 
     c.add_polygon([(-l / 2, y_mesa - w / 2), (l / 2, y_mesa - w / 2),
                    (l / 2, y_mesa + w / 2), (-l / 2, y_mesa + w / 2)], layer=LAYER_APD_GE)
 
-    c.add_polygon([(-2.0, cy - 2.0), (2.0, cy - 2.0),
-                   (2.0, y_mesa - w / 2), (-2.0, y_mesa - w / 2)], layer=LAYER_CU_M1)
-    c.add_polygon([(-l / 2 + 1.0, y_mesa + w / 2), (l / 2 - 1.0, y_mesa + w / 2),
-                   (l / 2 - 1.0, y_mesa + w / 2 + 2.5), (-l / 2 + 1.0, y_mesa + w / 2 + 2.5)],
+    c.add_polygon([(-1.0, cy - 1.0), (1.0, cy - 1.0),
+                   (1.0, y_mesa - w / 2), (-1.0, y_mesa - w / 2)], layer=LAYER_CU_M1)
+    c.add_polygon([(-l / 2 + 0.5, y_mesa + w / 2), (l / 2 - 0.5, y_mesa + w / 2),
+                   (l / 2 - 0.5, y_mesa + w / 2 + 1.5), (-l / 2 + 0.5, y_mesa + w / 2 + 1.5)],
                   layer=LAYER_CU_M1)
 
     c.add_label("SAC2M_APD_TDV", position=(0.0, 0.0), layer=LAYER_APD_GE)
@@ -257,40 +257,40 @@ def pcell_sac2m_apd_with_tdv() -> gf.Component:
 @gf.cell
 def pcell_optical_tree_bay() -> gf.Component:
     """
-    Single 4-stage binary switch tree bay (78.125 um wide x 156.25 um high):
+    Single 4-stage binary switch tree bay (39.0625 um wide x 78.125 um high):
       - 15x Sb2S3 non-volatile directional coupler switch cells (Layers 4/0, 5/0)
       - Adiabatic Si3N4 -> Si inverse tapers (Layers 5/0, 1/0)
-      - 16x SAC2M Ge/Si APD photodetectors with 8 um vertical Cu TDVs (Layers 1/0, 20/0, 30/0, 31/0)
-      - Arranged in 4x4 leaf sub-grid with deterministic (col-1.5)*16 um and (row-1.5)*32 um spacing
+      - 16x SAC2M Ge/Si APD photodetectors with 4 um vertical Cu TDVs (Layers 1/0, 20/0, 30/0, 31/0)
+      - Arranged in 4x4 leaf sub-grid with deterministic (col-1.5)*8.0 um and (row-1.5)*16.0 um spacing
     """
     c = gf.Component("OPTICAL_TREE_BAY_16LEAVES")
     sw_cell = pcell_sb2s3_sin_switch_cell()
-    taper_cell = pcell_sin_to_si_taper(length=15.0)
+    taper_cell = pcell_sin_to_si_taper(length=6.0)
     apd_cell = pcell_sac2m_apd_with_tdv()
 
-    # Stage 1: 1 switch at (0.0, -60.0)
-    c.add_ref(sw_cell).move((-COUPLER_LEN_UM / 2, -60.0))
+    # Stage 1: 1 switch at (0.0, -30.0)
+    c.add_ref(sw_cell).move((-COUPLER_LEN_UM / 2, -30.0))
 
-    # Stage 2: 2 switches at (-16.0, -42.0) and (16.0, -42.0)
-    c.add_ref(sw_cell).move((-16.0 - COUPLER_LEN_UM / 2, -42.0))
-    c.add_ref(sw_cell).move((16.0 - COUPLER_LEN_UM / 2, -42.0))
+    # Stage 2: 2 switches at (-8.0, -20.0) and (8.0, -20.0)
+    c.add_ref(sw_cell).move((-8.0 - COUPLER_LEN_UM / 2, -20.0))
+    c.add_ref(sw_cell).move((8.0 - COUPLER_LEN_UM / 2, -20.0))
 
-    # Stage 3: 4 switches at (-24.0, -24.0), (-8.0, -24.0), (8.0, -24.0), (24.0, -24.0)
-    for xs in [-24.0, -8.0, 8.0, 24.0]:
-        c.add_ref(sw_cell).move((xs - COUPLER_LEN_UM / 2, -24.0))
+    # Stage 3: 4 switches at (-12.0, -10.0), (-4.0, -10.0), (4.0, -10.0), (12.0, -10.0)
+    for xs in [-12.0, -4.0, 4.0, 12.0]:
+        c.add_ref(sw_cell).move((xs - COUPLER_LEN_UM / 2, -10.0))
 
-    # Stage 4: 8 switches at (-28.0, -20.0, -12.0, -4.0, 4.0, 12.0, 20.0, 28.0)
-    for xs in [-28.0, -20.0, -12.0, -4.0, 4.0, 12.0, 20.0, 28.0]:
-        c.add_ref(sw_cell).move((xs - COUPLER_LEN_UM / 2, -6.0))
+    # Stage 4: 8 switches across X at y = -2.0
+    for xs in [-14.0, -10.0, -6.0, -2.0, 2.0, 6.0, 10.0, 14.0]:
+        c.add_ref(sw_cell).move((xs - COUPLER_LEN_UM / 2, -2.0))
 
     # 16 Leaves: 4x4 sub-grid placed at get_leaf_tdv_coordinate relative offsets
     for leaf in range(16):
         col = leaf % 4
         row = leaf // 4
-        dx = (col - 1.5) * 16.0   # -24.0, -8.0, 8.0, 24.0
-        dy = (row - 1.5) * 32.0   # -48.0, -16.0, 16.0, 48.0
+        dx = (col - 1.5) * 8.0    # -12.0, -4.0, 4.0, 12.0
+        dy = (row - 1.5) * 16.0   # -24.0, -8.0, 8.0, 24.0
 
-        c.add_ref(taper_cell).move((dx - 7.5, dy - 12.0))
+        c.add_ref(taper_cell).move((dx - 3.0, dy - 6.0))
         c.add_ref(apd_cell).move((dx, dy))
 
     c.add_label("16TREE_BAY", position=(0.0, 0.0), layer=LAYER_SIN_CORE)
@@ -300,36 +300,36 @@ def pcell_optical_tree_bay() -> gf.Component:
 @gf.cell
 def pcell_optical_simd_lane() -> gf.Component:
     """
-    Single SIMD Lane (78.125 um width x 2500.0 um height):
-      - 1x LiTaO3 100-GHz electro-optic modulator at input (120 um length, 2 um rib,
-        24 um CPW electrode envelope with 54.125 um clean oxide clearance gap)
+    Single SIMD Lane (39.0625 um width x 1250.0 um height):
+      - 1x LiTaO3 200-GHz electro-optic modulator at input (60 um length, 2 um rib,
+        16 um CPW electrode envelope with clean oxide clearance gap)
       - Si3N4 low-loss optical feed trunk
-      - 16x stacked binary switch tree bays along Y (at y = (tree + 0.5) * 156.25 um)
+      - 16x stacked binary switch tree bays along Y (at y = (tree + 0.5) * 78.125 um)
       - Total 16 trees x 16 leaves = 256 APD TDVs per lane
     """
     lane = gf.Component("OPTICAL_SIMD_LANE_16TREES")
     tree_bay = pcell_optical_tree_bay()
 
-    # 1. LiTaO3 Electro-Optic Pockels Modulator (Y: 20.0 to 140.0 um, centered at x = 0.0)
-    lane.add_polygon([(-LITAO3_W_UM / 2, 20.0), (LITAO3_W_UM / 2, 20.0),
-                      (LITAO3_W_UM / 2, 20.0 + LITAO3_LEN_UM), (-LITAO3_W_UM / 2, 20.0 + LITAO3_LEN_UM)],
+    # 1. LiTaO3 Electro-Optic Pockels Modulator (Y: 10.0 to 70.0 um, centered at x = 0.0)
+    lane.add_polygon([(-LITAO3_W_UM / 2, 10.0), (LITAO3_W_UM / 2, 10.0),
+                      (LITAO3_W_UM / 2, 10.0 + LITAO3_LEN_UM), (-LITAO3_W_UM / 2, 10.0 + LITAO3_LEN_UM)],
                      layer=LAYER_LITAO3_EO)
-    lane.add_polygon([(-SIN_WIDTH_UM / 2, 10.0), (SIN_WIDTH_UM / 2, 10.0),
-                      (SIN_WIDTH_UM / 2, 145.0), (-SIN_WIDTH_UM / 2, 145.0)],
+    lane.add_polygon([(-SIN_WIDTH_UM / 2, 5.0), (SIN_WIDTH_UM / 2, 5.0),
+                      (SIN_WIDTH_UM / 2, 75.0), (-SIN_WIDTH_UM / 2, 75.0)],
                      layer=LAYER_SIN_CORE)
 
     # RF CPW Electrodes (Layer 10/0, Metal 1 Cu)
-    lane.add_polygon([(-12.0, 20.0), (-1.5, 20.0),
-                      (-1.5, 20.0 + LITAO3_LEN_UM), (-12.0, 20.0 + LITAO3_LEN_UM)],
+    lane.add_polygon([(-8.0, 10.0), (-1.2, 10.0),
+                      (-1.2, 10.0 + LITAO3_LEN_UM), (-8.0, 10.0 + LITAO3_LEN_UM)],
                      layer=LAYER_CU_M1)
-    lane.add_polygon([(1.5, 20.0), (12.0, 20.0),
-                      (12.0, 20.0 + LITAO3_LEN_UM), (1.5, 20.0 + LITAO3_LEN_UM)],
+    lane.add_polygon([(1.2, 10.0), (8.0, 10.0),
+                      (8.0, 10.0 + LITAO3_LEN_UM), (1.2, 10.0 + LITAO3_LEN_UM)],
                      layer=LAYER_CU_M1)
-    lane.add_label("LITAO3_MODULATOR", position=(0.0, 80.0), layer=LAYER_LITAO3_EO)
+    lane.add_label("LITAO3_200GHZ_MOD", position=(0.0, 40.0), layer=LAYER_LITAO3_EO)
 
     # 2. Vertical Si3N4 Optical Distribution Trunk
-    lane.add_polygon([(-SIN_WIDTH_UM / 2, 145.0), (SIN_WIDTH_UM / 2, 145.0),
-                      (SIN_WIDTH_UM / 2, 2490.0), (-SIN_WIDTH_UM / 2, 2490.0)],
+    lane.add_polygon([(-SIN_WIDTH_UM / 2, 75.0), (SIN_WIDTH_UM / 2, 75.0),
+                      (SIN_WIDTH_UM / 2, TILE_CORE_UM - 10.0), (-SIN_WIDTH_UM / 2, TILE_CORE_UM - 10.0)],
                      layer=LAYER_SIN_CORE)
 
     # 3. 16 Stacked Binary Switch Tree Bays
@@ -348,7 +348,7 @@ def pcell_optical_simd_lane() -> gf.Component:
 @gf.cell
 def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
     """
-    Synthesizes a complete 3D Monolithic Tile (2500 um x 2500 um = 6.25 mm^2):
+    Synthesizes a complete 3D Monolithic Tile (1250 um x 1250 um core = 1.5625 mm^2 active):
       - Bottom 65nm CMOS digital compute base (physical mask layers 100-199)
       - Middle monolithic 50 um SiO2 thermal buffer (Layer 32/0) with high-density Cu TDV pillars
       - Top dual-core Si3N4/Si optical permutation fabric:
@@ -382,12 +382,14 @@ def build_monolithic_3d_tile(tile_id: int = 0) -> gf.Component:
         ref.move((xl, 0.0))
 
     # 3. Global Orthogonal Metal Power Distribution Mesh (Layers 10/0 & 11/0)
-    for p_idx in range(11):
-        yp = 50.0 + p_idx * 240.0
+    num_stripes_y = int((tile_h - 60.0) / 120.0) + 1
+    for p_idx in range(num_stripes_y):
+        yp = 40.0 + p_idx * 120.0
         tile.add_polygon([(15.0, yp), (tile_w - 15.0, yp), (tile_w - 15.0, yp + 4.0), (15.0, yp + 4.0)],
                          layer=LAYER_CU_M1)
-    for p_idx in range(11):
-        xp = 50.0 + p_idx * 240.0
+    num_stripes_x = int((tile_w - 60.0) / 120.0) + 1
+    for p_idx in range(num_stripes_x):
+        xp = 40.0 + p_idx * 120.0
         tile.add_polygon([(xp, 15.0), (xp + 4.0, 15.0), (xp + 4.0, tile_h - 15.0), (xp, tile_h - 15.0)],
                          layer=LAYER_CU_M2)
 
@@ -409,7 +411,7 @@ def generate_janus_mini16_top_layout() -> gf.Component:
       - Complete 4-Layer Concentric Seal Ring & Scribe-Line Test Metrology
       - 4-Level Balanced H-Tree 3.125 GHz Clock (Metal 6 / Layer 161/0)
 
-    Die: 10000 x 10000 um (100.0 mm^2) | Tiles: 4x4 @ 2500 um pitch | Origin: (0, 0)
+    Die: 6000 x 6000 um (36.00 mm^2) | Tiles: 4x4 @ 1400 um pitch (1250 um core) | Origin: (200, 200)
     """
     top = gf.Component("JANUS_MINI16_TOP_CORE")
 
@@ -454,7 +456,7 @@ def generate_janus_mini16_top_layout() -> gf.Component:
             tile_ref = top.add_ref(build_monolithic_3d_tile(tile_id=tile_id))
             tile_ref.move((x_pos, y_pos))
             top.add_label(f"TILE_{tile_id}_LOCATION",
-                          position=(x_pos + 1250.0, y_pos + 1250.0), layer=LAYER_FLOORPLAN)
+                          position=(x_pos + TILE_CORE_UM / 2.0, y_pos + TILE_CORE_UM / 2.0), layer=LAYER_FLOORPLAN)
 
     # 3. Dual Optical Fiber V-Groove Array Grating Couplers
     gc_period = GC_TEETH_PERIOD_UM   # 0.725 um at 1064 nm
@@ -481,16 +483,16 @@ def generate_janus_mini16_top_layout() -> gf.Component:
                             layer=LAYER_SIN_CORE)
         gc_cell.add_label(f"FIBER_CH{i}", position=(17.5, y_gc), layer=LAYER_SIN_CORE)
 
-    top.add_ref(gc_cell).move((35.0, 3900.0))
+    top.add_ref(gc_cell).move((35.0, 1950.0))
     ref_r = top.add_ref(gc_cell)
     ref_r.mirror_x()
-    ref_r.move((die_w - 35.0, 3900.0))
-    top.add_label("FIBER_VGROOVE_PORT_WEST", position=(20.0, 3870.0), layer=LAYER_SIN_CORE)
-    top.add_label("FIBER_VGROOVE_PORT_EAST", position=(die_w - 20.0, 3870.0), layer=LAYER_SIN_CORE)
+    ref_r.move((die_w - 35.0, 1950.0))
+    top.add_label("FIBER_VGROOVE_PORT_WEST", position=(20.0, 1920.0), layer=LAYER_SIN_CORE)
+    top.add_label("FIBER_VGROOVE_PORT_EAST", position=(die_w - 20.0, 1920.0), layer=LAYER_SIN_CORE)
 
     # Optical Feed Trunks (Si3N4, Layer 5/0)
     for i in range(17):
-        y_gc = 3900.0 + i * 127.0
+        y_gc = 1950.0 + i * 127.0
         if y_gc < die_h - 100.0:
             for x0, x1 in [(10.0, 180.0), (die_w - 180.0, die_w - 10.0)]:
                 top.add_polygon([(x0, y_gc - SIN_WIDTH_UM / 2), (x1, y_gc - SIN_WIDTH_UM / 2),
@@ -579,6 +581,12 @@ def main():
     lyp_top = os.path.join(out_dir, "janus_mini16_layout.lyp")
     if os.path.exists(lyp_src):
         shutil.copyfile(lyp_src, lyp_top)
+
+    public_dir = os.path.abspath(os.path.join(_ws_root, "public"))
+    if os.path.exists(public_dir):
+        pub_gds = os.path.join(public_dir, "janus_mini16_layout.gds")
+        shutil.copyfile(gds_path, pub_gds)
+        print(f"[*] Synchronized GDS to public directory: {pub_gds}")
 
     gds_size = os.path.getsize(gds_path)
     print(f"[+] SUCCESS! Complete 3D Monolithic GDS II layout generated.")

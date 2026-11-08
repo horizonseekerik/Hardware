@@ -60,7 +60,8 @@ def test_azure_shell_scripts_syntax():
     for script in scripts:
         assert os.path.exists(script), f"Script not found: {script}"
         # Validate syntax with bash -n
-        res = subprocess.run(["bash", "-n", script], capture_output=True, text=True)
+        rel_script = os.path.relpath(script, os.getcwd()).replace("\\", "/")
+        res = subprocess.run(["bash", "-n", rel_script], capture_output=True, text=True)
         assert res.returncode == 0, f"Syntax error in {script}:\n{res.stderr}"
 
 

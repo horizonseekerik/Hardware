@@ -41,7 +41,8 @@ def test_1d_stack_analytical_and_mesh_convergence():
     # Also verify interface source analytical benchmark
     R_if = solver.calculate_analytical_thermal_resistance(source_location="interface")
     assert R_if < R_exact
-    assert abs(R_if - 0.17367) / 0.17367 < 0.01
+    R_if_expected = (getattr(cfg, "h_spreader_gap", 50.0e-6) / (3.0 * cfg.A_die) + (cfg.h_hs1 + cfg.h_hs2) / (400.0 * cfg.A_die))
+    assert abs(R_if - R_if_expected) / R_if_expected < 0.01
     
     # 2. Spatial grid convergence test (dz = 10 um, 5 um, 2.5 um)
     conv_res = solver.run_mesh_convergence_study()
