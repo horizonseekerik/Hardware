@@ -75,36 +75,36 @@
        High-Contrast Foundry Slate (Light) & Obsidian (Dark)
        ========================================================= */
     :root, [data-theme="dark"] {
-      /* PHOTONIC FOUNDRY DARK THEME (FLAGSHIP DEFAULT) */
-      --bg-color: #080a11;
-      --bg-dark: #0c0f18;
-      --header-bg: rgba(8, 10, 17, 0.92);
-      --nav-bg: #111522;
-      --card-bg: #0f131f;
-      --card-sub-bg: #141926;
+      /* PHOTONIC TITANIUM (NEUTRAL OBSIDIAN & COHERENT LASER) */
+      --bg-color: #06070a;           /* Pure neutral obsidian graphite */
+      --bg-dark: #090a0e;
+      --header-bg: rgba(8, 10, 15, 0.88);
+      --nav-bg: rgba(14, 16, 23, 0.82);
+      --card-bg: #0c0e14;            /* Smoky obsidian glass */
+      --card-sub-bg: #11141c;
       --card-border: rgba(255, 255, 255, 0.08);
       --card-border-subtle: rgba(255, 255, 255, 0.04);
-      --table-header-bg: #111624;
-      --table-row-hover: rgba(0, 240, 255, 0.04);
-      --input-bg: #111522;
+      --table-header-bg: #0f1118;
+      --table-row-hover: rgba(0, 240, 255, 0.05);
+      --input-bg: #0f1118;
       --accent-cyan: #00f0ff;        /* Coherent Laser Photonic Cyan */
       --accent-blue: #3b82f6;        /* Precision Blue */
       --accent-purple: #818cf8;      /* Waveguide Indigo */
       --accent-green: #10b981;       /* Verification Emerald */
       --accent-red: #f87171;         /* Limit Crimson */
-      --accent-amber: #f59e0b;       /* Thermal Copper / Sb2S3 */
+      --accent-amber: #e5a93c;       /* Silicon Gold / Sb2S3 / Cu TDV */
       --accent-yellow: #fbbf24;
-      --text-main: #f8fafc;          /* High-contrast crisp white */
+      --text-main: #ffffff;          /* Pure Titanium Crisp White */
       --text-muted: #94a3b8;         /* Technical Slate */
       --text-subtle: #64748b;
-      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.05);
-      --glow-cyan: 0 0 24px rgba(0, 240, 255, 0.28);
-      --glow-amber: 0 0 20px rgba(245, 158, 11, 0.24);
-      --glow-purple: 0 0 20px rgba(129, 140, 248, 0.24);
-      --canvas-bg: #080a11;
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+      --glow-cyan: 0 0 32px rgba(0, 240, 255, 0.32);
+      --glow-amber: 0 0 25px rgba(229, 169, 60, 0.25);
+      --glow-purple: 0 0 25px rgba(129, 140, 248, 0.25);
+      --canvas-bg: #06070a;
       --canvas-border: rgba(255, 255, 255, 0.08);
-      --hero-bg: #0b0e17;
-      --hero-title-grad: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      --hero-bg: #08090d;
+      --hero-title-grad: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
       --badge-pass-bg: rgba(16, 185, 129, 0.15);
       --badge-pass-color: #34d399;
     }
@@ -2566,7 +2566,126 @@
       border-top: 1px solid var(--card-border);
     }
 
-  </style>
+  
+    /* --- SPOTLIGHT CURSOR HOVER & FLOATING GLASS PILL NAVBAR --- */
+
+    /* Floating Glass Pill Island Header */
+    header {
+      background: transparent !important;
+      border: none !important;
+      padding: 12px 1.5rem 6px !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      position: sticky !important;
+      top: 6px !important;
+      z-index: 1000 !important;
+      pointer-events: none !important;
+      box-shadow: none !important;
+    }
+
+    .header-island {
+      width: 100%;
+      max-width: 1320px;
+      background: var(--header-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      padding: 0.55rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.08);
+      pointer-events: auto;
+      transition: all 0.25s ease;
+    }
+
+    @media (max-width: 860px) {
+      header {
+        padding: 6px 10px !important;
+        top: 0 !important;
+      }
+      .header-island {
+        border-radius: 12px;
+        padding: 0.5rem 0.8rem;
+      }
+    }
+
+    /* Card Dynamic Cursor Spotlight */
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: var(--mouse-y, -200px);
+      left: var(--mouse-x, -200px);
+      width: 450px;
+      height: 450px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 240, 255, 0.28);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Interactive Hardware Benchmark Tab Buttons */
+    .hw-compare-tab-btn {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      background: var(--card-sub-bg);
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .hw-compare-tab-btn:hover {
+      color: var(--text-main);
+      border-color: var(--accent-cyan);
+    }
+    .hw-compare-tab-btn.active {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+    }
+
+    .hw-compare-bar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 9999px;
+      height: 7px;
+      overflow: hidden;
+      margin-top: 6px;
+      position: relative;
+    }
+    .hw-compare-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+</style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
   <link rel="prefetch" href="/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb" as="fetch" crossorigin>
@@ -2581,43 +2700,45 @@
 
 
   <!-- TOP GLOBAL HEADER & NAVIGATION BAR -->
-  <header>
-    <div class="brand" onclick="switchPage('home')">
-      <img src="/janus-logo.png" alt="Janus Photonic Hardware Logo" class="brand-logo-img" />
-      <div class="brand-title">
-        <span class="brand-name">JANUS</span>
-        <span class="brand-subtitle">Photonic Hardware</span>
+    <header>
+    <div class="header-island">
+      <div class="brand" onclick="switchPage('home')">
+        <img src="/janus-logo.png" alt="Janus Photonic Hardware Logo" class="brand-logo-img" />
+        <div class="brand-title">
+          <span class="brand-name">JANUS</span>
+          <span class="brand-subtitle">Photonic Hardware</span>
+        </div>
       </div>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">☰</button>
+
+      <nav class="nav-bar">
+        <!-- Global Quick-Search & Command Palette Trigger -->
+        <button class="nav-btn cmd-palette-trigger" onclick="openCommandPalette()" title="Press Cmd+K or Ctrl+K to search"
+          style="display:inline-flex; align-items:center; gap:6px; padding:5px 12px; background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:9999px; font-size:0.75rem; color:var(--text-muted); cursor:pointer;">
+          <span>🔍</span> <span style="font-weight:600;">Search</span> <kbd style="background:var(--bg-dark); border:1px solid var(--card-border); border-radius:3px; padding:1px 5px; font-size:0.65rem; font-family:'JetBrains Mono',monospace;">⌘K</kbd>
+        </button>
+        <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">Overview</button>
+        <button class="nav-btn" id="nav-paper" onclick="switchPage('paper')">Manuscript</button>
+        <button class="nav-btn" id="nav-simulation" onclick="switchPage('simulation')">Co-Simulation</button>
+        <button class="nav-btn" id="nav-codebase" onclick="switchPage('codebase')">Codebase</button>
+        <button class="nav-btn" id="nav-roadmap" onclick="switchPage('roadmap')">Roadmap</button>
+        <button class="nav-btn" id="nav-hardware" onclick="switchPage('hardware')">CMOS & 3D Stack</button>
+        <button class="nav-btn" id="nav-software" onclick="switchPage('software')">Software & JIR</button>
+        <button class="nav-btn" id="nav-about" onclick="switchPage('about')">About Creator</button>
+
+        <!-- Segmented Dual-Theme Switcher -->
+        <div class="theme-switch-wrapper"
+          style="display:inline-flex; align-items:center; background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:9999px; padding:2px; margin-left:8px;">
+          <button id="btn-theme-light" onclick="applyTheme('light')"
+            style="padding:4px 10px; border-radius:9999px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
+            title="Switch to Paper Mode">LIGHT</button>
+          <button id="btn-theme-dark" onclick="applyTheme('dark')"
+            style="padding:4px 10px; border-radius:9999px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
+            title="Switch to Photonic Titanium">DARK</button>
+        </div>
+      </nav>
     </div>
-
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">☰</button>
-
-    <nav class="nav-bar">
-      <!-- Global Quick-Search & Command Palette Trigger -->
-      <button class="nav-btn cmd-palette-trigger" onclick="openCommandPalette()" title="Press Cmd+K or Ctrl+K to search"
-        style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:6px; font-size:0.75rem; color:var(--text-muted); cursor:pointer;">
-        <span>🔍</span> <span style="font-weight:600;">Search</span> <kbd style="background:var(--bg-dark); border:1px solid var(--card-border); border-radius:3px; padding:1px 5px; font-size:0.65rem; font-family:'JetBrains Mono',monospace;">⌘K</kbd>
-      </button>
-      <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">Overview</button>
-      <button class="nav-btn" id="nav-paper" onclick="switchPage('paper')">Manuscript</button>
-      <button class="nav-btn" id="nav-simulation" onclick="switchPage('simulation')">Co-Simulation</button>
-      <button class="nav-btn" id="nav-codebase" onclick="switchPage('codebase')">Codebase</button>
-      <button class="nav-btn" id="nav-roadmap" onclick="switchPage('roadmap')">Roadmap</button>
-      <button class="nav-btn" id="nav-hardware" onclick="switchPage('hardware')">CMOS & 3D Stack</button>
-      <button class="nav-btn" id="nav-software" onclick="switchPage('software')">Software & JIR</button>
-      <button class="nav-btn" id="nav-about" onclick="switchPage('about')">About Creator</button>
-
-      <!-- Segmented Dual-Theme Switcher -->
-      <div class="theme-switch-wrapper"
-        style="display:inline-flex; align-items:center; background:var(--nav-bg); border:1px solid var(--card-border); border-radius:6px; padding:2px; margin-left:8px;">
-        <button id="btn-theme-light" onclick="applyTheme('light')"
-          style="padding:4px 8px; border-radius:4px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
-          title="Switch to Light Theme">LIGHT</button>
-        <button id="btn-theme-dark" onclick="applyTheme('dark')"
-          style="padding:4px 8px; border-radius:4px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
-          title="Switch to Dark Theme">DARK</button>
-      </div>
-    </nav>
   </header>
 
   <!-- MAIN CONTENT CONTAINER -->
@@ -2630,10 +2751,17 @@
       <div class="hero-split-container">
         <!-- Left Column: Architectural Thesis, Actions & Spec Ticker -->
         <div class="hero-left">
-          <div class="hero-tag">[ ARCHITECTURE SPECIFICATION • 16-TILE MONOLITHIC PHOTONIC ACCELERATOR ]</div>
-          <h1 class="hero-headline">JANUS: Spatial Residue Photonic Hardware for High-Throughput Deep Learning Acceleration</h1>
-          <p class="hero-subhead">
-            Project JANUS replaces analog amplitude accumulation with spatial one-hot Residue Number System (RNS) routing, non-volatile Sb₂S₃ phase-change switches, and an electro-optic 50 fs ILO comb clock—scaling from 4-bit neural inference up to exact INT64 deterministic precision with zero static hold power.
+          <div class="hero-tag" style="letter-spacing: 0.12em; color: var(--accent-cyan); font-weight: 700; font-size: 0.72rem;">
+            [ BEYOND ELECTRONICS • 200.0 GHz MONOLITHIC PHOTONIC ACCELERATOR ]
+          </div>
+          <h1 class="hero-headline" style="font-size: 2.75rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin: 0.75rem 0 1.25rem;">
+            Computing at the Speed of Light.<br>
+            <span style="background: linear-gradient(135deg, var(--accent-cyan) 0%, #38bdf8 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              With Exact Mathematical Precision.
+            </span>
+          </h1>
+          <p class="hero-subhead" style="font-size: 1.02rem; line-height: 1.65; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Project JANUS replaces analog optical noise with deterministic spatial one-hot Residue Number System (RNS) permutations, non-volatile Sb₂S₃ phase-change switches, and an electro-optic 50 fs ILO comb clock—delivering sustained 3,276.8 TMAC/s at 5.29 W on a 36.00 mm² monolithic die with zero static hold power.
           </p>
 
           <div class="hero-actions">
@@ -3709,6 +3837,192 @@
 
       <!-- TAB 3: AI PROFILING & GPU COMPARISONS -->
       <div id="tab-ai" class="tab-content">
+
+        <!-- INTERACTIVE HARDWARE BENCHMARK COMPARATOR: JANUS vs LEADING SILICON -->
+        <div class="card" style="margin-bottom: 2rem; border: 1px solid rgba(0, 240, 255, 0.35); background: linear-gradient(180deg, rgba(0, 240, 255, 0.04) 0%, var(--card-bg) 100%);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+            <div>
+              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 240, 255, 0.15); color:var(--accent-cyan); font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">
+                Empirical Hardware Benchmark • Physical Silicon vs. Light
+              </div>
+              <h3 style="font-size:1.3rem; color:var(--text-main); margin:0.35rem 0 0;">
+                JANUS Model 1A vs. Leading Electronic & Optical Accelerators
+              </h3>
+            </div>
+            
+            <!-- Workload Selection Switcher -->
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="hw-compare-tab-btn active" id="btn-hwcmp-llama" onclick="setHwComparePreset('llama')">LLaMA-3 70B Token Step</button>
+              <button class="hw-compare-tab-btn" id="btn-hwcmp-gpt" onclick="setHwComparePreset('gpt')">GPT-4 Attention GEMM</button>
+              <button class="hw-compare-tab-btn" id="btn-hwcmp-int64" onclick="setHwComparePreset('int64')">Exact INT64 Scientific</button>
+            </div>
+          </div>
+
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.55; margin-bottom:1.5rem;" id="hwcmp-desc">
+            Direct first-principles architectural comparison across single-pulse latency, active operating thermal dissipation, static weight-retention hold power, and mathematical accumulation noise.
+          </p>
+
+          <!-- 4 Comparative Dimension Panels -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem;">
+            
+            <!-- Metric 1: Single Operation Latency -->
+            <div style="background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:8px; padding:1.1rem; font-family:'JetBrains Mono',monospace;">
+              <div style="display:flex; justify-content:space-between; font-size:0.76rem; color:var(--text-subtle); margin-bottom:8px;">
+                <span>COMPUTATION LATENCY</span>
+                <span style="color:var(--accent-cyan); font-weight:700;" id="hwcmp-lat-ratio">300× Faster</span>
+              </div>
+              
+              <!-- JANUS -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem;">
+                  <span style="color:var(--accent-cyan); font-weight:700;">JANUS Model 1A</span>
+                  <strong style="color:var(--accent-cyan);" id="hwcmp-lat-janus">5.0 ps (Opt)</strong>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-lat-janus" style="width: 100%; background: linear-gradient(90deg, var(--accent-cyan), #38bdf8);"></div>
+                </div>
+              </div>
+
+              <!-- NVIDIA H100 -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>NVIDIA H100 SXM5</span>
+                  <span id="hwcmp-lat-h100">1,500.0 ps (1.5 ns)</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-lat-h100" style="width: 6%; background: #64748b;"></div>
+                </div>
+              </div>
+
+              <!-- Blackwell B200 -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>NVIDIA Blackwell B200</span>
+                  <span id="hwcmp-lat-b200">1,100.0 ps (1.1 ns)</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-lat-b200" style="width: 8%; background: #475569;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 2: Active Electrical Power (TDP) -->
+            <div style="background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:8px; padding:1.1rem; font-family:'JetBrains Mono',monospace;">
+              <div style="display:flex; justify-content:space-between; font-size:0.76rem; color:var(--text-subtle); margin-bottom:8px;">
+                <span>ELECTRICAL DISSIPATION</span>
+                <span style="color:var(--accent-green); font-weight:700;" id="hwcmp-pwr-ratio">132× Greener</span>
+              </div>
+
+              <!-- JANUS -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem;">
+                  <span style="color:var(--accent-green); font-weight:700;">JANUS Model 1A</span>
+                  <strong style="color:var(--accent-green);" id="hwcmp-pwr-janus">5.29 W</strong>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-pwr-janus" style="width: 2%; background: var(--accent-green);"></div>
+                </div>
+              </div>
+
+              <!-- NVIDIA H100 -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>NVIDIA H100 SXM5</span>
+                  <span id="hwcmp-pwr-h100">700.00 W</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-pwr-h100" style="width: 70%; background: #ef4444;"></div>
+                </div>
+              </div>
+
+              <!-- Blackwell B200 -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>NVIDIA Blackwell B200</span>
+                  <span id="hwcmp-pwr-b200">1,000.00 W</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-pwr-b200" style="width: 100%; background: #dc2626;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 3: Static Hold Power (Weight Retention) -->
+            <div style="background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:8px; padding:1.1rem; font-family:'JetBrains Mono',monospace;">
+              <div style="display:flex; justify-content:space-between; font-size:0.76rem; color:var(--text-subtle); margin-bottom:8px;">
+                <span>STATIC WEIGHT HOLD POWER</span>
+                <span style="color:var(--accent-amber); font-weight:700;">Zero Static Leak</span>
+              </div>
+
+              <!-- JANUS -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem;">
+                  <span style="color:var(--accent-amber); font-weight:700;">JANUS Sb₂S₃ PCM</span>
+                  <strong style="color:var(--accent-amber);">0.00 W (Non-Volatile)</strong>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" style="width: 0%; background: var(--accent-amber);"></div>
+                </div>
+              </div>
+
+              <!-- NVIDIA H100 -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>H100 SRAM Leakage</span>
+                  <span>150.00 W (Continuous)</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" style="width: 71%; background: #f59e0b;"></div>
+                </div>
+              </div>
+
+              <!-- Analog MZI -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>Analog MZI Thermal Heaters</span>
+                  <span>&gt; 210.00 W (Active Heat)</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" style="width: 100%; background: #f97316;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 4: Precision & Noise Wall -->
+            <div style="background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:8px; padding:1.1rem; font-family:'JetBrains Mono',monospace;">
+              <div style="display:flex; justify-content:space-between; font-size:0.76rem; color:var(--text-subtle); margin-bottom:8px;">
+                <span>ACCUMULATION NOISE</span>
+                <span style="color:var(--accent-cyan); font-weight:700;">Exact 0-Error</span>
+              </div>
+
+              <!-- JANUS -->
+              <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem;">
+                  <span style="color:var(--accent-cyan); font-weight:700;">JANUS Spatial One-Hot</span>
+                  <strong style="color:var(--accent-cyan);">0.00 dB (Deterministic)</strong>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" style="width: 100%; background: var(--accent-cyan);"></div>
+                </div>
+              </div>
+
+              <!-- Analog Photonic Amplitude -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                  <span>Analog MZI Amplitude</span>
+                  <span style="color:#f87171;">138.4 dB Noise Collapse</span>
+                </div>
+                <div class="hw-compare-bar-track">
+                  <div class="hw-compare-bar-fill" style="width: 10%; background: #ef4444;"></div>
+                </div>
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-subtle); margin-top:8px;">
+                Analog optical accumulation collapses after depth N=128 (demands 21-bit ADC). JANUS routes photons along discrete spatial indices with zero mathematical noise.
+              </div>
+            </div>
+
+          </div>
+        </div>
 
         <!-- Top AI KPI Cards -->
         <div class="grid-4" style="margin-bottom: 1.5rem;">
@@ -11976,6 +12290,159 @@
         initEyeOscilloscope();
         inspectFloorplanBlock('core');
       }, 500);
+    });
+
+  
+    // --- 8. Card Spotlight Cursor Laser Hover Engine ---
+    document.addEventListener('mousemove', function(e) {
+      var cards = document.querySelectorAll('.card');
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var rect = card.getBoundingClientRect();
+        if (e.clientX >= rect.left - 40 && e.clientX <= rect.right + 40 &&
+            e.clientY >= rect.top - 40 && e.clientY <= rect.bottom + 40) {
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', x + 'px');
+          card.style.setProperty('--mouse-y', y + 'px');
+        }
+      }
+    });
+
+    // --- 9. Interactive Hardware Benchmark Comparator Engine ---
+    var hwComparePresets = {
+      'llama': {
+        desc: 'Workload: LLaMA-3 70B Autoregressive Token Generation Step (Batch=1). Single-token latency across 80 transformer layers.',
+        latRatio: '300× Faster',
+        latJanus: '5.0 ps (Opt flight)',
+        latH100: '1,500.0 ps (1.5 ns)',
+        latB200: '1,100.0 ps (1.1 ns)',
+        barLatJanus: '100%',
+        barLatH100: '6%',
+        barLatB200: '8%',
+        pwrRatio: '132× Greener',
+        pwrJanus: '5.29 W',
+        pwrH100: '700.00 W',
+        pwrB200: '1,000.00 W',
+        barPwrJanus: '2%',
+        barPwrH100: '70%',
+        barPwrB200: '100%'
+      },
+      'gpt': {
+        desc: 'Workload: GPT-4 Multi-Head Self-Attention GEMM (4096 × 4096 Matrix Decomposition). Fully parallel tile permutation without memory bandwidth bottlenecks.',
+        latRatio: '240× Faster',
+        latJanus: '10.0 ps (Dual-phase)',
+        latH100: '2,400.0 ps (2.4 ns)',
+        latB200: '1,800.0 ps (1.8 ns)',
+        barLatJanus: '100%',
+        barLatH100: '8%',
+        barLatB200: '11%',
+        pwrRatio: '113× Greener',
+        pwrJanus: '6.17 W',
+        pwrH100: '700.00 W',
+        pwrB200: '1,000.00 W',
+        barPwrJanus: '3%',
+        barPwrH100: '70%',
+        barPwrB200: '100%'
+      },
+      'int64': {
+        desc: 'Workload: Exact INT64 Scientific Matrix Multiplication (Quantum Simulation / Cryptography). Full 64-bit residue range via 8-modulus optical PRNS + Equation 3 SRAM Trick.',
+        latRatio: '350× Faster',
+        latJanus: '5.0 ps (Exact CRT)',
+        latH100: '1,750.0 ps (1.75 ns)',
+        latB200: '1,300.0 ps (1.30 ns)',
+        barLatJanus: '100%',
+        barLatH100: '5%',
+        barLatB200: '7%',
+        pwrRatio: '132× Greener',
+        pwrJanus: '5.29 W',
+        pwrH100: '700.00 W',
+        pwrB200: '1,000.00 W',
+        barPwrJanus: '2%',
+        barPwrH100: '70%',
+        barPwrB200: '100%'
+      }
+    };
+
+    function setHwComparePreset(key) {
+      var data = hwComparePresets[key];
+      if (!data) return;
+
+      document.querySelectorAll('.hw-compare-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var activeBtn = document.getElementById('btn-hwcmp-' + key);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('hwcmp-desc').textContent = data.desc;
+      document.getElementById('hwcmp-lat-ratio').textContent = data.latRatio;
+      document.getElementById('hwcmp-lat-janus').textContent = data.latJanus;
+      document.getElementById('hwcmp-lat-h100').textContent = data.latH100;
+      document.getElementById('hwcmp-lat-b200').textContent = data.latB200;
+      document.getElementById('hwcmp-bar-lat-janus').style.width = data.barLatJanus;
+      document.getElementById('hwcmp-bar-lat-h100').style.width = data.barLatH100;
+      document.getElementById('hwcmp-bar-lat-b200').style.width = data.barLatB200;
+
+      document.getElementById('hwcmp-pwr-ratio').textContent = data.pwrRatio;
+      document.getElementById('hwcmp-pwr-janus').textContent = data.pwrJanus;
+      document.getElementById('hwcmp-pwr-h100').textContent = data.pwrH100;
+      document.getElementById('hwcmp-pwr-b200').textContent = data.pwrB200;
+      document.getElementById('hwcmp-bar-pwr-janus').style.width = data.barPwrJanus;
+      document.getElementById('hwcmp-bar-pwr-h100').style.width = data.barPwrH100;
+      document.getElementById('hwcmp-bar-pwr-b200').style.width = data.barPwrB200;
+
+      showToast('Benchmark: ' + key.toUpperCase() + ' Workload Active', 'info');
+    }
+
+    // --- 10. Metric Count-Up Animation Engine ---
+    function initMetricCountUp() {
+      if (!('IntersectionObserver' in window)) return;
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var el = entry.target;
+            if (el.dataset.counted) return;
+            el.dataset.counted = 'true';
+
+            var text = el.textContent.trim();
+            var match = text.match(/^([0-9,.]+)\s*(.*)$/);
+            if (!match) return;
+
+            var targetNum = parseFloat(match[1].replace(/,/g, ''));
+            var unit = match[2] || '';
+            var startTime = performance.now();
+            var duration = 850;
+
+            function step(now) {
+              var progress = Math.min(1.0, (now - startTime) / duration);
+              var ease = 1.0 - Math.pow(1.0 - progress, 3); // Ease out cubic
+              var current = (targetNum * ease);
+              
+              if (targetNum >= 1000) {
+                el.textContent = current.toLocaleString('en-US', { maximumFractionDigits: 1 }) + ' ' + unit;
+              } else if (targetNum % 1 !== 0) {
+                el.textContent = current.toFixed(1) + ' ' + unit;
+              } else {
+                el.textContent = Math.round(current) + ' ' + unit;
+              }
+
+              if (progress < 1.0) {
+                requestAnimationFrame(step);
+              } else {
+                el.textContent = text; // Restore original formatted string
+              }
+            }
+            requestAnimationFrame(step);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.kpi-val, .stat-value').forEach(function(el) {
+        observer.observe(el);
+      });
+    }
+
+    window.addEventListener('load', function() {
+      setTimeout(initMetricCountUp, 600);
     });
 
   </script>
