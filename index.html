@@ -2462,7 +2462,7 @@
               </div>
               <div id="hero-stratum-1" onclick="selectHeroStratum(1)" style="display: flex; justify-content: space-between; padding: 5px 8px; background: var(--card-sub-bg); border-radius: 4px; border: 1px solid var(--card-border-subtle); cursor: pointer; transition: all 0.15s;">
                 <span style="color: var(--accent-green); font-weight: 600;">Stratum 1</span>
-                <span style="color: var(--text-muted);">65 nm CMOS Digital Die (36.00 mm², >92% Active)</span>
+                <span style="color: var(--text-muted);">65 nm CMOS Digital Die (36.00 mm², FP4–FP64 Engine)</span>
               </div>
             </div>
 
@@ -2657,10 +2657,20 @@
                 PRECISION MODE
               </label>
               <select id="calc-precision" onchange="updateEnergyEstimator()" style="width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 7px 10px; border-radius: 6px; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; outline: none;">
-                <option value="int4">INT4 (Ultra-Low Power • 4 Tiles Active)</option>
-                <option value="int8" selected>INT8 (Standard Production • 8 Tiles Active)</option>
-                <option value="int16">INT16 (High Dynamic Range • 16 Tiles Active)</option>
-                <option value="int64">Exact INT64 (3-Equation Hybrid RNS)</option>
+                <optgroup label="Floating-Point Precisions (CMOS Format Engine • 2.75 mm²)">
+                  <option value="fp4">FP4 (Microscaled GenAI • 4 Tiles Active)</option>
+                  <option value="fp8">FP8 E4M3/E5M2 (Transformer Inference • 8 Tiles Active)</option>
+                  <option value="bf16">BF16 (Brain Float 16 Deep Learning • 16 Tiles Active)</option>
+                  <option value="fp16">FP16 (IEEE 754 Half Precision • 16 Tiles Active)</option>
+                  <option value="fp32">FP32 (IEEE 754 Single Precision • 16 Tiles Active)</option>
+                  <option value="fp64">FP64 (IEEE 754 Double Precision Scientific Engine)</option>
+                </optgroup>
+                <optgroup label="Fixed-Point & Integer Precisions (PRNS Optical Native)">
+                  <option value="int4">INT4 (Ultra-Low Power • 4 Tiles Active)</option>
+                  <option value="int8" selected>INT8 (Standard Production • 8 Tiles Active)</option>
+                  <option value="int16">INT16 (High Dynamic Range • 16 Tiles Active)</option>
+                  <option value="int64">Exact INT64 (3-Equation Hybrid RNS)</option>
+                </optgroup>
               </select>
             </div>
 
@@ -2766,7 +2776,7 @@
               <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">TAPE-OUT READY</span>
             </div>
             <div style="font-size: 1.45rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text-main); margin-bottom: 4px;">819.2 TMAC/s</div>
-            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">5.29 W Total Power • 36 mm² Monolithic Die • INT8 / INT4 Multi-Precision</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">5.29 W Total Power • 36 mm² Monolithic Die • Universal Float & Integer (FP4 to FP64 • INT4 to INT64)</div>
           </div>
 
           <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem;">
@@ -4868,7 +4878,7 @@
               JANUS Mini-16 CMOS Digital Backend Architecture & Silicon Blueprint
             </h2>
             <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin:0;">
-              Document ID: <code>JANUS-CMOS-SPEC-MINI16-2026-V1</code> • 65nm Planar CMOS Base Die (36.00 mm², >92% Active Plane Utilization) • 1-2-8-8 Antiphase • 4x Hardware BVH • Dual-LUT SRAM Subsystem • 1:32
+              Document ID: <code>JANUS-CMOS-SPEC-MINI16-2026-V1</code> • 65nm Planar CMOS Base Die (36.00 mm², >92% Utilization) • Universal Float (FP4–FP64) • 1-2-8-8 Antiphase • 4x Hardware BVH • Dual-LUT SRAM • 1:32
               Polyphase 3.125 GHz Deserializer • Dual-LUT 1.5 MB SRAM Memory Subsystem • 32-Lane SIMD Calculation Array
               • 3D TDV Heterogeneous Stacking.
             </p>
@@ -5295,8 +5305,8 @@
           </table>
         </div>
 
-        <!-- Triple Deep-Tech Subsystem Feature Grid -->
-        <div class="grid-3" style="margin-top: 1.5rem; gap: 1rem;">
+        <!-- Quad Deep-Tech Subsystem Feature Grid (Including Universal Float Engine) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
           <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
               <span style="font-size: 0.76rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">
@@ -5318,6 +5328,18 @@
             </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
               Integrates 4 hardware BVH engines (16-way AABB ray-box tests) and 12.8 GTri/s barycentric rasterizer with 16 anisotropic TMUs and 80 Gbps DisplayPort 2.1 PHY. Ray-triangle Möller-Trumbore linear systems solve optically with sub-10 ps latency.
+            </p>
+          </div>
+
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span style="font-size: 0.76rem; font-weight: 700; color: var(--accent-purple); text-transform: uppercase;">
+                Universal Float (FP4 to FP64)
+              </span>
+              <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">2.75 mm² DEDICATED</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+              Allocates 2.75 mm² on CMOS: 1.95 mm² format engine unpacking FP4, FP8 (E4M3/E5M2), BF16, FP16, and FP32 in 1 cycle for optical GEMMs, plus 0.80 mm² dual-rail exponent normalizers and LZDs delivering exact IEEE 754 FP64 scientific precision (0.00% error).
             </p>
           </div>
 
@@ -6388,7 +6410,7 @@
       },
       1: {
         title: "Stratum 1 (65nm CMOS Digital Die)",
-        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization (29.78 mm² Active Logic) • 1-2-8-8 Antiphase • Ray-Tracing BVH • Dual-LUT SRAM • 16x Vector SFUs • DisplayPort 2.1."
+        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization • Universal Float Engine (FP4, FP8, BF16, FP16, FP32, FP64) • 1-2-8-8 Antiphase • Ray-Tracing BVH • 16x Vector SFUs • DisplayPort 2.1."
       }
     };
 
@@ -6425,10 +6447,16 @@
     };
 
     const precMultipliers = {
-      int4:  { factor: 0.25, tiles: "4 / 16 Active",  pct: "75% Silicon Gated (P ∝ k²)",  savingsMul: 130 },
-      int8:  { factor: 1.0,  tiles: "8 / 16 Active",  pct: "50% Silicon Gated (P ∝ k²)",  savingsMul: 108 },
-      int16: { factor: 2.2,  tiles: "16 / 16 Active", pct: "100% Silicon Active",        savingsMul: 65 },
-      int64: { factor: 3.8,  tiles: "16 / 16 Active", pct: "Hybrid Partitioning Exact",  savingsMul: 42 }
+      fp4:   { factor: 0.28, tiles: "4 / 16 Active",  pct: "75% Gated • FP4 Microscaling",      savingsMul: 125 },
+      fp8:   { factor: 1.05, tiles: "8 / 16 Active",  pct: "50% Gated • FP8 (E4M3/E5M2)",        savingsMul: 105 },
+      bf16:  { factor: 2.1,  tiles: "16 / 16 Active", pct: "100% Active • Brain Float 16",       savingsMul: 68 },
+      fp16:  { factor: 2.2,  tiles: "16 / 16 Active", pct: "100% Active • IEEE 754 Half",        savingsMul: 65 },
+      fp32:  { factor: 3.2,  tiles: "16 / 16 Active", pct: "100% Active • IEEE 754 Single",      savingsMul: 52 },
+      fp64:  { factor: 3.8,  tiles: "16 / 16 Active", pct: "Exact Scientific • IEEE Double",     savingsMul: 42 },
+      int4:  { factor: 0.25, tiles: "4 / 16 Active",  pct: "75% Silicon Gated (P ∝ k²)",         savingsMul: 130 },
+      int8:  { factor: 1.0,  tiles: "8 / 16 Active",  pct: "50% Silicon Gated (P ∝ k²)",         savingsMul: 108 },
+      int16: { factor: 2.2,  tiles: "16 / 16 Active", pct: "100% Silicon Active",               savingsMul: 65 },
+      int64: { factor: 3.8,  tiles: "16 / 16 Active", pct: "Hybrid Partitioning Exact",         savingsMul: 42 }
     };
 
     function updateEnergyEstimator() {

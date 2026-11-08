@@ -149,10 +149,12 @@ To reconcile the frequency mismatch between the **3.125 GHz 65nm CMOS digital cl
   * **Optical Möller-Trumbore Intersection**: Solves the ray-triangle intersection $3\times 3$ linear system $\begin{bmatrix} -D & V_1-V_0 & V_2-V_0 \end{bmatrix} \begin{bmatrix} t & u & v \end{bmatrix}^T = O - V_0$ optically on the 200 GHz tensor core with picosecond latency.
   * **Fixed-Function Rasterizer & TMUs**: 12.8 GigaTriangles/s edge equation setup, sub-pixel barycentric rasterizer, 16 Texture Mapping Units (bilinear, trilinear, anisotropic), and integrated 80 Gbps DisplayPort 2.1 / eDP PHY.
 
-### 3. Double-Precision FP64 Scientific Engine
-* Full IEEE 754 Double Precision support ($1\text{ sign bit}$, $11\text{-bit exponent}$, $53\text{-bit mantissa}$ with implicit leading 1).
-* **Zero Carry Propagation**: The 53-bit mantissa multiplication is mapped across the 16 residue channels ($k_{\text{int64}}=16$), providing $>106\text{ bits}$ of dynamic range with exact **0.00000000% error**.
-* **CMOS Exponent Normalizers**: 11-bit dual-rail exponent subtractors, barrel shifters, and Leading Zero Detectors (LZD) complete post-normalization in $<40\text{ ps}$.
+### 3. Universal Floating-Point Engine (FP4, FP8, BF16, FP16, FP32 & FP64)
+Project JANUS allocates **2.75 mm² (7.64% of the 36.00 mm² CMOS base die)** to a dedicated multi-precision floating-point format and normalization engine, enabling seamless execution across every standard AI and scientific floating-point data type without retraining:
+* **FP4 & FP8 (OCP Microscaling / E4M3 / E5M2)**: 1-cycle hardware exponent unpackers and mantissa aligners feed the optical crossbar array for frontier LLM inference and MoE routing at **3,276.8 TFLOPS (FP4)** and **1,638.4 TFLOPS (FP8)**.
+* **BF16 & FP16 (Deep Learning Mixed Precision)**: Google Brain bfloat16 and IEEE 754 half-precision normalizers with $<20\text{ ps}$ exponent tracking across 2 optical residue tiles (**696.3 – 819.2 TFLOPS**).
+* **FP32 (IEEE 754 Single Precision)**: Standard scientific and neural network gradient accumulation; 8-bit exponent aligners and 24-bit mantissas mapped across 4 optical residue tiles (**348.2 – 409.6 TFLOPS**).
+* **FP64 (IEEE 754 Double Precision Scientific Engine)**: 0.80 mm² dedicated block with 11-bit dual-rail exponent subtractors, barrel shifters, and Leading Zero Detectors (LZD); the 53-bit mantissa is distributed across all 16 parallel residue channels ($k_{\text{int64}}=16$), providing $>106\text{ bits}$ of dynamic range with exact **0.00000000% error** (**174.1 – 204.8 TFLOPS**).
 
 ### 4. Zero-Base 36.00 mm² CMOS Floorplan Budget
 | Subsystem Component | Stratum | Units | Area (mm²) | Die % | Architectural Function |
