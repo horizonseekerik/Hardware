@@ -46,11 +46,11 @@
     "embedUrl": "https://janus-photonic-hardware.vercel.app/#page-simulation"
   }
   </script>
-  <!-- Typography: Italian / Classical Roman Serif for Brand & Inter for UI -->
+  <!-- Typography: Inter for UI & JetBrains Mono for Hardware Specifications -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <!-- Highlight.js for Codebase Syntax Highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -71,96 +71,99 @@
   </script>
   <style>
     /* =========================================================
-       JANUS HIGH-CONTRAST DUAL-THEME SYSTEM (LIGHT & DARK)
+       JANUS PRECISION HARDWARE DESIGN SYSTEM
+       High-Contrast Foundry Slate (Light) & Obsidian (Dark)
        ========================================================= */
     :root {
-      /* LIGHT THEME (DEFAULT: CRISP BLACK & WHITE + VIBRANT ACCENTS) */
+      /* LIGHT THEME (ARCHITECTURAL PAPER & FOUNDRY SLATE) */
       --bg-color: #f8fafc;
       --bg-dark: #f1f5f9;
-      --header-bg: rgba(255, 255, 255, 0.78);
-      --nav-bg: rgba(241, 245, 249, 0.70);
-      --card-bg: rgba(255, 255, 255, 0.40);
-      --card-sub-bg: rgba(248, 250, 252, 0.28);
-      --card-border: rgba(226, 232, 240, 0.80);
-      --table-header-bg: rgba(241, 245, 249, 0.65);
-      --table-row-hover: rgba(241, 245, 249, 0.4);
-      --input-bg: rgba(255, 255, 255, 0.75);
-      --accent-cyan: #0284c7;
-      /* Sky/Cyan Blue */
-      --accent-blue: #2563eb;
-      /* Royal Blue */
-      --accent-purple: #7c3aed;
-      /* Deep Violet */
-      --accent-green: #16a34a;
-      /* Emerald Green */
-      --accent-red: #dc2626;
-      /* Crimson Red */
-      --accent-amber: #d97706;
-      /* Amber Yellow */
+      --header-bg: rgba(255, 255, 255, 0.94);
+      --nav-bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --card-sub-bg: #f8fafc;
+      --card-border: #e2e8f0;
+      --card-border-subtle: #edf2f7;
+      --table-header-bg: #f1f5f9;
+      --table-row-hover: rgba(241, 245, 249, 0.7);
+      --input-bg: #ffffff;
+      --accent-cyan: #0284c7;        /* Optical Sky/Cyan */
+      --accent-blue: #2563eb;        /* Precision Blue */
+      --accent-purple: #6366f1;      /* Indigo */
+      --accent-green: #10b981;       /* Verification Emerald */
+      --accent-red: #ef4444;         /* Alert Red */
+      --accent-amber: #d97706;       /* Thermal Copper / Amber */
       --accent-yellow: #d97706;
-      /* Amber Yellow */
-      --text-main: #0f172a;
-      /* Deep Slate Black */
-      --text-muted: #475569;
-      /* Slate Gray */
-      --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(226, 232, 240, 0.8);
-      --glow-cyan: 0 0 15px rgba(2, 132, 199, 0.2);
-      --glow-purple: 0 0 15px rgba(124, 58, 237, 0.2);
+      --text-main: #0f172a;          /* Deep Ink Slate */
+      --text-muted: #475569;         /* Muted Technical Slate */
+      --text-subtle: #94a3b8;
+      --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+      --glow-cyan: none;
+      --glow-purple: none;
       --canvas-bg: #ffffff;
       --canvas-border: #e2e8f0;
-      --hero-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(241, 245, 249, 0.25) 100%), radial-gradient(circle at top right, rgba(2, 132, 199, 0.08), transparent 60%);
-      --hero-title-grad: linear-gradient(135deg, #0f172a 30%, #0284c7 80%, #7c3aed 100%);
-      --badge-pass-bg: rgba(22, 163, 74, 0.12);
-      --badge-pass-color: #16a34a;
+      --hero-bg: #ffffff;
+      --hero-title-grad: #0f172a;
+      --badge-pass-bg: rgba(16, 185, 129, 0.1);
+      --badge-pass-color: #059669;
     }
 
     [data-theme="dark"] {
-      /* DARK THEME (OPTIONAL FALLBACK) */
-      --bg-color: #030712;
-      --bg-dark: #0a0e17;
-      --header-bg: rgba(11, 15, 25, 0.78);
-      --nav-bg: rgba(6, 9, 17, 0.70);
-      --card-bg: rgba(11, 15, 25, 0.45);
-      --card-sub-bg: rgba(6, 9, 17, 0.35);
-      --card-border: rgba(30, 41, 59, 0.8);
-      --table-header-bg: rgba(6, 9, 17, 0.65);
-      --table-row-hover: rgba(255, 255, 255, 0.04);
-      --input-bg: rgba(6, 9, 17, 0.75);
-      --accent-cyan: #00f2fe;
-      --accent-blue: #4facfe;
-      --accent-purple: #8b5cf6;
-      --accent-green: #10b981;
-      --accent-red: #ef4444;
-      --accent-amber: #f59e0b;
+      /* DARK THEME (DEEP OBSIDIAN / SEMICONDUCTOR FOUNDRY) */
+      --bg-color: #080a0f;
+      --bg-dark: #0c0f17;
+      --header-bg: rgba(12, 15, 23, 0.94);
+      --nav-bg: #10141f;
+      --card-bg: #0e121a;
+      --card-sub-bg: #121722;
+      --card-border: #1e2638;
+      --card-border-subtle: #171d2b;
+      --table-header-bg: #10141f;
+      --table-row-hover: rgba(255, 255, 255, 0.03);
+      --input-bg: #10141f;
+      --accent-cyan: #38bdf8;        /* Laser Photonic Cyan */
+      --accent-blue: #3b82f6;        /* Precision Blue */
+      --accent-purple: #818cf8;      /* Indigo */
+      --accent-green: #10b981;       /* Verification Emerald */
+      --accent-red: #f87171;         /* Limit Crimson */
+      --accent-amber: #f59e0b;       /* Silicon / Copper Amber */
       --accent-yellow: #f59e0b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-      --glow-cyan: 0 0 15px rgba(0, 242, 254, 0.35);
-      --glow-purple: 0 0 15px rgba(139, 92, 246, 0.35);
-      --canvas-bg: #060911;
-      --canvas-border: #1e293b;
-      --hero-bg: linear-gradient(180deg, rgba(15, 23, 42, 0.48), rgba(10, 14, 23, 0.52)), radial-gradient(circle at top right, rgba(0, 242, 254, 0.15), transparent 60%);
-      --hero-title-grad: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan) 80%, var(--accent-purple) 100%);
+      --text-main: #f8fafc;          /* High-contrast crisp white */
+      --text-muted: #94a3b8;         /* Technical Slate */
+      --text-subtle: #64748b;
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+      --glow-cyan: none;
+      --glow-purple: none;
+      --canvas-bg: #0c0f17;
+      --canvas-border: #1e2638;
+      --hero-bg: #0e121a;
+      --hero-title-grad: #ffffff;
       --badge-pass-bg: rgba(16, 185, 129, 0.15);
-      --badge-pass-color: #10b981;
+      --badge-pass-color: #34d399;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    code, pre, .mono, .kpi-val, [data-mono] {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-feature-settings: 'tnum' 1, 'zero' 1;
     }
 
     body {
-      background: var(--bg-color);
+      background-color: var(--bg-color);
+      background-image: radial-gradient(var(--card-border-subtle) 1px, transparent 1px);
+      background-size: 24px 24px;
       color: var(--text-main);
       line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background 0.25s ease, color 0.25s ease;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
     /* Top Global Header */
@@ -174,8 +177,9 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     }
 
     .brand {
@@ -184,31 +188,27 @@
       cursor: pointer;
       text-decoration: none;
       user-select: none;
-      transition: all 0.25s ease;
+      transition: opacity 0.2s ease;
       padding: 2px 4px;
     }
 
     .brand:hover {
       opacity: 0.88;
-      transform: translateY(-1px);
     }
 
     .brand-logo-img {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
       object-fit: cover;
       margin-right: 12px;
-      border: 1px solid rgba(2, 132, 199, 0.35);
-      box-shadow: 0 0 12px rgba(2, 132, 199, 0.25);
-      transition: all 0.3s ease;
+      border: 1px solid var(--card-border);
+      transition: border-color 0.2s ease;
       flex-shrink: 0;
     }
 
     .brand:hover .brand-logo-img {
-      box-shadow: 0 0 20px rgba(2, 132, 199, 0.55);
       border-color: var(--accent-cyan);
-      transform: scale(1.05);
     }
 
     .brand-title {
@@ -219,44 +219,39 @@
 
     .brand-title .brand-name,
     .brand-title h1 {
-      font-family: 'Cinzel', 'Playfair Display', 'Bodoni MT', 'Didot', 'Georgia', serif;
-      font-size: 1.65rem;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 1.25rem;
       font-weight: 800;
-      letter-spacing: 0.24em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       margin: 0;
-      line-height: 1;
+      line-height: 1.1;
       display: block;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue) 60%, var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.20));
-      transition: filter 0.3s ease;
+      color: var(--text-main);
+      background: none;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: initial;
+      filter: none;
     }
 
     .brand-subtitle {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 0.64rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--accent-cyan);
-      margin-top: 3px;
+      color: var(--text-muted);
+      margin-top: 2px;
       line-height: 1;
-    }
-
-    .brand:hover .brand-title .brand-name,
-    .brand:hover .brand-title h1 {
-      filter: drop-shadow(0 2px 14px rgba(2, 132, 199, 0.40));
     }
 
     /* Global Navigation Bar */
     .nav-bar {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       background: var(--nav-bg);
       padding: 4px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid var(--card-border);
       align-items: center;
     }
@@ -266,11 +261,11 @@
       border: 1px solid transparent;
       color: var(--text-muted);
       padding: 0.45rem 0.85rem;
-      border-radius: 7px;
+      border-radius: 6px;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
+      font-weight: 500;
+      font-size: 0.82rem;
+      transition: all 0.15s ease;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -278,14 +273,15 @@
 
     .nav-btn:hover {
       color: var(--text-main);
-      background: rgba(0, 0, 0, 0.04);
+      background: rgba(125, 125, 125, 0.08);
     }
 
     .nav-btn.active {
       background: var(--card-bg);
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-      box-shadow: var(--card-shadow);
+      border-color: var(--card-border);
+      color: var(--text-main);
+      font-weight: 600;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
     }
 
     /* Page Switcher Container */
@@ -299,7 +295,7 @@
 
     .page-section {
       display: none;
-      animation: fadeIn 0.35s ease;
+      animation: fadeIn 0.25s ease;
     }
 
     .page-section.active {
@@ -309,9 +305,8 @@
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(4px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -322,27 +317,26 @@
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-radius: 10px;
       padding: 1.75rem;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
       box-shadow: var(--card-shadow);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.15s ease;
     }
 
     .card:hover {
-      border-color: var(--accent-cyan);
+      border-color: var(--card-border);
     }
 
     .card-title {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      color: var(--accent-cyan);
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
+      letter-spacing: -0.01em;
     }
 
     .grid-2 {
@@ -370,176 +364,225 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-      border: none;
-      color: #ffffff;
-      padding: 0.65rem 1.4rem;
-      border-radius: 8px;
+      background: var(--accent-cyan);
+      border: 1px solid transparent;
+      color: #080a0f;
+      padding: 0.65rem 1.3rem;
+      border-radius: 6px;
       font-weight: 600;
+      font-size: 0.88rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
+      transition: all 0.15s ease;
       text-decoration: none;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-
+    [data-theme="light"] .btn-primary {
+      background: #0f172a;
+      color: #ffffff;
+    }
     .btn-primary:hover {
       opacity: 0.92;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
     }
 
     .btn-outline {
-      background: var(--card-bg);
+      background: transparent;
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.65rem 1.4rem;
-      border-radius: 8px;
-      font-weight: 600;
+      padding: 0.65rem 1.3rem;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.88rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
+      transition: all 0.15s ease;
       text-decoration: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
     }
-
     .btn-outline:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-      background: rgba(2, 132, 199, 0.05);
+      border-color: var(--text-muted);
+      background: rgba(125, 125, 125, 0.06);
     }
 
-    /* HERO STYLES */
-    .hero-banner {
-      background: var(--hero-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 4rem 3rem;
-      text-align: center;
-      margin-bottom: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    /* HERO STYLES (SPLIT HERO ARCHITECTURE) */
+    .hero-split-container {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2.25rem;
+      align-items: start;
+      margin-bottom: 2rem;
+      padding: 1rem 0 0.5rem 0;
+    }
+
+    @media (max-width: 1040px) {
+      .hero-split-container {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+      }
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 
     .hero-tag {
-      display: inline-block;
-      padding: 0.4rem 1.2rem;
-      border-radius: 9999px;
-      background: rgba(2, 132, 199, 0.1);
-      border: 1px solid var(--accent-cyan);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.35rem 0.85rem;
+      border-radius: 4px;
+      background: var(--card-sub-bg);
+      border: 1px solid var(--card-border);
       color: var(--accent-cyan);
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
-      backdrop-filter: blur(8px);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.15rem;
     }
 
     .hero-headline {
-      font-size: 2.75rem;
-      font-weight: 900;
-      line-height: 1.2;
-      max-width: 950px;
-      margin: 0 auto 1.5rem auto;
-      background: var(--hero-title-grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+      margin: 0 0 1.1rem 0;
+      color: var(--text-main);
+    }
+
+    @media (max-width: 768px) {
+      .hero-headline {
+        font-size: 1.85rem;
+      }
     }
 
     .hero-subhead {
-      font-size: 1.2rem;
+      font-size: 1.02rem;
       color: var(--text-muted);
-      max-width: 850px;
-      margin: 0 auto 2.5rem auto;
-      line-height: 1.6;
+      margin: 0 0 1.6rem 0;
+      line-height: 1.62;
     }
 
     .hero-actions {
       display: flex;
-      gap: 1rem;
-      justify-content: center;
+      gap: 0.65rem;
+      align-items: center;
       flex-wrap: wrap;
-      margin-bottom: 3rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-link-chip {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.65rem 0.95rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+    .hero-link-chip:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .hardware-showcase-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 1rem;
+      gap: 0;
+      background: var(--card-sub-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
       max-width: 1200px;
       margin: 0 auto;
+      overflow: hidden;
     }
 
     .kpi-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.2rem 1rem;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--card-border);
+      border-radius: 0;
+      padding: 1.25rem 0.75rem;
       text-align: center;
-      box-shadow: var(--card-shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      box-shadow: none;
+    }
+    .kpi-card:last-child {
+      border-right: none;
     }
 
     .kpi-val {
-      font-size: 1.45rem;
-      font-weight: 800;
+      font-size: 1.25rem;
+      font-weight: 700;
       color: var(--text-main);
-      font-family: monospace;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      letter-spacing: -0.02em;
     }
 
     .kpi-lbl {
-      font-size: 0.75rem;
+      font-size: 0.70rem;
       color: var(--text-muted);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       margin-top: 4px;
     }
 
     .comp-box {
-      background: var(--card-sub-bg);
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 1.75rem;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      border-radius: 8px;
+      padding: 1.5rem;
       box-shadow: var(--card-shadow);
     }
 
     .comp-box.negative {
-      border-color: rgba(220, 38, 38, 0.3);
-      background: rgba(220, 38, 38, 0.04);
+      border-top: 2px solid var(--accent-red);
     }
 
     .comp-box.positive {
-      border-color: rgba(22, 163, 74, 0.3);
-      background: rgba(22, 163, 74, 0.04);
+      border-top: 2px solid var(--accent-green);
     }
 
     .pillar-box {
       background: var(--card-sub-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 1.35rem 1.25rem;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-      transition: all 0.25s ease;
+      box-shadow: none;
+      transition: border-color 0.15s ease;
     }
 
     .pillar-box:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.1);
+      border-color: var(--text-muted);
     }
 
     /* PDF CONTAINER */
@@ -963,7 +1006,7 @@
     }
 
     /* AMBIENT YELLOW GLOW PARTICLE CANVAS */
-    #ambient-particle-canvas {
+    #ambient-particle-canvas { display: none !important;
       position: fixed;
       top: 0;
       left: 0;
@@ -2287,8 +2330,6 @@
 
 <body>
 
-  <!-- AMBIENT YELLOW GLOW PARTICLES BACKGROUND -->
-  <canvas id="ambient-particle-canvas"></canvas>
 
   <!-- TOP GLOBAL HEADER & NAVIGATION BAR -->
   <header>
@@ -2314,13 +2355,13 @@
 
       <!-- Segmented Dual-Theme Switcher -->
       <div class="theme-switch-wrapper"
-        style="display:inline-flex; align-items:center; background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:20px; padding:2px; margin-left:6px;">
+        style="display:inline-flex; align-items:center; background:var(--nav-bg); border:1px solid var(--card-border); border-radius:6px; padding:2px; margin-left:8px;">
         <button id="btn-theme-light" onclick="applyTheme('light')"
-          style="padding:4px 10px; border-radius:16px; border:none; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.2s;"
-          title="Switch to Light Theme">☀️ Light</button>
+          style="padding:4px 8px; border-radius:4px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
+          title="Switch to Light Theme">LIGHT</button>
         <button id="btn-theme-dark" onclick="applyTheme('dark')"
-          style="padding:4px 10px; border-radius:16px; border:none; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.2s;"
-          title="Switch to Dark Theme">🌙 Dark</button>
+          style="padding:4px 8px; border-radius:4px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
+          title="Switch to Dark Theme">DARK</button>
       </div>
     </nav>
   </header>
@@ -2329,136 +2370,343 @@
   <main>
 
     <!-- PAGE 1: STORYTELLING HOMEPAGE & OVERVIEW -->
-    <section id="page-home" class="page-section active">
+        <section id="page-home" class="page-section active">
 
-      <!-- Hero Banner -->
-      <div class="hero-banner">
-        <div class="hero-tag">Breaking The Optical Computing Barrier</div>
-        <h1 class="hero-headline">Janus: Spatial Residue Photonic Hardware for High-Throughput Deep Learning
-          Acceleration</h1>
-        <p class="hero-subhead">
-          Project JANUS replaces analog amplitude accumulation with <strong>Spatial One-Hot Residue Number System
-            (RNS)</strong> routing, non-volatile <strong>Sb₂S₃</strong> phase-change switches, and an electro-optic
-          <strong>50 fs ILO comb clock</strong>—scaling from 4-bit neural inference up to <strong>Exact INT64
-            deterministic precision</strong>. Modeled from a <strong>696.3 – 819.2 TMAC/s Planar Processor (1,638.4 TMAC/s INT4, Model 1A at 6.17
-            W, 100.00 mm² die)</strong> up to a <strong>104.8 PetaMAC/s Hyperscale 3D Module (Model 6B projection at ~392 W)</strong>
-          with zero static hold power.
-        </p>
+      <!-- SPLIT HERO SECTION -->
+      <div class="hero-split-container">
+        <!-- Left Column: Architectural Thesis, Actions & Spec Ticker -->
+        <div class="hero-left">
+          <div class="hero-tag">[ ARCHITECTURE SPECIFICATION • 16-TILE MONOLITHIC PHOTONIC ACCELERATOR ]</div>
+          <h1 class="hero-headline">JANUS: Spatial Residue Photonic Hardware for High-Throughput Deep Learning Acceleration</h1>
+          <p class="hero-subhead">
+            Project JANUS replaces analog amplitude accumulation with spatial one-hot Residue Number System (RNS) routing, non-volatile Sb₂S₃ phase-change switches, and an electro-optic 50 fs ILO comb clock—scaling from 4-bit neural inference up to exact INT64 deterministic precision with zero static hold power.
+          </p>
 
-        <div class="hero-actions">
-          <button class="btn-primary" onclick="switchPage('simulation')">Launch Co-Simulation Suite</button>
-          <button class="btn-outline" onclick="switchPage('paper'); switchPaper('manuscript');">Architectural Treatise
-            (IEEEtran)</button>
-          <button class="btn-outline" onclick="switchPage('hardware')">CMOS & 3D Stack</button>
-          <button class="btn-outline" onclick="switchPage('codebase')">Explore Codebase</button>
-          <button class="btn-outline" onclick="switchPage('roadmap')">Roadmap</button>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="switchPage('simulation')">Launch Co-Simulation Suite <span style="font-family:sans-serif; margin-left:4px;">→</span></button>
+            <button class="btn-outline" onclick="switchPage('paper'); switchPaper('manuscript');">Read IEEE Manuscript (PDF)</button>
+            <a href="javascript:void(0)" onclick="switchPage('hardware')" class="hero-link-chip">CMOS & 3D Stack ↗</a>
+            <a href="javascript:void(0)" onclick="switchPage('roadmap')" class="hero-link-chip">Roadmap ↗</a>
+          </div>
+
+          <!-- Integrated Spec Ticker -->
+          <div class="kpi-grid" style="width: 100%;">
+            <div class="kpi-card">
+              <div class="kpi-val">200 GHz</div>
+              <div class="kpi-lbl">Comb Clock</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val">104.8 PMAC/s</div>
+              <div class="kpi-lbl">Model 6B Peak</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val">INT64 Exact</div>
+              <div class="kpi-lbl">Precision Ceiling</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val">0 W</div>
+              <div class="kpi-lbl">Static Hold Power</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val">≤ 10⁻¹²</div>
+              <div class="kpi-lbl">Target BER</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val">+8.41 dB</div>
+              <div class="kpi-lbl">Link Margin</div>
+            </div>
+          </div>
         </div>
 
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-val">200 GHz</div>
-            <div class="kpi-lbl">Clock Frequency</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val" style="color:var(--accent-cyan);">104.8 PMAC/s (6B)</div>
-            <div class="kpi-lbl">Model 6B Projected Peak</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val" style="color:var(--accent-green);">Up to INT64</div>
-            <div class="kpi-lbl">Exact Precision Ceiling</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val">0 W</div>
-            <div class="kpi-lbl">Static Hold Power</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val">≤ 10⁻¹²</div>
-            <div class="kpi-lbl">Link Budget Target BER</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val" style="color:var(--accent-cyan);">+6.56 to +8.41 dB</div>
-            <div class="kpi-lbl">Optical Link Margin (Optimized MMI)</div>
+        <!-- Right Column: Physical Hardware Showcase Card -->
+        <div class="hero-right">
+          <div class="hardware-showcase-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 0.65rem;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 700; color: var(--text-main); text-transform: uppercase;">
+                330 µm Heterogeneous Monolithic Stack
+              </span>
+              <span class="badge-pass" style="font-size: 0.66rem; padding: 2px 7px; border-radius: 4px; font-weight: 600;">
+                MODEL 1A SPEC
+              </span>
+            </div>
+
+            <!-- Visual Viewport with Switcher -->
+            <div style="position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--card-border); background: #0c0f17;">
+              <img id="hero-showcase-img" src="/janus_mini16_poster.jpg" alt="Project JANUS 3D Heterogeneous Architecture" style="width: 100%; height: 235px; object-fit: cover; display: block; transition: opacity 0.2s;" />
+              <div style="position: absolute; bottom: 8px; left: 8px; right: 8px; display: flex; gap: 6px; background: rgba(8, 10, 15, 0.88); backdrop-filter: blur(8px); padding: 4px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <button type="button" id="btn-hero-view-strata" onclick="setHeroShowcase('strata')" style="flex: 1; padding: 4px 8px; font-size: 0.72rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; border: none; border-radius: 4px; background: var(--card-bg); color: var(--text-main); cursor: pointer; transition: all 0.15s;">
+                  3D Exploded Strata
+                </button>
+                <button type="button" id="btn-hero-view-die" onclick="setHeroShowcase('die')" style="flex: 1; padding: 4px 8px; font-size: 0.72rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; border: none; border-radius: 4px; background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.15s;">
+                  Silicon GDS-II Die
+                </button>
+              </div>
+            </div>
+
+            <!-- Strata Breakdown Hierarchy -->
+            <div style="display: flex; flex-direction: column; gap: 5px; font-size: 0.74rem; font-family: 'JetBrains Mono', monospace;">
+              <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--card-sub-bg); border-radius: 4px; border: 1px solid var(--card-border-subtle);">
+                <span style="color: var(--accent-cyan); font-weight: 600;">Stratum 4</span>
+                <span style="color: var(--text-muted);">250 µm Microchannel Slim-Lid</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--card-sub-bg); border-radius: 4px; border: 1px solid var(--card-border-subtle);">
+                <span style="color: var(--accent-amber); font-weight: 600;">Stratum 3</span>
+                <span style="color: var(--text-muted);">Copper Thermal Shunt (400 W/m·K)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--card-sub-bg); border-radius: 4px; border: 1px solid var(--card-border-subtle);">
+                <span style="color: var(--accent-blue); font-weight: 600;">Stratum 2</span>
+                <span style="color: var(--text-muted);">220 nm Photonic Core (16 Tiles, 200 GHz)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--card-sub-bg); border-radius: 4px; border: 1px solid var(--card-border-subtle);">
+                <span style="color: var(--accent-green); font-weight: 600;">Stratum 1</span>
+                <span style="color: var(--text-muted);">65 nm CMOS Digital Die (100.00 mm²)</span>
+              </div>
+            </div>
+
+            <!-- Launch 3D Explorer CTA -->
+            <button class="btn-outline" onclick="switchPage('simulation'); switchArchSubView('3d');" style="width: 100%; justify-content: center; font-size: 0.8rem; padding: 0.5rem; font-weight: 600; margin-top: 2px;">
+              Launch Full Interactive 3D WebGL Model →
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- The Core Problem vs. The JANUS Solution -->
+      <!-- SECTION 1: COMPARATIVE ARCHITECTURE (SPATIAL BINARY VS. ANALOG MZI) -->
       <div class="grid-2" style="margin-bottom: 2rem;">
         <div class="comp-box negative">
-          <h3 style="color: var(--accent-red); margin-bottom: 0.75rem; display:flex; align-items:center; gap:8px;">
-            ⚠️ The Analog Photonic Failure Mode
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; font-weight:600; color:var(--accent-red); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.4rem;">[ CONVENTIONAL BASELINE ]</div>
+          <h3 style="color: var(--text-main); margin-bottom: 0.75rem; font-size:1.15rem; font-weight:700;">
+            Analog Photonic Amplitude Failure Mode
           </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">
-            Conventional optical AI chips encode numbers in analog amplitude and accumulate optical power across
-            Mach-Zehnder Interferometer (MZI) meshes. For a 128×128 matrix multiplication, unreduced accumulation spans
-            8.3 million discrete levels.
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem;">
+            Conventional optical AI chips encode numbers in analog amplitude and accumulate optical power across Mach-Zehnder Interferometer (MZI) meshes. For a 128×128 matrix multiplication, unreduced accumulation spans 8.3 million discrete levels.
           </p>
-          <ul style="color: var(--text-muted); font-size: 0.9rem; margin-left: 1.25rem; line-height: 1.6;">
-            <li><strong>The 138.4 dB SNR Wall:</strong> Demands an impossible 21-bit ADC at 100 GHz sampling.</li>
-            <li><strong>Thermal Drifts:</strong> Continuous milliwatt heating per MZI consumes >100 kW static mesh hold
-              power.</li>
-            <li><strong>Analog Noise Cascading:</strong> Thermal drift and shot noise cause catastrophic precision
-              collapse.</li>
+          <ul style="color: var(--text-muted); font-size: 0.88rem; margin-left: 1.25rem; line-height: 1.6;">
+            <li><strong>The 138.4 dB SNR Wall:</strong> Demands an unattainable 21-bit ADC at 100 GHz sampling rates.</li>
+            <li><strong>Thermal Drifts:</strong> Continuous milliwatt heating per MZI consumes >100 kW static mesh hold power.</li>
+            <li><strong>Analog Noise Cascading:</strong> Thermal drift and shot noise cause rapid precision collapse in deep networks.</li>
           </ul>
         </div>
 
         <div class="comp-box positive">
-          <h3 style="color: var(--accent-green); margin-bottom: 0.75rem; display:flex; align-items:center; gap:8px;">
-            💎 The JANUS Spatial Binary Advantage
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; font-weight:600; color:var(--accent-green); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.4rem;">[ JANUS ARCHITECTURE ]</div>
+          <h3 style="color: var(--text-main); margin-bottom: 0.75rem; font-size:1.15rem; font-weight:700;">
+            Deterministic Spatial Binary Photonic Computing
           </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">
-            JANUS maps numbers to <strong>spatial waveguide indices</strong> (which waveguide carries light) rather than
-            photon counts. Photons merely carry a binary arrival presence:
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem;">
+            JANUS maps numbers to discrete spatial waveguide indices (which waveguide carries light) rather than photon counts. Photons merely carry a binary arrival presence:
           </p>
-          <ul style="color: var(--text-muted); font-size: 0.9rem; margin-left: 1.25rem; line-height: 1.6;">
-            <li><strong>Zero Amplitude Noise:</strong> 1-bit binary regenerative detection via receiverless Ge/Si SAC²M
-              APDs.</li>
-            <li><strong>0W Static Hold Power:</strong> Non-volatile Sb₂S₃ phase-change switches maintain state
-              indefinitely.</li>
-            <li><strong>Up to Exact INT64 Precision:</strong> 3-equation Hybrid Partitioning computes exact 64-bit
-              mathematical integers.</li>
+          <ul style="color: var(--text-muted); font-size: 0.88rem; margin-left: 1.25rem; line-height: 1.6;">
+            <li><strong>Zero Amplitude Noise:</strong> 1-bit binary regenerative detection via receiverless Ge/Si SAC²M APDs.</li>
+            <li><strong>0W Static Hold Power:</strong> Non-volatile Sb₂S₃ phase-change switches maintain routing states indefinitely.</li>
+            <li><strong>Exact INT64 Precision Ceiling:</strong> 3-equation Hybrid Partitioning computes exact 64-bit mathematical integers.</li>
           </ul>
         </div>
       </div>
 
-      <!-- The 4 Architectural Pillars -->
-      <div class="card">
-        <div class="card-title">🏛️ The Four Architectural Pillars of Project JANUS</div>
+      <!-- SECTION 2: CORE ARCHITECTURAL SUBSYSTEMS -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-title">Core Architectural Subsystems</div>
         <div class="grid-4">
           <div class="pillar-box">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✨</div>
-            <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">Sb₂S₃ PCM Switches</h4>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">[ 01 ]</div>
+            <h4 style="color: var(--text-main); margin-bottom: 0.5rem; font-size:0.95rem;">Sb₂S₃ PCM Switches</h4>
             <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-              Sub-bandgap transparency at 1064 nm (<i>E</i><sub>g</sub> = 1.72 eV &gt; 1.165 eV) with near-zero
-              intrinsic loss (&kappa; &approx; 10<sup>-5</sup>) and 4.2 pJ graphene micro-heaters.
+              Sub-bandgap transparency at 1064 nm (<i>E</i><sub>g</sub> = 1.72 eV &gt; 1.165 eV) with near-zero intrinsic loss (&kappa; &approx; 10<sup>-5</sup>) and 4.2 pJ graphene micro-heaters.
             </p>
           </div>
 
           <div class="pillar-box">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧮</div>
-            <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">Hybrid Partitioning</h4>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">[ 02 ]</div>
+            <h4 style="color: var(--text-main); margin-bottom: 0.5rem; font-size:0.95rem;">Hybrid Partitioning</h4>
             <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-              3-equation decomposition computes (<i>X</i><sub>L</sub> &times; <i>Y</i><sub>L</sub>, <i>X</i><sub>H</sub>
-              &times; <i>Y</i><sub>H</sub>) in optics and cross-terms in CMOS SRAM LUTs, guaranteeing zero analog
-              overflow.
+              3-equation decomposition computes (<i>X</i><sub>L</sub> &times; <i>Y</i><sub>L</sub>, <i>X</i><sub>H</sub> &times; <i>Y</i><sub>H</sub>) in optics and cross-terms in CMOS SRAM LUTs, guaranteeing zero analog overflow.
             </p>
           </div>
 
           <div class="pillar-box">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
-            <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">Receiverless APD</h4>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">[ 03 ]</div>
+            <h4 style="color: var(--text-main); margin-bottom: 0.5rem; font-size:0.95rem;">Receiverless APD</h4>
             <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-              Ge/Si SAC²M APDs co-integrated with clocked StrongARM dynamic latches (<3 fF parasitic capacitance) and 50
-                fs rms ILO comb-locked clocking. </p>
+              Ge/Si SAC²M APDs co-integrated with clocked StrongARM dynamic latches (&lt; 3 fF parasitic capacitance) and 50 fs rms ILO comb-locked clocking.
+            </p>
           </div>
 
           <div class="pillar-box">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧊</div>
-            <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">Hydraulic Shunt</h4>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">[ 04 ]</div>
+            <h4 style="color: var(--text-main); margin-bottom: 0.5rem; font-size:0.95rem;">Hydraulic Shunt</h4>
             <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-              Vertical thermal isolation (<i>R</i><sub>th,up</sub> = 0.227 K/W vs <i>R</i><sub>th,down</sub> = 0.488
-              K/W) pulls photonic heat upward while routing CMOS heat laterally.
+              Vertical thermal isolation (<i>R</i><sub>th,up</sub> = 0.227 K/W vs <i>R</i><sub>th,down</sub> = 0.488 K/W) pulls photonic heat upward while routing CMOS heat laterally.
             </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: PHYSICAL SILICON IMPLEMENTATION & TAPEOUT SUMMARY -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent-cyan); letter-spacing: 0.08em; text-transform: uppercase;">
+              [ PHYSICAL IMPLEMENTATION ]
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-top: 2px;">
+              Monolithic 3D Heterogeneous Tapeout Architecture
+            </h3>
+          </div>
+          <button class="btn-outline" onclick="switchPage('hardware')" style="font-size: 0.82rem; padding: 0.45rem 0.9rem;">
+            View Full CMOS & 3D Stack Specs →
+          </button>
+        </div>
+
+        <div class="grid-2" style="align-items: center; gap: 2rem;">
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; margin-bottom: 1.25rem;">
+              The JANUS Mini-16 coprocessor bridges standard <strong>65nm CMOS logic</strong> with a high-speed <strong>220nm SOI silicon photonic stratum</strong> via micro-bumps and an integrated copper thermal shunt.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
+              <div style="background: var(--card-sub-bg); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border-subtle);">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">Total Die Footprint</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin-top: 2px;">100.00 mm²</div>
+                <div style="color: var(--text-subtle); font-size: 0.68rem;">10.0 × 10.0 mm monolithic die</div>
+              </div>
+              <div style="background: var(--card-sub-bg); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border-subtle);">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">Tile Floorplan</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin-top: 2px;">16 Coprocessors</div>
+                <div style="color: var(--text-subtle); font-size: 0.68rem;">1.85 × 1.85 mm² per tile</div>
+              </div>
+              <div style="background: var(--card-sub-bg); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border-subtle);">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">CMOS Logic Gate Count</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin-top: 2px;">41.2M Gates</div>
+                <div style="color: var(--text-subtle); font-size: 0.68rem;">Polyphase deserializers & SRAM</div>
+              </div>
+              <div style="background: var(--card-sub-bg); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border-subtle);">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">Thermal Extraction</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin-top: 2px;">1.54 W/cm²</div>
+                <div style="color: var(--text-subtle); font-size: 0.68rem;">Convective hydraulic slim-lid</div>
+              </div>
+            </div>
+          </div>
+          <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--card-border); background: #0c0f17; position: relative;">
+            <img src="/fig_gds_die_and_tile_floorplan.png" alt="JANUS Mini-16 Full Die & Tile Floorplan" style="width: 100%; height: auto; display: block;" />
+            <div style="padding: 8px 12px; background: var(--card-sub-bg); border-top: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;">
+              <span style="color: var(--text-muted);">GDS-II Mask Floorplan • 16-Tile Matrix</span>
+              <a href="/fig_gds_die_and_tile_floorplan.png" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">Inspect Full-Res (300 DPI) ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: FRONTIER AI WORKLOAD PROFILING & HARDWARE SCALING -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent-cyan); letter-spacing: 0.08em; text-transform: uppercase;">
+              [ PERFORMANCE BENCHMARKS ]
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-top: 2px;">
+              Frontier Model Profiling & Silicon Scaling Matrix
+            </h3>
+          </div>
+          <button class="btn-primary" onclick="switchPage('simulation')" style="font-size: 0.82rem; padding: 0.45rem 0.9rem;">
+            Run Co-Simulation Suite →
+          </button>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem;">
+          JANUS delivers hardware-deterministic optical computation modeled across 6 scaling generations. From edge-deployable Planar Accelerators (Model 1A) to Hyperscale 3D Modules (Model 6B), spatial residue routing achieves up to <strong>100× lower energy-per-token</strong> compared to electronic GPUs.
+        </p>
+
+        <!-- Model Scaling Spec Ticker Cards -->
+        <div class="grid-3" style="gap: 1.25rem; margin-bottom: 1.25rem;">
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan);">MODEL 1A (PLANAR)</span>
+              <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">TAPE-OUT READY</span>
+            </div>
+            <div style="font-size: 1.45rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text-main); margin-bottom: 4px;">819.2 TMAC/s</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">6.17 W Total Power • 100 mm² Monolithic Die • INT8 / INT4 Multi-Precision</div>
+          </div>
+
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--accent-amber);">MODEL 3B (MULTI-DIE)</span>
+              <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); font-weight: 600;">DATACENTER</span>
+            </div>
+            <div style="font-size: 1.45rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text-main); margin-bottom: 4px;">6.55 PMAC/s</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">64 Tiles Heterogeneous Multi-Die • 48.6 W TDP • Ultra-Dense Attention</div>
+          </div>
+
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--accent-green);">MODEL 6B (HYPERSCALE)</span>
+              <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(16, 185, 129, 0.15); color: var(--accent-green); font-weight: 600;">FLAGSHIP</span>
+            </div>
+            <div style="font-size: 1.45rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text-main); margin-bottom: 4px;">104.8 PMAC/s</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">392 W Module • 1,024 Tiles in 3D Stack • Sub-100 fs Optical Matrix Engine</div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <a href="javascript:void(0)" onclick="switchPage('roadmap')" style="color: var(--accent-cyan); font-size: 0.82rem; font-weight: 600; text-decoration: none; font-family: 'JetBrains Mono', monospace;">
+            View Complete 6-Generation Scaling Matrix & Roadmap →
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 5: OFFICIAL RESEARCH PUBLICATIONS & INTELLECTUAL PROPERTY -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent-cyan); letter-spacing: 0.08em; text-transform: uppercase;">
+              [ PUBLICATIONS & INTELLECTUAL PROPERTY ]
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-top: 2px;">
+              Architectural Manuscripts & Patent Disclosure
+            </h3>
+          </div>
+          <button class="btn-outline" onclick="openJanusModal('modal-citation')" style="font-size: 0.82rem; padding: 0.45rem 0.9rem;">
+            Cite Project JANUS (BibTeX)
+          </button>
+        </div>
+
+        <div class="grid-3" style="gap: 1.25rem;">
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent-cyan); margin-bottom: 4px;">IEEE TRANSACTIONS MANUSCRIPT</div>
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">24-Page Architectural Treatise</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                Rigorous mathematical formulation of 16-Tile PRNS, optical waveguide transmission matrix, noise analysis, and 104.8 PMAC/s validation.
+              </p>
+            </div>
+            <button class="btn-outline" onclick="switchPage('paper'); switchPaper('manuscript');" style="font-size: 0.78rem; width: 100%; justify-content: center;">
+              Read Architecture Manuscript →
+            </button>
+          </div>
+
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent-amber); margin-bottom: 4px;">SILICON SPECIFICATION</div>
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">65nm CMOS Backend Spec</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                Detailed digital controller timing, 1:32 polyphase interleaving deserializer, SRAM dual-LUT floorplan, and JIR thermal balancing RTL.
+              </p>
+            </div>
+            <button class="btn-outline" onclick="switchPage('paper'); switchPaper('cmos');" style="font-size: 0.78rem; width: 100%; justify-content: center;">
+              Read CMOS Specification →
+            </button>
+          </div>
+
+          <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent-green); margin-bottom: 4px;">INTELLECTUAL PROPERTY</div>
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Patent App 202611052791</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                Official Indian Patent Office filing covering Spatial Residue Number System routing, non-volatile Sb₂S₃ switching, and 3-equation partitioning.
+              </p>
+            </div>
+            <button class="btn-outline" onclick="switchPage('about')" style="font-size: 0.78rem; width: 100%; justify-content: center;">
+              View Inventor & Patent Info →
+            </button>
           </div>
         </div>
       </div>
@@ -2502,7 +2750,7 @@
             </a>
             <a id="paper-open-btn" href="/JANUS_IEEE_Manuscript.pdf" target="_blank" class="btn-outline"
               style="display:flex; align-items:center; gap:6px; font-weight:500;">
-              🌐 Open in Browser Tab
+              Open in Browser Tab ↗
             </a>
             <a id="paper-dl-btn" href="/JANUS_IEEE_Manuscript.pdf" download="JANUS_IEEE_Manuscript.pdf"
               class="btn-primary" style="display:flex; align-items:center; gap:6px; font-weight:600;">
@@ -2547,8 +2795,8 @@
         <div class="grid-2">
           <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem;">
-              <div class="card-title" style="margin-bottom:0;">🔢 Evaluate Custom Integer</div>
-              <span class="badge-pass" style="font-size:0.68rem; padding:2px 7px;">⚡ Dynamic Tile Gating</span>
+              <div class="card-title" style="margin-bottom:0;">Evaluate Custom Integer</div>
+              <span class="badge-pass" style="font-size:0.68rem; padding:2px 7px;">Dynamic Tile Gating</span>
             </div>
             <div class="input-group">
               <input type="text" id="int-input" class="input-box" value="260"
@@ -2572,8 +2820,8 @@
 
           <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem;">
-              <div class="card-title" style="margin-bottom:0;">✖️ Custom Optical Multiplication</div>
-              <span class="badge-pass" style="font-size:0.68rem; padding:2px 7px;">🌱 Power-Proportional</span>
+              <div class="card-title" style="margin-bottom:0;">Custom Optical Multiplication</div>
+              <span class="badge-pass" style="font-size:0.68rem; padding:2px 7px;">Power-Proportional</span>
             </div>
             <div class="input-group">
               <input type="text" id="mult-a" class="input-box" value="26" placeholder="Operand A" style="max-width:140px;">
@@ -2598,7 +2846,7 @@
         </div>
 
         <div class="card" id="tiles-card">
-          <div class="card-title">🌐 16-Tile Spatial Residue Waveguide Allocation (Asymmetric 16-Tree Fermat Core: Radix-16 / 1-of-17 Encoding, Inputs ≤ 16)</div>
+          <div class="card-title">16-Tile Spatial Residue Waveguide Allocation (Asymmetric 16-Tree Fermat Core: Radix-16 / 1-of-17 Encoding, Inputs ≤ 16)</div>
           <div id="tiles-container" class="tiles-grid">
             <!-- Populated by JS -->
           </div>
@@ -2608,7 +2856,7 @@
           style="display:none; margin-top:1rem; padding:1rem 1.2rem; background:var(--card-bg,#0f1923); border:1px solid var(--card-border,rgba(0,242,254,0.15)); border-radius:10px;">
           <div id="rns-math-panel-title"
             style="font-size:0.82rem; font-weight:700; color:var(--accent-cyan,#00f2fe); margin-bottom:0.6rem; letter-spacing:0.04em;">
-            🧮 Math Details
+            Mathematical Details
           </div>
           <pre id="rns-math-panel-steps"
             style="margin:0; font-family:Consolas,Monaco,'Courier New',monospace; font-size:0.76rem; color:var(--text-muted,#94a3b8); white-space:pre-wrap; line-height:1.55; max-height:340px; overflow-y:auto;"></pre>
@@ -2625,10 +2873,10 @@
             style="display: flex; gap: 8px; background: var(--nav-bg); padding: 4px; border-radius: 10px; border: 1px solid var(--card-border); flex-wrap: wrap;"
             id="arch-view-btns">
             <button class="sim-tab-btn active" id="btn-arch-subview-3d" onclick="switchArchSubView('3d')">
-              🎥 3D Physical Silicon Stack (Exploded Strata)
+              3D Physical Silicon Stack (Exploded Strata)
             </button>
             <button class="sim-tab-btn" id="btn-arch-subview-2d" onclick="switchArchSubView('2d')">
-              ⚡ 2D Electro-Optic Waveguide Mesh (Logical Co-Sim)
+              2D Electro-Optic Waveguide Mesh (Logical Co-Sim)
             </button>
           </div>
           <div style="font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
@@ -2643,15 +2891,15 @@
           <div class="card" style="overflow: hidden; max-width: 100%; margin-bottom: 1.5rem;">
             <div class="card-title"
               style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-              <span>🔬 3D Exploded Hardware Demonstration & Heterogeneous Strata Inspection</span>
+              <span>3D Exploded Hardware Demonstration & Heterogeneous Strata Inspection</span>
               <div class="arch-mode-pill-toggle">
                 <button type="button" class="arch-mode-pill-btn active" id="btn-3dmode-webgl"
                   onclick="switch3DRenderMode('webgl')">
-                  🕹️ Interactive 3D (WebGL)
+                  Interactive 3D (WebGL)
                 </button>
                 <button type="button" class="arch-mode-pill-btn" id="btn-3dmode-video"
                   onclick="switch3DRenderMode('video')">
-                  🎥 60 FPS Video Render
+                  60 FPS Video Render
                 </button>
               </div>
             </div>
@@ -2671,9 +2919,9 @@
                   <span id="webgl-state-text">85% • Exploded Strata Inspection</span>
                 </div>
                 <div class="webgl-hint-overlay">
-                  <span>🖱️ Drag to Orbit 360°</span>
+                  <span>Drag to Orbit 360°</span>
                   <span>•</span>
-                  <span>📜 Scroll/Pinch to Zoom</span>
+                  <span>Scroll/Pinch to Zoom</span>
                   <span>•</span>
                   <span>↔ Right-Click to Pan</span>
                 </div>
@@ -2686,15 +2934,15 @@
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                   <button type="button" class="btn-action" id="webgl-explode-btn" onclick="toggleWebGLExplode()"
                     style="padding: 6px 16px; height: 36px; font-size: 0.85rem; touch-action: manipulation; display: flex; align-items: center; gap: 6px;">
-                    📦 Assemble Package
+                    Assemble Package
                   </button>
                   <button type="button" class="btn-outline" id="webgl-autorotate-btn" onclick="toggleWebGLAutoRotate()"
                     style="padding: 6px 14px; height: 36px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">
-                    🔄 Auto-Rotate: OFF
+                    Auto-Rotate: OFF
                   </button>
                   <button type="button" class="btn-outline" onclick="resetWebGLCamera()"
                     style="padding: 6px 14px; height: 36px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">
-                    🔍 Reset View
+                    Reset View
                   </button>
                   <div
                     style="margin-left: auto; font-size: 0.84rem; font-family: monospace; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px;"
@@ -2740,11 +2988,11 @@
                   </button>
                   <button type="button" class="btn-outline" onclick="jumpDemoVideo(5.2)"
                     style="padding: 6px 14px; height: 36px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">
-                    💥 Exploded Strata (5.2s)
+                    Exploded Strata (5.2s)
                   </button>
                   <button type="button" class="btn-outline" onclick="jumpDemoVideo(0.0)"
                     style="padding: 6px 14px; height: 36px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">
-                    📦 Assembled Package (0.0s)
+                    Assembled Package (0.0s)
                   </button>
                   <button type="button" class="btn-outline" onclick="replayDemoVideo()"
                     style="padding: 6px 14px; height: 36px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">
@@ -2774,7 +3022,7 @@
                 style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
                 <span
                   style="font-weight: 700; font-size: 0.92rem; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
-                  📑 Inspect Physical Strata (Top to Bottom):
+                  Physical Strata Inspection (Top to Bottom):
                 </span>
                 <span style="font-size: 0.78rem; color: var(--text-muted);">Click any stratum to isolate parameters &
                   jump to exploded state</span>
@@ -2860,7 +3108,7 @@
           <div class="card" style="overflow: hidden; max-width: 100%; margin-bottom: 1.5rem;">
             <div class="card-title"
               style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-              <span>🔬 2D Electro-Optic Waveguide Mesh & Logic Propagation Engine</span>
+              <span>2D Electro-Optic Waveguide Mesh & Logic Propagation Engine</span>
               <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; max-width: 100%;"
                 class="arch-controls-cluster">
                 <label style="font-size: 0.8rem; color: var(--text-muted);" class="arch-mode-label">Co-Operation
@@ -2882,8 +3130,7 @@
                   style="padding: 4px 10px; height: 32px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">Speed:
                   1x</button>
                 <button type="button" class="btn-outline" onclick="resetArchAnimation()"
-                  style="padding: 4px 10px; height: 32px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">🔄
-                  Reset</button>
+                  style="padding: 4px 10px; height: 32px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">Reset</button>
               </div>
             </div>
 
@@ -2903,7 +3150,7 @@
         <!-- Co-Operation & Microarchitecture Explainer Cards -->
         <div class="grid-3" style="margin-top: 1.5rem;">
           <div class="card" style="margin-bottom: 0;">
-            <div class="card-title">🌐 1. CMOS + Photonic Co-Operation</div>
+            <div class="card-title">1. Heterogeneous CMOS & Photonic Co-Design</div>
             <div class="stat-box" style="text-align: left; line-height: 1.6; font-size: 0.83rem;">
               <p>• <b>CMOS Logic Layer:</b> Decomposes 64-bit tensors into 16 coprime residues (<i>r</i><sub>0</sub>,
                 ..., <i>r</i><sub>15</sub>) via parallel modulo tables.</p>
@@ -2917,7 +3164,7 @@
           </div>
 
           <div class="card" style="margin-bottom: 0;">
-            <div class="card-title">⚡ 2. Why Optics + CMOS Beats Pure Silicon</div>
+            <div class="card-title">2. Electro-Optic Synergy vs. Electronic Baselines</div>
             <div class="stat-box" style="text-align: left; line-height: 1.6; font-size: 0.83rem;">
               <p>• <b>Zero <i>CV</i><sup>2</sup><i>f</i> Charging Loss:</b> Photons propagate without charging wire
                 capacitances (<i>R</i><sub>wire</sub> = 0, <i>C</i><sub>wire</sub> = 0).</p>
@@ -2931,7 +3178,7 @@
           </div>
 
           <div class="card" style="margin-bottom: 0;">
-            <div class="card-title">🔄 3. JIR Closed-Loop Thermal Balancing</div>
+            <div class="card-title">3. JIR Closed-Loop Thermal Balancing Runtime Runtime</div>
             <div class="stat-box" style="text-align: left; line-height: 1.6; font-size: 0.83rem;">
               <p>• <b>Isothermal Guarantee:</b> CMOS thermal monitors sense tile temperature rise in real-time
                 (<i>T</i><sub>trigger</sub> = 40.0°C).</p>
@@ -2977,16 +3224,16 @@
         <div class="card" style="padding-bottom: 1rem;">
           <div
             style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 1.25rem;">
-            <div class="card-title" style="margin-bottom: 0;">⚡ Layer-by-Layer AI Workload Profiling & Energy Breakdown
+            <div class="card-title" style="margin-bottom: 0;">Layer-by-Layer AI Workload Profiling & Energy Breakdown
             </div>
             <div
               style="display: flex; gap: 8px; background: var(--nav-bg); padding: 4px; border-radius: 10px; border: 1px solid var(--card-border); flex-wrap: wrap;"
               id="ai-model-btns">
-              <button class="sim-tab-btn active" id="btn-ai-llama" onclick="switchAIModel('llama')">🦙 LLaMA-3-8B
+              <button class="sim-tab-btn active" id="btn-ai-llama" onclick="switchAIModel('llama')">LLaMA-3-8B
                 (INT8)</button>
-              <button class="sim-tab-btn" id="btn-ai-gpt" onclick="switchAIModel('gpt')">🤖 GPT-2 Base (INT8)</button>
-              <button class="sim-tab-btn" id="btn-ai-vit" onclick="switchAIModel('vit')">🖼️ ViT-Huge (INT8)</button>
-              <button class="sim-tab-btn" id="btn-ai-gpu" onclick="switchAIModel('gpu')">📊 GPU vs. JANUS
+              <button class="sim-tab-btn" id="btn-ai-gpt" onclick="switchAIModel('gpt')">GPT-2 Base (INT8)</button>
+              <button class="sim-tab-btn" id="btn-ai-vit" onclick="switchAIModel('vit')">ViT-Huge (INT8)</button>
+              <button class="sim-tab-btn" id="btn-ai-gpu" onclick="switchAIModel('gpu')">GPU vs. JANUS Comparison
                 Comparison</button>
             </div>
           </div>
@@ -3223,7 +3470,7 @@
 
         <!-- Token Packing Card -->
         <div class="card">
-          <div class="card-title">📦 Spatial Batch & Multi-Head Token Packing (100% Spatial Tile Occupancy)</div>
+          <div class="card-title">Spatial Batch & Multi-Head Token Packing (100% Spatial Tile Occupancy)</div>
           <div class="grid-2">
             <div class="stat-box" style="text-align: left;">
               <h4 style="color: var(--accent-cyan); margin-bottom: 8px;">Multi-Head Attention (32 Heads Packed)</h4>
@@ -3255,7 +3502,7 @@
         <div class="card">
           <div class="card-title"
             style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span>🎛️ Dynamic JIR Workload & Multi-Hour Datacenter Stress Configuration</span>
+            <span>Dynamic JIR Workload & Multi-Hour Datacenter Stress Configuration</span>
             <div id="thermal-sim-status" style="font-size: 0.85rem; font-weight: 700;">
               <span style="color: var(--accent-green);">● READY (Configurable 1 to 16 Custom Active Tiles • 10s to
                 24-Hour Co-Sim)</span>
@@ -3367,7 +3614,7 @@
         <div class="grid-2">
           <!-- 4 &times; 4 Die Floorplan -->
           <div class="card">
-            <div class="card-title">🗺️ 16-Tile Monolithic Die Thermal Floorplan</div>
+            <div class="card-title">16-Tile Monolithic Die Thermal Floorplan</div>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
               Click any tile to inspect its live temperature, waveguide phase drift, and 100 GHz eye opening.
             </p>
@@ -3376,16 +3623,16 @@
             </div>
             <div
               style="margin-top: 1rem; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
-              <span>🔵 Cool (&lt; 30°C)</span>
-              <span>🟡 Moderate (30-40°C)</span>
-              <span>🔴 Hot (&gt; 40°C)</span>
+              <span>Cool (&lt; 30°C)</span>
+              <span>Moderate (30-40°C)</span>
+              <span>Elevated (&gt; 40°C)</span>
               <span style="color: var(--accent-cyan);">Click tile to focus</span>
             </div>
           </div>
 
           <!-- Deep Multi-Physics Inspector Card -->
           <div class="card" id="tile-specs-card">
-            <div class="card-title" id="inspector-title">🔍 Tile Physical & Optical Inspection: Tile 00</div>
+            <div class="card-title" id="inspector-title">Tile Physical & Optical Inspection: Tile 00</div>
             <div id="inspector-content" class="stat-box"
               style="text-align: left; line-height: 1.6; font-size: 0.85rem;">
               Click on any tile in the 4 &times; 4 matrix to inspect its real-time thermo-optic parameters, waveguide
@@ -3395,7 +3642,7 @@
             <div
               style="margin-top: 1rem; background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan);">👁️ Live 100 GHz Eye
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan);">Live 100 GHz Eye
                   Diagram at StrongARM APD</span>
                 <span id="eye-metric-badge"
                   style="font-size: 0.75rem; color: var(--accent-green); font-family: monospace;">BER ≤ 10⁻⁴¹ | Eye
@@ -3410,7 +3657,7 @@
         <div class="card">
           <div class="card-title"
             style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span>📈 Dynamic JIR Rotational Cooling & Thermal Trajectories</span>
+            <span>Dynamic JIR Rotational Cooling & Thermal Trajectories</span>
             <div style="display: flex; gap: 8px; align-items: center;">
               <label style="font-size: 0.8rem; color: var(--text-muted);">Focus Tile:</label>
               <select id="chart-tile-select" class="input-box"
@@ -3468,7 +3715,7 @@
               </span>
               <button class="btn-primary" id="btn-run-full-cosim" onclick="loadMatrixData(true)"
                 style="padding: 0.45rem 1rem; font-size: 0.85rem;">
-                ⚡ Run Full 16-Test Co-Sim
+                Run Full 16-Test Co-Simulation
               </button>
             </div>
           </div>
@@ -3478,16 +3725,11 @@
             style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; background: var(--card-sub-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--card-border); align-items: center;">
             <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Run
               Specific Tier:</span>
-            <button class="btn-outline" onclick="runTierAudit(1)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">🔬
-              Tier 1: Optics FDTD (Checks 1-4)</button>
-            <button class="btn-outline" onclick="runTierAudit(2)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">🧊
-              Tier 2: Thermal FEM (Checks 5-8)</button>
-            <button class="btn-outline" onclick="runTierAudit(3)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">⚡
-              Tier 3: Circuit & APD (Checks 9-11)</button>
-            <button class="btn-outline" onclick="runTierAudit(4)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">💻
-              Tier 4: RTL Logic (Checks 12-13)</button>
-            <button class="btn-outline" onclick="runTierAudit(5)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">🧮
-              Tier 5: Z3 Formal & GEMM (Checks 14-16)</button>
+            <button class="btn-outline" onclick="runTierAudit(1)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Tier 1: Optics FDTD (Checks 1-4)</button>
+            <button class="btn-outline" onclick="runTierAudit(2)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Tier 2: Thermal FEM (Checks 5-8)</button>
+            <button class="btn-outline" onclick="runTierAudit(3)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Tier 3: Circuit & APD (Checks 9-11)</button>
+            <button class="btn-outline" onclick="runTierAudit(4)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Tier 4: RTL Logic (Checks 12-13)</button>
+            <button class="btn-outline" onclick="runTierAudit(5)" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Tier 5: Z3 Formal & GEMM (Checks 14-16)</button>
           </div>
 
           <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; border-radius: 8px;">
@@ -3728,7 +3970,7 @@
     <section id="page-codebase" class="page-section">
       <div class="card">
         <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
-          <span>💻 Project JANUS Multi-Tier Codebase & Verification Suite</span>
+          <span>Project JANUS Multi-Tier Codebase & Verification Suite</span>
           <span style="font-size:0.8rem; color:var(--text-muted);">Explore Python, Verilog RTL, Elmer FEM, and LaTeX
             Sources</span>
         </div>
@@ -3749,7 +3991,7 @@
                 <span id="active-filesize" style="color:var(--text-muted); font-size:0.8rem;">30.2 KB</span>
               </div>
               <button class="btn-outline" style="padding:0.35rem 0.8rem; font-size:0.8rem;"
-                onclick="copyActiveCode()">📋 Copy Snippet</button>
+                onclick="copyActiveCode()">Copy Snippet</button>
             </div>
             <div class="code-body">
               <pre><code id="active-code-content" class="language-python"># Select a file from the repository tree on the left to inspect its implementation.</code></pre>
@@ -3764,8 +4006,7 @@
 
       <!-- Executive Mission & Patent Reference -->
       <div class="card">
-        <div class="card-title">
-          <span>🗺️ Project JANUS Master Engineering & Technology Roadmap</span>
+        <div class="card-title"><span>Project JANUS Master Engineering & Technology Roadmap</span>
         </div>
         <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem;">
           <strong>Patent Reference:</strong> Indian Patent App No. 202611052791 (Patent Pending) &nbsp;|&nbsp;
@@ -3782,7 +4023,7 @@
 
         <!-- Product Families Comparison -->
         <h4 style="color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
-          🏢 Three Specialized Product Families & Workload Target Profiles
+          Three Specialized Product Families & Workload Target Profiles
         </h4>
         <div class="grid-3" style="margin-bottom: 2rem;">
 
@@ -3842,7 +4083,7 @@
         <!-- Master Hardware Performance Matrix (18 Models) with TRL Status -->
         <h4
           style="color: var(--text-main); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-          <span>📊 Master Hardware & Performance Matrix (Models 1A through 6B)</span>
+          <span>Master Hardware & Performance Matrix (Models 1A through 6B)</span>
           <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Click any model row to
             inspect deep engineering specs & TRL readiness</span>
         </h4>
@@ -4095,7 +4336,7 @@
             <div>
               <span
                 style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.08em;">
-                🔬 Individual Model Engineering Deep-Dive & TRL Readiness
+                Individual Model Engineering Deep-Dive & TRL Readiness
               </span>
               <h3 id="inspect-model-title" style="color: var(--text-main); margin-top: 4px;">Model 1A: JANUS Mini
                 16-Tile Monolithic Planar Core</h3>
@@ -4167,7 +4408,7 @@
           <!-- Next Industrial Milestone Target -->
           <div
             style="background: rgba(0, 242, 254, 0.04); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.83rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span><b style="color: var(--accent-cyan);">🎯 Next Fabrication Milestone:</b> <span
+            <span><b style="color: var(--accent-cyan);">Next Fabrication Milestone:</b> <span
                 id="inspect-model-target" style="color: var(--text-main);">TSMC 7nm FinFET + GlobalFoundries 45CLO MPW
                 Shuttle Tapeout</span></span>
             <span style="font-family: monospace; color: var(--accent-green);" id="inspect-model-status-badge">Status:
@@ -4180,7 +4421,7 @@
           style="background: var(--card-sub-bg); border: 1px solid var(--card-border); margin-bottom: 2rem;">
           <h4
             style="color: var(--text-main); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-            <span>📐 Technology Readiness Level (TRL 1–7) Ranking Framework for Photonic Hardware</span>
+            <span>Technology Readiness Level (TRL 1–7) Ranking Framework for Photonic Hardware</span>
             <span style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: normal;">NASA / DoD Hardware
               Maturity Scale Tailored for Photonic Integrated Circuits</span>
           </h4>
@@ -4292,7 +4533,7 @@
 
         <!-- 6-Generation Product Ladder Timeline -->
         <h4 style="color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
-          🚀 The 6-Generation Hardware Scaling Ladder
+          The 6-Generation Hardware Scaling Ladder
         </h4>
         <div class="timeline">
 
@@ -4423,7 +4664,7 @@
         <!-- Dual-Tier Thermal Boundary & Data Retention Gate -->
         <h4
           style="color: var(--text-main); margin-top: 2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
-          🌡️ Dual-Tier Thermal Boundaries & Material Retention Hierarchy
+          Dual-Tier Thermal Boundaries & Material Retention Hierarchy
         </h4>
         <div class="grid-3">
           <div
@@ -4474,7 +4715,7 @@
           <div style="max-width: 820px;">
             <div
               style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 242, 254, 0.15); color:var(--accent-cyan); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:12px; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.05em;">
-              🔬 Official Companion IEEE Silicon Specification
+              Official Companion IEEE Silicon Specification
             </div>
             <h2 style="font-size:1.5rem; color:var(--text-main); margin-bottom:0.4rem;">
               JANUS Mini-16 CMOS Digital Backend Architecture & Silicon Blueprint
@@ -4488,7 +4729,7 @@
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <button onclick="switchPage('paper'); switchPaper('cmos');" class="btn-primary"
               style="display:flex; align-items:center; gap:6px; font-weight:600; padding:10px 20px; cursor:pointer;">
-              📄 View CMOS Manuscript
+              View CMOS Manuscript
             </button>
             <a href="/api/cmos_pdf?download=1" download="JANUS_Mini16_CMOS_Architecture.pdf" class="btn-outline"
               style="display:flex; align-items:center; gap:6px; font-weight:600; padding:10px 18px;">
@@ -4503,7 +4744,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
           <div>
             <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 242, 254, 0.15); color:var(--accent-cyan); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:12px; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em;">
-              📐 Tapeout-Ready Physical Implementation • OASIS / GDS II Hierarchy
+              Tapeout-Ready Physical Implementation • OASIS / GDS II Hierarchy
             </div>
             <h3 style="font-size:1.35rem; color:var(--text-main); margin:0;">
               JANUS Mini-16 Full-Die & Single-Tile Physical Mask Layout Floorplan
@@ -4511,13 +4752,13 @@
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <a href="/janus_mini16_layout.gds" download="janus_mini16_layout.gds" class="btn-primary" style="display:flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; padding:7px 14px;">
-              💾 Download Photonic GDS II (955 KB)
+              Download Photonic GDS II (955 KB)
             </a>
             <a href="/janus_mini16_cmos_base_layout.gds" download="janus_mini16_cmos_base_layout.gds" class="btn-outline" style="display:flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; padding:7px 14px;">
-              💾 Download CMOS GDS II (169 KB)
+              Download CMOS GDS II (169 KB)
             </a>
             <a href="/fig_gds_die_and_tile_floorplan.png" target="_blank" class="btn-outline" style="display:flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; padding:7px 14px;">
-              🔍 Open High-Res Die PNG (300 DPI)
+              Open High-Res Die PNG (300 DPI)
             </a>
           </div>
         </div>
@@ -4538,7 +4779,7 @@
 
       <!-- 1. 3D Monolithic Heterogeneous Vertical Stack -->
       <div class="card" style="margin-bottom: 2rem;">
-        <div class="card-title">🔬 1. Monolithic Heterogeneous 330 µm 3D Stack Architecture</div>
+        <div class="card-title">1. Monolithic Heterogeneous 330 µm 3D Stack Architecture</div>
         <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">
           In JANUS Model 1A, CMOS electronics and photonic components are vertically integrated in a <strong>3D
             Monolithic Heterogeneous Stack</strong>, eliminating wire-bond parasitics and enabling direct Z-axis signal
@@ -4590,7 +4831,7 @@
         </div>
 
         <div class="card" style="background: var(--card-sub-bg); margin-bottom:0;">
-          <div class="card-title">🧊 Hydraulic Thermal Shunt & Microchannel Heat Dissipation</div>
+          <div class="card-title">Hydraulic Thermal Shunt & Microchannel Heat Dissipation</div>
           <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6;">
             By engineering the bump pitch to 25 µm on the top interface versus 50 µm on the bottom interface, JANUS
             achieves a thermal resistance asymmetry:
@@ -4605,7 +4846,7 @@
       <!-- 2. Polyphase Deserializer & Optoelectronic Front-End -->
       <div class="grid-2" style="margin-bottom: 2rem;">
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">⚡ 2. 1:32 Polyphase Interleaving Deserializer</div>
+          <div class="card-title">2. 1:32 Polyphase Interleaving Deserializer</div>
           <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
             Optical pulses travel at <strong>100 GHz (<i>T</i><sub>opt</sub> = 10.0 ps)</strong>. To avoid burning
             excessive power in ultra-high-frequency CMOS clock trees, a 1:32 polyphase deserializer steps down the
@@ -4623,7 +4864,7 @@
         </div>
 
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">🧠 3. The Dual-LUT Hardware Memory Trick</div>
+          <div class="card-title">3. Subsystem: Dual-LUT Modulo Mapping & Accumulation</div>
           <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
             Computing the 64-bit cross-term (<i>X</i><sub>L</sub><i>W</i><sub>H</sub> +
             <i>X</i><sub>H</sub><i>W</i><sub>L</sub>) mod <i>m</i><sub>i</sub> directly via a single lookup table would
@@ -4638,7 +4879,7 @@
             </code>
           </div>
           <p style="color:var(--accent-green); font-size:0.88rem; font-weight:600;">
-            ✅ Compresses 36 GB down to 1.152 MB raw / 1.5 MB physical SRAM (a 31,250&times; memory reduction) fitting
+            Compresses 36 GB down to 1.152 MB raw / 1.5 MB physical SRAM (a 31,250&times; memory reduction) fitting
             easily in 65nm planar CMOS.
           </p>
         </div>
@@ -4647,7 +4888,7 @@
       <!-- 3. SIMD Array & Warp Scheduler -->
       <div class="grid-2" style="margin-bottom: 2rem;">
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">🧮 4. 32-Lane SIMD Calculation Array</div>
+          <div class="card-title">4. 32-Lane SIMD Calculation Array</div>
           <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
             Each of the 32 polyphase lanes features a high-throughput 3-stage wave-pipelined arithmetic execution
             datapath running at 3.125 GHz:
@@ -4665,7 +4906,7 @@
         </div>
 
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">🔄 5. Centralized Warp & JIR Thermal Scheduler</div>
+          <div class="card-title">5. Centralized Warp & JIR Thermal Scheduler</div>
           <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
             A single centralized warp/epoch scheduler replaces 32 bulky per-lane CPU controllers, saving &gt;90% control
             logic silicon area:
@@ -4684,7 +4925,7 @@
 
       <!-- 4. Silicon Floorplan Area Budget Table -->
       <div class="card">
-        <div class="card-title">📊 6. 65nm CMOS Base Die Silicon Area Budget (100.00 mm² Footprint)</div>
+        <div class="card-title">6. 65nm CMOS Base Die Silicon Area Budget (100.00 mm² Footprint)</div>
         <div style="overflow-x:auto;">
           <table style="width:100%; border-collapse:collapse; font-size:0.88rem; text-align:left;">
             <thead>
@@ -4766,7 +5007,7 @@
           <div style="max-width: 820px;">
             <div
               style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 242, 254, 0.15); color:var(--accent-cyan); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:12px; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.05em;">
-              🧠 Full-Stack Graph Compiler & Photonic Runtime
+              Full-Stack Graph Compiler & Photonic Runtime
             </div>
             <h2 style="font-size:1.5rem; color:var(--text-main); margin-bottom:0.4rem;">
               JANUS Software Architecture, PyTorch 2.0 Compiler & Spatial Token Packing
@@ -4781,11 +5022,11 @@
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <button onclick="switchPage('simulation'); switchTab('rns');" class="btn-primary"
               style="display:flex; align-items:center; gap:6px; font-weight:600; padding:10px 20px; cursor:pointer;">
-              ⚡ Test Integer Engine
+              Test Integer Engine
             </button>
             <button onclick="switchPage('simulation'); switchTab('ai');" class="btn-outline"
               style="display:flex; align-items:center; gap:6px; font-weight:600; padding:10px 18px; cursor:pointer;">
-              📊 AI Workload Profiler
+              AI Workload Profiler
             </button>
           </div>
         </div>
@@ -4829,7 +5070,7 @@
 
       <!-- 1. END-TO-END COMPILER EXECUTION PIPELINE -->
       <div class="card" style="margin-bottom: 2rem;">
-        <div class="card-title">🔄 1. End-to-End Compiler Execution Pipeline (Graph to Silicon Photons)</div>
+        <div class="card-title">1. End-to-End Compiler Execution Pipeline (Graph to Silicon Photons)</div>
         <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">
           The JANUS compiler translates high-level PyTorch 2.0 computational graphs into spatial optical waveguide paths
           through a deterministic 6-stage transformation pipeline:
@@ -4932,7 +5173,7 @@
       <!-- 2. WHY PYTORCH 2.0 (TORCHDYNAMO) ARCHITECTURE: NO REWRITING REQUIRED -->
       <div class="card"
         style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(0, 242, 254, 0.04) 0%, rgba(16, 185, 129, 0.04) 100%); border: 1px solid rgba(0, 242, 254, 0.25);">
-        <div class="card-title">⚡ 2. Why PyTorch 2.0 (TorchDynamo) Architecture? (The 99% GEMM Secret)</div>
+        <div class="card-title">2. TorchDynamo JIT Graph Lowering & GEMM Extraction</div>
         <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:1.25rem;">
           PyTorch is a massive framework with millions of lines of code. However, in modern AI models (LLaMA-3, GPT-4,
           Transformers), <strong>over 98% to 99% of total execution time and power</strong> is consumed by a single
@@ -4980,7 +5221,7 @@
       <!-- 3. SPATIAL TOKEN PACKING & ATTENTION ACCELERATION -->
       <div class="grid-2" style="margin-bottom: 2rem;">
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">📦 3. Spatial Multi-Head Attention Token Packer</div>
+          <div class="card-title">3. Spatial Multi-Head Attention Token Packer</div>
           <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
             In traditional optical accelerators, single-token autoregressive decoding utilizes only 1 row of a 32×32
             multiplier mesh—wasting <strong>96.875% of silicon compute capacity</strong>.
@@ -5004,7 +5245,7 @@
         </div>
 
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">🔄 4. Just-In-Time Rotation (JIR) Thermal Runtime</div>
+          <div class="card-title">4. Just-In-Time Rotation (JIR) Thermal Runtime</div>
           <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
             To keep the monolithic die clamped at <strong>28.4°C</strong> (well below the 70.0°C crystallization
             threshold), the JIR runtime implements closed-loop spatial modulus rotation:
@@ -5030,7 +5271,7 @@
 
       <!-- 4. PYTHON DEVELOPER SDK & API INTEGRATION -->
       <div class="card" style="margin-bottom: 2rem;">
-        <div class="card-title">💻 5. Python Developer SDK & PyTorch 2.0 Integration Example</div>
+        <div class="card-title">5. Python Developer SDK & PyTorch 2.0 Integration Example</div>
         <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
           Developers can run unmodified PyTorch 2.0 / HuggingFace models on JANUS hardware using standard Python APIs:
         </p>
@@ -5089,7 +5330,7 @@
 
       <!-- 5. FRONTIER WORKLOAD BENCHMARK PROFILING TABLE -->
       <div class="card" style="margin-bottom: 2rem;">
-        <div class="card-title">📊 6. Frontier AI Model Profiling Comparison</div>
+        <div class="card-title">6. Frontier AI Model Profiling Comparison</div>
         <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1rem;">
           Comparing the JANUS Mini 16-Tile Planar Processor against modern GPU accelerators on standard AI workloads:
         </p>
@@ -5157,7 +5398,7 @@
 
       <!-- 6. OPEN-SOURCE EDA & COMPILER ROADMAP -->
       <div class="card" style="margin-bottom: 0;">
-        <div class="card-title">🚀 7. Open-Source EDA & Compiler Roadmap</div>
+        <div class="card-title">7. Open-Source EDA & Compiler Roadmap</div>
         <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1.25rem;">
           Planned software releases and tooling ecosystem expansion for Project JANUS:
         </p>
@@ -5206,7 +5447,7 @@
           <div style="max-width: 820px;">
             <div
               style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 242, 254, 0.15); color:var(--accent-cyan); font-size:0.75rem; font-weight:700; padding:3px 12px; border-radius:12px; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.06em;">
-              👑 Lead Architect & Inventor
+              Lead Architect & Principal Inventor
             </div>
             <h2
               style="font-size:2rem; color:var(--text-main); margin-bottom:0.35rem; font-weight:800; letter-spacing:-0.02em;">
@@ -5226,11 +5467,11 @@
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:0.5rem;">
               <span
                 style="background:var(--card-sub-bg); border:1px solid var(--border-color); color:var(--text-main); font-size:0.82rem; font-weight:600; padding:5px 12px; border-radius:8px;">
-                📜 Indian Patent App No. <strong>202611052791</strong> (Patent Pending)
+                Indian Patent Application No. <strong>202611052791</strong> (Patent Pending)
               </span>
               <span
                 style="background:var(--card-sub-bg); border:1px solid var(--border-color); color:var(--text-main); font-size:0.82rem; font-weight:600; padding:5px 12px; border-radius:8px;">
-                🔬 24-Page IEEE Architecture Treatise
+                24-Page IEEE Architecture Treatise
               </span>
             </div>
 
@@ -5239,22 +5480,22 @@
               <a href="mailto:deepanshubhardwaj4115@gmail.com"
                 style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 242, 254, 0.12); border:1px solid rgba(0, 242, 254, 0.4); color:var(--accent-cyan); font-size:0.84rem; font-weight:600; padding:6px 14px; border-radius:8px; text-decoration:none; transition:all 0.2s;"
                 title="Send Email to Deepanshu Bhardwaj">
-                ✉️ deepanshubhardwaj4115@gmail.com
+                Email: deepanshubhardwaj4115@gmail.com
               </a>
               <a href="https://www.linkedin.com/in/deepanshu-bhardwaj-412963432/" target="_blank" rel="noopener noreferrer"
                 style="display:inline-flex; align-items:center; gap:6px; background:rgba(10, 102, 194, 0.15); border:1px solid rgba(10, 102, 194, 0.45); color:#0a66c2; font-size:0.84rem; font-weight:600; padding:6px 14px; border-radius:8px; text-decoration:none; transition:all 0.2s;"
                 title="Deepanshu Bhardwaj on LinkedIn">
-                💼 Deepanshu Bhardwaj | LinkedIn ↗
+                LinkedIn: Deepanshu Bhardwaj ↗
               </a>
               <a href="https://github.com/horizonseekerik/janus-photonic-hardware" target="_blank" rel="noopener noreferrer"
                 style="display:inline-flex; align-items:center; gap:6px; background:var(--card-sub-bg); border:1px solid var(--border-color); color:var(--text-main); font-size:0.84rem; font-weight:600; padding:6px 14px; border-radius:8px; text-decoration:none; transition:all 0.2s;"
                 title="Hardware Repository on GitHub">
-                🐙 GitHub: Photonic Hardware ↗
+                GitHub: Photonic Hardware ↗
               </a>
               <a href="https://github.com/horizonseekerik/janus-simulation" target="_blank" rel="noopener noreferrer"
                 style="display:inline-flex; align-items:center; gap:6px; background:var(--card-sub-bg); border:1px solid var(--border-color); color:var(--text-main); font-size:0.84rem; font-weight:600; padding:6px 14px; border-radius:8px; text-decoration:none; transition:all 0.2s;"
                 title="Simulation Suite Repository on GitHub">
-                🐙 GitHub: Simulation Suite ↗
+                GitHub: Simulation Suite ↗
               </a>
             </div>
           </div>
@@ -5262,15 +5503,15 @@
           <div style="display:flex; flex-direction:column; gap:10px; min-width:200px;">
             <button onclick="switchPage('paper'); switchPaper('manuscript');" class="btn-primary"
               style="display:flex; align-items:center; justify-content:center; gap:8px; font-weight:600; padding:10px 18px; cursor:pointer;">
-              📄 Read Architecture Paper
+              Read Architecture Paper
             </button>
             <button onclick="switchPage('paper'); switchPaper('cmos');" class="btn-outline"
               style="display:flex; align-items:center; justify-content:center; gap:8px; font-weight:600; padding:10px 18px; cursor:pointer;">
-              🔬 Read CMOS Silicon Spec
+              Read CMOS Silicon Spec
             </button>
             <button onclick="switchPage('paper'); switchPaper('simulation');" class="btn-outline"
               style="display:flex; align-items:center; justify-content:center; gap:8px; font-weight:600; padding:10px 18px; cursor:pointer;">
-              📊 Read Simulation Report
+              Read Simulation Report
             </button>
           </div>
         </div>
@@ -5278,7 +5519,7 @@
 
       <!-- ARCHITECTURAL PHILOSOPHY & VISION -->
       <div class="card" style="margin-bottom: 2rem;">
-        <div class="card-title">💡 The Architectural Philosophy Behind JANUS</div>
+        <div class="card-title">The Architectural Philosophy Behind JANUS</div>
         <div style="border-left: 3px solid var(--accent-cyan); padding-left:1.25rem; margin-bottom:1.5rem;">
           <p style="color:var(--text-main); font-size:1.05rem; font-style:italic; line-height:1.7; margin:0;">
             "For more than four decades, optical computing was trapped in the analog domain—struggling with phase drift,
@@ -5301,7 +5542,7 @@
 
       <!-- 8 NOVEL ARCHITECTURAL PARADIGMS (FROM THE IEEE MAIN TREATISE) -->
       <div class="card" style="margin-bottom: 2rem;">
-        <div class="card-title">🔬 8 Foundational Architectural Paradigms & Proposed Frameworks (From Main Treatise)
+        <div class="card-title">8 Foundational Architectural Paradigms & Proposed Frameworks (From Main Treatise)
         </div>
         <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin-bottom:1.25rem;">
           Conceived, mathematically formulated, and derived by Deepanshu Bhardwaj in the 24-page foundational
@@ -5481,7 +5722,7 @@
         <div
           style="background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:10px; padding:1.25rem;">
           <div style="font-size:0.95rem; font-weight:700; color:var(--text-main); margin-bottom:0.75rem;">
-            📋 Physical Constraint Compliance Summary (Table XX from Main Manuscript)
+            Physical Constraint Compliance Summary (Table XX from Main Manuscript)
           </div>
           <div style="overflow-x:auto;">
             <table style="width:100%; border-collapse:collapse; font-size:0.84rem; text-align:left;">
@@ -5552,7 +5793,7 @@
       <!-- CITATION & INTELLECTUAL PROPERTY -->
       <div class="grid-2">
         <div class="card" style="margin-bottom:0;">
-          <div class="card-title">📜 Patent Application & Intellectual Property</div>
+          <div class="card-title">Patent Application & Intellectual Property</div>
           <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; margin-bottom:1rem;">
             The architectural innovations, circuit topologies, and spatial algorithms of Project JANUS are protected
             under:
@@ -5575,7 +5816,7 @@
         <div class="card" style="margin-bottom:0;">
           <div
             style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:0.5rem;">
-            <div class="card-title" style="margin-bottom:0;">📌 Research Citation & Permanent Archive</div>
+            <div class="card-title" style="margin-bottom:0;">Research Citation & Permanent Archive</div>
             <a href="https://doi.org/10.5281/zenodo.22733656" target="_blank" title="Permanent Zenodo Archive DOI">
               <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22733656.svg" alt="DOI: 10.5281/zenodo.22733656"
                 style="height:20px;" />
@@ -5630,7 +5871,7 @@
 
       <!-- Col 2: Architectural Papers & Specs -->
       <div class="footer-col">
-        <h4>📄 Manuscripts & Docs</h4>
+        <h4>Manuscripts & Documentation</h4>
         <ul class="footer-links">
           <li><button onclick="switchPage('paper'); switchPaper('manuscript');">Architectural Treatise (24-Page)</button></li>
           <li><button onclick="switchPage('paper'); switchPaper('simulation');">Co-Simulation Report (17-Page Model 1A Sign-Off with 3D PEX & DFT/BIST)</button></li>
@@ -5642,7 +5883,7 @@
 
       <!-- Col 3: Solvers & Hardware -->
       <div class="footer-col">
-        <h4>⚡ Hardware & Tools</h4>
+        <h4>Hardware & Tools</h4>
         <ul class="footer-links">
           <li><button onclick="switchPage('simulation'); switchTab('rns');">Spatial RNS Simulator</button></li>
           <li><button onclick="switchPage('simulation'); switchTab('arch');">3D WebGL Strata Model</button></li>
@@ -5654,12 +5895,12 @@
 
       <!-- Col 4: Governance & Legal -->
       <div class="footer-col">
-        <h4>⚖️ Governance & Citation</h4>
+        <h4>Governance & Citation</h4>
         <ul class="footer-links">
-          <li><button onclick="openJanusModal('modal-cookie-preferences')">🍪 Cookie & Storage Settings</button></li>
-          <li><button onclick="openJanusModal('modal-privacy-policy')">🔒 Privacy Policy & Data Disclosure</button></li>
-          <li><button onclick="openJanusModal('modal-terms-use')">📜 Terms of Research Use</button></li>
-          <li><button onclick="openJanusModal('modal-citation')">📑 Cite Project JANUS (BibTeX)</button></li>
+          <li><button onclick="openJanusModal('modal-cookie-preferences')">Cookie & Storage Settings</button></li>
+          <li><button onclick="openJanusModal('modal-privacy-policy')">Privacy Policy & Data Disclosure</button></li>
+          <li><button onclick="openJanusModal('modal-terms-use')">Terms of Research Use</button></li>
+          <li><button onclick="openJanusModal('modal-citation')">Cite Project JANUS (BibTeX)</button></li>
           <li><button onclick="openJanusModal('modal-shortcuts')">⌨️ Keyboard Shortcuts Guide</button></li>
         </ul>
       </div>
@@ -5675,7 +5916,7 @@
           <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); display: inline-block;"></span>
           16/16 Verification Checks Verified
         </span>
-        <a href="mailto:deepanshubhardwaj4115@gmail.com" style="color: var(--text-muted); text-decoration: none;">✉️ Contact</a>
+        <a href="mailto:deepanshubhardwaj4115@gmail.com" style="color: var(--text-muted); text-decoration: none;">Contact</a>
         <a href="https://www.linkedin.com/in/deepanshu-bhardwaj-412963432/" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none;">LinkedIn ↗</a>
         <a href="https://github.com/horizonseekerik/janus-photonic-hardware" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none;">Hardware Repo ↗</a>
         <a href="https://github.com/horizonseekerik/janus-simulation" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none;">Simulation Repo ↗</a>
@@ -5707,16 +5948,16 @@
       const btnDark = document.getElementById('btn-theme-dark');
       if (btnLight && btnDark) {
         if (theme === 'dark') {
-          btnDark.style.background = 'var(--accent-cyan)';
-          btnDark.style.color = '#030712';
-          btnDark.style.boxShadow = '0 0 10px rgba(0, 242, 254, 0.4)';
+          btnDark.style.background = 'var(--card-bg)';
+          btnDark.style.color = 'var(--text-main)';
+          btnDark.style.boxShadow = '0 1px 2px rgba(0,0,0,0.3)';
           btnLight.style.background = 'transparent';
           btnLight.style.color = 'var(--text-muted)';
           btnLight.style.boxShadow = 'none';
         } else {
-          btnLight.style.background = 'var(--accent-cyan)';
-          btnLight.style.color = '#ffffff';
-          btnLight.style.boxShadow = '0 2px 8px rgba(2, 132, 199, 0.3)';
+          btnLight.style.background = 'var(--card-bg)';
+          btnLight.style.color = 'var(--text-main)';
+          btnLight.style.boxShadow = '0 1px 2px rgba(0,0,0,0.06)';
           btnDark.style.background = 'transparent';
           btnDark.style.color = 'var(--text-muted)';
           btnDark.style.boxShadow = 'none';
@@ -5760,6 +6001,33 @@
     }
 
     // --- Page Navigation Switcher ---
+    
+    // --- HERO HARDWARE SHOWCASE VISUAL TOGGLE ---
+    function setHeroShowcase(mode) {
+      const img = document.getElementById('hero-showcase-img');
+      const btnStrata = document.getElementById('btn-hero-view-strata');
+      const btnDie = document.getElementById('btn-hero-view-die');
+      if (!img) return;
+
+      if (mode === 'die') {
+        img.src = '/fig_gds_die_and_tile_floorplan.png';
+        if (btnDie && btnStrata) {
+          btnDie.style.background = 'var(--card-bg)';
+          btnDie.style.color = 'var(--text-main)';
+          btnStrata.style.background = 'transparent';
+          btnStrata.style.color = 'var(--text-muted)';
+        }
+      } else {
+        img.src = '/janus_mini16_poster.jpg';
+        if (btnDie && btnStrata) {
+          btnStrata.style.background = 'var(--card-bg)';
+          btnStrata.style.color = 'var(--text-main)';
+          btnDie.style.background = 'transparent';
+          btnDie.style.color = 'var(--text-muted)';
+        }
+      }
+    }
+
     function switchPage(pageId) {
       // Close mobile menu on navigation
       const navBar = document.querySelector('.nav-bar');
@@ -6190,14 +6458,14 @@
 
         const titleEl = document.createElement('div');
         titleEl.className = 'tree-cat-title';
-        titleEl.innerHTML = `📁 ${cat.category}`;
+        titleEl.innerHTML = `${cat.category}`;
         catEl.appendChild(titleEl);
 
         cat.files.forEach(f => {
           const itemEl = document.createElement('div');
           itemEl.className = 'tree-item';
           itemEl.id = `tree-item-${f.name.replace(/\./g, '_')}`;
-          itemEl.innerHTML = `<span>📄 ${f.name}</span>`;
+          itemEl.innerHTML = `<span>${f.name}</span>`;
           itemEl.title = f.desc || f.name;
           itemEl.onclick = () => loadCodeFile(f.path, itemEl);
           catEl.appendChild(itemEl);
@@ -6511,7 +6779,7 @@
         if (!isMatch) {
           overflowWarning = `
             <div style="margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); border-radius:6px; color:#f87171; font-size:0.78rem; line-height:1.4;">
-              ⚠️ <b>Dynamic Range Overflow:</b> Input value requires <b>${res.bit_range} bits</b>, but 16 tiles provide up to <b>81.2 bits</b> (lowest moduli) / <b>124.7 bits</b> (full moduli). In RNS arithmetic, inputs larger than M<sub>total</sub> naturally wrap modulo M<sub>total</sub>. Single-cycle exact reconstruction requires additional tiles (e.g. 24–32 tiles in Datacenter mode).
+              <span class='badge-fail'>[OVERFLOW]</span> <b>Dynamic Range Overflow:</b> Input value requires <b>${res.bit_range} bits</b>, but 16 tiles provide up to <b>81.2 bits</b> (lowest moduli) / <b>124.7 bits</b> (full moduli). In RNS arithmetic, inputs larger than M<sub>total</sub> naturally wrap modulo M<sub>total</sub>. Single-cycle exact reconstruction requires additional tiles (e.g. 24–32 tiles in Datacenter mode).
             </div>
           `;
         }
@@ -6810,13 +7078,13 @@
         if (usePrns) {
           statusBanner = `
             <div style="margin-top:6px; padding:6px 10px; background:rgba(6,182,212,0.12); border:1px solid rgba(6,182,212,0.4); border-radius:6px; color:#22d3ee; font-size:0.78rem; line-height:1.4;">
-              ⚡ <b>Three Equations (Hybrid Memory-Optical PRNS) Activated:</b> Product requires <b>${res.bit_range} bits</b> (> 16-tile flat dynamic range). Handled via dual 8-tile optical clusters (Tiles 0-7: A<sub>L</sub>&times;B<sub>L</sub>, Tiles 8-15: A<sub>H</sub>&times;B<sub>H</sub>) and CMOS SRAM LUT memory trick for cross-terms to achieve exact 128-bit reconstruction.
+              <span class='badge-pass'>[PRNS]</span> <b>Three Equations Activated:</b> Product requires <b>${res.bit_range} bits</b> (> 16-tile flat dynamic range). Handled via dual 8-tile optical clusters (Tiles 0-7: A<sub>L</sub>&times;B<sub>L</sub>, Tiles 8-15: A<sub>H</sub>&times;B<sub>H</sub>) and CMOS SRAM LUT memory trick for cross-terms to achieve exact 128-bit reconstruction.
             </div>
           `;
         } else if (chipExceed || !isMatch) {
           statusBanner = `
             <div style="margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); border-radius:6px; color:#f87171; font-size:0.78rem; line-height:1.4;">
-              ⚠️ <b>Chip Capacity Exceeded:</b> Input operands require <b>${res.bit_range} bits</b>, exceeding the chip's maximum ceiling (64-bit operands / 128-bit product via PRNS Three Equations). In RNS arithmetic, inputs larger than dynamic capacity wrap modulo M<sub>total</sub>.
+              <span class='badge-fail'>[EXCEEDED]</span> <b>Chip Capacity Exceeded:</b> Input operands require <b>${res.bit_range} bits</b>, exceeding the chip's maximum ceiling (64-bit operands / 128-bit product via PRNS Three Equations). In RNS arithmetic, inputs larger than dynamic capacity wrap modulo M<sub>total</sub>.
             </div>
           `;
         }
@@ -6864,7 +7132,7 @@
       if (!mathPanel || !stepsEl) return;
 
       if (steps.length > 0) {
-        if (titleEl) titleEl.textContent = `🧮 Math Details — ${headerText}`;
+        if (titleEl) titleEl.textContent = `Mathematical Details — ${headerText}`;
         stepsEl.innerHTML = steps.map(s => escapeHtml(s)).join('\n');
         mathPanel.style.display = 'block';
       } else {
@@ -6919,8 +7187,8 @@
         const titleEl = cardTitle.querySelector('.card-title');
         if (titleEl) {
           titleEl.textContent = isProduct
-            ? '🌐 16-Tile Spatial Residue Waveguide Allocation — Product Residues (Asymmetric 16-Tree Fermat Core, Inputs ≤ 16)'
-            : '🌐 16-Tile Spatial Residue Waveguide Allocation (Asymmetric 16-Tree Fermat Core: Radix-16 / 1-of-17 Encoding, Inputs ≤ 16)';
+            ? '16-Tile Spatial Residue Waveguide Allocation — Product Residues (Asymmetric 16-Tree Fermat Core, Inputs ≤ 16)'
+            : '16-Tile Spatial Residue Waveguide Allocation (Asymmetric 16-Tree Fermat Core: Radix-16 / 1-of-17 Encoding, Inputs ≤ 16)';
         }
       }
 
@@ -6968,7 +7236,7 @@
             <div class="tile-card" style="opacity:0.45; border:1px dashed var(--card-border); background:rgba(148,163,184,0.03);">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span class="tile-num" style="color:var(--text-muted);">TILE ${i < 10 ? '0' + i : i}</span>
-                <span style="font-size:0.62rem; font-weight:600; color:var(--text-muted); background:rgba(100,116,139,0.12); padding:1px 5px; border-radius:4px;">💤 GATED</span>
+                <span style="font-size:0.62rem; font-weight:600; color:var(--text-muted); background:rgba(100,116,139,0.12); padding:1px 5px; border-radius:4px;">GATED</span>
                 <span class="tile-mod" style="color:var(--text-muted);">${mLabel}</span>
               </div>
               <div class="tile-val" style="color:var(--text-muted); font-size:0.85rem; margin-top:4px; font-style:italic;">0 W Standby</div>
@@ -7681,7 +7949,7 @@
       }
       const btn = document.getElementById('webgl-explode-btn');
       if (btn) {
-        btn.innerHTML = factor > 0.5 ? '📦 Assemble Package' : '💥 Explode Strata';
+        btn.innerHTML = factor > 0.5 ? 'Assemble Package' : 'Explode Strata';
       }
     }
 
@@ -7689,7 +7957,7 @@
       isWebglAutoRotate = !isWebglAutoRotate;
       const btn = document.getElementById('webgl-autorotate-btn');
       if (btn) {
-        btn.innerText = isWebglAutoRotate ? '🔄 Auto-Rotate: ON' : '⏸ Auto-Rotate: OFF';
+        btn.innerText = isWebglAutoRotate ? 'Auto-Rotate: ON' : '⏸ Auto-Rotate: OFF';
       }
     }
 
@@ -8020,7 +8288,7 @@
       ctx.strokeRect(25, 20, tier1BadgeW, 22);
       ctx.fillStyle = dark ? '#ffffff' : '#1e1b4b';
       ctx.font = isMobile ? 'bold 10px sans-serif' : 'bold 12px sans-serif';
-      ctx.fillText(isMobile ? '⚡ TIER 1: 7nm CMOS DIGITAL & CONTROLLER' : '⚡ TIER 1: 7nm FinFET CMOS DIGITAL & HYBRID CONTROLLER LAYER', 32, 35);
+      ctx.fillText(isMobile ? 'TIER 1: 7nm CMOS DIGITAL & CONTROLLER' : 'TIER 1: 7nm FinFET CMOS DIGITAL & HYBRID CONTROLLER LAYER', 32, 35);
 
       function drawArchBox(x, y, bw, bh, title, sub, bgCol, borderCol, titleCol, subCol) {
         ctx.fillStyle = bgCol;
@@ -8128,7 +8396,7 @@
       ctx.strokeRect(25, tier2Top + 8, tier2BadgeW, 22);
       ctx.fillStyle = dark ? '#ffffff' : '#0e7490';
       ctx.font = isMobile ? 'bold 10px sans-serif' : 'bold 12px sans-serif';
-      ctx.fillText(isMobile ? '🌊 TIER 2: 220nm SOI SILICON PHOTONIC' : '🌊 TIER 2: 220nm SOI SILICON PHOTONIC SUBSTRATE (Light-Speed Compute)', 32, tier2Top + 23);
+      ctx.fillText(isMobile ? 'TIER 2: 220nm SOI SILICON PHOTONIC' : 'TIER 2: 220nm SOI SILICON PHOTONIC SUBSTRATE (Light-Speed Compute)', 32, tier2Top + 23);
 
       // === 3-COLUMN SIGNAL FLOW LAYOUT ===
       const NUM_LANES = 4;
@@ -8403,7 +8671,7 @@
           if (!isMobile) {
             ctx.fillStyle = '#ef4444';
             ctx.font = 'bold 9px sans-serif';
-            ctx.fillText('🔥 HOT', meshX2 - 48, laneYs[li] + 4);
+            ctx.fillText('HOT', meshX2 - 48, laneYs[li] + 4);
           }
         });
         coldLanes.forEach(li => {
@@ -8412,7 +8680,7 @@
           if (!isMobile) {
             ctx.fillStyle = '#10b981';
             ctx.font = 'bold 9px sans-serif';
-            ctx.fillText('❄ COLD', meshX2 - 52, laneYs[li] + 4);
+            ctx.fillText('COLD', meshX2 - 52, laneYs[li] + 4);
           }
         });
 
@@ -8541,15 +8809,15 @@
       if (archMode === 'gemm') {
         ctx.fillStyle = dark ? '#22d3ee' : '#0284c7';
         ctx.font = isMobile ? 'bold 9px monospace' : 'bold 11px monospace';
-        ctx.fillText('⚡ 1.33 ps Optical Compute: r_out = (r_A × r_B) mod m_i', 30, statusY);
+        ctx.fillText('1.33 ps Optical Compute: r_out = (r_A × r_B) mod m_i', 30, statusY);
       } else if (archMode === 'jir') {
         ctx.fillStyle = '#ef4444';
         ctx.font = isMobile ? 'bold 9px monospace' : 'bold 11px monospace';
-        ctx.fillText('🔄 JIR Modulus Swap: Hot center tiles ↔ Cold perimeter tiles (214.5 ms cycle)', 30, statusY);
+        ctx.fillText('JIR Modulus Swap: Hot center tiles ↔ Cold perimeter tiles (214.5 ms cycle)', 30, statusY);
       } else if (archMode === 'sb2s3') {
         ctx.fillStyle = dark ? '#fbbf24' : '#d97706';
         ctx.font = isMobile ? 'bold 9px monospace' : 'bold 11px monospace';
-        ctx.fillText('💾 Sb₂S₃ Programming: Crystalline (ON, n=3.3) ↔ Amorphous (OFF, n=2.7) | 0W Hold', 30, statusY);
+        ctx.fillText('Sb₂S₃ Programming: Crystalline (ON, n=3.3) ↔ Amorphous (OFF, n=2.7) | 0W Hold', 30, statusY);
       }
 
       ctx.restore();
@@ -8731,7 +8999,7 @@
             `;
           } else {
             statusEl.innerHTML = `
-              <span style="color: #ef4444; font-weight: 700;">🔴 JIR OFF: UNMITIGATED HOTSPOT (${count} Tiles • Max: ${(res.max_temperature_C !== undefined ? res.max_temperature_C : 58.0).toFixed(1)}°C • ${res.thermal_violations > 0 ? 'CEILING VIOLATION' : 'NO ROTATION'})</span>
+              <span style="color: #ef4444; font-weight: 700;">[CRITICAL] JIR OFF: UNMITIGATED HOTSPOT (${count} Tiles • Max: ${(res.max_temperature_C !== undefined ? res.max_temperature_C : 58.0).toFixed(1)}°C • ${res.thermal_violations > 0 ? 'CEILING VIOLATION' : 'NO ROTATION'})</span>
             `;
           }
         }
@@ -8757,7 +9025,7 @@
         if (logBox) {
           logBox.innerHTML = `
             <div style="background: ${globalJIREnabled ? 'rgba(0, 242, 254, 0.04)' : 'rgba(239, 68, 68, 0.08)'}; border: 1px solid ${globalJIREnabled ? 'rgba(0, 242, 254, 0.2)' : 'rgba(239, 68, 68, 0.4)'}; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 0.82rem; line-height: 1.5;">
-              <b style="color: ${globalJIREnabled ? 'var(--accent-cyan)' : '#ef4444'};">🔬 Physics of JIR Thermal Swapping:</b> ${res.mechanism_description || ''}<br>
+              <b style="color: ${globalJIREnabled ? 'var(--accent-cyan)' : '#ef4444'};">Physics of JIR Thermal Swapping:</b> ${res.mechanism_description || ''}<br>
               <span style="color: var(--text-main);">• Active Tile Set (${count} Tiles):</span> <b style="color: var(--accent-cyan);">${count} concurrent modulus channels</b> &nbsp;|&nbsp; 
               <span style="color: var(--text-main);">• Heating Dwell to Trigger:</span> <b style="color: #ef4444;">${res.active_dwell_time_ms !== undefined ? res.active_dwell_time_ms : 214.5} ms</b> (heats to ${res.trigger_threshold_C}°C) &nbsp;|&nbsp; 
               <span style="color: var(--text-main);">• Cooling Recovery Dwell:</span> <b style="color: var(--accent-green);">${res.cooling_recovery_ms !== undefined ? res.cooling_recovery_ms : 643.5} ms</b> &nbsp;|&nbsp; 
@@ -8793,25 +9061,25 @@
         let color = '#00f2fe';
         let border = 'rgba(0, 242, 254, 0.3)';
         let bg = 'rgba(0, 242, 254, 0.04)';
-        let heatTag = '🔵 COOL';
+        let heatTag = 'COOL';
 
         if (t > 40.0) {
           color = '#ef4444';
           border = 'rgba(239, 68, 68, 0.6)';
           bg = 'rgba(239, 68, 68, 0.12)';
-          heatTag = '🔴 HOT';
+          heatTag = 'HOT';
         } else if (t >= 30.0) {
           color = '#f59e0b';
           border = 'rgba(245, 158, 11, 0.5)';
           bg = 'rgba(245, 158, 11, 0.08)';
-          heatTag = '🟡 MODERATE';
+          heatTag = 'MODERATE';
         }
 
         let stateBadge = `<span style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;">⏸ STANDBY</span>`;
         if (state === 'ACTIVE') {
           stateBadge = `<span style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700;">● ACTIVE</span>`;
         } else if (state === 'COOLING') {
-          stateBadge = `<span style="background: rgba(0, 242, 254, 0.15); color: #00f2fe; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;">❄ COOLING</span>`;
+          stateBadge = `<span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">COOLING</span>`;
         }
 
         const isSelected = (i === currentSelectedTile);
@@ -8862,7 +9130,7 @@
         }).then(r => r.json());
 
         const titleEl = document.getElementById('inspector-title');
-        if (titleEl) titleEl.innerHTML = `🔍 Tile ${tileId < 10 ? '0' + tileId : tileId} Multi-Physics & Workload Stats`;
+        if (titleEl) titleEl.innerHTML = `Tile ${tileId < 10 ? '0' + tileId : tileId} Multi-Physics & Workload Stats`;
 
         const contentEl = document.getElementById('inspector-content');
         if (contentEl) {
@@ -8875,13 +9143,13 @@
             </div>
             <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 6px 0;">
             <div style="background: rgba(0, 242, 254, 0.03); border: 1px solid rgba(0, 242, 254, 0.15); padding: 8px 10px; border-radius: 6px; margin-bottom: 8px;">
-              <b style="color: var(--accent-cyan);">📊 Workload Assignment History:</b><br>
+              <b style="color: var(--accent-cyan);">Workload Assignment History:</b><br>
               • <b>Total Times Assigned Workload:</b> <b style="color: var(--accent-green); font-size: 1.05rem;">${(specs.activations_count || 1050).toLocaleString()} times</b><br>
               • <b>Cumulative Active Compute Time:</b> <span style="color: var(--text-main);">${specs.active_time_formatted || '15.0 min'}</span> (<b style="color: var(--accent-purple);">${specs.duty_cycle_pct || 25.0}% Duty Cycle</b>)<br>
               • <b>Cumulative Passive Cooling Rest:</b> <span style="color: var(--text-muted);">${(100 - (specs.duty_cycle_pct || 25.0)).toFixed(1)}% Resting Duration</span>
             </div>
             <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.83rem;">
-              <b style="color: var(--accent-green);">🔥 Natural Fourier Thermal Dissipation Balance:</b><br>
+              <b style="color: var(--accent-green);">Natural Fourier Thermal Dissipation Balance:</b><br>
               • <b>Input Optical/CMOS Power (P_in):</b> <span style="color: var(--text-main);">${specs.input_power_mW || 385.6} mW</span><br>
               • <b>Natural Conduction to Heatsink (Q_diss):</b> <b style="color: var(--accent-cyan);">${specs.natural_q_dissipated_mW || 385.6} mW</b> (via package R_pkg = 55 K/W)<br>
               • <b>Thermodynamic Balance:</b> <span style="color: var(--accent-green); font-weight: 600;">${specs.dissipation_status}</span>
@@ -9183,7 +9451,7 @@
           ctx.beginPath(); ctx.arc(xTrigger, yTrigger, 5, 0, 2 * Math.PI); ctx.fill();
           ctx.fillStyle = dark ? '#ffffff' : '#0f172a';
           ctx.font = '10px sans-serif';
-          ctx.fillText('⚡ 40.0°C JIR Swap Trigger', xTrigger + 8, yTrigger - 6);
+          ctx.fillText('40.0°C JIR Swap Trigger', xTrigger + 8, yTrigger - 6);
         }
       }
 
@@ -9226,7 +9494,7 @@
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #ef4444;">Error running co-simulation audit: ${err.message}</td></tr>`;
       } finally {
         if (fullBtn) {
-          fullBtn.innerHTML = '⚡ Run Full 16-Test Co-Sim';
+          fullBtn.innerHTML = 'Run Full 16-Test Co-Simulation';
           fullBtn.disabled = false;
         }
       }
@@ -9621,7 +9889,7 @@
         grid.innerHTML = `
           <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem;">
             <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">
-              🧱 Physical & 3D Stack Architecture
+              Physical & 3D Stack Architecture
             </div>
             <div style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.6;">
               <div>• <b>Strata Count:</b> ${m.strata} SiPh Strata</div>
@@ -9635,7 +9903,7 @@
 
           <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem;">
             <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-green); text-transform: uppercase; margin-bottom: 0.5rem;">
-              ⚡ Optical Fabric & Power Link Budget
+              Optical Fabric & Power Link Budget
             </div>
             <div style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.6;">
               <div>• <b>Total Multipliers:</b> <b style="color: var(--text-main);">${m.multipliers}</b></div>
@@ -9649,7 +9917,7 @@
 
           <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem;">
             <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-purple); text-transform: uppercase; margin-bottom: 0.5rem;">
-              🚀 Multi-Precision Throughput Matrix
+              Multi-Precision Throughput Matrix
             </div>
             <div style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.6;">
               <div>• <b>INT4 Direct:</b> <b style="color:var(--accent-cyan);">${m.int4_tmacs}</b></div>
@@ -9685,6 +9953,8 @@
 
     // --- AMBIENT PHOTONIC PARTICLES ENGINE (MULTI-STOP CHROMATIC BLOOM) ---
     (function initAmbientParticles() {
+      // Particle canvas decommissioned for high-performance deep-tech UI
+      return;
       const canvas = document.getElementById('ambient-particle-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
@@ -9843,7 +10113,7 @@
 
       if (type === 'simulation') {
         iframe.src = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb#toolbar=1&navpanes=1&scrollbar=1';
-        title.innerHTML = '📊 Multi-Physics Co-Simulation & Modeling Report: JANUS Mini 16-Tile Monolithic Planar Processor (IEEEtran Format)';
+        title.innerHTML = 'Multi-Physics Co-Simulation & Modeling Report: JANUS Mini 16-Tile Monolithic Planar Processor (IEEEtran Format)';
         desc.innerHTML = '17-Page Multi-Physics Co-Simulation, 100,000,000-Run Model 1A Sign-Off, 3D PEX Interconnect Closure, GDS II Mask Floorplan & Electro-Photonic DFT/BIST Architecture';
         openBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb';
         dlBtn.href = '/JANUS_Mini16_Simulation_Report.pdf?v=20260921_opt_2mb';
@@ -9854,7 +10124,7 @@
         if (btnCmos) btnCmos.className = 'btn-outline';
       } else if (type === 'cmos') {
         iframe.src = '/JANUS_Mini16_CMOS_Architecture.pdf#toolbar=1&navpanes=1&scrollbar=1';
-        title.innerHTML = '🔬 CMOS Digital Backend Architecture Specification (IEEEtran Format)';
+        title.innerHTML = 'CMOS Digital Backend Architecture Specification (IEEEtran Format)';
         desc.innerHTML = '65nm Digital CMOS Backend Blueprint: 1:32 Polyphase 3.125 GHz Deserializer, Dual-LUT 1.5MB SRAM, 32-Lane SIMD Array & 3D TDV Stacking';
         openBtn.href = '/JANUS_Mini16_CMOS_Architecture.pdf';
         dlBtn.href = '/JANUS_Mini16_CMOS_Architecture.pdf';
@@ -9982,7 +10252,7 @@
       if (!container) return;
       const toast = document.createElement('div');
       toast.className = 'janus-toast';
-      toast.innerHTML = '<span>✨</span><span>' + msg + '</span>';
+      toast.innerHTML = '<span>●</span> <span>' + msg + '</span>';
       container.appendChild(toast);
       setTimeout(() => toast.classList.add('show'), 20);
       setTimeout(() => {
@@ -10118,7 +10388,7 @@
   <!-- FLOATING COOKIE & LOCAL STORAGE CONSENT BANNER -->
   <div id="janus-cookie-banner" class="cookie-banner-container" role="region" aria-label="Cookie and storage consent">
     <div class="cookie-banner-text">
-      <strong>🍪 Cookie & Local Storage Consent:</strong> We use essential client-side local storage to preserve your theme, active simulation parameters, and hardware test state. We do not use third-party advertising cookies or cross-site tracking. You can accept all storage, decline non-essential caching, or customize your preferences. Read our <a onclick="openJanusModal('modal-privacy-policy')">Privacy Policy</a>.
+      <strong>Cookie & Local Storage Notice:</strong> We use essential client-side local storage to preserve your theme, active simulation parameters, and hardware test state. We do not use third-party advertising cookies or cross-site tracking. You can accept all storage, decline non-essential caching, or customize your preferences. Read our <a onclick="openJanusModal('modal-privacy-policy')">Privacy Policy</a>.
     </div>
     <div class="cookie-banner-actions">
       <button class="btn-primary" onclick="acceptAllCookies()">Accept All</button>
@@ -10131,7 +10401,7 @@
   <div id="modal-cookie-preferences" class="janus-modal-overlay" onclick="handleJanusModalBackdrop(event, 'modal-cookie-preferences')">
     <div class="janus-modal-card" role="dialog" aria-labelledby="modal-cookie-title">
       <div class="janus-modal-header">
-        <div id="modal-cookie-title" class="janus-modal-title">🍪 Cookie & Storage Preferences</div>
+        <div id="modal-cookie-title" class="janus-modal-title">Cookie & Storage Preferences</div>
         <button class="janus-modal-close" onclick="closeJanusModal('modal-cookie-preferences')" aria-label="Close modal">✕</button>
       </div>
       <div class="janus-modal-body">
@@ -10189,7 +10459,7 @@
   <div id="modal-privacy-policy" class="janus-modal-overlay" onclick="handleJanusModalBackdrop(event, 'modal-privacy-policy')">
     <div class="janus-modal-card" role="dialog" aria-labelledby="modal-privacy-title">
       <div class="janus-modal-header">
-        <div id="modal-privacy-title" class="janus-modal-title">🔒 Privacy Policy & Data Disclosure</div>
+        <div id="modal-privacy-title" class="janus-modal-title">Privacy Policy & Data Disclosure</div>
         <button class="janus-modal-close" onclick="closeJanusModal('modal-privacy-policy')" aria-label="Close modal">✕</button>
       </div>
       <div class="janus-modal-body">
@@ -10232,7 +10502,7 @@
   <div id="modal-terms-use" class="janus-modal-overlay" onclick="handleJanusModalBackdrop(event, 'modal-terms-use')">
     <div class="janus-modal-card" role="dialog" aria-labelledby="modal-terms-title">
       <div class="janus-modal-header">
-        <div id="modal-terms-title" class="janus-modal-title">📜 Terms of Research Use & Open Access</div>
+        <div id="modal-terms-title" class="janus-modal-title">Terms of Research Use & Open Access</div>
         <button class="janus-modal-close" onclick="closeJanusModal('modal-terms-use')" aria-label="Close modal">✕</button>
       </div>
       <div class="janus-modal-body">
@@ -10263,7 +10533,7 @@
   <div id="modal-citation" class="janus-modal-overlay" onclick="handleJanusModalBackdrop(event, 'modal-citation')">
     <div class="janus-modal-card" role="dialog" aria-labelledby="modal-citation-title">
       <div class="janus-modal-header">
-        <div id="modal-citation-title" class="janus-modal-title">📑 Cite Project JANUS</div>
+        <div id="modal-citation-title" class="janus-modal-title">Cite Project JANUS</div>
         <button class="janus-modal-close" onclick="closeJanusModal('modal-citation')" aria-label="Close modal">✕</button>
       </div>
       <div class="janus-modal-body">
@@ -10271,7 +10541,7 @@
 
         <h3 style="display:flex; justify-content:space-between; align-items:center;">
           BibTeX Format
-          <button class="citation-copy-btn" onclick="copyCitationText('bibtex')">📋 Copy BibTeX</button>
+          <button class="citation-copy-btn" onclick="copyCitationText('bibtex')">Copy BibTeX</button>
         </h3>
         <div id="citation-bibtex" class="citation-box">@article{janus2026photonic,
   title={Project JANUS: Deterministic Spatial Residue Optical Computing Architecture for Peta-Scale Deep Learning Acceleration},
@@ -10284,13 +10554,13 @@
 
         <h3 style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem;">
           IEEE Reference Format
-          <button class="citation-copy-btn" onclick="copyCitationText('ieee')">📋 Copy IEEE</button>
+          <button class="citation-copy-btn" onclick="copyCitationText('ieee')">Copy IEEE</button>
         </h3>
         <div id="citation-ieee" class="citation-box">H. S. IK et al., "Project JANUS: Deterministic Spatial Residue Optical Computing Architecture for Peta-Scale Deep Learning Acceleration," IEEE Trans. Emerg. Topics Comput., 2026, doi: 10.5281/zenodo.22733656.</div>
 
         <h3 style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem;">
           APA 7th Edition Format
-          <button class="citation-copy-btn" onclick="copyCitationText('apa')">📋 Copy APA</button>
+          <button class="citation-copy-btn" onclick="copyCitationText('apa')">Copy APA</button>
         </h3>
         <div id="citation-apa" class="citation-box">IK, H. S., & Project JANUS Contributors. (2026). Project JANUS: Deterministic Spatial Residue Optical Computing Architecture for Peta-Scale Deep Learning Acceleration. IEEE Transactions on Emerging Topics in Computing (Preprint). https://doi.org/10.5281/zenodo.22733656</div>
       </div>
