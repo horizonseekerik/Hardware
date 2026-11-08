@@ -8,7 +8,7 @@ Comprehensive, zero-base mathematical derivation of:
 Covers both strata of the 3D Monolithic Stack:
   - Top Optical Stratum: Si3N4/Si waveguides, LiTaO3 modulators, Sb2S3 switches,
     Talbot MMIs, Ge/Si APDs, TDV pillars, microbumps, grating couplers, and seal ring.
-  - Bottom 65nm CMOS Base Stratum: StrongARM sense latches, 1:32 deserializers,
+  - Bottom 65nm CMOS Base Stratum: StrongARM sense latches, 1:64 deserializers,
     32-lane SIMD Wallace-Kogge arrays, 1.5 MB SRAM macros, 1.5 MB central ROM/JIR,
     160-bit CSA accumulators, H-tree clock distribution, and power grid.
 """
@@ -208,31 +208,31 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
         ))
 
         # ----------------------------------------------------------------------
-        # 6. 1:32 Polyphase Deserializers (100 Gbps -> 3.125 GHz)
+        # 6. 1:64 Polyphase Deserializers (200 GHz -> 3.125 GHz)
         # ----------------------------------------------------------------------
         # 16 deserializers (1 per tile).
         # Converts 100 Gbps serial bitstream to 32 parallel lanes at 3.125 GHz.
         # Power = 1.25 mW per deserializer bank.
         p_deser_mW = 1.250
         power_items.append(ComponentPowerSpec(
-            name="1:32 Polyphase Deserializer Banks",
+            name="1:64 Polyphase Deserializer Banks",
             category="65nm CMOS Digital",
             unit_count=self.num_tiles,
             unit_power_mW=p_deser_mW,
             total_power_mW=self.num_tiles * p_deser_mW * self.activity_factor,
             activity_factor=self.activity_factor,
-            derivation_notes="100 Gbps -> 32x 3.125 GHz CML shift tree: 1.250 mW / bank"
+            derivation_notes="200 GHz -> 64x 3.125 GHz CML shift tree: 1.250 mW / bank"
         ))
 
         # ----------------------------------------------------------------------
-        # 7. 32-Lane SIMD Wallace-Kogge Arithmetic Units
+        # 7. 64-Lane SIMD Wallace-Kogge & FP Arithmetic Units
         # ----------------------------------------------------------------------
         # 16 SIMD units (1 per tile).
         # Operates at 3.125 GHz, Vdd = 0.8 V.
-        # Dynamic power: 32 lanes of 8b/16b Wallace tree + Kogge-Stone adder = 4.80 mW / tile.
+        # Dynamic power: 64 lanes of 8b/16b Wallace tree + Kogge-Stone adder = 4.80 mW / tile.
         p_simd_mW = 4.800
         power_items.append(ComponentPowerSpec(
-            name="32-Lane SIMD Wallace-Kogge Arrays",
+            name="64-Lane SIMD Wallace-Kogge & FP Arrays",
             category="65nm CMOS Digital",
             unit_count=self.num_tiles,
             unit_power_mW=p_simd_mW,
@@ -405,7 +405,7 @@ class FirstPrinciplesPowerAndAreaAnalyzer:
             unit_power_mW=1.572,
             total_power_mW=self.num_tiles * 1.572 * self.activity_factor,
             activity_factor=self.activity_factor,
-            derivation_notes="16x (0.322 mW StrongARM latch + 1.250 mW 1:32 CML deserializer)"
+            derivation_notes="16x (0.322 mW StrongARM latch + 1.250 mW 1:64 CML deserializer)"
         ))
 
         # 6. 1-2-8-8 Two-Phase Antiphase Control Hierarchy

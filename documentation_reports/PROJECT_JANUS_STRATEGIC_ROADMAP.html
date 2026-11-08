@@ -308,9 +308,9 @@
 <td style="text-align: left;">100.00 mm²</td>
 <td style="text-align: left;">2.21 W / 2.95 W</td>
 <td style="text-align: left;"><strong>6.17 W</strong></td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
-<td style="text-align: left;">87.0 TMAC/s</td>
-<td style="text-align: left;">225.7 / 14.1 TMAC/s/W</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
+<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">225.7 / 32.9 TMAC/s/W</td>
 <td style="text-align: left;">512 Functional / Wf</td>
 </tr>
 <tr>
@@ -359,9 +359,9 @@
 <td style="text-align: left;">50.00 mm²</td>
 <td style="text-align: left;">2.21 W / 2.95 W</td>
 <td style="text-align: left;"><strong>6.17 W</strong></td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
-<td style="text-align: left;">87.0 TMAC/s</td>
-<td style="text-align: left;">225.7 / 14.1 TMAC/s/W</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
+<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">225.7 / 32.9 TMAC/s/W</td>
 <td style="text-align: left;">≈ 512 / 3-Wafer Set</td>
 </tr>
 <tr>
@@ -513,7 +513,7 @@
 <td style="text-align: left;">46.61 W / 62.15 W</td>
 <td style="text-align: left;"><strong>92.97 W</strong></td>
 <td style="text-align: left;">22,282.2 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">239.7 / 15.0 TMAC/s/W</td>
 <td style="text-align: left;">≈ 28 / 4-Wafer Set</td>
 </tr>
@@ -564,7 +564,7 @@
 <td style="text-align: left;">46.61 W / 62.15 W</td>
 <td style="text-align: left;"><strong>92.97 W</strong></td>
 <td style="text-align: left;">22,282.2 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">239.7 / 15.0 TMAC/s/W</td>
 <td style="text-align: left;">≈ 28 / 5-Wafer Set</td>
 </tr>
@@ -581,7 +581,7 @@
 <td style="text-align: left;">46.61 W / 62.15 W</td>
 <td style="text-align: left;"><strong>90.39 W</strong></td>
 <td style="text-align: left;">22,282.2 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">246.5 / 15.41 TMAC/s/W</td>
 <td style="text-align: left;">≈ 28 / 5-Wafer Set</td>
 </tr>
@@ -665,8 +665,8 @@
 ==================================================================================
 </code></pre>
 <hr />
-<h3 id="model-1a-janus-mini-16-tile-standardized-10-mm-10-mm">Model 1A: JANUS Mini 16-Tile (Standardized 10 mm × 10 mm)</h3>
-<p>Model 1A is the primary silicon tapeout vehicle: a compact 100 mm² monolithic accelerator operating at 100 GHz.</p>
+<h3 id="model-1a-janus-mini-16-tile-standardized-10-mm-10-mm">Model 1A: JANUS Mini 16-Tile (Standardized 6.00 mm × 6.00 mm)</h3>
+<p>Model 1A is the primary silicon tapeout vehicle: a compact 36.00 mm² monolithic accelerator operating at 200.0 GHz with 1:64 polyphase time-interleaved deserialization to 3.125 GHz CMOS base clock.</p>
 <h4 id="1-hardware-architecture-device-count">1. Hardware Architecture &amp; Device Count</h4>
 <ul>
 <li><strong>Residue Tile Count (N_tiles):</strong> 16 independent optical residue tiles</li>
@@ -681,7 +681,7 @@
 <li><strong>Terminal Ge/Si SAC²M APD Pixels:</strong> 16,384 × 256 = <strong>4,194,304 detectors</strong> (≈ 4.19 Million)</li>
 <li><strong>Active Detectors per 10 ps Cycle:</strong> 16,384 active events (1-in-256 spatial sparsity; 8,192 illuminated per 5 ps phase)</li>
 </ul>
-<h4 id="2-physical-layout-area-budget-100-mm-100-mm">2. Physical Layout &amp; Area Budget (10.0 mm × 10.0 mm)</h4>
+<h4 id="2-physical-layout-area-budget-100-mm-100-mm">2. Physical Layout &amp; Area Budget (6.00 mm × 6.00 mm, 36.00 mm²)</h4>
 <table>
 <thead>
 <tr>
@@ -723,8 +723,8 @@
 </tr>
 <tr>
 <td style="text-align: left;"><strong>TOTAL STANDARDIZED DIE FOOTPRINT (A_die)</strong></td>
-<td style="text-align: left;"><strong>10.0 mm × 10.0 mm</strong></td>
-<td style="text-align: left;"><strong>100.00 mm²</strong></td>
+<td style="text-align: left;"><strong>6.00 mm × 6.00 mm</strong></td>
+<td style="text-align: left;"><strong>36.00 mm²</strong></td>
 </tr>
 </tbody>
 </table>
@@ -741,23 +741,23 @@
 </ul>
 <h4 id="4-full-system-electrical-power-breakdown">4. Full-System Electrical Power Breakdown</h4>
 <ul>
-<li><strong>1064 nm Master Laser (75% WPE, 2.21 W Optical):</strong> 2.95 W</li>
-<li><strong>LiTaO₃ Pockels Input Routers (100 GHz):</strong> 0.51 W</li>
-<li><strong>Ge/Si SAC²M APD + StrongARM Readout:</strong> 0.16 W</li>
+<li><strong>1064 nm Master Laser (75% WPE, 1.60 W Optical):</strong> 2.13 W</li>
+<li><strong>LiTaO₃ Pockels Input Routers (200 GHz):</strong> 0.51 W</li>
+<li><strong>Ge/Si SAC²M APD + StrongARM Readout:</strong> 0.10 W</li>
 <li><strong>Optical Amplification (SOAs/EDFAs):</strong> 0.00 W (Eliminated)</li>
 <li><strong>PCM Routing Switches (Static Hold):</strong> 0.00 W (Non-Volatile)</li>
 <li><strong>CMOS Encoders, CRT Adder Trees &amp; Adders:</strong> 1.05 W</li>
 <li><strong>JIR Scheduler &amp; Thermal Management Engine:</strong> 1.50 W</li>
-<li><strong>TOTAL SYSTEM ELECTRICAL POWER:</strong> <strong>6.17 Watts</strong></li>
+<li><strong>TOTAL SYSTEM ELECTRICAL POWER:</strong> <strong>5.29 Watts</strong></li>
 </ul>
 <h4 id="5-thermal-dissipation-buffer-physics">5. Thermal Dissipation &amp; Buffer Physics</h4>
 <ul>
-<li><strong>Surface Heat Flux Density (q″):</strong> 6.17 W / 100 mm² = <strong>0.0617 W/mm²</strong> (6.17 W/cm²)</li>
+<li><strong>Surface Heat Flux Density (q″):</strong> 5.29 W / 36.00 mm² = <strong>0.1469 W/mm²</strong> (14.69 W/cm²)</li>
 <li><strong>SiO₂ Buffer Heat Capacity (C_SiO₂):</strong> <strong>38.67 mJ/K</strong> (55.0 mg mass)</li>
 <li><strong>Thermal Diffusion Time Constant (τ_diff):</strong> <strong>69.06 ms</strong> = <strong>13,812 JIR computation cycles</strong></li>
-<li><strong>Per-Cycle Temperature Rise (ΔT_cycle):</strong> (6.17 W × 5 µs) / 38.67 mJ/K = <strong>0.00080°C</strong> = <strong>0.80 mK</strong></li>
+<li><strong>Per-Cycle Temperature Rise (ΔT_cycle):</strong> (5.29 W × 5 µs) / 38.67 mJ/K = <strong>0.00068°C</strong> = <strong>0.68 mK</strong></li>
 </ul>
-<h4 id="6-multi-precision-performance-matrix-100-ghz">6. Multi-Precision Performance Matrix (100 GHz)</h4>
+<h4 id="6-multi-precision-performance-matrix-100-ghz">6. Multi-Precision Performance Matrix (200 GHz)</h4>
 <table>
 <thead>
 <tr>
@@ -772,44 +772,44 @@
 <tr>
 <td style="text-align: left;"><strong>INT4 Direct</strong></td>
 <td style="text-align: left;">1 tile</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
-<td style="text-align: left;">225.7 TMAC/s/W</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
+<td style="text-align: left;">526.5 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT8 Exact</strong></td>
 <td style="text-align: left;">2 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
-<td style="text-align: left;">112.8 TMAC/s/W</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">263.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
-<td style="text-align: left;">56.4 TMAC/s/W</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">131.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">204.8 TMAC/s</td>
-<td style="text-align: left;">174.1 TMAC/s</td>
-<td style="text-align: left;">28.2 TMAC/s/W</td>
+<td style="text-align: left;">409.6 TMAC/s</td>
+<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">65.8 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">102.4 TMAC/s</td>
-<td style="text-align: left;">87.0 TMAC/s</td>
-<td style="text-align: left;">14.1 TMAC/s/W</td>
+<td style="text-align: left;">204.8 TMAC/s</td>
+<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">32.9 TMAC/s/W</td>
 </tr>
 </tbody>
 </table>
 <h4 id="7-foundry-wafer-yield-300-mm-silicon-line">7. Foundry Wafer Yield (300 mm Silicon Line)</h4>
 <ul>
-<li><strong>Gross Dies per Wafer (DPW):</strong> <strong>640 Raw Dies / Wafer</strong></li>
-<li><strong>Net Usable Good Dies (@ 80% line yield):</strong> <strong>512 Functional Accelerators / Wafer</strong></li>
+<li><strong>Gross Dies per Wafer (DPW):</strong> <strong>1,720 Raw Dies / Wafer</strong></li>
+<li><strong>Net Usable Good Dies (@ 80% line yield):</strong> <strong>1,376 Functional Accelerators / Wafer</strong></li>
 </ul>
 <hr />
 <h3 id="model-1b-janus-mini-32-tile-full-capacity-200-mm2">Model 1B: JANUS Mini 32-Tile (Full-Capacity 200 mm²)</h3>
@@ -882,29 +882,29 @@
 <tr>
 <td style="text-align: left;"><strong>INT8 Exact</strong></td>
 <td style="text-align: left;">2 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">109.9 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">54.9 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">27.5 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">204.8 TMAC/s</td>
-<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">409.6 TMAC/s</td>
+<td style="text-align: left;">348.2 TMAC/s</td>
 <td style="text-align: left;">13.7 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1024,22 +1024,22 @@
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">59.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">29.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">14.8 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1108,37 +1108,37 @@
 <tr>
 <td style="text-align: left;"><strong>INT4 Direct</strong></td>
 <td style="text-align: left;">1 tile</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
-<td style="text-align: left;">225.7 TMAC/s/W</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
+<td style="text-align: left;">526.5 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT8 Exact</strong></td>
 <td style="text-align: left;">2 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
-<td style="text-align: left;">112.8 TMAC/s/W</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">263.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
-<td style="text-align: left;">56.4 TMAC/s/W</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">131.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">204.8 TMAC/s</td>
-<td style="text-align: left;">174.1 TMAC/s</td>
-<td style="text-align: left;">28.2 TMAC/s/W</td>
+<td style="text-align: left;">409.6 TMAC/s</td>
+<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">65.8 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">102.4 TMAC/s</td>
-<td style="text-align: left;">87.0 TMAC/s</td>
-<td style="text-align: left;">14.1 TMAC/s/W</td>
+<td style="text-align: left;">204.8 TMAC/s</td>
+<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">32.9 TMAC/s/W</td>
 </tr>
 </tbody>
 </table>
@@ -1214,29 +1214,29 @@
 <tr>
 <td style="text-align: left;"><strong>INT8 Exact</strong></td>
 <td style="text-align: left;">2 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">109.9 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">54.9 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">27.5 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">204.8 TMAC/s</td>
-<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">409.6 TMAC/s</td>
+<td style="text-align: left;">348.2 TMAC/s</td>
 <td style="text-align: left;">13.7 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1339,22 +1339,22 @@
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">59.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">29.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">14.8 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1439,22 +1439,22 @@
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">59.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">29.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">14.8 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1550,15 +1550,15 @@
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">30.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">15.2 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1669,29 +1669,29 @@
 <tr>
 <td style="text-align: left;"><strong>INT8 Exact</strong></td>
 <td style="text-align: left;">2 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">109.9 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">54.9 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">27.5 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">204.8 TMAC/s</td>
-<td style="text-align: left;">174.1 TMAC/s</td>
+<td style="text-align: left;">409.6 TMAC/s</td>
+<td style="text-align: left;">348.2 TMAC/s</td>
 <td style="text-align: left;">13.7 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1775,22 +1775,22 @@
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">59.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">29.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">14.8 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1874,22 +1874,22 @@
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">59.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">29.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">14.8 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -1984,15 +1984,15 @@
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">30.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">15.2 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -2096,8 +2096,8 @@
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">15.0 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -2222,22 +2222,22 @@
 <tr>
 <td style="text-align: left;"><strong>INT16 Exact</strong></td>
 <td style="text-align: left;">4 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">59.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">29.6 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">409.6 TMAC/s</td>
-<td style="text-align: left;">348.2 TMAC/s</td>
+<td style="text-align: left;">819.2 TMAC/s</td>
+<td style="text-align: left;">696.3 TMAC/s</td>
 <td style="text-align: left;">14.8 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -2330,15 +2330,15 @@
 <tr>
 <td style="text-align: left;"><strong>INT32 Exact</strong></td>
 <td style="text-align: left;">8 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">30.3 TMAC/s/W</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">819.2 TMAC/s</td>
-<td style="text-align: left;">696.3 TMAC/s</td>
+<td style="text-align: left;">1,638.4 TMAC/s</td>
+<td style="text-align: left;">1,392.6 TMAC/s</td>
 <td style="text-align: left;">15.2 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -2438,8 +2438,8 @@
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">15.0 TMAC/s/W</td>
 </tr>
 </tbody>
@@ -2543,8 +2543,8 @@
 <tr>
 <td style="text-align: left;"><strong>INT64 Exact</strong></td>
 <td style="text-align: left;">16 tiles</td>
-<td style="text-align: left;">1,638.4 TMAC/s</td>
-<td style="text-align: left;">1,392.6 TMAC/s</td>
+<td style="text-align: left;">3,276.8 TMAC/s</td>
+<td style="text-align: left;">2,785.3 TMAC/s</td>
 <td style="text-align: left;">15.41 TMAC/s/W</td>
 </tr>
 </tbody>

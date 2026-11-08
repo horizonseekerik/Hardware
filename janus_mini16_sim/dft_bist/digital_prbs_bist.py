@@ -10,7 +10,7 @@ Simulates Digital & Mixed-Signal Built-In Self-Test (BIST) & Boundary Scan:
      - Dual-mode: Self-Test Pattern Generation (STPG) & Output Response Analyzer (ORA).
      - At-speed eye margin testing and error counting without external test gear.
   2. IEEE 1500 Embedded Core Test Wrapper (Boundary Scan):
-     - Scan architecture wrapping 16 Fermat core tiles, 1:32 deserializers, and 1.5 MB SRAM.
+     - Scan architecture wrapping 16 Fermat core tiles, 1:64 deserializers, and 1.5 MB SRAM.
      - Automated Test Pattern Generation (ATPG) stuck-at (SA0/SA1) fault simulation.
      - Fault coverage calculation (> 99.5% target).
   3. RRNS Online Hardware Self-Checking & Dynamic Fault Injector:
@@ -91,7 +91,7 @@ class PRBS31Engine:
 class IEEE1500ScanWrapper:
     """
     Simulates IEEE 1500 standard core wrapper for the 16 Fermat tiles,
-    1:32 polyphase deserializers, and local SRAM slices.
+    1:64 polyphase deserializers, and local SRAM slices.
     """
 
     def __init__(self, n_tiles: int = 16, scan_chain_length_per_tile: int = 256):

@@ -1,7 +1,7 @@
 # PROJECT JANUS MINI (16-TILE): AI WORKLOAD & GPU BENCHMARK REPORT
 
 **Date:** 2026-08-26 00:19:27  
-**Target Architecture:** JANUS Mini 16-Tile Monolithic Planar MVP (100 GHz, 6.17 W, 100 mm²)
+**Target Architecture:** JANUS Mini 16-Tile Monolithic Planar MVP (200 GHz, 5.29 W, 36.00 mm²)
 
 ## 1. Executive Summary
 
@@ -11,7 +11,7 @@ This report profiles the execution of standard modern Artificial Intelligence wo
 
 | Platform | Architecture / Technology | Die Area (mm²) | TDP (W) | Peak INT8 (TMAC/s) | INT8 Efficiency (TMAC/s/W) | Area Density (TMAC/s/mm²) |
 |---|---|---|---|---|---|---|
-| **JANUS Mini 16-Tile (Planar MVP)** | One-Hot Optical Spatial RNS + 100 GHz CMOS | 100.0 | 6.2 | 696.3 | 112.85 | 6.96 |
+| **JANUS Mini 16-Tile (Planar MVP)** | One-Hot Optical Spatial RNS + 3.125 GHz CMOS (1:64) | 36.00 | 5.29 | 696.3 | 112.85 | 6.96 |
 | **NVIDIA H100 SXM5** | Hopper (4th Gen Tensor Cores) | 814.0 | 700.0 | 494.8 | 0.71 | 0.61 |
 | **NVIDIA B200 Blackwell** | Blackwell (5th Gen Tensor Cores) | 1600.0 | 1000.0 | 1125.0 | 1.12 | 0.70 |
 

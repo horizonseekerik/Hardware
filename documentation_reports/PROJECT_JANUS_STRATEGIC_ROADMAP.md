@@ -27,7 +27,7 @@ Conventional optical neural accelerators have stalled due to the **Analog Precis
 
 ### Comprehensive Master Hardware & Performance Matrix (Models 1A through 6B)
 
-All models operate under **100 GHz wave-pipelined optical cycling** (T_cycle = 10.0 ps), sustained utilization η = 0.85, and binary detection margin ≥ +4.61 dB over the Ge/Si SAC²M APD sensitivity threshold (P_sens,practical = -23.20 dBm). Laser launch power is strictly derived via the optical link budget with 2-phase 5 ps time-multiplexed steering (75% Wall-Plug Efficiency).
+All models operate under **200 GHz wave-pipelined optical cycling** (T_cycle = 5.0 ps, 2.5 ps antiphase half-cycles), sustained utilization η = 0.85, and binary detection margin ≥ +4.61 dB over the Ge/Si SAC²M APD sensitivity threshold (P_sens,practical = -23.20 dBm). Laser launch power is strictly derived via the optical link budget with 2-phase 5 ps time-multiplexed steering (75% Wall-Plug Efficiency).
 
 | Model ID | Generation & Stack Architecture | SiPh Strata | Tile Count (N_tiles) | Matrix Mesh per Tile | Total Multipliers | Total Non-Volatile Switches | Total APD Detectors | Die Area (A_die) | Master Laser (Opt / Elec) | Total System Electrical Power | Sustained INT4 Throughput | Sustained INT64 Throughput | Sustained INT4 / INT64 Efficiency | Effective Yield / Wafer (Set) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -139,9 +139,9 @@ To ensure absolute reliability across both active 100 GHz wave-pipelined silicon
 
 ---
 
-### Model 1A: JANUS Mini 16-Tile (Standardized 10 mm × 10 mm)
+### Model 1A: JANUS Mini 16-Tile (Standardized 6.00 mm × 6.00 mm)
 
-Model 1A is the primary silicon tapeout vehicle: a compact 100 mm² monolithic accelerator operating at 100 GHz.
+Model 1A is the primary silicon tapeout vehicle: a compact 36.00 mm² monolithic accelerator operating at 200.0 GHz with 1:64 polyphase time-interleaved deserialization to 3.125 GHz CMOS base clock.
 
 #### 1. Hardware Architecture & Device Count
 * **Residue Tile Count (N_tiles):** 16 independent optical residue tiles
@@ -166,7 +166,7 @@ Model 1A is the primary silicon tapeout vehicle: a compact 100 mm² monolithic a
 | **4. Master Laser 1:8,192 MMI Distribution H-Tree** | Low-loss 13 stages | 4.50 mm² |
 | **5. Monolithic Ge/Si SAC²M APDs (4.19M pixels)** | 1.00 – 1.10 µm² | 4.40 mm² |
 | **6. Scribe Lines, Cu Perimeter Shunt, I/O & Dicing** | 15.5% Margin | 15.59 mm² |
-| **TOTAL STANDARDIZED DIE FOOTPRINT (A_die)** | **10.0 mm × 10.0 mm** | **100.00 mm²** |
+| **TOTAL STANDARDIZED DIE FOOTPRINT (A_die)** | **6.00 mm × 6.00 mm** | **36.00 mm²** |
 
 #### 3. Optical Link Budget & Laser Requirement (1064 nm)
 * **Passive Split Tree (13 stages of 1:2 MMIs for 8,192 branches):** L_split,ideal = 10·log₁₀(2¹³) = **39.13 dB**
@@ -186,27 +186,27 @@ Model 1A is the primary silicon tapeout vehicle: a compact 100 mm² monolithic a
 * **PCM Routing Switches (Static Hold):** 0.00 W (Non-Volatile)
 * **CMOS Encoders, CRT Adder Trees & Adders:** 1.05 W
 * **JIR Scheduler & Thermal Management Engine:** 1.50 W
-* **TOTAL SYSTEM ELECTRICAL POWER:** **6.17 Watts**
+* **TOTAL SYSTEM ELECTRICAL POWER:** **5.29 Watts**
 
 #### 5. Thermal Dissipation & Buffer Physics
-* **Surface Heat Flux Density (q″):** 6.17 W / 100 mm² = **0.0617 W/mm²** (6.17 W/cm²)
+* **Surface Heat Flux Density (q″):** 5.29 W / 36.00 mm² = **0.1469 W/mm²** (14.69 W/cm²)
 * **SiO₂ Buffer Heat Capacity (C_SiO₂):** **38.67 mJ/K** (55.0 mg mass)
 * **Thermal Diffusion Time Constant (τ_diff):** **69.06 ms** = **13,812 JIR computation cycles**
-* **Per-Cycle Temperature Rise (ΔT_cycle):** (6.17 W × 5 µs) / 38.67 mJ/K = **0.00080°C** = **0.80 mK**
+* **Per-Cycle Temperature Rise (ΔT_cycle):** (5.29 W × 5 µs) / 38.67 mJ/K = **0.00068°C** = **0.68 mK**
 
-#### 6. Multi-Precision Performance Matrix (100 GHz)
+#### 6. Multi-Precision Performance Matrix (200 GHz)
 
 | Precision Target | RNS Tiles (k) | Peak Throughput | Sustained (η=0.85) | Energy Efficiency |
 | :--- | :--- | :--- | :--- | :--- |
-| **INT4 Direct** | 1 tile | 1,638.4 TMAC/s | 1,392.6 TMAC/s | 225.7 TMAC/s/W |
-| **INT8 Exact** | 2 tiles | 819.2 TMAC/s | 696.3 TMAC/s | 112.8 TMAC/s/W |
-| **INT16 Exact** | 4 tiles | 409.6 TMAC/s | 348.2 TMAC/s | 56.4 TMAC/s/W |
-| **INT32 Exact** | 8 tiles | 204.8 TMAC/s | 174.1 TMAC/s | 28.2 TMAC/s/W |
-| **INT64 Exact** | 16 tiles | 102.4 TMAC/s | 87.0 TMAC/s | 14.1 TMAC/s/W |
+| **INT4 Direct** | 1 tile | 3,276.8 TMAC/s | 2,785.3 TMAC/s | 526.5 TMAC/s/W |
+| **INT8 Exact** | 2 tiles | 1,638.4 TMAC/s | 1,392.6 TMAC/s | 263.3 TMAC/s/W |
+| **INT16 Exact** | 4 tiles | 819.2 TMAC/s | 696.3 TMAC/s | 131.6 TMAC/s/W |
+| **INT32 Exact** | 8 tiles | 409.6 TMAC/s | 348.2 TMAC/s | 65.8 TMAC/s/W |
+| **INT64 Exact** | 16 tiles | 204.8 TMAC/s | 174.1 TMAC/s | 32.9 TMAC/s/W |
 
 #### 7. Foundry Wafer Yield (300 mm Silicon Line)
-* **Gross Dies per Wafer (DPW):** **640 Raw Dies / Wafer**
-* **Net Usable Good Dies (@ 80% line yield):** **512 Functional Accelerators / Wafer**
+* **Gross Dies per Wafer (DPW):** **1,720 Raw Dies / Wafer**
+* **Net Usable Good Dies (@ 80% line yield):** **1,376 Functional Accelerators / Wafer**
 
 ---
 
@@ -399,7 +399,7 @@ Generation 2 introduces two critical evolutionary paths:
 * **1064 nm Master Laser (75% WPE, 2.21 W Optical):** 2.95 W
 * **LiTaO₃ Pockels Input Routers + APD Readout:** 0.67 W
 * **CMOS Encoders, CRT Adder Trees & JIR Engine:** 2.55 W
-* **TOTAL SYSTEM ELECTRICAL POWER:** **6.17 Watts**
+* **TOTAL SYSTEM ELECTRICAL POWER:** **5.29 Watts**
 
 #### 5. Thermal Dissipation & Buffer Physics
 * **Surface Heat Flux Density (q″):** 6.17 W / 50.0 mm² = **0.1234 W/mm²** (12.34 W/cm²)
@@ -408,15 +408,15 @@ Generation 2 introduces two critical evolutionary paths:
 * **Inter-Stratum SiO₂ Buffer (50 µm):** τ_diff,inter = **2.76 ms** = **552 JIR cycles**
 * **Per-Cycle Temperature Rise (ΔT_cycle):** (6.17 W × 5 µs) / 0.01933 J/K = **0.00160°C** = **1.60 mK**
 
-#### 6. Multi-Precision Performance Matrix (100 GHz)
+#### 6. Multi-Precision Performance Matrix (200 GHz)
 
 | Precision Target | RNS Tiles (k) | Peak Throughput | Sustained (η=0.85) | Energy Efficiency |
 | :--- | :--- | :--- | :--- | :--- |
-| **INT4 Direct** | 1 tile | 1,638.4 TMAC/s | 1,392.6 TMAC/s | 225.7 TMAC/s/W |
-| **INT8 Exact** | 2 tiles | 819.2 TMAC/s | 696.3 TMAC/s | 112.8 TMAC/s/W |
-| **INT16 Exact** | 4 tiles | 409.6 TMAC/s | 348.2 TMAC/s | 56.4 TMAC/s/W |
-| **INT32 Exact** | 8 tiles | 204.8 TMAC/s | 174.1 TMAC/s | 28.2 TMAC/s/W |
-| **INT64 Exact** | 16 tiles | 102.4 TMAC/s | 87.0 TMAC/s | 14.1 TMAC/s/W |
+| **INT4 Direct** | 1 tile | 3,276.8 TMAC/s | 2,785.3 TMAC/s | 526.5 TMAC/s/W |
+| **INT8 Exact** | 2 tiles | 1,638.4 TMAC/s | 1,392.6 TMAC/s | 263.3 TMAC/s/W |
+| **INT16 Exact** | 4 tiles | 819.2 TMAC/s | 696.3 TMAC/s | 131.6 TMAC/s/W |
+| **INT32 Exact** | 8 tiles | 409.6 TMAC/s | 348.2 TMAC/s | 65.8 TMAC/s/W |
+| **INT64 Exact** | 16 tiles | 204.8 TMAC/s | 174.1 TMAC/s | 32.9 TMAC/s/W |
 
 #### 7. Foundry Wafer Set Economics (300 mm Silicon Line)
 * **Die Footprint per Stacked Unit:** 50.00 mm² (7.07 mm × 7.07 mm)

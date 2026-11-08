@@ -19,7 +19,7 @@
 ---
 
 ## 2. Digital & AMS BIST (D-BIST) Sign-Off Metrics
-- **At-Speed 100 GHz PRBS-31 Generator & Error Analyzer:**
+- **At-Speed 200 GHz PRBS-31 Generator & Error Analyzer:**
   - Test Stream Length: **250,000 bits**
   - Error Detection Fidelity: **100.00%** (14 injected / 14 detected)
 - **IEEE 1500 Embedded Core Scan Wrapper:**

@@ -22,7 +22,7 @@ The automated multi-physics co-simulation stack executes across all 5 verificati
 | 8 | Tier 2 | Thermal ROM Extraction Accuracy | R^2 >= 0.999 | 0.9998 | >= 0.999 | PASS |
 | 9 | Tier 3 | APD Practical Sensitivity Margin | Margin >= +3.00 dB | 6.211 | >= +3.00 dB | PASS |
 | 10 | Tier 3 | Optical Receiver Bit Error Rate | BER <= 10^-18 | 1.492e-42 | <= 1.00e-18 | PASS |
-| 11 | Tier 3 | 100 GHz Eye Diagram Opening | Eye Opening > 0% | 77.63 | > 0.0% | PASS |
+| 11 | Tier 3 | 200 GHz Eye Diagram Opening | Eye Opening > 0% | 77.63 | > 0.0% | PASS |
 | 12 | Tier 4 | CRT Adder Tree Digital Latency | t_CRT <= 220 ps | 80 | <= 220.0 ps | PASS |
 | 13 | Tier 4 | RTL Cycle-Accurate Verification | Errors == 0 | 0 | == 0 errors | PASS |
 | 14 | Tier 5 | Z3 SMT Formal Proofs (5 Proofs) | == 5 Proved | 5 | All 5 Proved | PASS |
@@ -43,7 +43,7 @@ The automated multi-physics co-simulation stack executes across all 5 verificati
 - **Switches per Multiplier:** 240 (16 trees × 15 switches)
 - **Total Multipliers:** 16,384 (16 tiles x 1,024)
 - **Total Sb2S3 Switches:** 3,932,160 switches
-- **Operating Frequency:** 100 GHz (T_cycle = 10.0 ps)
+- **Operating Frequency:** 200 GHz (T_cycle = 5.0 ps)
 - **Laser Launch Power:** 2.21 W optical (+33.44 dBm)
 - **Optical Path:** 4 stages, 1.61 dB insertion loss, 1.33 ps flight delay
 - **Single Product Ceiling:** 256 (< 257 for Radix-16 Z_257 division-free reduction)
@@ -66,6 +66,6 @@ The automated multi-physics co-simulation stack executes across all 5 verificati
   - Ultra-low parasitic interconnect: R_via < 0.05 Ohm, C_via < 4.2 fF linking APD anodes directly to CMOS sense nodes.
 - **65nm LP/GP CMOS Base Die Stratum (Layers 40-46/0):**
   - StrongARM regenerative latches (Layer 40/0) 1:1 vertically aligned below each APD via.
-  - 1:32 polyphase deserializers (Layer 41/0), 32-lane SIMD Wallace-Kogge unit (Layer 42/0).
+  - 1:64 polyphase deserializers (Layer 41/0), 64-lane SIMD Wallace-Kogge unit and multi-precision FP engine (Layer 42/0).
   - 1.5 MB local dual-LUT SRAM (Layer 43/0) and 1.5 MB central ROM / JIR FSM (Layer 44/0).
   - 160-bit carry-save accumulator (Layer 45/0) and JIR thermal sensing diodes (Layer 46/0).

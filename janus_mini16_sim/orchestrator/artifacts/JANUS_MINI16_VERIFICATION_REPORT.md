@@ -66,7 +66,7 @@ The automated multi-physics co-simulation stack executes across all 5 verificati
   - Ultra-low parasitic interconnect: R_via < 0.05 Ohm, C_via < 4.2 fF linking APD anodes directly to CMOS sense nodes.
 - **65nm LP/GP CMOS Base Die Stratum (Layers 40-46/0):**
   - StrongARM regenerative latches (Layer 40/0) 1:1 vertically aligned below each APD via.
-  - 1:32 polyphase deserializers (Layer 41/0), 32-lane SIMD Wallace-Kogge unit (Layer 42/0).
+  - 1:64 polyphase deserializers (Layer 41/0), 64-lane SIMD Wallace-Kogge unit and multi-precision FP engine (Layer 42/0).
   - 1.5 MB local dual-LUT SRAM (Layer 43/0) and 1.5 MB central ROM / JIR FSM (Layer 44/0).
   - 160-bit carry-save accumulator (Layer 45/0) and JIR thermal sensing diodes (Layer 46/0).
 

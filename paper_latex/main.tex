@@ -164,7 +164,7 @@ S_{\max,\mathrm{Datacenter}} &= 8{,}323{,}200 \implies \mathrm{SNR}_{\mathrm{Dat
 \end{equation}
 These requirements exceed realistic photonic operating conditions by several orders of magnitude (as summarized alongside the One-Hot solution in Table~\ref{tab:onehot_transition}).
 
-The contradiction becomes especially severe when detector bandwidth is considered. Because high-resolution requirements---such as the 138 dB analog precision target derived above---cannot be met by standard ADC/DAC architectures operating above 10 GHz , JANUS bypasses these conventional limitations through a specialized spatial encoding approach. As derived in Section~\ref{sec:operating_frequency}, the architecture sustains an operating frequency of 100 GHz; this is critical, as no practical ADC architecture can simultaneously sustain high resolution, high sampling rate, low thermal noise, and acceptable power density within a realistic operating envelope.
+The contradiction becomes especially severe when detector bandwidth is considered. Because high-resolution requirements---such as the 138 dB analog precision target derived above---cannot be met by standard ADC/DAC architectures operating above 10 GHz , JANUS bypasses these conventional limitations through a specialized spatial encoding approach. As derived in Section~\ref{sec:operating_frequency}, the architecture sustains an operating repetition rate of 200 GHz; this is critical, as no practical ADC architecture can simultaneously sustain high resolution, high sampling rate, low thermal noise, and acceptable power density within a realistic operating envelope.
 
 Consequently, the analog accumulation paradigm itself becomes the primary scaling failure.
 
@@ -179,7 +179,7 @@ Several conventional mitigation strategies attempt to preserve analog photonic s
 f_{\text{eff}} = \frac{f_{\text{native}}}{S}
 \end{equation}
 
-where S is the slice factor. For an accumulation of 128 terms requiring 23-bit resolution sliced into 4-bit optical segments, S = 6 cycles per MAC. The effective throughput collapses from 100 GHz to 16.7 GHz, destroying the speed advantage of optics.
+where S is the slice factor. For an accumulation of 128 terms requiring 23-bit resolution sliced into 4-bit optical segments, S = 6 cycles per MAC. The effective throughput collapses from 200 GHz to 33.3 GHz, destroying the speed advantage of optics.
 \item Spatial interleaving distributes accumulation across multiple physical waveguides. However, the signals must ultimately be coherently combined or individually converted by dedicated ADCs. Slicing across 6 waveguides increases detector and ADC count by 6$\times$, creating an unsustainable area and thermal footprint.
 \end{itemize}
 
@@ -763,7 +763,7 @@ P_{\mathrm{signal}} > P_{\mathrm{sens,practical}}
 \right)
 \end{equation}
 
-The Ge/Si $\mathrm{SAC^2M}$ avalanche photodetector operating at gain $M = 7$ possesses a gain--bandwidth product of 441 GHz with an inherent 3 dB receiver bandwidth of 105 GHz, comfortably supporting the 100 GHz system clock rate. This bandwidth filtering combined with a receiverless charge-integration front end and an ILO comb-referenced clock (50 fs rms jitter) yields a practical binary receiver sensitivity of $P_{\mathrm{sens,practical}} \approx -23.20\text{ dBm}$ (for a reconciled target bit error rate of $\le 10^{-36}$, as derived in Section~\ref{sec:passive_fanout_apd}). Consequently, the delivered optical signal intensity across the passive 1 : $2^{18}$ distribution tree reaches $-12.70\text{ dBm}$ through the 4-stage 16-Tree Fermat Core, providing an abundant binary detection margin of $+10.50\text{ dB}$ ($+6.142\text{ dB}$ under strict foundry sign-off constraints).
+The Ge/Si $\mathrm{SAC^2M}$ avalanche photodetector operating at gain $M = 7$ possesses a gain--bandwidth product of 441 GHz with an inherent 3 dB receiver bandwidth of 105 GHz, comfortably supporting the 200 GHz system repetition rate via two-phase antiphase time-interleaving ($5.0\,\text{ps}$ repetition interval, two $2.5\,\text{ps}$ antiphase half-cycles). This bandwidth filtering combined with a receiverless charge-integration front end and an ILO comb-referenced clock (50 fs rms jitter) yields a practical binary receiver sensitivity of $P_{\mathrm{sens,practical}} \approx -23.20\text{ dBm}$ (for a reconciled target bit error rate of $\le 10^{-36}$, as derived in Section~\ref{sec:passive_fanout_apd}). Consequently, the delivered optical signal intensity across the passive 1 : $2^{18}$ distribution tree reaches $-12.70\text{ dBm}$ through the 4-stage 16-Tree Fermat Core, providing an abundant binary detection margin of $+10.50\text{ dB}$ ($+6.142\text{ dB}$ under strict foundry sign-off constraints).
 
 Thus, the JANUS architecture transforms an analog precision requirement of approximately 138 dB into a robust binary detection problem with substantial receiver margin.
 
@@ -1827,7 +1827,7 @@ The total system power of JANUS is decomposed by functional layer. Because PCM r
 \centering
 \small
 \setlength{\tabcolsep}{1pt}
-\caption{JANUS FULL-SYSTEM POWER BUDGET BY COMPONENT LAYER. PCM ROUTING SWITCHES CONTRIBUTE 0 W STATIC HOLD POWER. ALL VALUES ARE PEAK SUSTAINED ESTIMATES AT 100 GHz OPERATION.}
+\caption{JANUS FULL-SYSTEM POWER BUDGET BY COMPONENT LAYER. PCM ROUTING SWITCHES CONTRIBUTE 0 W STATIC HOLD POWER. ALL VALUES ARE PEAK SUSTAINED ESTIMATES AT 200 GHz OPERATION.}
 \label{tab:table15}
 \begin{tabular}{lccc}
 \toprule
@@ -1867,19 +1867,19 @@ By replacing thermo-optic MZIs with non-volatile PCM routing, JANUS achieves a s
 In the JANUS wave-pipelined architecture, functional stages along the optical-to-electrical datapath are physically decoupled in space, operating concurrently on successive in-flight optical pulses. Consequently, the minimum clock cycle period $T_{\text{cycle}}$ is not the cumulative sum of stage latencies, but is bounded by the bottleneck single-stage processing and recovery duration:
 
 \begin{equation}
-T_{\text{cycle}} = \max\left( t_{\text{mod}}, \, t_{\text{PD}}, \, t_{\text{wire}}, \, t_{\text{guard}} \right) \le 10.0\,\text{ps}
+T_{\text{cycle}} = \max\left( t_{\text{mod}}, \, t_{\text{PD}}, \, t_{\text{wire}}, \, t_{\text{guard}} \right) \le 5.0\,\text{ps}
 \end{equation}
 
-Each concurrent stage satisfies the 10.0~ps timing boundary:
+Each concurrent stage satisfies the 5.0~ps timing boundary (two 2.5~ps antiphase half-cycles):
 \begin{enumerate}
-\item \textbf{Electro-Optic Injection Interval ($t_{\text{mod}} \le 10.0\,\text{ps}$):} 
-The $\mathrm{LiTaO_3}$ Pockels-effect input router formats and injects optical pulses with full-width half-maximum $\tau_{\text{FWHM}} \approx 3\text{--}5\,\text{ps}$ into the active One-Hot waveguide at a 10.0~ps repetition interval.
+\item \textbf{Electro-Optic Injection Interval ($t_{\text{mod}} \le 5.0\,\text{ps}$):} 
+The $\mathrm{LiTaO_3}$ Pockels-effect input router formats and injects optical pulses with full-width half-maximum $\tau_{\text{FWHM}} \approx 2\text{--}3\,\text{ps}$ into the active One-Hot waveguide at a 5.0~ps repetition interval (two-phase antiphase interleaved every 2.5~ps).
 
 \item \textbf{Photodetector Carrier Clearance ($t_{\text{PD}} \approx 1.52\,\text{ps}$):}
 \begin{equation*}
 t_{\text{PD}} = \frac{1}{2\pi \cdot f_{3\text{dB}}} = \frac{1}{2\pi \times 105\,\text{GHz}} \approx 1.52\,\text{ps}
 \end{equation*}
-where the 105~GHz receiver bandwidth corresponds to the high-speed Ge/Si $\mathrm{SAC^2M}$ avalanche photodetectors \cite{Chen2025}. Photogenerated carriers clear the multiplication region in $\approx 1.52\,\text{ps}$, ensuring complete reset well before the next pulse arrives in the 10.0~ps slot.
+where the 105~GHz receiver bandwidth corresponds to the high-speed Ge/Si $\mathrm{SAC^2M}$ avalanche photodetectors \cite{Chen2025}. Photogenerated carriers clear the multiplication region in $\approx 1.52\,\text{ps}$, ensuring complete reset well before the next pulse arrives in the 5.0~ps slot.
 
 \item \textbf{Electrical Interconnect Delay ($t_{\text{wire}} \approx 1.33\,\text{ps}$):}
 Local on-chip wire propagation over a $200\,\mu\text{m}$ effective metal path ($v \approx 1.5 \times 10^8\,\text{m/s}$) requires:
@@ -1893,15 +1893,15 @@ Provides temporal isolation between adjacent in-flight optical wavefronts to pre
 
 Thus, the sustained system operating clock frequency is:
 \begin{equation}
-f_{\text{clk}} = \frac{1}{T_{\text{cycle}}} = \frac{1}{10.0\,\text{ps}} = 100\,\text{GHz}
+f_{\text{clk}} = \frac{1}{T_{\text{cycle}}} = \frac{1}{5.0\,\text{ps}} = 200\,\text{GHz}
 \end{equation}
 
 \paragraph{\textbf{Pipelining and End-to-End Latency Clarification:}}
 
-The 10.0~ps cycle time represents the throughput interval (the time between successive optical pulses entering the routing fabric), not the end-to-end latency of a single computation. The cumulative single-computation end-to-end latency consists of:
+The 5.0~ps cycle time represents the throughput interval (the time between successive optical pulses entering the routing fabric, with 2.5~ps antiphase interleaving), not the end-to-end latency of a single computation. The cumulative single-computation end-to-end latency consists of:
 
 \begin{enumerate}
-\item \textbf{PCM 16-Tree Fermat Core optical propagation:} The 4 routing stages ($\log_2 16 = 4$) have an ultrafast optical propagation latency of only $t_{\text{opt}} \approx 1.33\,\text{ps}$ across the compact binary tree fabric (measured in full-wave simulation). Because the non-volatile PCM states remain static throughout an inference epoch, successive optical pulses stream through the fabric every 10.0~ps in a wave-pipelined fashion.
+\item \textbf{PCM 16-Tree Fermat Core optical propagation:} The 4 routing stages ($\log_2 16 = 4$) have an ultrafast optical propagation latency of only $t_{\text{opt}} \approx 1.33\,\text{ps}$ across the compact binary tree fabric (measured in full-wave simulation). Because the non-volatile PCM states remain static throughout an inference epoch, successive optical pulses stream through the fabric every 5.0~ps in a wave-pipelined fashion.
 
 \item \textbf{CMOS CRT adder-tree accumulation:} The CMOS backend accumulates and reconstructs residues with an optimized 8-stage pipelined adder-tree latency of approximately $t_{\text{CRT}} \approx 80.0\,\text{ps}$ (at $10.0\,\text{ps}$ per register stage, reduced from $210\,\text{ps}$). This latency is hidden behind deeply staged CMOS registers that process reconstruction in parallel with optical transport.
 \end{enumerate}
@@ -1921,7 +1921,7 @@ Each photonic tile implements an $N \times N$ matrix--vector multiplication in o
 
 For the three JANUS deployment configurations:
 \begin{equation}
-\dot{M}_{\text{Mini,tile}} = 102.4\,\text{TMAC/s}, \quad \dot{M}_{\text{Edge,tile}} = 409.6\,\text{TMAC/s}, \quad \dot{M}_{\text{DC,tile}} = 1,638.4\,\text{TMAC/s}.
+\dot{M}_{\text{Mini,tile}} = 204.8\,\text{TMAC/s}, \quad \dot{M}_{\text{Edge,tile}} = 819.2\,\text{TMAC/s}, \quad \dot{M}_{\text{DC,tile}} = 3,276.8\,\text{TMAC/s}.
 \end{equation}
 
 \paragraph{\textbf{Sustained Utilization Factor:}}

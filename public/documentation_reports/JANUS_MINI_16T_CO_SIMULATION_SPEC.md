@@ -21,7 +21,7 @@ To bridge the gap between nanophotonic Maxwell field physics and high-level arti
 +---------------------+-----------------------+-----------------------------------------------------+
 | Tier 1: Optics      | 3D MEEP (FDTD)        | Maxwell solver, Sb2S3 S-matrix, field absorption |
 | Tier 2: Thermal     | Elmer FEM (3D FEM)    | Transient Z-axis heat diffusion, SiO2 buffer, ROM   |
-| Tier 3: Circuit     | Xyce (Parallel SPICE) | SAC2M APD, StrongARM latches, 100 GHz eye diagrams  |
+| Tier 3: Circuit     | Xyce (Parallel SPICE) | SAC2M APD, StrongARM latches, 200 GHz eye diagrams  |
 | Tier 4: RTL Logic   | Cocotb + Verilator    | Gate-level CRT adder tree (210 ps), RNS encoders    |
 | Tier 5: Arithmetic  | Python RNS Engine     | Spatial One-Hot, JIR scheduler, RRNS, Z3 proofs     |
 +---------------------+-----------------------+-----------------------------------------------------+
@@ -149,7 +149,7 @@ All simulation parameters defined in this section are **immutable constants** sh
 
 | Python Variable | Symbol | Value | Unit | Tier Scope | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `A_die` | A_die | 100.00 x 10^-6 | m^2 | T2 | Die footprint area (100.00 mm^2) |
+| `A_die` | A_die | 36.00 x 10^-6 | m^2 | T2 | Die footprint area (36.00 mm^2) |
 | `A_die_mm2` | A_die | 100.00 | mm^2 | T2 | Die footprint area (mm^2) |
 | `L_die` | L_die | 10.0 x 10^-3 | m | T2 | Die side length (10.0 mm) |
 | `A_tile` | A_t | 6.25 x 10^-6 | m^2 | T2 | Individual tile area (100/16 = 6.25 mm^2) |
@@ -368,7 +368,7 @@ All simulation parameters defined in this section are **immutable constants** sh
 
 | Python Variable | Symbol | Value | Unit | Tier Scope | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `f_clk` | f_clk | 100 x 10^9 | Hz | All | System operating clock frequency (100 GHz) |
+| `f_clk` | f_clk | 200 x 10^9 | Hz | All | System operating clock frequency (200 GHz) |
 | `T_cycle` | T_cyc | 10.0 x 10^-12 | s | All | Wave-pipelined clock cycle period (10.0 ps) |
 | `T_phase` | T_ph | 5.0 x 10^-12 | s | T1, T3 | Time-multiplexed illumination phase duration (5 ps) |
 | `tau_fwhm_min` | tau_min | 3.0 x 10^-12 | s | T1 | Minimum optical pulse FWHM (3 ps) |
@@ -491,8 +491,8 @@ The simulation suite strictly targets the verified hardware parameters of the **
 | **Total Sb2S3 Switch Cells** | **3,932,160** | ~3.93 Million non-volatile cells (0 W hold) |
 | **Terminal Ge/Si SAC2M APDs** | **278,528** | ~278.5 K monolithic pixels |
 | **Active Photons per 10 ps Cycle** | 16,384 | 1-in-17 spatial sparsity (8,192 per 5 ps phase) |
-| **Operating Frequency** | **100 GHz** | T_cycle = 10.0 ps wave-pipelined |
-| **Die Footprint (A_die)** | **100.00 mm^2** | 10.0 mm x 10.0 mm monolithic planar |
+| **Operating Frequency** | **200 GHz** | T_cycle = 5.0 ps wave-pipelined (2.5 ps half-cycles) |
+| **Die Footprint (A_die)** | **36.00 mm^2** | 6.00 mm x 6.00 mm monolithic planar |
 | **Total Active Die Height** | **330 um** | 50 um CMOS + 250 um SiO2 + 30 um SiPh |
 | **Master Laser Launch Power** | **2.21 W Optical CW** | 1064 nm Yb-fiber CW (+33.44 dBm) |
 | **Master Laser Electrical Power** | **2.95 W Electrical** | >75% Wall-Plug Efficiency (WPE) |
@@ -519,7 +519,7 @@ The simulation suite strictly targets the verified hardware parameters of the **
    |                                 | - Vector-fitting (vectfit) to passive subcircuit
    |                                 | - SAC2M APD equivalent circuit (M=7, C_j=0.8 fF)
    |                                 | - StrongARM dynamic latch model (~100 aJ/event)
-   |                                 | - Outputs: 100 GHz Eye Diagrams, Jitter, BER <= 10^-18
+   |                                 | - Outputs: 200 GHz Eye Diagrams, Jitter, BER <= 10^-18
    v                                 v
    [ TIER 2: ELMER FEM THERMAL ]     | Realistic BER & Transit Delays
    | - 3D transient heat diffusion   |
@@ -598,7 +598,7 @@ The simulation suite strictly targets the verified hardware parameters of the **
    - Clocked sensing latch consuming E_strongarm=100 aJ/event, regeneration time t_regen <= 3.5 ps.
 
 #### B. Verification Targets
-1. **Eye Diagram Opening:** Open eye at f_clk=100 GHz optical rate (T_cycle=10 ps cycle period).
+1. **Eye Diagram Opening:** Open eye at f_clk=200 GHz optical rate (T_cycle=5 ps cycle period).
 2. **Bit Error Rate (BER):** Verify BER_target <= 10^-18 under practical sensitivity P_sens_practical=-23.21 dBm with link_margin=+4.61 dB at P_det=-18.59 dBm.
 
 ---
@@ -672,7 +672,7 @@ janus_mini16_sim/
 |   +-- vector_fit_s_params.py        # Rational fitting for SPICE subcircuits
 |   +-- sac2m_apd_model.cir           # Ge/Si SAC2M equivalent circuit
 |   +-- strongarm_latch.cir           # StrongARM regenerative comparator
-|   +-- run_eye_diagram.cir           # 100 GHz transient eye diagram & BER
+|   +-- run_eye_diagram.cir           # 200 GHz transient eye diagram & BER
 +-- tier4_rtl_digital/
 |   +-- rns_encoder.v                 # Modulo decomposition logic
 |   +-- crt_adder_tree.v              # 210 ps pipelined CRT reconstruction

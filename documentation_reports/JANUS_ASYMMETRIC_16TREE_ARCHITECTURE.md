@@ -100,7 +100,7 @@ Underneath Photodetector #72 is a vertical Through-Die Via (TDV) connecting dire
 * Trace #72 jumps from $0\,\text{V} \to 1.0\,\text{V}$ (digital pulse).
 * All other 224 traces remain at $0\,\text{V}$.
 
-### 2.2 Why Digital Memory Lookups Are Physically Impossible at 100 GHz
+### 2.2 Why Digital Memory Lookups Are Physically Impossible at 200 GHz
 If CMOS were required to "look up" the product in an SRAM table indexed by $(X, W)$:
 1. **Memory Throughput:** A $32 \times 32$ tile with 1,024 MAC multipliers operating at a 100 GHz optical clock requires:
    $$\text{Lookups/sec} = 1,024 \times 100 \times 10^9 = \mathbf{102.4 \text{ Trillion memory reads / second}}$$
@@ -289,7 +289,7 @@ Two simulation test benches were constructed and executed to prove physical vali
     │       DIGITAL GPUs        │      ANALOG PHOTONICS     │        PROJECT JANUS      │
     │     (NVIDIA / Google)     │   (MZI Meshes / WDM)      │  (Spatial 16-Tree Core)   │
     ├───────────────────────────┼───────────────────────────┼───────────────────────────┤
-    │ Capped at 1–3 GHz         │ Capped by Analog Noise    │ Runs at 100 GHz Optical   │
+    │ Capped at 1–3 GHz         │ Capped by Analog Noise    │ Runs at 200 GHz Optical   │
     │ Burns 1–5 pJ per MAC      │ Limited to ~4-bit SNR     │ Bit-Exact 64-Bit Math     │
     │ Rigid 2:4 Sparsity Ceiling│ Giant, Power-Hungry ADCs  │ 1-Bit StrongArm Triggers  │
     │ Giant Clock Trees & Wire  │ Drifts with Temperature   │ WG0 Omitted (0 aJ Zeros)  │

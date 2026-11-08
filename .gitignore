@@ -89,7 +89,8 @@ ofc_switch_paper_latex/
 ofc_apd_paper_latex/
 *OFC*
 *ofc*
-ScholarOne*
+ScholarOne*
+
 # Embedded Research Repositories & Licenses
 .licenses/
 Switch research/
@@ -97,3 +98,5 @@ scripts/*switch_research*
 scripts/test_categorization.py
 scripts/run_optica_audit.py
 scripts/generate_organized_readmes.py
+
+scratch/

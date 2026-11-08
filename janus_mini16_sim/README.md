@@ -102,7 +102,7 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 | Platform | Architecture / Process Node | Die Footprint | Total Power | INT8 Compute Throughput | INT8 Energy Efficiency | Area Compute Density |
 |---|---|---|---|---|---|---|
-| **JANUS Model 1A (Planar MVP - 200 GHz)** | **Spatial RNS Photonic (Monolithic 3D)** | **100.00 mm²** (10.0 × 10.0 mm) | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** (2,785.2 – 3,276.8 TOPS) | **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) | **14.0 – 16.4 TMAC/s/mm²** (32.8 TMAC/s/mm² INT4) |
+| **JANUS Model 1A (Planar MVP - 200 GHz)** | **Spatial RNS Photonic (Monolithic 3D)** | **36.00 mm²** (10.0 × 10.0 mm) | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** (2,785.2 – 3,276.8 TOPS) | **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) | **14.0 – 16.4 TMAC/s/mm²** (32.8 TMAC/s/mm² INT4) |
 | **NVIDIA H100 SXM5** | Hopper (TSMC 4N) | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² (0.61 TMAC/s/mm²) |
 | **NVIDIA B200 Blackwell** | Blackwell (TSMC 4NP Dual-Die) | 1600 mm² | 1000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.12 TMAC/s/W) | 1.41 TOPS/mm² (0.70 TMAC/s/mm²) |
 

@@ -359,7 +359,7 @@ END
 |  +------------------------------------------+                |
 |  | ALG 2A: Generate 3D Mesh (Gmsh)          |                |
 |  |   - 330 um total stack height             |                |
-|  |   - 10 mm x 10 mm lateral (100 mm^2)     |                |
+|  |   - 6.0 mm x 6.0 mm lateral (36.00 mm^2)     |                |
 |  |   - Structured hex mesh with refinement   |                |
 |  |     near SiO2/SiPh interface              |                |
 |  +------------------------------------------+                |
@@ -420,7 +420,7 @@ END
 ```
 ALGORITHM 2A: THERMAL_MESH_GENERATION
 ================================================================
-INPUT:  A_die=100 mm^2, L_die=10 mm, N_tiles=16
+INPUT:  A_die=36 mm^2, L_die=6 mm, N_tiles=16
         h_cmos=50 um, h_sio2=250 um, h_siph=30 um
 OUTPUT: mesh (Gmsh .msh format)
 
@@ -598,13 +598,13 @@ END
 |  | ALG 3D: Assemble Full Transient Netlist   |                |
 |  |   - Optical source -> 16-Tree S-param chain |                |
 |  |     -> APD -> StrongARM -> Digital out     |                |
-|  |   - Clock: 100 GHz (T_cycle=10 ps)        |                |
+|  |   - Clock: 200 GHz (T_cycle=5 ps)        |                |
 |  +------------------------------------------+                |
 |     |                                                        |
 |     v                                                        |
 |  +------------------------------------------+                |
 |  | ALG 3E: Run Transient & Extract Results   |                |
-|  |   - 100 GHz eye diagram                   |                |
+|  |   - 200 GHz eye diagram                   |                |
 |  |   - Jitter measurement                    |                |
 |  |   - BER estimation                        |                |
 |  +------------------------------------------+                |
@@ -729,7 +729,7 @@ END
 ```
 ALGORITHM 3E: EYE_DIAGRAM_AND_BER
 ================================================================
-INPUT:  assembled netlist, f_clk=100 GHz, T_cycle=10 ps,
+INPUT:  assembled netlist, f_clk=200 GHz, T_cycle=5 ps,
         P_det=13.82 uW, P_sens_practical=4.79 uW,
         BER_target=10^-18, Q_factor=9.38
 OUTPUT: eye_diagram, jitter, BER_measured, margin
@@ -739,7 +739,7 @@ BEGIN
   1.  N_bits  = 2^15 - 1 = 32,767     // PRBS-15 sequence
   2.  pattern = generate_PRBS15()
   3.  optical_signal(t) = pattern[floor(t/T_cycle)] * P_det
-      // OOK modulation at 100 GHz
+      // OOK modulation at 200 GHz
 
   // STEP 2: Run Xyce transient simulation
   4.  t_end   = N_bits * T_cycle = 327.67 ns
