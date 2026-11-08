@@ -7,7 +7,7 @@
 [![TRL Readiness](https://img.shields.io/badge/TRL-4.0%20(Co--Sim%20Validated)-green.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![Peak Compute](https://img.shields.io/badge/Peak%20Compute-3.28%20PMAC%2Fs%20(6.55%20Peta--OPS%20INT4)-gold.svg)](#-ai-workload-benchmarks--gpu-comparison)
 [![Energy Efficiency](https://img.shields.io/badge/Energy%20Efficiency-619.4%20TMAC%2Fs%2FW%20(1238.9%20TOPS%2FW)-cyan.svg)](#-ai-workload-benchmarks--gpu-comparison)
-[![Die Footprint](https://img.shields.io/badge/Die%20Area-100.00%20mm%C2%B2%20(10.0x10.0mm)-blueviolet.svg)](#-master-hardware-scaling-roadmap-18-models)
+[![Die Footprint](https://img.shields.io/badge/Die%20Area-36.00%20mm%C2%B2%20(6.0x6.0mm)-blueviolet.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![Total Power](https://img.shields.io/badge/Total%20Power-5.29%20Watts-purple.svg)](#-master-hardware-scaling-roadmap-18-models)
 [![100M Monte Carlo](https://img.shields.io/badge/100M%20Monte%20Carlo-100%25%20Yield%20(%2B6.95dB%203%CF%83)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
 [![200GHz SPICE](https://img.shields.io/badge/200GHz%20SPICE%20Cycles-0%20Errors%20(BER%20%3D%201.5%C3%9710%E2%81%BB%C2%B2%C2%B2)-brightgreen.svg)](#-cloud-hpc-100000000-run-production-campaign--hardware-sign-off)
@@ -21,12 +21,12 @@
 
 **Project JANUS** is a constraint-aware, bounded-exact optoelectronic tensor computing architecture engineered for high-throughput, low-power deep learning acceleration, upgraded to **200 GHz wave-pipelined operation**. Verified across photonic FDTD, 3D FEM thermal, 200 GHz SPICE, and synthesizable CMOS RTL:
 
-* **Die Footprint**: **100.00 mm²** (10.0 mm × 10.0 mm) monolithic 3D optoelectronic die featuring **22.50 mm²** active Sb₂S₃ phase-change switch fabric (3,932,160 non-volatile directional couplers at 5.72 µm²/cell: 7.55 µm × 0.758 µm pure straight parallel waveguides with 118 nm gap) with > 77 mm² dedicated routing and crossing margin. Matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
+* **Die Footprint**: **36.00 mm²** (6.0 mm × 6.0 mm) monolithic 3D optoelectronic die featuring **22.50 mm²** active Sb₂S₃ phase-change switch fabric (3,932,160 non-volatile directional couplers at 5.72 µm²/cell: 7.55 µm × 0.758 µm pure straight parallel waveguides with 118 nm gap) with 13.5 mm² dedicated routing and pad margin. Matched 1:1 vertically via Cu through-dielectric vias (TDVs) to the 65nm CMOS digital base die.
 * **Full-Package Power Envelope**: **5.29 W** total system dissipation at 100% component activity (2.13 W laser electrical power @ 75% WPE on 1.60 W optical carrier, 0.51 W LiTaO₃ modulators across 120 active channels, 0.16 W 205.2 GHz Ge/Si SAC²M APDs and clocked StrongARM latches, 0.99 W 65nm CMOS carry-save accumulators, 1.50 W JIR dynamic modulus scheduler, and **0.00 W static hold power** for non-volatile Sb₂S₃ switches).
 * **Throughput & Areal Density**:
-  * **INT4 Direct**: **3,276.8 TMAC/s** (6,553.6 TOPS → **6.55 Peta-OPS**) @ **619.4 TMAC/s/W** (1,238.9 TOPS/W) and **32.8 TMAC/s/mm²** (65.5 TOPS/mm²).
-  * **INT8 Exact**: **1,392.6 TMAC/s** (2,785.2 TOPS sustained) to **1,638.4 TMAC/s** (3,276.8 TOPS peak) @ **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) and **14.0 – 16.4 TMAC/s/mm²**.
-  * **INT64 Exact Deterministic**: **174.1 TMAC/s** (348.2 TOPS sustained) to **204.8 TMAC/s** (409.6 TOPS peak) @ **32.9 – 38.7 TMAC/s/W** and **1.74 – 2.05 TMAC/s/mm²** (0 arithmetic deviation).
+  * **INT4 Direct**: **3,276.8 TMAC/s** (6,553.6 TOPS → **6.55 Peta-OPS**) @ **619.4 TMAC/s/W** (1,238.9 TOPS/W) and **91.0 TMAC/s/mm²** (182.0 TOPS/mm²).
+  * **INT8 Exact**: **1,392.6 TMAC/s** (2,785.2 TOPS sustained) to **1,638.4 TMAC/s** (3,276.8 TOPS peak) @ **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) and **38.7 – 45.5 TMAC/s/mm²** (77.4 – 91.0 TOPS/mm²).
+  * **INT64 Exact Deterministic**: **174.1 TMAC/s** (348.2 TOPS sustained) to **204.8 TMAC/s** (409.6 TOPS peak) @ **32.9 – 38.7 TMAC/s/W** and **4.84 – 5.69 TMAC/s/mm²** (0 arithmetic deviation).
   * **Optical Symbol Rate**: **3.2 Terabaud** (16 channels × 200 Gbaud).
 * **Optoelectronic Signal Integrity & Link Budget**:
   * **205.2 GHz Ge/Si SAC²M Thin-Mesa APD Receiver**: Bandwidth partitioned via transit-time limit (284.1 GHz), avalanche buildup limit (297.4 GHz), and RC cutoff (4.89 THz) with 0.50 fF junction capacitance and 0.720 A/W responsivity.
@@ -437,11 +437,11 @@ The automated multi-physics co-simulation suite completes with a **100.0% pass r
 
 ## 🗺️ Master Hardware Scaling Roadmap (18 Models)
 
-Project JANUS scales from an entry **Model 1A Monolithic Planar MVP (100.00 mm², 5.29 W, 3,932,160 Sb₂S₃ switches at 5.72 µm²/cell, 3.28 PMAC/s INT4)** up to a **Model 6B 5-Stratum 3D Hyperscale Apex Module (104.85 PetaMAC/s at 392 W)** across 6 generations and 18 distinct hardware configurations:
+Project JANUS scales from an entry **Model 1A Monolithic Planar MVP (36.00 mm², 5.29 W, 3,932,160 Sb₂S₃ switches at 5.72 µm²/cell, 3.28 PMAC/s INT4)** up to a **Model 6B 5-Stratum 3D Hyperscale Apex Module (104.85 PetaMAC/s at 392 W)** across 6 generations and 18 distinct hardware configurations:
 
 | Model | Generation & Stack | Strata | Tiles | Mesh Size | Total Switches | Die Area | Total Power | INT8 Throughput | INT64 Throughput | TRL Status |
 |:---:|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **1A** | **Gen-1 Monolithic Planar MVP** | **1** | **16** | **32 x 32** | **3.93 M** | **100.0 mm²** | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** | **174.1 – 204.8 TMAC/s** | **TRL 4 (Co-Sim & 100M HPC Verified)** |
+| **1A** | **Gen-1 Monolithic Planar MVP** | **1** | **16** | **32 x 32** | **3.93 M** | **36.0 mm²** | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** | **174.1 – 204.8 TMAC/s** | **TRL 4 (Co-Sim & 100M HPC Verified)** |
 | **1B** | Gen-1 Monolithic Planar Full | 1 | 32 | 32 x 32 | 7.86 M | 200.0 mm² | **12.67 W** | 1,392.6 TMAC/s | 174.1 TMAC/s | TRL 3 (Analytical Proof) |
 | **2A** | Gen-2 Monolithic Planar Edge | 1 | 16 | 64 x 64 | 15.73 M | 400.0 mm² | 23.49 W | 2,785.3 TMAC/s | 348.2 TMAC/s | TRL 3 (Analytical Proof) |
 | **2B** | Gen-2 3D Mini Stack (50 mm²) | 2 | 16 | 32 x 32 | 3.93 M | 50.0 mm² | **5.29 W** | 1,392.6 – 1,638.4 TMAC/s | 174.1 – 204.8 TMAC/s | TRL 3 (Analytical Proof) |
@@ -467,15 +467,15 @@ Project JANUS scales from an entry **Model 1A Monolithic Planar MVP (100.00 mm²
 
 | Accelerator Platform | Architecture & Process | Die Footprint | TDP Power (W) | Peak INT8 Throughput | INT8 Energy Efficiency | Area Compute Density | Advantage vs Platform |
 |---|---|---|:---:|:---:|:---:|:---:|:---:|
-| **Project JANUS (Model 1A Planar - 200 GHz)** | **Spatial RNS Photonic (Monolithic 3D)** | **100.00 mm²** (10.0 × 10.0 mm) | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** (2,785.2 – 3,276.8 TOPS) | **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) | **14.0 – 16.4 TMAC/s/mm²** (32.8 TMAC/s/mm² INT4) | **Baseline (1.0x)** |
+| **Project JANUS (Model 1A Planar - 200 GHz)** | **Spatial RNS Photonic (Monolithic 3D)** | **36.00 mm²** (6.0 × 6.0 mm) | **5.29 W** | **1,392.6 – 1,638.4 TMAC/s** (2,785.2 – 3,276.8 TOPS) | **263.2 – 309.7 TMAC/s/W** (526.4 – 619.4 TOPS/W) | **38.7 – 45.5 TMAC/s/mm²** (91.0 TMAC/s/mm² INT4) | **Baseline (1.0x)** |
 | NVIDIA H100 SXM5 | Hopper (TSMC 4N) Silicon GPU | 814 mm² | 700.0 W | 989.6 TOPS (494.8 TMAC/s) | 1.41 TOPS/W (0.71 TMAC/s/W) | 1.22 TOPS/mm² (0.61 TMAC/s/mm²) | **158.9x Higher Efficiency** |
 | NVIDIA B200 (Blackwell) | Blackwell (TSMC 4NP Dual-Die) Silicon GPU | 1,600 mm² | 1,000.0 W | 2,250.0 TOPS (1,125.0 TMAC/s) | 2.25 TOPS/W (1.12 TMAC/s/W) | 1.41 TOPS/mm² (0.70 TMAC/s/mm²) | **100.8x Higher Efficiency** |
 | Google TPU v5p | 4nm Electronic TPU ASIC | ~600 mm² | 450.0 W | 918.0 TOPS (459.0 TMAC/s) | 2.04 TOPS/W (1.02 TMAC/s/W) | 1.53 TOPS/mm² (0.77 TMAC/s/mm²) | **110.6x Higher Efficiency** |
 
 * **370.7× Higher Energy Efficiency vs. NVIDIA H100 SXM5** (263.2 vs. 0.71 TMAC/s/W)
 * **235.0× Higher Energy Efficiency vs. NVIDIA B200 Blackwell** (263.2 vs. 1.12 TMAC/s/W)
-* **26.9× Higher Area Compute Density vs. NVIDIA H100 SXM5** (16.4 vs. 0.61 TMAC/s/mm²)
-* **23.4× Higher Area Compute Density vs. NVIDIA B200 Blackwell** (16.4 vs. 0.70 TMAC/s/mm²)
+* **74.6× Higher Area Compute Density vs. NVIDIA H100 SXM5** (45.5 vs. 0.61 TMAC/s/mm²)
+* **65.0× Higher Area Compute Density vs. NVIDIA B200 Blackwell** (45.5 vs. 0.70 TMAC/s/mm²)
 * **INT4 Direct Peak Throughput: 3,276.8 TMAC/s (6,553.6 TOPS @ 619.4 TMAC/s/W)**
 * **INT64 Deterministic Exact Precision: 174.1 – 204.8 TMAC/s (348.2 – 409.6 TOPS @ 32.9 – 38.7 TMAC/s/W)**
 * **Optical Line Rate: 3.2 Terabaud (16 channels × 200 Gbaud)**
