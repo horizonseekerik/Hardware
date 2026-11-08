@@ -2657,7 +2657,7 @@
                 PRECISION MODE
               </label>
               <select id="calc-precision" onchange="updateEnergyEstimator()" style="width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 7px 10px; border-radius: 6px; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; outline: none;">
-                <optgroup label="Floating-Point Precisions (CMOS Format Engine • 2.75 mm²)">
+                <optgroup label="Floating-Point Precisions (CMOS Format Engine • 3.75 mm²)">
                   <option value="fp4">FP4 (Microscaled GenAI • 4 Tiles Active)</option>
                   <option value="fp8">FP8 E4M3/E5M2 (Transformer Inference • 8 Tiles Active)</option>
                   <option value="bf16">BF16 (Brain Float 16 Deep Learning • 16 Tiles Active)</option>
@@ -5194,82 +5194,82 @@
               </tr>
               <tr style="border-bottom:1px solid var(--card-border);">
                 <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
-                  Fixed-Function Rasterizer & 16x TMUs
-                </td>
-                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  12.8 GTri/s barycentric rasterizer, 16x anisotropic TMUs, 80 Gbps DisplayPort 2.1 / eDP PHY
-                </td>
-                <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">3.900 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-main);">10.83%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.82 W</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--card-border);">
-                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
-                  64-Lane Vector SFU Transcendentals Array
-                </td>
-                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  64x vector lanes (dual 32-lane antiphase clusters, 64:1 gearing @ 3.125 GHz = 200 GHz throughput) for Softmax, GELU, SiLU, RoPE, RMSNorm
-                </td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">64</td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">3.200 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-main);">8.89%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.65 W</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--card-border);">
-                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
                   Multi-Precision Floating-Point Engine
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  64x polyphase format pre/post-processors (dual 32-lane clusters, 64:1 gearing @ 3.125 GHz = 200 GHz) for optical FP4, FP8, BF16, FP16 & FP32
+                  64x polyphase format pre/post-processors (dual 32-lane clusters, 64:1 gearing @ 3.125 GHz = 200 GHz wire speed) for optical FP4, FP8, BF16, FP16 & FP32 [EXPANDED]
                 </td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">64</td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.950 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-main);">5.42%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.42 W</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--card-border);">
-                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
-                  Hardware Ray-Tracing BVH Engines
-                </td>
-                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  4x hardware BVH traversal units (16-way AABB ray-box tests; Möller-Trumbore optical solve)
-                </td>
-                <td style="padding:10px 12px; color:var(--text-subtle);">4</td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.500 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-main);">4.17%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.35 W</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--card-border);">
-                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
-                  Dual-LUT SRAM & Microcode Subsystem
-                </td>
-                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  32x local volatile Dual-LUT SRAM macros (1.50 MB) + centralized microcode instruction ROM (320 ps access)
-                </td>
-                <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.500 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-main);">4.17%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.32 W</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">2.450 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-main);">6.81%</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.52 W</td>
               </tr>
               <tr style="border-bottom:1px solid var(--card-border);">
                 <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
                   FP64 Scientific Dual-Rail Normalizers
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  64x dual-rail 11-bit exponent aligners, Leading-Zero Detectors & IEEE 754 normalizers (64:1 gearing @ 3.125 GHz = 200 GHz)
+                  64x dual-rail 11-bit exponent aligners, 53-bit Leading-Zero Detectors & IEEE 754 normalizers (64:1 gearing @ 3.125 GHz = 200 GHz wire speed) [EXPANDED]
                 </td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">64</td>
-                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">0.800 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-main);">2.22%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.18 W</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.300 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-main);">3.61%</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.28 W</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--card-border);">
+                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
+                  Fixed-Function Rasterizer & 8x TMUs
+                </td>
+                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
+                  Barycentric edge setup, 8x anisotropic TMUs, 80 Gbps DisplayPort 2.1 PHY (runs at 4K 120Hz display refresh, decoupled from optical core) [RIGHT-SIZED]
+                </td>
+                <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">2.700 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-main);">7.50%</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.58 W</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--card-border);">
+                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
+                  Vector SFU Transcendentals Array
+                </td>
+                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
+                  16x vector-rate transcendental pipelines (Softmax, GELU, SiLU, RoPE, RMSNorm) operating post-GEMM on accumulated vectors (decoupled from optical core) [RIGHT-SIZED]
+                </td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">16</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">2.400 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-main);">6.67%</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.48 W</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--card-border);">
+                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
+                  Hardware Ray-Tracing BVH Engines
+                </td>
+                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
+                  2x hardware BVH traversal units (16-way AABB ray-box tests; operates asynchronously on geometry trees before optical solve) [RIGHT-SIZED]
+                </td>
+                <td style="padding:10px 12px; color:var(--text-subtle);">2</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.000 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-main);">2.78%</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.23 W</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--card-border);">
+                <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
+                  Dual-LUT SRAM & Microcode Subsystem
+                </td>
+                <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
+                  32x local volatile Dual-LUT SRAM macros (1.50 MB) + centralized microcode instruction ROM (320 ps access) [PRESERVED UNTOUCHED]
+                </td>
+                <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.500 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-main);">4.17%</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.32 W</td>
               </tr>
               <tr style="border-bottom:1px solid var(--card-border); background: rgba(56, 189, 248, 0.03);">
                 <td style="padding:10px 12px; font-weight:600; color:var(--accent-cyan); font-family: 'Inter', sans-serif;">
                   H-Tree Clock Mesh & Power Delivery Grid
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  Balanced 3.125 GHz H-tree clock distribution, low-IR power grid & active decoupling arrays
+                  Balanced 3.125 GHz H-tree clock distribution, low-IR power grid & active decoupling arrays [PRESERVED UNTOUCHED]
                 </td>
                 <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">3.500 mm²</td>
@@ -5281,11 +5281,11 @@
                   MIM/MOS Decoupling Whitespace & Dicing Border
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  High-density on-chip MIM/MOS decoupling capacitance filler & thermal relief dicing margin
+                  High-density on-chip MIM/MOS decoupling capacitance filler for di/dt suppression & thermal relief dicing margin [EXPANDED]
                 </td>
                 <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
-                <td style="padding:10px 12px; color:var(--text-muted); font-weight: 700;">2.720 mm²</td>
-                <td style="padding:10px 12px; color:var(--text-muted);">7.56%</td>
+                <td style="padding:10px 12px; color:var(--text-muted); font-weight: 700;">4.220 mm²</td>
+                <td style="padding:10px 12px; color:var(--text-muted);">11.72%</td>
                 <td style="padding:10px 12px; color:var(--text-muted);">0.00 W</td>
               </tr>
               <tr style="background:rgba(0, 242, 254, 0.07); font-weight:700; border-top: 2px solid var(--accent-cyan);">
@@ -5333,10 +5333,10 @@
               <span style="font-size: 0.76rem; font-weight: 700; color: var(--accent-purple); text-transform: uppercase;">
                 Universal Float (FP4 to FP64)
               </span>
-              <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">2.75 mm² DEDICATED</span>
+              <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">3.75 mm² DEDICATED</span>
             </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
-              Allocates 2.75 mm² on CMOS: 1.95 mm² for 64x polyphase format pre/post-processors (64:1 gearing @ 3.125 GHz = 200 GHz wire speed) unpacking FP4, FP8 (E4M3/E5M2), BF16, FP16, and FP32, plus 0.80 mm² for 64x dual-rail FP64 normalizers with Leading-Zero Detectors delivering exact IEEE 754 double precision.
+              Allocates 3.75 mm² on CMOS: 2.45 mm² for 64x polyphase format pre/post-processors (64:1 gearing @ 3.125 GHz = 200 GHz wire speed) unpacking FP4, FP8 (E4M3/E5M2), BF16, FP16, and FP32, plus 1.30 mm² for 64x dual-rail FP64 normalizers with Leading-Zero Detectors delivering exact IEEE 754 double precision.
             </p>
           </div>
 
@@ -6407,7 +6407,7 @@
       },
       1: {
         title: "Stratum 1 (65nm CMOS Digital Die)",
-        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization • Universal Float Engine (FP4–FP64 • 64-Lane 64:1 Gearing @ 3.125 GHz = 200 GHz) • 1-2-8-8 Antiphase • Ray-Tracing BVH • 64-Lane Vector SFUs • DisplayPort 2.1."
+        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >88% Active Silicon Utilization • Universal Float Engine (FP4–FP64 • 64-Lane 64:1 Gearing @ 3.125 GHz = 200 GHz • 3.75 mm²) • 1-2-8-8 Antiphase • Ray-Tracing BVH • Vector SFUs • DisplayPort 2.1."
       }
     };
 

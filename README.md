@@ -109,21 +109,21 @@ Project JANUS integrates general-purpose control (**APU**), 200 GHz photonic ten
 |  - FP4, FP8, BF16, FP16, FP32 Pre/Post Process  │   - Softmax, GELU, SiLU Transcendentals |
 |  - 11-Bit Exponent Aligners & Normalizers       │   - RMSNorm, RoPE Positional Encoders   |
 |  - 53-Bit Mantissa Multiplied over 16 Channels  │   - 64 Parallel SIMD Vector Lanes       |
-|  (2.75 mm² Total: 1.95 mm² Float + 0.80 mm² FP64)│   (3.20 mm² Active Area)                |
+|  (3.75 mm² Total: 2.45 mm² Float + 1.30 mm² FP64)│   (2.40 mm² Active Area)                |
 +─────────────────────────────────────────────────┴─────────────────────────────────────────+
-|                  DUAL-MODE GRAPHICS & RAY-TRACING SUBSYSTEM (5.40 mm² Total)              |
+|                  DUAL-MODE GRAPHICS & RAY-TRACING SUBSYSTEM (3.70 mm² Total)              |
 |  [Approach A: Neural Rendering & NeRFs]         │  [Approach B: Hardware Ray-Tracing & 3D] |
-|  - 3D Gaussian Splatting (3DGS) Covariance      │  - 4x Hardware BVH Traversal Engines    |
+|  - 3D Gaussian Splatting (3DGS) Covariance      │  - 2x Hardware BVH Traversal Engines    |
 |  - Spherical Harmonics Matrix Projections       │  - 16-Way CMOS AABB Ray-Box Pipelines   |
 |  - 3.28 Peta-MAC/s Optical Volume Composition   │  - Optical Möller-Trumbore 3x3 Solver   |
 |  (Executed on 200 GHz Optical Matrix Core)      │  - 12.8 GTri/s Fixed-Function Rasterizer|
-|                                                 │  - 16x Anisotropic TMUs + DisplayPort   |
+|                                                 │  - 8x Anisotropic TMUs + DisplayPort    |
 +─────────────────────────────────────────────────┴─────────────────────────────────────────+
 |  [Baseline CMOS Core Components]                │  [Silicon Whitespace & H-Tree Mesh]     |
 |  - 16x StrongARM Sense-Amps & Deserializers     │  - 3.125 GHz H-Tree Clock Mesh          |
 |  - CRT Garner Adder Trees & Modulo Encoders     │  - VDD/VSS Decoupling Capacitors (Decap)|
 |  - Cu TDV Microbump Contact Pads (50 um pitch)  │  - Monolithic Thermal Buffer Relief     |
-|  - Global Power Ring & 4-Layer Seal Ring        │  (6.22 mm² Free Margin / 17.28% of die) |
+|  - Global Power Ring & 4-Layer Seal Ring        │  (7.72 mm² Free Margin / 21.44% of die) |
 |  (10.63 mm² Active Area)                        │                                         |
 +───────────────────────────────────────────────────────────────────────────────────────────+
 ```
@@ -150,25 +150,25 @@ To reconcile the frequency mismatch between the **3.125 GHz 65nm CMOS digital cl
   * **Fixed-Function Rasterizer & TMUs**: 12.8 GigaTriangles/s edge equation setup, sub-pixel barycentric rasterizer, 16 Texture Mapping Units (bilinear, trilinear, anisotropic), and integrated 80 Gbps DisplayPort 2.1 / eDP PHY.
 
 ### 3. Universal Floating-Point Engine (FP4, FP8, BF16, FP16, FP32 & FP64)
-Project JANUS allocates **2.75 mm² (7.64% of the 36.00 mm² CMOS base die)** to a dedicated multi-precision floating-point format and normalization engine, enabling seamless execution across every standard AI and scientific floating-point data type without retraining:
+Project JANUS allocates **3.75 mm² (10.42% of the 36.00 mm² CMOS base die)** to a dedicated multi-precision floating-point format and normalization engine, enabling seamless execution across every standard AI and scientific floating-point data type without retraining:
 * **FP4 & FP8 (OCP Microscaling / E4M3 / E5M2)**: 1-cycle hardware exponent unpackers and mantissa aligners feed the optical crossbar array for frontier LLM inference and MoE routing at **3,276.8 TFLOPS (FP4)** and **1,638.4 TFLOPS (FP8)**.
 * **BF16 & FP16 (Deep Learning Mixed Precision)**: Google Brain bfloat16 and IEEE 754 half-precision normalizers with $<20\text{ ps}$ exponent tracking across 2 optical residue tiles (**696.3 – 819.2 TFLOPS**).
 * **FP32 (IEEE 754 Single Precision)**: Standard scientific and neural network gradient accumulation; 8-bit exponent aligners and 24-bit mantissas mapped across 4 optical residue tiles (**348.2 – 409.6 TFLOPS**).
-* **FP64 (IEEE 754 Double Precision Scientific Engine)**: 0.80 mm² dedicated block with 11-bit dual-rail exponent subtractors, barrel shifters, and Leading Zero Detectors (LZD); the 53-bit mantissa is distributed across all 16 parallel residue channels ($k_{\text{int64}}=16$), providing $>106\text{ bits}$ of dynamic range with exact **0.00000000% error** (**174.1 – 204.8 TFLOPS**).
+* **FP64 (IEEE 754 Double Precision Scientific Engine)**: 1.30 mm² dedicated block with 11-bit dual-rail exponent subtractors, barrel shifters, and Leading Zero Detectors (LZD); the 53-bit mantissa is distributed across all 16 parallel residue channels ($k_{\text{int64}}=16$), providing $>106\text{ bits}$ of dynamic range with exact **0.00000000% error** (**174.1 – 204.8 TFLOPS**).
 
 ### 4. Zero-Base 36.00 mm² CMOS Floorplan Budget
 | Subsystem Component | Stratum | Units | Area (mm²) | Die % | Architectural Function |
 | :--- | :--- | :---: | :---: | :---: | :--- |
 | **Baseline CMOS Core Logic & Latches** | 65nm CMOS Base | 1 | **10.63** | 29.53% | StrongARM latches, CRT trees, RNS encoders, TDV pads, power/seal rings |
 | **1-2-8-8 Antiphase Control Hierarchy** | 65nm CMOS Base | 19 | **6.30** | 17.50% | 1 Master Core (1.5 mm²), 2 Phase Mgrs (0.8 mm²), 16 Tile Cores (4.0 mm²) |
-| **Multi-Precision Float Engine** | 65nm CMOS Base | 64 | **1.95** | 5.42% | 64x polyphase format pre/post-processors (64:1 gearing @ 3.125 GHz = 200 GHz) for FP4–FP32 |
-| **FP64 Scientific Normalizers** | 65nm CMOS Base | 64 | **0.80** | 2.22% | 64x dual-rail 11-bit exponent aligners, LZDs & IEEE 754 FP64 normalizers (64:1 gearing) |
-| **64-Lane Vector SFU Transcendentals** | 65nm CMOS Base | 64 | **3.20** | 8.89% | 64x vector lanes (dual 32-lane clusters, 64:1 gearing @ 3.125 GHz = 200 GHz) for Softmax/GELU |
-| **Hardware Ray-Tracing BVH Engines** | 65nm CMOS Base | 4 | **1.50** | 4.17% | 4x BVH traversal engines with 16-way AABB ray-box pipelines |
-| **Rasterizer, 16x TMUs & DisplayPort** | 65nm CMOS Base | 1 | **3.90** | 10.83% | 12.8 GTri/s barycentric rasterizer, 16x TMUs, 80 Gbps DP 2.1 PHY |
+| **Multi-Precision Float Engine** | 65nm CMOS Base | 64 | **2.45** | 6.81% | 64x polyphase format pre/post-processors (64:1 gearing @ 3.125 GHz = 200 GHz wire speed) [EXPANDED] |
+| **FP64 Scientific Normalizers** | 65nm CMOS Base | 64 | **1.30** | 3.61% | 64x dual-rail 11-bit exponent aligners, LZDs & IEEE 754 normalizers (64:1 gearing) [EXPANDED] |
+| **Vector SFU Transcendentals** | 65nm CMOS Base | 16 | **2.40** | 6.67% | 16x vector-rate transcendental pipelines (Softmax/GELU) operating post-accumulation [DECOUPLED] |
+| **Hardware Ray-Tracing BVH Engines** | 65nm CMOS Base | 2 | **1.00** | 2.78% | 2x BVH traversal units (16-way AABB box-ray tests, geometry rate) [DECOUPLED] |
+| **Rasterizer, 8x TMUs & DisplayPort** | 65nm CMOS Base | 1 | **2.70** | 7.50% | Barycentric rasterizer, 8x TMUs, 80 Gbps DP 2.1 PHY (4K 120Hz display rate) [DECOUPLED] |
 | **Dual-LUT SRAM & Microcode Subsystem** | 65nm CMOS Base | 1 | **1.50** | 4.17% | 32x local volatile Dual-LUT SRAM macros (1.50 MB) + central ROM (320 ps access) |
-| **H-Tree Clock Mesh & Decap Whitespace** | Silicon Whitespace | 1 | **6.22** | **17.28%** | 3.125 GHz balanced clock tree, power grid decoupling, thermal buffer |
-| **Total Physical CMOS Base Die** | **Monolithic 65nm** | — | **36.00** | **100.00%** | **6.00 mm × 6.00 mm Base Die (82.72% Active Area, 17.28% Whitespace)** |
+| **H-Tree Clock Mesh & Decap Whitespace** | Silicon Whitespace | 1 | **7.72** | **21.44%** | 3.125 GHz H-tree clock (3.50 mm² [PRESERVED]) + MIM decap whitespace (4.22 mm²) |
+| **Total Physical CMOS Base Die** | **Monolithic 65nm** | — | **36.00** | **100.00%** | **6.00 mm × 6.00 mm Base Die (78.56% Active Area, 21.44% Clock & Decap Margin)** |
 
 ---
 
