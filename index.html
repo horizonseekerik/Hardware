@@ -5206,12 +5206,12 @@
               </tr>
               <tr style="border-bottom:1px solid var(--card-border);">
                 <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
-                  16x Vector SFU Transcendentals Array
+                  64-Lane Vector SFU Transcendentals Array
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  16x vector lanes for Softmax, GELU, SiLU, RoPE, RMSNorm & transcendental evaluations
+                  64x vector lanes (dual 32-lane antiphase clusters, 64:1 gearing @ 3.125 GHz = 200 GHz throughput) for Softmax, GELU, SiLU, RoPE, RMSNorm
                 </td>
-                <td style="padding:10px 12px; color:var(--text-subtle);">16</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">64</td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">3.200 mm²</td>
                 <td style="padding:10px 12px; color:var(--text-main);">8.89%</td>
                 <td style="padding:10px 12px; color:var(--accent-green);">0.65 W</td>
@@ -5221,9 +5221,9 @@
                   Multi-Precision Floating-Point Engine
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  16x hardware format pre/post-processors for optical FP4, FP8, BF16, FP16 & FP32 mapping
+                  64x polyphase format pre/post-processors (dual 32-lane clusters, 64:1 gearing @ 3.125 GHz = 200 GHz) for optical FP4, FP8, BF16, FP16 & FP32
                 </td>
-                <td style="padding:10px 12px; color:var(--text-subtle);">16</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">64</td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.950 mm²</td>
                 <td style="padding:10px 12px; color:var(--text-main);">5.42%</td>
                 <td style="padding:10px 12px; color:var(--accent-green);">0.42 W</td>
@@ -5257,9 +5257,9 @@
                   FP64 Scientific Dual-Rail Normalizers
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  11-bit exponent aligners, Leading-Zero Detectors, FP64 packing (53b mantissa across 16 RNS)
+                  64x dual-rail 11-bit exponent aligners, Leading-Zero Detectors & IEEE 754 normalizers (64:1 gearing @ 3.125 GHz = 200 GHz)
                 </td>
-                <td style="padding:10px 12px; color:var(--text-subtle);">16</td>
+                <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">64</td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">0.800 mm²</td>
                 <td style="padding:10px 12px; color:var(--text-main);">2.22%</td>
                 <td style="padding:10px 12px; color:var(--accent-green);">0.18 W</td>
@@ -5336,7 +5336,7 @@
               <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">2.75 mm² DEDICATED</span>
             </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
-              Allocates 2.75 mm² on CMOS: 1.95 mm² format engine unpacking FP4, FP8 (E4M3/E5M2), BF16, FP16, and FP32 in 1 cycle for optical GEMMs, plus 0.80 mm² dual-rail exponent normalizers and LZDs delivering exact IEEE 754 FP64 scientific precision (0.00% error).
+              Allocates 2.75 mm² on CMOS: 1.95 mm² for 64x polyphase format pre/post-processors (64:1 gearing @ 3.125 GHz = 200 GHz wire speed) unpacking FP4, FP8 (E4M3/E5M2), BF16, FP16, and FP32, plus 0.80 mm² for 64x dual-rail FP64 normalizers with Leading-Zero Detectors delivering exact IEEE 754 double precision.
             </p>
           </div>
 
@@ -6407,7 +6407,7 @@
       },
       1: {
         title: "Stratum 1 (65nm CMOS Digital Die)",
-        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization • Universal Float Engine (FP4, FP8, BF16, FP16, FP32, FP64) • 1-2-8-8 Antiphase • Ray-Tracing BVH • 16x Vector SFUs • DisplayPort 2.1."
+        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization • Universal Float Engine (FP4–FP64 • 64-Lane 64:1 Gearing @ 3.125 GHz = 200 GHz) • 1-2-8-8 Antiphase • Ray-Tracing BVH • 64-Lane Vector SFUs • DisplayPort 2.1."
       }
     };
 

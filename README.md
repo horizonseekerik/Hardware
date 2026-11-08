@@ -105,10 +105,10 @@ Project JANUS integrates general-purpose control (**APU**), 200 GHz photonic ten
 |   Tile 00  Tile 01  Tile 02  Tile 03  Tile 04  Tile 05  Tile 06  Tile 07  (Phase 1 Group)  |
 |   Tile 08  Tile 09  Tile 10  Tile 11  Tile 12  Tile 13  Tile 14  Tile 15  (Phase 2 Group)  |
 +─────────────────────────────────────────────────┬─────────────────────────────────────────+
-|  [Multi-Precision Float & FP64 Scientific Engine]│   [16x Vector SFU Array]                |
+|  [Multi-Precision Float & FP64 Scientific Engine]│   [64-Lane Vector SFU Transcendentals]  |
 |  - FP4, FP8, BF16, FP16, FP32 Pre/Post Process  │   - Softmax, GELU, SiLU Transcendentals |
 |  - 11-Bit Exponent Aligners & Normalizers       │   - RMSNorm, RoPE Positional Encoders   |
-|  - 53-Bit Mantissa Multiplied over 16 Channels  │   - 16 Parallel SIMD Vector Lanes       |
+|  - 53-Bit Mantissa Multiplied over 16 Channels  │   - 64 Parallel SIMD Vector Lanes       |
 |  (2.75 mm² Total: 1.95 mm² Float + 0.80 mm² FP64)│   (3.20 mm² Active Area)                |
 +─────────────────────────────────────────────────┴─────────────────────────────────────────+
 |                  DUAL-MODE GRAPHICS & RAY-TRACING SUBSYSTEM (5.40 mm² Total)              |
@@ -161,9 +161,9 @@ Project JANUS allocates **2.75 mm² (7.64% of the 36.00 mm² CMOS base die)** to
 | :--- | :--- | :---: | :---: | :---: | :--- |
 | **Baseline CMOS Core Logic & Latches** | 65nm CMOS Base | 1 | **10.63** | 29.53% | StrongARM latches, CRT trees, RNS encoders, TDV pads, power/seal rings |
 | **1-2-8-8 Antiphase Control Hierarchy** | 65nm CMOS Base | 19 | **6.30** | 17.50% | 1 Master Core (1.5 mm²), 2 Phase Mgrs (0.8 mm²), 16 Tile Cores (4.0 mm²) |
-| **Multi-Precision Float Engine** | 65nm CMOS Base | 16 | **1.95** | 5.42% | FP4, FP8, BF16, FP16, FP32 unpackers and format normalizers |
-| **FP64 Scientific Normalizers** | 65nm CMOS Base | 16 | **0.80** | 2.22% | 11-bit exponent aligners, Leading-Zero Detectors, FP64 pack units |
-| **16x Vector SFU Transcendentals Array** | 65nm CMOS Base | 16 | **3.20** | 8.89% | Softmax, GELU, SiLU, RoPE, RMSNorm transcendental vector lanes |
+| **Multi-Precision Float Engine** | 65nm CMOS Base | 64 | **1.95** | 5.42% | 64x polyphase format pre/post-processors (64:1 gearing @ 3.125 GHz = 200 GHz) for FP4–FP32 |
+| **FP64 Scientific Normalizers** | 65nm CMOS Base | 64 | **0.80** | 2.22% | 64x dual-rail 11-bit exponent aligners, LZDs & IEEE 754 FP64 normalizers (64:1 gearing) |
+| **64-Lane Vector SFU Transcendentals** | 65nm CMOS Base | 64 | **3.20** | 8.89% | 64x vector lanes (dual 32-lane clusters, 64:1 gearing @ 3.125 GHz = 200 GHz) for Softmax/GELU |
 | **Hardware Ray-Tracing BVH Engines** | 65nm CMOS Base | 4 | **1.50** | 4.17% | 4x BVH traversal engines with 16-way AABB ray-box pipelines |
 | **Rasterizer, 16x TMUs & DisplayPort** | 65nm CMOS Base | 1 | **3.90** | 10.83% | 12.8 GTri/s barycentric rasterizer, 16x TMUs, 80 Gbps DP 2.1 PHY |
 | **Dual-LUT SRAM & Microcode Subsystem** | 65nm CMOS Base | 1 | **1.50** | 4.17% | 32x local volatile Dual-LUT SRAM macros (1.50 MB) + central ROM (320 ps access) |
