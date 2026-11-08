@@ -59,12 +59,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // Set theme immediately to avoid flash of dark content
+    // Set theme immediately to avoid flash of unstyled content (Photonic Foundry Dark Default)
     (function () {
       var savedTheme = localStorage.getItem('janus_theme');
       if (savedTheme !== 'dark' && savedTheme !== 'light') {
-        savedTheme = 'light';
-        localStorage.setItem('janus_theme', 'light');
+        savedTheme = 'dark';
+        localStorage.setItem('janus_theme', 'dark');
       }
       document.documentElement.setAttribute('data-theme', savedTheme);
     })();
@@ -74,8 +74,43 @@
        JANUS PRECISION HARDWARE DESIGN SYSTEM
        High-Contrast Foundry Slate (Light) & Obsidian (Dark)
        ========================================================= */
-    :root {
-      /* LIGHT THEME (ARCHITECTURAL PAPER & FOUNDRY SLATE) */
+    :root, [data-theme="dark"] {
+      /* PHOTONIC FOUNDRY DARK THEME (FLAGSHIP DEFAULT) */
+      --bg-color: #080a11;
+      --bg-dark: #0c0f18;
+      --header-bg: rgba(8, 10, 17, 0.92);
+      --nav-bg: #111522;
+      --card-bg: #0f131f;
+      --card-sub-bg: #141926;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-subtle: rgba(255, 255, 255, 0.04);
+      --table-header-bg: #111624;
+      --table-row-hover: rgba(0, 240, 255, 0.04);
+      --input-bg: #111522;
+      --accent-cyan: #00f0ff;        /* Coherent Laser Photonic Cyan */
+      --accent-blue: #3b82f6;        /* Precision Blue */
+      --accent-purple: #818cf8;      /* Waveguide Indigo */
+      --accent-green: #10b981;       /* Verification Emerald */
+      --accent-red: #f87171;         /* Limit Crimson */
+      --accent-amber: #f59e0b;       /* Thermal Copper / Sb2S3 */
+      --accent-yellow: #fbbf24;
+      --text-main: #f8fafc;          /* High-contrast crisp white */
+      --text-muted: #94a3b8;         /* Technical Slate */
+      --text-subtle: #64748b;
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      --glow-cyan: 0 0 24px rgba(0, 240, 255, 0.28);
+      --glow-amber: 0 0 20px rgba(245, 158, 11, 0.24);
+      --glow-purple: 0 0 20px rgba(129, 140, 248, 0.24);
+      --canvas-bg: #080a11;
+      --canvas-border: rgba(255, 255, 255, 0.08);
+      --hero-bg: #0b0e17;
+      --hero-title-grad: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      --badge-pass-bg: rgba(16, 185, 129, 0.15);
+      --badge-pass-color: #34d399;
+    }
+
+    [data-theme="light"] {
+      /* PAPER / JOURNAL LIGHT THEME (HIGH-CONTRAST MANUSCRIPT READING) */
       --bg-color: #f8fafc;
       --bg-dark: #f1f5f9;
       --header-bg: rgba(255, 255, 255, 0.94);
@@ -90,8 +125,8 @@
       --accent-cyan: #0284c7;        /* Optical Sky/Cyan */
       --accent-blue: #2563eb;        /* Precision Blue */
       --accent-purple: #6366f1;      /* Indigo */
-      --accent-green: #10b981;       /* Verification Emerald */
-      --accent-red: #ef4444;         /* Alert Red */
+      --accent-green: #059669;       /* Verification Emerald */
+      --accent-red: #dc2626;         /* Alert Red */
       --accent-amber: #d97706;       /* Thermal Copper / Amber */
       --accent-yellow: #d97706;
       --text-main: #0f172a;          /* Deep Ink Slate */
@@ -99,6 +134,7 @@
       --text-subtle: #94a3b8;
       --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
       --glow-cyan: none;
+      --glow-amber: none;
       --glow-purple: none;
       --canvas-bg: #ffffff;
       --canvas-border: #e2e8f0;
@@ -106,40 +142,6 @@
       --hero-title-grad: #0f172a;
       --badge-pass-bg: rgba(16, 185, 129, 0.1);
       --badge-pass-color: #059669;
-    }
-
-    [data-theme="dark"] {
-      /* DARK THEME (DEEP OBSIDIAN / SEMICONDUCTOR FOUNDRY) */
-      --bg-color: #080a0f;
-      --bg-dark: #0c0f17;
-      --header-bg: rgba(12, 15, 23, 0.94);
-      --nav-bg: #10141f;
-      --card-bg: #0e121a;
-      --card-sub-bg: #121722;
-      --card-border: #1e2638;
-      --card-border-subtle: #171d2b;
-      --table-header-bg: #10141f;
-      --table-row-hover: rgba(255, 255, 255, 0.03);
-      --input-bg: #10141f;
-      --accent-cyan: #38bdf8;        /* Laser Photonic Cyan */
-      --accent-blue: #3b82f6;        /* Precision Blue */
-      --accent-purple: #818cf8;      /* Indigo */
-      --accent-green: #10b981;       /* Verification Emerald */
-      --accent-red: #f87171;         /* Limit Crimson */
-      --accent-amber: #f59e0b;       /* Silicon / Copper Amber */
-      --accent-yellow: #f59e0b;
-      --text-main: #f8fafc;          /* High-contrast crisp white */
-      --text-muted: #94a3b8;         /* Technical Slate */
-      --text-subtle: #64748b;
-      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px -4px rgba(0, 0, 0, 0.5);
-      --glow-cyan: none;
-      --glow-purple: none;
-      --canvas-bg: #0c0f17;
-      --canvas-border: #1e2638;
-      --hero-bg: #0e121a;
-      --hero-title-grad: #ffffff;
-      --badge-pass-bg: rgba(16, 185, 129, 0.15);
-      --badge-pass-color: #34d399;
     }
 
     * {
@@ -2319,6 +2321,251 @@
       }
     }
 
+  
+    /* --- NEW UI/UX REVAMP STYLES (Photonic Foundry 2026) --- */
+    
+    /* Top Reading Progress Bar */
+    #reading-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+      z-index: 99999;
+      box-shadow: 0 0 10px var(--accent-cyan);
+      transition: width 0.1s ease;
+    }
+
+    /* Pulse Indicator Keyframes */
+    @keyframes pulseGlow {
+      0% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 4px var(--accent-cyan); }
+      50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 12px var(--accent-cyan); }
+      100% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 4px var(--accent-cyan); }
+    }
+
+    /* Hero Telemetry Banner */
+    .hero-telemetry-banner {
+      margin: 1.5rem 0 1.25rem;
+      padding: 0.85rem 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      backdrop-filter: blur(8px);
+    }
+    .hero-telemetry-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    /* Command Palette */
+    .cmd-palette-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 11, 0.82);
+      backdrop-filter: blur(8px);
+      z-index: 100000;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 12vh;
+    }
+    .cmd-palette-backdrop.active {
+      display: flex;
+    }
+    .cmd-palette-modal {
+      width: 90%;
+      max-width: 640px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 240, 255, 0.2);
+      overflow: hidden;
+      animation: cmdPop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes cmdPop {
+      from { opacity: 0; transform: scale(0.96) translateY(-10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .cmd-palette-header {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--card-border);
+      gap: 12px;
+      background: var(--card-sub-bg);
+    }
+    .cmd-palette-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .cmd-palette-list {
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .cmd-palette-group-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      padding: 8px 12px 4px;
+      letter-spacing: 0.08em;
+    }
+    .cmd-palette-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 0.88rem;
+      transition: all 0.12s ease;
+    }
+    .cmd-palette-item:hover, .cmd-palette-item.selected {
+      background: var(--card-sub-bg);
+      border-left: 3px solid var(--accent-cyan);
+      padding-left: 11px;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.1);
+    }
+    .cmd-palette-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cmd-palette-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.74rem;
+      color: var(--text-subtle);
+      background: var(--card-sub-bg);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Toast Notification System */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100001;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast-message {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(0, 240, 255, 0.2);
+      font-size: 0.84rem;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.2s ease-out;
+      pointer-events: auto;
+      border-left: 3px solid var(--accent-cyan);
+    }
+    .toast-message.toast-success { border-left-color: var(--accent-green); }
+    .toast-message.toast-warning { border-left-color: var(--accent-amber); }
+    .toast-message.fade-out {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.25s ease-out;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Interactive 36mm² Floorplan Inspector */
+    .floorplan-container {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .floorplan-container { grid-template-columns: 1fr; }
+    }
+    .floorplan-canvas-wrapper {
+      background: #04060b;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .floorplan-block-rect {
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .floorplan-block-rect:hover, .floorplan-block-rect.active {
+      filter: brightness(1.35) drop-shadow(0 0 8px var(--accent-cyan));
+      stroke: #ffffff;
+      stroke-width: 1.5px;
+    }
+    .floorplan-hud {
+      background: var(--card-sub-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 200 GHz Oscilloscope Eye Diagram */
+    .oscilloscope-box {
+      background: #020408;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.1), inset 0 0 40px rgba(0,0,0,0.9);
+    }
+    .oscilloscope-canvas {
+      width: 100%;
+      height: 280px;
+      display: block;
+      border-radius: 4px;
+    }
+    .oscilloscope-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--card-border);
+    }
+
   </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
@@ -2329,6 +2576,8 @@
 </head>
 
 <body>
+  <!-- Top Scroll Reading Progress Indicator -->
+  <div id="reading-progress-bar"></div>
 
 
   <!-- TOP GLOBAL HEADER & NAVIGATION BAR -->
@@ -2344,6 +2593,11 @@
     <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">☰</button>
 
     <nav class="nav-bar">
+      <!-- Global Quick-Search & Command Palette Trigger -->
+      <button class="nav-btn cmd-palette-trigger" onclick="openCommandPalette()" title="Press Cmd+K or Ctrl+K to search"
+        style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; background:var(--card-sub-bg); border:1px solid var(--card-border); border-radius:6px; font-size:0.75rem; color:var(--text-muted); cursor:pointer;">
+        <span>🔍</span> <span style="font-weight:600;">Search</span> <kbd style="background:var(--bg-dark); border:1px solid var(--card-border); border-radius:3px; padding:1px 5px; font-size:0.65rem; font-family:'JetBrains Mono',monospace;">⌘K</kbd>
+      </button>
       <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">Overview</button>
       <button class="nav-btn" id="nav-paper" onclick="switchPage('paper')">Manuscript</button>
       <button class="nav-btn" id="nav-simulation" onclick="switchPage('simulation')">Co-Simulation</button>
@@ -2387,6 +2641,30 @@
             <button class="btn-outline" onclick="switchPage('paper'); switchPaper('manuscript');">Read IEEE Manuscript (PDF)</button>
             <a href="javascript:void(0)" onclick="switchPage('hardware')" class="hero-link-chip">CMOS & 3D Stack ↗</a>
             <a href="javascript:void(0)" onclick="switchPage('roadmap')" class="hero-link-chip">Roadmap ↗</a>
+          </div>
+
+          <!-- LIVE HARDWARE TELEMETRY BANNER -->
+          <div class="hero-telemetry-banner">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:8px; height:8px; border-radius:50%; background:var(--accent-cyan); display:inline-block; animation:pulseGlow 2s infinite;"></span>
+              <span style="color:var(--text-subtle);">TELEMETRY:</span>
+              <strong style="color:var(--accent-cyan);">MODEL 1A</strong>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; color:var(--text-muted); font-size:0.75rem;">
+              <span>CARRIER: <strong style="color:var(--text-main);">200.0 GHz</strong> (5.0 ps)</span>
+              <span style="color:var(--card-border);">•</span>
+              <span>DIE: <strong style="color:var(--text-main);">36.00 mm²</strong> (6.00×6.00 mm)</span>
+              <span style="color:var(--card-border);">•</span>
+              <span>CMOS BASE: <strong style="color:var(--text-main);">3.125 GHz</strong> (1:64)</span>
+              <span style="color:var(--card-border);">•</span>
+              <span>POWER: <strong style="color:var(--accent-amber);">5.29 W</strong></span>
+              <span style="color:var(--card-border);">•</span>
+              <span>INT4: <strong style="color:var(--accent-green);">3,276.8 TMAC/s</strong></span>
+              <span style="color:var(--card-border);">•</span>
+              <span>BER: <strong style="color:var(--accent-green);">&lt; 10⁻¹⁸</strong></span>
+              <span style="color:var(--card-border);">•</span>
+              <span class="hero-telemetry-badge">● TAPEOUT-READY</span>
+            </div>
           </div>
 
           <!-- Integrated Spec Ticker -->
@@ -3023,6 +3301,76 @@
       <!-- TAB 2: ARCHITECTURE & LIGHT PROPAGATION CO-DESIGN -->
       <div id="tab-arch" class="tab-content">
 
+        <!-- INTERACTIVE 200.0 GHz EYE DIAGRAM & LINK BUDGET OSCILLOSCOPE -->
+        <div class="card oscilloscope-box" style="margin-bottom: 2rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
+            <div>
+              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 240, 255, 0.15); color:var(--accent-cyan); font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">
+                Live Optoelectronic Oscilloscope • 200.0 GHz Symbol Rate
+              </div>
+              <h3 style="font-size:1.25rem; color:#ffffff; margin:0.35rem 0 0;">
+                200.0 GHz Wave-Pipelined Eye Diagram & Link Closure Simulator
+              </h3>
+            </div>
+            <div id="osc-ber-badge" style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:700; padding:4px 10px; border-radius:4px; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid #10b981;">
+              ● LINK CLOSED: BER &le; 1.0 &times; 10⁻¹⁸
+            </div>
+          </div>
+
+          <p style="color:#94a3b8; font-size:0.86rem; line-height:1.5; margin-bottom:1rem;">
+            Simulates the high-speed optoelectronic eye opening across the 13-stage cascaded MMI tree, 4-stage binary Sb₂S₃ tree routers, and SAC²M Ge/Si avalanche photoreceiver mesas. Adjust optical laser power ($P_{\text{opt}}$) or timing jitter to observe real-time eye closure and $Q$-factor degradation.
+          </p>
+
+          <!-- Oscilloscope Canvas Display -->
+          <canvas id="eyeOscilloscopeCanvas" class="oscilloscope-canvas" width="760" height="280"></canvas>
+
+          <!-- Interactive Parameter Controls -->
+          <div class="oscilloscope-controls">
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-family:'JetBrains Mono',monospace; color:#94a3b8; margin-bottom:4px;">
+                <span>Laser Power (P_opt):</span>
+                <strong style="color:var(--accent-cyan);" id="osc-popt-val">1.60 W (32.0 dBm)</strong>
+              </div>
+              <input type="range" id="osc-popt-slider" min="0.80" max="2.50" step="0.05" value="1.60"
+                style="width:100%; accent-color:var(--accent-cyan); cursor:pointer;" oninput="updateOscilloscope()">
+              <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:#64748b; font-family:'JetBrains Mono',monospace;">
+                <span>0.80 W</span>
+                <span>Nominal: 1.60 W</span>
+                <span>2.50 W</span>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-family:'JetBrains Mono',monospace; color:#94a3b8; margin-bottom:4px;">
+                <span>RMS Comb Jitter:</span>
+                <strong style="color:var(--accent-amber);" id="osc-jitter-val">50 fs RMS</strong>
+              </div>
+              <input type="range" id="osc-jitter-slider" min="20" max="120" step="5" value="50"
+                style="width:100%; accent-color:var(--accent-amber); cursor:pointer;" oninput="updateOscilloscope()">
+              <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:#64748b; font-family:'JetBrains Mono',monospace;">
+                <span>20 fs (Ideal)</span>
+                <span>Nominal: 50 fs</span>
+                <span>120 fs (Degraded)</span>
+              </div>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.76rem; display:flex; flex-direction:column; justify-content:center; gap:4px;">
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:#94a3b8;">Delivered Prx:</span>
+                <strong style="color:#ffffff;" id="osc-prx-readout">10.00 µW (-20.0 dBm)</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:#94a3b8;">Eye Opening:</span>
+                <strong style="color:var(--accent-green);" id="osc-eye-readout">94.2%</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:#94a3b8;">Q-Factor / SNR:</span>
+                <strong style="color:var(--accent-cyan);" id="osc-q-readout">Q = 9.38 (28.4 dB)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Sub-View Switcher: 3D Physical Silicon Stack vs 2D Waveguide Mesh -->
         <div
           style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 1.25rem;">
@@ -3101,6 +3449,15 @@
                     style="padding: 6px 14px; height: 36px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; touch-action: manipulation;">
                     Reset View
                   </button>
+
+                  <!-- 3D Camera View Presets -->
+                  <div style="display:inline-flex; gap:4px; align-items:center; background:var(--card-sub-bg); padding:3px 6px; border-radius:6px; border:1px solid var(--card-border);">
+                    <span style="font-size:0.72rem; color:var(--text-subtle); font-family:'JetBrains Mono',monospace; margin-right:4px;">CAMERA:</span>
+                    <button type="button" class="btn-subtle" onclick="setWebGLCameraPreset('isometric')" style="font-size:0.72rem; padding:3px 7px; cursor:pointer;" title="Isometric 3D Perspective">Isometric</button>
+                    <button type="button" class="btn-subtle" onclick="setWebGLCameraPreset('front')" style="font-size:0.72rem; padding:3px 7px; cursor:pointer;" title="Front Cross-Section Strata">Elevation</button>
+                    <button type="button" class="btn-subtle" onclick="setWebGLCameraPreset('top')" style="font-size:0.72rem; padding:3px 7px; cursor:pointer;" title="Top-Down Planar Floorplan">Top-Down</button>
+                    <button type="button" class="btn-subtle" onclick="setWebGLCameraPreset('exploded')" style="font-size:0.72rem; padding:3px 7px; cursor:pointer;" title="Exploded Strata Overview">Exploded</button>
+                  </div>
                   <div
                     style="margin-left: auto; font-size: 0.84rem; font-family: monospace; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px;"
                     id="webgl-explode-readout">
@@ -4134,8 +4491,14 @@
 
         <div class="code-explorer">
           <!-- File Tree Sidebar -->
-          <div class="file-tree" id="codebase-tree">
-            <div style="color:var(--text-muted); font-size:0.85rem;">Loading repository tree...</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="padding: 2px 0;">
+              <input type="text" id="code-search-input" placeholder="🔍 Filter scripts & modules..." oninput="filterCodeTree(this.value)"
+                style="width:100%; background:var(--input-bg); border:1px solid var(--card-border); border-radius:6px; padding:6px 10px; font-size:0.78rem; color:var(--text-main); font-family:'JetBrains Mono',monospace;">
+            </div>
+            <div class="file-tree" id="codebase-tree">
+              <div style="color:var(--text-muted); font-size:0.85rem;">Loading repository tree...</div>
+            </div>
           </div>
 
           <!-- Code Viewport -->
@@ -4892,6 +5255,146 @@
               style="display:flex; align-items:center; gap:6px; font-weight:600; padding:10px 18px;">
               ⬇️ Download PDF
             </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE 36.00 mm² SILICON DIE FLOORPLAN INSPECTOR -->
+      <div class="card" style="margin-bottom: 2rem; border: 1px solid rgba(0, 240, 255, 0.4); background: linear-gradient(180deg, rgba(0, 240, 255, 0.03) 0%, var(--card-bg) 100%);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+          <div>
+            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 240, 255, 0.15); color:var(--accent-cyan); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:12px; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em;">
+              Interactive Silicon Inspector • 65nm LP/GP CMOS Base Die
+            </div>
+            <h3 style="font-size:1.35rem; color:var(--text-main); margin:0;">
+              JANUS Mini-16 (Model 1A) 36.00 mm² Die Floorplan & Subsystem Telemetry
+            </h3>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:0.75rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">DIE FOOTPRINT:</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:3px 8px; border-radius:4px; font-size:0.8rem;">
+              6.00 mm × 6.00 mm (100.00% Physical Closure)
+            </span>
+          </div>
+        </div>
+        
+        <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; margin-bottom:1.25rem;">
+          Hover or tap on any subsystem block below to inspect its exact silicon area allocation, die budget percentage, clock domain, and physical timing coordination. Subsystems coordinate across the 1:64 polyphase deserialization boundary from the 200.0 GHz optical carrier down to the 3.125 GHz CMOS base clock.
+        </p>
+
+        <div class="floorplan-container">
+          <!-- Left: 2D Interactive Vector Silicon Die Map -->
+          <div class="floorplan-canvas-wrapper">
+            <svg id="siliconFloorplanSvg" viewBox="0 0 600 600" style="width:100%; max-width:540px; height:auto; display:inline-block; border:1px solid rgba(255,255,255,0.12); border-radius:6px; background:#070a12;">
+              <!-- Silicon Perimeter Moisture Seal Ring (Layer 190) -->
+              <rect x="6" y="6" width="588" height="588" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4" opacity="0.6" />
+              
+              <!-- 1. Core Logic & 1:64 Deserializers (10.630 mm², 29.53%) -->
+              <rect id="fp-block-core" class="floorplan-block-rect" x="20" y="20" width="310" height="206" fill="#0284c7" fill-opacity="0.28" stroke="#38bdf8" stroke-width="1" onmouseover="inspectFloorplanBlock('core')" onclick="inspectFloorplanBlock('core')">
+                <title>Baseline Core Logic & 1:64 Deserializers (10.630 mm²)</title>
+              </rect>
+              <text x="175" y="125" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">Core Logic & 1:64 Deser</text>
+              <text x="175" y="145" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">10.630 mm² (29.53%)</text>
+
+              <!-- 2. 1-2-8-8 Antiphase Control Hierarchy (6.300 mm², 17.50%) -->
+              <rect id="fp-block-control" class="floorplan-block-rect" x="340" y="20" width="240" height="158" fill="#6366f1" fill-opacity="0.28" stroke="#818cf8" stroke-width="1" onmouseover="inspectFloorplanBlock('control')" onclick="inspectFloorplanBlock('control')">
+                <title>1-2-8-8 Antiphase Control Hierarchy (6.300 mm²)</title>
+              </rect>
+              <text x="460" y="95" fill="#818cf8" font-size="12" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">1-2-8-8 Control</text>
+              <text x="460" y="115" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">6.300 mm² (17.50%)</text>
+
+              <!-- 3. 4-Level Balanced H-Tree Clock Mesh (3.500 mm², 9.72%) - PRESERVED -->
+              <rect id="fp-block-htree" class="floorplan-block-rect" x="340" y="188" width="240" height="88" fill="#8b5cf6" fill-opacity="0.28" stroke="#a78bfa" stroke-width="1" onmouseover="inspectFloorplanBlock('htree')" onclick="inspectFloorplanBlock('htree')">
+                <title>4-Level Balanced H-Tree Clock Mesh (3.500 mm² - PRESERVED)</title>
+              </rect>
+              <text x="460" y="232" fill="#a78bfa" font-size="11" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">H-Tree Clock Mesh (Preserved)</text>
+              <text x="460" y="248" fill="#94a3b8" font-size="9" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">3.500 mm² (9.72%)</text>
+
+              <!-- 4. Fixed-Function Rasterizer & 8x TMUs (2.700 mm², 7.50%) -->
+              <rect id="fp-block-raster" class="floorplan-block-rect" x="20" y="236" width="180" height="90" fill="#f59e0b" fill-opacity="0.28" stroke="#fbbf24" stroke-width="1" onmouseover="inspectFloorplanBlock('raster')" onclick="inspectFloorplanBlock('raster')">
+                <title>Rasterizer & 8x TMUs + eDP (2.700 mm²)</title>
+              </rect>
+              <text x="110" y="280" fill="#fbbf24" font-size="11" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">Raster & TMUs</text>
+              <text x="110" y="296" fill="#94a3b8" font-size="9" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">2.700 mm² (7.50%)</text>
+
+              <!-- 5. 64-Lane Multi-Precision FP Engine (2.450 mm², 6.81%) -->
+              <rect id="fp-block-fp" class="floorplan-block-rect" x="210" y="236" width="180" height="82" fill="#10b981" fill-opacity="0.28" stroke="#34d399" stroke-width="1" onmouseover="inspectFloorplanBlock('fp')" onclick="inspectFloorplanBlock('fp')">
+                <title>64-Lane Multi-Precision FP Engine (2.450 mm²)</title>
+              </rect>
+              <text x="300" y="278" fill="#34d399" font-size="11" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">64-Lane FP Engine</text>
+              <text x="300" y="294" fill="#94a3b8" font-size="9" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">2.450 mm² (6.81%)</text>
+
+              <!-- 6. 16x Vector SFU Transcendentals (2.400 mm², 6.67%) -->
+              <rect id="fp-block-sfu" class="floorplan-block-rect" x="400" y="286" width="180" height="80" fill="#06b6d4" fill-opacity="0.28" stroke="#22d3ee" stroke-width="1" onmouseover="inspectFloorplanBlock('sfu')" onclick="inspectFloorplanBlock('sfu')">
+                <title>16x Vector SFU Array (2.400 mm²)</title>
+              </rect>
+              <text x="490" y="328" fill="#22d3ee" font-size="11" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">16x Vector SFUs</text>
+              <text x="490" y="344" fill="#94a3b8" font-size="9" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">2.400 mm² (6.67%)</text>
+
+              <!-- 7. Dual-LUT SRAM & Central ROM Macros (1.500 mm², 4.17%) - PRESERVED -->
+              <rect id="fp-block-sram" class="floorplan-block-rect" x="20" y="336" width="180" height="50" fill="#eab308" fill-opacity="0.32" stroke="#facc15" stroke-width="1" onmouseover="inspectFloorplanBlock('sram')" onclick="inspectFloorplanBlock('sram')">
+                <title>Dual-LUT SRAM & ROM (1.500 mm² - PRESERVED)</title>
+              </rect>
+              <text x="110" y="366" fill="#facc15" font-size="11" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">Dual-LUT SRAM (1.5 MB)</text>
+
+              <!-- 8. 64-Lane FP64 Dual-Rail Normalizers (1.300 mm², 3.61%) -->
+              <rect id="fp-block-fp64" class="floorplan-block-rect" x="210" y="328" width="180" height="43" fill="#84cc16" fill-opacity="0.28" stroke="#a3e635" stroke-width="1" onmouseover="inspectFloorplanBlock('fp64')" onclick="inspectFloorplanBlock('fp64')">
+                <title>64-Lane FP64 Normalizers (1.300 mm²)</title>
+              </rect>
+              <text x="300" y="354" fill="#a3e635" font-size="10" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">FP64 Normalizers (1.30 mm²)</text>
+
+              <!-- 9. Hardware Ray-Tracing BVH Engines (1.000 mm², 2.78%) -->
+              <rect id="fp-block-bvh" class="floorplan-block-rect" x="20" y="396" width="180" height="34" fill="#f43f5e" fill-opacity="0.28" stroke="#fb7185" stroke-width="1" onmouseover="inspectFloorplanBlock('bvh')" onclick="inspectFloorplanBlock('bvh')">
+                <title>Hardware BVH Engines (1.000 mm²)</title>
+              </rect>
+              <text x="110" y="418" fill="#fb7185" font-size="10" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">4x BVH RT Engines (1.00 mm²)</text>
+
+              <!-- 10. MIM/MOS Decap & Thermal Whitespace (4.220 mm², 11.72%) -->
+              <rect id="fp-block-decap" class="floorplan-block-rect" x="210" y="381" width="370" height="199" fill="#334155" fill-opacity="0.32" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" onmouseover="inspectFloorplanBlock('decap')" onclick="inspectFloorplanBlock('decap')">
+                <title>MIM/MOS Decap & Thermal Relief Margin (4.220 mm²)</title>
+              </rect>
+              <text x="395" y="475" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono',monospace" font-weight="700" text-anchor="middle" pointer-events="none">MIM/MOS Decap & Thermal Relief</text>
+              <text x="395" y="495" fill="#64748b" font-size="10" font-family="'JetBrains Mono',monospace" text-anchor="middle" pointer-events="none">4.220 mm² Whitespace (11.72% Margin)</text>
+
+              <rect id="fp-block-decap2" class="floorplan-block-rect" x="20" y="440" width="180" height="140" fill="#334155" fill-opacity="0.32" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" onmouseover="inspectFloorplanBlock('decap')" onclick="inspectFloorplanBlock('decap')" />
+
+              <!-- Die Center Mark -->
+              <circle cx="300" cy="300" r="3" fill="#00f0ff" />
+              <text x="300" y="590" fill="#64748b" font-size="9" font-family="'JetBrains Mono',monospace" text-anchor="middle">DIE X-AXIS: 6.00 mm (6000 µm)</text>
+            </svg>
+            <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:6px; font-family:'JetBrains Mono',monospace;">
+              Interactive SVG Mask Topology • Scale: 100 pixels = 1.00 mm
+            </div>
+          </div>
+
+          <!-- Right: Floating Telemetry HUD Card -->
+          <div class="floorplan-hud" id="floorplanHudCard">
+            <div style="font-size:0.7rem; color:var(--accent-cyan); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px;" id="fp-hud-subsystem">SUBSYSTEM INSPECTION</div>
+            <h4 style="font-size:1.15rem; color:var(--text-main); margin-bottom:0.75rem;" id="fp-hud-title">Baseline 65nm Core Logic</h4>
+            
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--card-border); font-size:0.8rem;">
+              <span style="color:var(--text-subtle);">Silicon Area:</span>
+              <strong style="color:var(--text-main);" id="fp-hud-area">10.630 mm²</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--card-border); font-size:0.8rem;">
+              <span style="color:var(--text-subtle);">Die Budget %:</span>
+              <strong style="color:var(--accent-cyan);" id="fp-hud-pct">29.53%</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--card-border); font-size:0.8rem;">
+              <span style="color:var(--text-subtle);">Clock Domain:</span>
+              <strong style="color:var(--text-main);" id="fp-hud-clock">3.125 GHz Base</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--card-border); font-size:0.8rem;">
+              <span style="color:var(--text-subtle);">Gearing Ratio:</span>
+              <strong style="color:var(--accent-green);" id="fp-hud-gearing">64:1 Polyphase</strong>
+            </div>
+
+            <div style="margin-top:1rem;">
+              <div style="font-size:0.72rem; color:var(--text-subtle); text-transform:uppercase; margin-bottom:4px;">Architecture Notes:</div>
+              <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;" id="fp-hud-desc">
+                Houses 8,192 StrongARM regenerative sense amplifiers per tile landing directly beneath the 4 µm Cu TDVs, 1:64 polyphase time-interleaved shift registers, and CRT adder reconstruction networks.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -6298,7 +6801,7 @@
     }
 
     function applyTheme(theme) {
-      if (theme !== 'dark' && theme !== 'light') theme = 'light';
+      if (theme !== 'dark' && theme !== 'light') theme = 'dark';
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('janus_theme', theme);
 
@@ -6342,8 +6845,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       var savedTheme = localStorage.getItem('janus_theme');
       if (savedTheme !== 'dark' && savedTheme !== 'light') {
-        savedTheme = 'light';
-        localStorage.setItem('janus_theme', 'light');
+        savedTheme = 'dark';
+        localStorage.setItem('janus_theme', 'dark');
       }
       applyTheme(savedTheme);
     });
@@ -8060,6 +8563,17 @@
         webglControls.minDistance = 6;
         webglControls.maxPolarAngle = Math.PI * 0.85;
         webglControls.target.set(0, -0.2, 0);
+        window.janusCamera = webglCamera;
+        window.janusControls = webglControls;
+
+        // Viewport IntersectionObserver to pause rendering off-screen (Battery/GPU saver)
+        if ('IntersectionObserver' in window) {
+          window.isWebGLInView = true;
+          var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) { window.isWebGLInView = e.isIntersecting; });
+          }, { threshold: 0.05 });
+          obs.observe(canvas);
+        }
       }
 
       // 5. Lighting (Studio key light + rim cyan + SiPh point emitter)
@@ -8428,6 +8942,7 @@
 
     function animateWebGL() {
       webglAnimFrameId = requestAnimationFrame(animateWebGL);
+      if (typeof window.isWebGLInView !== 'undefined' && !window.isWebGLInView) return;
 
       // Smooth explosion interpolation (LERP)
       currentExplosion += (targetExplosion - currentExplosion) * 0.08;
@@ -10959,6 +11474,510 @@
       }, 3000);
     });
 
+  
+    // =========================================================================
+    // PROJECT JANUS UI/UX REVAMP ENGINES (Photonic Foundry 2026)
+    // =========================================================================
+
+    // --- 1. Reading Progress Bar Engine ---
+    window.addEventListener('scroll', function() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      var bar = document.getElementById('reading-progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // --- 2. Rich Toast Notification Engine ---
+    function showToast(message, type = 'info') {
+      var container = document.getElementById('toast-container');
+      if (!container) return;
+      var toast = document.createElement('div');
+      toast.className = 'toast-message toast-' + type;
+      var icon = type === 'success' ? '✓' : (type === 'warning' ? '⚠' : 'ℹ');
+      toast.innerHTML = '<span style="color:var(--accent-cyan); font-weight:700;">[' + icon + ']</span> <span>' + message + '</span>';
+      container.appendChild(toast);
+      setTimeout(function() {
+        toast.classList.add('fade-out');
+        setTimeout(function() { toast.remove(); }, 250);
+      }, 2600);
+    }
+
+    // --- 3. 3D WebGL Camera View Presets Engine ---
+    function setWebGLCameraPreset(preset) {
+      if (!window.janusCamera || !window.janusControls) {
+        showToast('3D WebGL camera initializing...', 'warning');
+        return;
+      }
+      var cam = window.janusCamera;
+      var ctrl = window.janusControls;
+
+      if (preset === 'isometric') {
+        cam.position.set(18, 14, 22);
+        ctrl.target.set(0, 5, 0);
+      } else if (preset === 'front') {
+        cam.position.set(0, 6, 28);
+        ctrl.target.set(0, 6, 0);
+      } else if (preset === 'top') {
+        cam.position.set(0, 32, 0.1);
+        ctrl.target.set(0, 0, 0);
+      } else if (preset === 'exploded') {
+        cam.position.set(16, 12, 20);
+        ctrl.target.set(0, 6, 0);
+        setWebGLExplosion(100);
+        var slider = document.getElementById('arch-webgl-slider');
+        if (slider) slider.value = 100;
+      }
+      ctrl.update();
+      showToast('Camera Preset: ' + preset.toUpperCase() + ' View', 'success');
+    }
+
+    // --- 4. Interactive 36.00 mm² Silicon Floorplan Inspector ---
+    var floorplanData = {
+      'core': {
+        title: 'Baseline 65nm Core Logic & Deserializers',
+        area: '10.630 mm²',
+        pct: '29.53%',
+        clock: '3.125 GHz Base',
+        gearing: '64:1 Polyphase',
+        desc: 'Houses 8,192 StrongARM regenerative sense amplifiers per tile landing directly beneath the 4 µm Cu TDVs, 1:64 polyphase time-interleaved shift registers, and CRT adder reconstruction networks.'
+      },
+      'control': {
+        title: '1-2-8-8 Antiphase Control Hierarchy',
+        area: '6.300 mm²',
+        pct: '17.50%',
+        clock: '3.125 GHz CMOS',
+        gearing: '2-Phase Synchronizer',
+        desc: 'Decentralized control network: 1x Master Orchestration Core (1.50 mm²), 2x Phase Managers (0.80 mm² for 2.5 ps antiphase slots), and 16x Residue Tile Controllers (4.00 mm²).'
+      },
+      'htree': {
+        title: '4-Level Balanced H-Tree Clock Mesh (Preserved)',
+        area: '3.500 mm²',
+        pct: '9.72%',
+        clock: '3.125 GHz Low-Skew',
+        gearing: '< 1.5 ps Total Skew',
+        desc: 'PRESERVED: Metal 6 balanced differential H-tree delivering low-jitter 3.125 GHz clock across all 16 tile centroids with strict symmetry and zero timing drift.'
+      },
+      'raster': {
+        title: 'Fixed-Function Rasterizer & 8x TMUs',
+        area: '2.700 mm²',
+        pct: '7.50%',
+        clock: '3.125 GHz / eDP PHY',
+        gearing: '12.8 GTri/s Peak',
+        desc: 'Hardware graphics acceleration: 12.8 GTri/s barycentric rasterizer, 8 anisotropic Texture Mapping Units, and integrated 80 Gbps DisplayPort 2.1 / eDP UHBR20 physical layer.'
+      },
+      'fp': {
+        title: '64-Lane Multi-Precision FP Engine',
+        area: '2.450 mm²',
+        pct: '6.81%',
+        clock: '3.125 GHz Base',
+        gearing: '64 SIMD Lanes',
+        desc: 'Unpacked floating-point arithmetic hardware supporting FP4, FP8, BF16, FP16, and FP32 dynamically coordinated across all 64 parallel deserialized lanes.'
+      },
+      'sfu': {
+        title: '16x Vector SFU Transcendentals Array',
+        area: '2.400 mm²',
+        pct: '6.67%',
+        clock: '3.125 GHz Base',
+        gearing: '16 SIMD Units',
+        desc: 'Pipelined CORDIC and polynomial Taylor-series evaluation engines executing Softmax, GELU, SiLU, RoPE rotary embeddings, and RMSNorm post-accumulation.'
+      },
+      'sram': {
+        title: 'Dual-LUT SRAM & Central ROM (RAM Preserved)',
+        area: '1.500 mm²',
+        pct: '4.17%',
+        clock: '3.125 GHz Base',
+        gearing: '320 ps Single-Cycle',
+        desc: 'PRESERVED: 1.50 MB volatile Dual-LUT SRAM (32 slices x 48 KB) strictly required for Equation 3 cross-term lookup, plus 0.25 MB central hardwired Via-ROM constants.'
+      },
+      'fp64': {
+        title: '64-Lane FP64 Dual-Rail Normalizers',
+        area: '1.300 mm²',
+        pct: '3.61%',
+        clock: '3.125 GHz Base',
+        gearing: '11-bit Exponent Shifter',
+        desc: '64-way 11-bit dual-rail exponent aligners, mantissa barrel shifters, and IEEE 754 double-precision normalizers evaluated across all 16 parallel residue channels.'
+      },
+      'bvh': {
+        title: 'Hardware Ray-Tracing BVH Traversal Engines',
+        area: '1.000 mm²',
+        pct: '2.78%',
+        clock: '3.125 GHz Base',
+        gearing: '16-way AABB Test',
+        desc: '4x hardware Bounding Volume Hierarchy (BVH) engines executing 16-way AABB ray-box intersection tests in CMOS; Möller-Trumbore ray-triangle 3x3 linear systems are solved optically at 200 GHz.'
+      },
+      'decap': {
+        title: 'MIM/MOS Decap & Thermal Whitespace',
+        area: '4.220 mm²',
+        pct: '11.72%',
+        clock: 'DC Decoupling',
+        gearing: 'dI/dt Suppression',
+        desc: 'High-density Metal-Insulator-Metal (MIM) and thin-oxide MOS decoupling capacitance banks providing supply voltage stabilization against 200 GHz switching transients, plus substrate thermal relief.'
+      }
+    };
+
+    function inspectFloorplanBlock(key) {
+      var item = floorplanData[key];
+      if (!item) return;
+
+      document.getElementById('fp-hud-title').textContent = item.title;
+      document.getElementById('fp-hud-area').textContent = item.area;
+      document.getElementById('fp-hud-pct').textContent = item.pct;
+      document.getElementById('fp-hud-clock').textContent = item.clock;
+      document.getElementById('fp-hud-gearing').textContent = item.gearing;
+      document.getElementById('fp-hud-desc').textContent = item.desc;
+
+      // Update active highlight class
+      document.querySelectorAll('.floorplan-block-rect').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      var activeEl = document.getElementById('fp-block-' + key);
+      if (activeEl) activeEl.classList.add('active');
+    }
+
+    // --- 5. 200.0 GHz Eye Diagram & Link Budget Oscilloscope Engine ---
+    var oscPopt = 1.60;
+    var oscJitter = 50.0;
+    var oscAnimationId = null;
+
+    function initEyeOscilloscope() {
+      var canvas = document.getElementById('eyeOscilloscopeCanvas');
+      if (!canvas) return;
+      drawEyeDiagram();
+    }
+
+    function updateOscilloscope() {
+      var poptSlider = document.getElementById('osc-popt-slider');
+      var jitterSlider = document.getElementById('osc-jitter-slider');
+      if (poptSlider) oscPopt = parseFloat(poptSlider.value);
+      if (jitterSlider) oscJitter = parseFloat(jitterSlider.value);
+
+      document.getElementById('osc-popt-val').textContent = oscPopt.toFixed(2) + ' W (' + (10 * Math.log10(oscPopt * 1000)).toFixed(1) + ' dBm)';
+      document.getElementById('osc-jitter-val').textContent = oscJitter.toFixed(0) + ' fs RMS';
+
+      // Delivered power at APD: P_opt - 52.03 dB distribution loss
+      var pRxWatts = oscPopt * Math.pow(10, -52.03 / 10);
+      var pRxUWatts = pRxWatts * 1e6;
+      var pRxDbm = 10 * Math.log10(pRxWatts * 1000);
+      document.getElementById('osc-prx-readout').textContent = pRxUWatts.toFixed(2) + ' µW (' + pRxDbm.toFixed(1) + ' dBm)';
+
+      // Eye opening percentage model
+      var powerRatio = Math.min(1.0, pRxWatts / 10.0e-6);
+      var jitterPenalty = Math.max(0.0, (oscJitter - 50) / 100.0);
+      var eyeOpening = Math.max(10.0, Math.min(99.0, 94.2 * Math.sqrt(powerRatio) * (1.0 - jitterPenalty * 0.4)));
+      document.getElementById('osc-eye-readout').textContent = eyeOpening.toFixed(1) + '%';
+
+      // Q-factor and BER calculation
+      var qFactor = Math.max(2.0, (eyeOpening / 100.0) * 10.0 * (pRxUWatts / 10.0));
+      var snrDb = 20 * Math.log10(qFactor) + 8.9;
+      document.getElementById('osc-q-readout').textContent = 'Q = ' + qFactor.toFixed(2) + ' (' + snrDb.toFixed(1) + ' dB)';
+
+      var badge = document.getElementById('osc-ber-badge');
+      if (qFactor >= 9.0 && pRxUWatts >= 8.5) {
+        badge.innerHTML = '● LINK CLOSED: BER &le; 1.0 &times; 10⁻¹⁸';
+        badge.style.background = 'rgba(16,185,129,0.2)';
+        badge.style.color = '#34d399';
+        badge.style.borderColor = '#10b981';
+      } else if (qFactor >= 6.0) {
+        badge.innerHTML = '⚠ MARGINAL: BER ~ 10⁻⁹ (ECC Required)';
+        badge.style.background = 'rgba(245,158,11,0.2)';
+        badge.style.color = '#fbbf24';
+        badge.style.borderColor = '#f59e0b';
+      } else {
+        badge.innerHTML = '✕ LINK DEGRADED: EYE CLOSURE';
+        badge.style.background = 'rgba(239,68,68,0.2)';
+        badge.style.color = '#f87171';
+        badge.style.borderColor = '#ef4444';
+      }
+
+      drawEyeDiagram();
+    }
+
+    function drawEyeDiagram() {
+      var canvas = document.getElementById('eyeOscilloscopeCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width;
+      var h = canvas.height;
+
+      // Dark oscilloscope graticule background
+      ctx.fillStyle = '#02050b';
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid lines (8x8 divisions)
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+      ctx.lineWidth = 1;
+      var numDivX = 10;
+      var numDivY = 8;
+      for (var x = 0; x <= w; x += w / numDivX) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (var y = 0; y <= h; y += h / numDivY) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Time & Voltage Axis Labels
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.5)';
+      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.fillText('0.0 ps', 8, h - 8);
+      ctx.fillText('2.5 ps (Slot 1)', w * 0.25 - 20, h - 8);
+      ctx.fillText('5.0 ps (Period)', w * 0.5 - 20, h - 8);
+      ctx.fillText('7.5 ps (Slot 2)', w * 0.75 - 20, h - 8);
+      ctx.fillText('10.0 ps', w - 50, h - 8);
+      ctx.fillText('+400 mV', 8, 16);
+      ctx.fillText('0 mV (Decision Threshold)', 8, h / 2 - 4);
+      ctx.fillText('-400 mV', 8, h - 22);
+
+      // Decision threshold line
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, h / 2);
+      ctx.lineTo(w, h / 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw multi-trace synthetic 200 GHz eye trajectories (NRZ antiphase transitions)
+      var pRatio = Math.min(1.3, oscPopt / 1.60);
+      var amp = (h * 0.36) * Math.sqrt(pRatio);
+      var midY = h / 2;
+      var jitterScale = (oscJitter / 50.0);
+
+      // 64 synthetic overlaid pulse traces
+      ctx.lineWidth = 1.5;
+      for (var i = 0; i < 48; i++) {
+        var seed = (i * 17) % 31;
+        var jOff = ((seed - 15) / 15.0) * (jitterScale * 18);
+        var noiseY = ((seed % 7) - 3) * 1.5;
+
+        // Trace 1: Laser Cyan Eye Wave
+        ctx.strokeStyle = (i % 2 === 0) ? 'rgba(0, 240, 255, 0.28)' : 'rgba(56, 189, 248, 0.20)';
+        ctx.beginPath();
+        for (var px = 0; px <= w; px += 4) {
+          var t = (px / w) * (2 * Math.PI * 2); // 2 full eye cycles
+          var py = midY + Math.sin(t + (jOff * 0.04)) * amp + noiseY;
+          if (px === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+
+        // Trace 2: Inverted Complementary Phase (Antiphase Rail)
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.16)';
+        ctx.beginPath();
+        for (var px2 = 0; px2 <= w; px2 += 4) {
+          var t2 = (px2 / w) * (2 * Math.PI * 2);
+          var py2 = midY - Math.sin(t2 + (jOff * 0.04)) * amp - noiseY;
+          if (px2 === 0) ctx.moveTo(px2, py2);
+          else ctx.lineTo(px2, py2);
+        }
+        ctx.stroke();
+      }
+
+      // StrongARM Latch Sensing Apertures
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.18)';
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 1;
+      // Strobe 1 at 2.5 ps
+      var strobeX1 = w * 0.25;
+      var apertureW = 12 * (jitterScale);
+      ctx.fillRect(strobeX1 - apertureW/2, midY - amp * 0.85, apertureW, amp * 1.7);
+      ctx.strokeRect(strobeX1 - apertureW/2, midY - amp * 0.85, apertureW, amp * 1.7);
+      
+      // Strobe 2 at 7.5 ps
+      var strobeX2 = w * 0.75;
+      ctx.fillRect(strobeX2 - apertureW/2, midY - amp * 0.85, apertureW, amp * 1.7);
+      ctx.strokeRect(strobeX2 - apertureW/2, midY - amp * 0.85, apertureW, amp * 1.7);
+
+      ctx.fillStyle = '#34d399';
+      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.fillText('STROBE Φ1', strobeX1 - 24, 30);
+      ctx.fillText('STROBE Φ2', strobeX2 - 24, 30);
+    }
+
+    // --- 6. Codebase File Tree Real-Time Filter Engine ---
+    function filterCodeTree(query) {
+      var q = query.trim().toLowerCase();
+      var items = document.querySelectorAll('#codebase-tree .tree-item');
+      var categories = document.querySelectorAll('#codebase-tree .tree-category');
+      items.forEach(function(item) {
+        var text = item.textContent.toLowerCase();
+        if (!q || text.indexOf(q) !== -1) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      categories.forEach(function(cat) {
+        var visibleFiles = cat.querySelectorAll('.tree-item:not([style*="display: none"])');
+        if (!q || visibleFiles.length > 0) {
+          cat.style.display = '';
+        } else {
+          cat.style.display = 'none';
+        }
+      });
+    }
+
+    // --- 7. Global Command Palette (`Cmd+K` / `Ctrl+K`) Engine ---
+    var cmdItems = [
+      // Navigation
+      { title: 'Overview & Architecture Thesis', cat: 'Navigation', icon: '🏛️', action: function() { switchPage('home'); } },
+      { title: 'IEEE Manuscript & Abstract', cat: 'Navigation', icon: '📄', action: function() { switchPage('paper'); switchPaper('manuscript'); } },
+      { title: 'Co-Simulation Suite & Tiers 0-5', cat: 'Navigation', icon: '🔬', action: function() { switchPage('simulation'); } },
+      { title: 'Interactive Multi-Tier Codebase', cat: 'Navigation', icon: '💻', action: function() { switchPage('codebase'); } },
+      { title: 'Hardware Technology Roadmap (1A to 6B)', cat: 'Navigation', icon: '🗺️', action: function() { switchPage('roadmap'); } },
+      { title: 'CMOS & 3D Heterogeneous Stack', cat: 'Navigation', icon: '⚡', action: function() { switchPage('hardware'); } },
+      { title: 'Software Toolchain & JIR Scheduler', cat: 'Navigation', icon: '⚙️', action: function() { switchPage('software'); } },
+      { title: 'About Creator (Deepanshu Bhardwaj)', cat: 'Navigation', icon: '👤', action: function() { switchPage('about'); } },
+
+      // Interactive Tools
+      { title: 'Silicon Floorplan Inspector (36.00 mm²)', cat: 'Interactive Tools', icon: '🗺️', action: function() { switchPage('hardware'); document.getElementById('siliconFloorplanSvg').scrollIntoView({behavior:'smooth'}); } },
+      { title: '200 GHz Eye Diagram Oscilloscope', cat: 'Interactive Tools', icon: '📈', action: function() { switchPage('simulation'); switchTab('arch'); document.getElementById('eyeOscilloscopeCanvas').scrollIntoView({behavior:'smooth'}); } },
+      { title: '3D WebGL Strata Model: Explode Stack', cat: 'Interactive Tools', icon: '🧊', action: function() { switchPage('home'); setWebGLCameraPreset('exploded'); } },
+      { title: '3D WebGL Strata Model: Top-Down Planar', cat: 'Interactive Tools', icon: '📐', action: function() { switchPage('home'); setWebGLCameraPreset('top'); } },
+      { title: 'Evaluate Custom Integer (RNS Decomposition)', cat: 'Interactive Tools', icon: '🧮', action: function() { switchPage('simulation'); switchTab('rns'); document.getElementById('int-input').focus(); } },
+      { title: 'Custom Optical Multiplication (Modulo Gating)', cat: 'Interactive Tools', icon: '✖️', action: function() { switchPage('simulation'); switchTab('rns'); document.getElementById('mult-a').focus(); } },
+      { title: 'AI Workload Profiler (LLaMA-3 / GPT-4)', cat: 'Interactive Tools', icon: '🤖', action: function() { switchPage('simulation'); switchTab('ai'); } },
+
+      // Hardware Specs & Tables
+      { title: 'Table 1: 36.00 mm² CMOS Floorplan Budget', cat: 'Hardware Specs', icon: '📊', action: function() { switchPage('hardware'); } },
+      { title: 'Table 2: Bill of Materials & Layer Stack', cat: 'Hardware Specs', icon: '🧱', action: function() { switchPage('hardware'); } },
+      { title: 'Optical Link Budget (52.03 dB Total Distribution)', cat: 'Hardware Specs', icon: '💡', action: function() { switchPage('simulation'); switchTab('arch'); } },
+      { title: '1-2-8-8 Antiphase Control Hierarchy', cat: 'Hardware Specs', icon: '⏱️', action: function() { switchPage('hardware'); inspectFloorplanBlock('control'); } },
+      { title: 'Dual-LUT 1.5 MB SRAM Memory Trick', cat: 'Hardware Specs', icon: '💾', action: function() { switchPage('hardware'); inspectFloorplanBlock('sram'); } },
+      { title: '4-Level Balanced H-Tree Clock Mesh (3.5 mm²)', cat: 'Hardware Specs', icon: '🌳', action: function() { switchPage('hardware'); inspectFloorplanBlock('htree'); } },
+
+      // Downloads & Assets
+      { title: 'Download Photonic GDS II Mask (266 KB)', cat: 'Downloads', icon: '💾', action: function() { window.location.href = '/janus_mini16_layout.gds'; showToast('Downloading janus_mini16_layout.gds...', 'success'); } },
+      { title: 'Download Standalone CMOS GDS II (180 KB)', cat: 'Downloads', icon: '💾', action: function() { window.location.href = '/janus_mini16_cmos_base_layout.gds'; showToast('Downloading janus_mini16_cmos_base_layout.gds...', 'success'); } },
+      { title: 'Download IEEE Manuscript PDF (25 pages)', cat: 'Downloads', icon: '📄', action: function() { window.location.href = '/public/JANUS_IEEE_Manuscript.pdf'; showToast('Downloading IEEE Manuscript...', 'success'); } },
+      { title: 'Download CMOS Digital Architecture PDF (5 pages)', cat: 'Downloads', icon: '📄', action: function() { window.location.href = '/public/JANUS_Mini16_CMOS_Architecture.pdf'; showToast('Downloading CMOS Architecture PDF...', 'success'); } },
+      { title: 'Download Multi-Physics Simulation Report PDF (17 pages)', cat: 'Downloads', icon: '📄', action: function() { window.location.href = '/public/JANUS_Mini16_Simulation_Report.pdf'; showToast('Downloading Simulation Report PDF...', 'success'); } },
+
+      // Actions
+      { title: 'Toggle Theme (Photonic Dark / Paper Light)', cat: 'Actions', icon: '🌓', action: function() { toggleTheme(); showToast('Toggled display theme', 'info'); } },
+      { title: 'Copy BibTeX Academic Citation', cat: 'Actions', icon: '📋', action: function() { copyBibtexDirect(); showToast('Copied BibTeX citation to clipboard', 'success'); } }
+    ];
+
+    var selectedCmdIndex = 0;
+    var filteredCmdItems = [];
+
+    function openCommandPalette() {
+      var modal = document.getElementById('janus-command-palette');
+      var input = document.getElementById('cmd-palette-input');
+      if (!modal || !input) return;
+      modal.classList.add('active');
+      input.value = '';
+      filterCommandPalette('');
+      input.focus();
+    }
+
+    function closeCommandPalette() {
+      var modal = document.getElementById('janus-command-palette');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function handleCmdBackdropClick(e) {
+      if (e.target.id === 'janus-command-palette') {
+        closeCommandPalette();
+      }
+    }
+
+    function filterCommandPalette(query) {
+      var q = query.trim().toLowerCase();
+      filteredCmdItems = cmdItems.filter(function(item) {
+        return !q || item.title.toLowerCase().indexOf(q) !== -1 || item.cat.toLowerCase().indexOf(q) !== -1;
+      });
+
+      selectedCmdIndex = 0;
+      renderCommandPaletteResults();
+    }
+
+    function renderCommandPaletteResults() {
+      var container = document.getElementById('cmd-palette-results');
+      if (!container) return;
+
+      if (filteredCmdItems.length === 0) {
+        container.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-subtle); font-size:0.85rem;">No matching commands or specifications found.</div>';
+        return;
+      }
+
+      var html = '';
+      var currentCat = '';
+      filteredCmdItems.forEach(function(item, idx) {
+        if (item.cat !== currentCat) {
+          currentCat = item.cat;
+          html += '<div class="cmd-palette-group-title">' + currentCat + '</div>';
+        }
+        var isSel = (idx === selectedCmdIndex) ? ' selected' : '';
+        html += '<div class="cmd-palette-item' + isSel + '" onclick="executeCmdItem(' + idx + ')" onmouseenter="selectCmdIndex(' + idx + ')">';
+        html += '  <div class="cmd-palette-item-left"><span style="font-size:1rem;">' + item.icon + '</span> <span>' + item.title + '</span></div>';
+        html += '  <span style="font-size:0.7rem; color:var(--text-subtle); font-family:\'JetBrains Mono\',monospace;">' + item.cat + '</span>';
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+    }
+
+    function selectCmdIndex(idx) {
+      selectedCmdIndex = idx;
+      var items = document.querySelectorAll('.cmd-palette-item');
+      items.forEach(function(el, i) {
+        if (i === idx) el.classList.add('selected');
+        else el.classList.remove('selected');
+      });
+    }
+
+    function executeCmdItem(idx) {
+      var item = filteredCmdItems[idx];
+      if (item && item.action) {
+        closeCommandPalette();
+        item.action();
+      }
+    }
+
+    function handleCmdKeyDown(e) {
+      if (e.key === 'Escape') {
+        closeCommandPalette();
+        e.preventDefault();
+      } else if (e.key === 'ArrowDown') {
+        if (filteredCmdItems.length > 0) {
+          selectedCmdIndex = (selectedCmdIndex + 1) % filteredCmdItems.length;
+          renderCommandPaletteResults();
+        }
+        e.preventDefault();
+      } else if (e.key === 'ArrowUp') {
+        if (filteredCmdItems.length > 0) {
+          selectedCmdIndex = (selectedCmdIndex - 1 + filteredCmdItems.length) % filteredCmdItems.length;
+          renderCommandPaletteResults();
+        }
+        e.preventDefault();
+      } else if (e.key === 'Enter') {
+        executeCmdItem(selectedCmdIndex);
+        e.preventDefault();
+      }
+    }
+
+    // Global keyboard shortcut listener for Cmd+K / Ctrl+K
+    window.addEventListener('keydown', function(e) {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        var modal = document.getElementById('janus-command-palette');
+        if (modal && modal.classList.contains('active')) {
+          closeCommandPalette();
+        } else {
+          openCommandPalette();
+        }
+      }
+    });
+
+    // Auto-init eye oscilloscope and floorplan inspector on page load
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        initEyeOscilloscope();
+        inspectFloorplanBlock('core');
+      }, 500);
+    });
+
   </script>
   <!-- FLOATING COOKIE & LOCAL STORAGE CONSENT BANNER -->
   <div id="janus-cookie-banner" class="cookie-banner-container" role="region" aria-label="Cookie and storage consent">
@@ -11184,6 +12203,27 @@
 
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="janus-toast-container"></div>
+
+  <!-- GLOBAL COMMAND PALETTE MODAL (Cmd+K / Ctrl+K) -->
+  <div id="janus-command-palette" class="cmd-palette-backdrop" onclick="handleCmdBackdropClick(event)">
+    <div class="cmd-palette-modal">
+      <div class="cmd-palette-header">
+        <span style="font-size:1.1rem; color:var(--accent-cyan);">🔍</span>
+        <input type="text" id="cmd-palette-input" class="cmd-palette-input" placeholder="Type a command, tier, file, or specification... (e.g. 'GDS', 'Floorplan', '200 GHz', 'SRAM', 'LLaMA')" oninput="filterCommandPalette(this.value)" onkeydown="handleCmdKeyDown(event)">
+        <kbd style="background:var(--bg-dark); border:1px solid var(--card-border); border-radius:4px; padding:2px 6px; font-size:0.7rem; font-family:'JetBrains Mono',monospace; color:var(--text-subtle);">ESC</kbd>
+      </div>
+      <div class="cmd-palette-list" id="cmd-palette-results">
+        <!-- Results injected dynamically -->
+      </div>
+      <div class="cmd-palette-footer">
+        <div>Navigate: <kbd>↑</kbd> <kbd>↓</kbd> &nbsp; Select: <kbd>↵</kbd> &nbsp; Close: <kbd>ESC</kbd></div>
+        <div>PROJECT JANUS CORE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING RICH TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container"></div>
 
 </body>
 
