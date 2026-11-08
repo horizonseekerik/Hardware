@@ -4868,7 +4868,7 @@
               JANUS Mini-16 CMOS Digital Backend Architecture & Silicon Blueprint
             </h2>
             <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.6; margin:0;">
-              Document ID: <code>JANUS-CMOS-SPEC-MINI16-2026-V1</code> • 65nm Planar CMOS Base Die (36.00 mm², >92% Active Plane Utilization) • 1-2-8-8 Antiphase • 4x Hardware BVH • OMI 25.6 TB/s • 1:32
+              Document ID: <code>JANUS-CMOS-SPEC-MINI16-2026-V1</code> • 65nm Planar CMOS Base Die (36.00 mm², >92% Active Plane Utilization) • 1-2-8-8 Antiphase • 4x Hardware BVH • Dual-LUT SRAM Subsystem • 1:32
               Polyphase 3.125 GHz Deserializer • Dual-LUT 1.5 MB SRAM Memory Subsystem • 32-Lane SIMD Calculation Array
               • 3D TDV Heterogeneous Stacking.
             </p>
@@ -5235,15 +5235,15 @@
               </tr>
               <tr style="border-bottom:1px solid var(--card-border);">
                 <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
-                  Native OMI 25.6 TB/s Memory Interface
+                  Dual-LUT SRAM & Microcode Subsystem
                 </td>
                 <td style="padding:10px 12px; font-family: 'Inter', sans-serif; font-size: 0.8rem;">
-                  256-pillar Open Memory Interface, 990 ps cold access latency with Reed-Solomon SEC-DED ECC
+                  32x local volatile Dual-LUT SRAM macros (1.50 MB) + centralized microcode instruction ROM (320 ps access)
                 </td>
                 <td style="padding:10px 12px; color:var(--text-subtle);">1</td>
                 <td style="padding:10px 12px; color:var(--accent-cyan); font-weight: 700;">1.500 mm²</td>
                 <td style="padding:10px 12px; color:var(--text-main);">4.17%</td>
-                <td style="padding:10px 12px; color:var(--accent-green);">0.38 W</td>
+                <td style="padding:10px 12px; color:var(--accent-green);">0.32 W</td>
               </tr>
               <tr style="border-bottom:1px solid var(--card-border);">
                 <td style="padding:10px 12px; font-weight:600; color:var(--text-main); font-family: 'Inter', sans-serif;">
@@ -5324,12 +5324,12 @@
           <div style="background: var(--card-sub-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
               <span style="font-size: 0.76rem; font-weight: 700; color: var(--accent-green); text-transform: uppercase;">
-                Native OMI 25.6 TB/s & SFUs
+                Dual-LUT SRAM & Vector SFUs
               </span>
-              <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">990 ps ACCESS</span>
+              <span class="badge-pass" style="font-size: 0.65rem; padding: 2px 6px;">320 ps ACCESS</span>
             </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
-              256-pillar Open Memory Interface (OMI) controller streaming at 25.6 TB/s bandwidth with 990 ps cold access latency. Accompanied by 16 vector SFU lanes executing Softmax, GELU, SiLU, RoPE, and RMSNorm in parallel with optical GEMM passes.
+              Dual-tier on-chip memory subsystem (1.50 MB Dual-LUT SRAM + 0.25 MB Microcode ROM) delivering single-cycle 320 ps access to the 32 SIMD lanes. Accompanied by 16 vector SFU lanes executing Softmax, GELU, SiLU, RoPE, and RMSNorm in parallel with optical GEMM passes.
             </p>
           </div>
         </div>
@@ -6388,7 +6388,7 @@
       },
       1: {
         title: "Stratum 1 (65nm CMOS Digital Die)",
-        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization (29.78 mm² Active Logic) • 1-2-8-8 Antiphase • Ray-Tracing BVH • OMI 25.6 TB/s • 16x Vector SFUs • DisplayPort 2.1."
+        text: "65nm Low-Power CMOS Base: 36.00 mm² footprint (6.0 × 6.0 mm) • >92% Silicon Utilization (29.78 mm² Active Logic) • 1-2-8-8 Antiphase • Ray-Tracing BVH • Dual-LUT SRAM • 16x Vector SFUs • DisplayPort 2.1."
       }
     };
 

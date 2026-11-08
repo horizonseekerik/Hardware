@@ -91,15 +91,15 @@ Conventional optical AI processors encode numbers in continuous analog amplitude
 
 ## 🚀 Universal Heterogeneous APU + NPU + GPU Architecture
 
-Project JANUS integrates general-purpose control (**APU**), 200 GHz photonic tensor acceleration (**NPU**), and real-time ray-tracing / neural rendering graphics (**GPU**) onto a single monolithic **36.00 mm² ($6.0\text{ mm} \times 6.0\text{ mm}$)** 65nm CMOS base die co-packaged with 3D photonic strata and high-speed Open Memory Interface (OMI):
+Project JANUS integrates general-purpose control (**APU**), 200 GHz photonic tensor acceleration (**NPU**), and real-time ray-tracing / neural rendering graphics (**GPU**) onto a single monolithic **36.00 mm² ($6.0\text{ mm} \times 6.0\text{ mm}$)** 65nm CMOS base die co-packaged with 3D photonic strata and an ultra-low-latency on-chip Dual-LUT SRAM memory subsystem:
 
 ```
 +───────────────────────────────────────────────────────────────────────────────────────────+
 |               PROJECT JANUS: 36.00 mm² UNIFIED CMOS BASE DIE FLOORPLAN (6.0 x 6.0 mm)      |
 +───────────────────────────────────────────────────────────────────────────────────────────+
-|  [Master Core]   [Phase-1 Mgr]   [Phase-2 Mgr]  │   [Open Memory Interface (OMI)]         |
-|  RISC-V 64b CPU  Tiles 0-7 Sync  Tiles 8-15 Sync│   25.6 TB/s Co-Packaged Bus (256 Pads)   |
-|  (1.50 mm²)      (0.40 mm²)      (0.40 mm²)     │   990 ps Latency + Reed-Solomon ECC     |
+|  [Master Core]   [Phase-1 Mgr]   [Phase-2 Mgr]  │   [Dual-LUT SRAM Subsystem (1.5 MB)]    |
+|  RISC-V 64b CPU  Tiles 0-7 Sync  Tiles 8-15 Sync│   32x Volatile Macros + 0.25 MB ROM     |
+|  (1.50 mm²)      (0.40 mm²)      (0.40 mm²)     │   320 ps Single-Cycle Latency (3.125GHz)|
 +─────────────────────────────────────────────────┴─────────────────────────────────────────+
 |               16x DECENTRALIZED TILE CONTROLLERS (4.00 mm² Total / 0.25 mm² each)         |
 |   Tile 00  Tile 01  Tile 02  Tile 03  Tile 04  Tile 05  Tile 06  Tile 07  (Phase 1 Group)  |
@@ -130,14 +130,14 @@ Project JANUS integrates general-purpose control (**APU**), 200 GHz photonic ten
 
 ### 1. 1-2-8-8 Two-Phase Antiphase Control Hierarchy
 To reconcile the frequency mismatch between the **3.125 GHz 65nm CMOS digital clock** and the **200.0 GHz optical pulse repetition rate** ($64:1$ time-interleaving ratio), JANUS deploys a 3-tier decentralized control hierarchy:
-* **1 Master Orchestration Core (RISC-V 64-bit)**: Handles high-level runtime scheduling, kernel launch descriptors, and OMI memory paging. Emits macro-descriptors where a single 3.125 GHz instruction dispatches tens of thousands of optical picosecond tensor operations.
+* **1 Master Orchestration Core (RISC-V 64-bit)**: Handles high-level runtime scheduling, kernel launch descriptors, and on-chip SRAM memory paging. Emits macro-descriptors where a single 3.125 GHz instruction dispatches tens of thousands of optical picosecond tensor operations.
 * **2 Phase-Manager Cores ($\Phi_1$ & $\Phi_2$)**: Dedicated hardware state machines synchronizing the two interleaved 2.5 ps antiphase half-cycles.
 * **16 Decentralized Tile Controllers**: Divided into two alternating phase groups:
-  * **Phase 1 ($\Phi_1 = 0 \to 2.5\text{ ps}$)**: Group A (Tiles 0–7) computes optically in the photonic stratum while Group B (Tiles 8–15) executes latch sense-amplification, CRT accumulation, and OMI prefetching.
+  * **Phase 1 ($\Phi_1 = 0 \to 2.5\text{ ps}$)**: Group A (Tiles 0–7) computes optically in the photonic stratum while Group B (Tiles 8–15) executes latch sense-amplification, CRT accumulation, and SRAM prefetching.
   * **Phase 2 ($\Phi_2 = 2.5 \to 5.0\text{ ps}$)**: Group B (Tiles 8–15) computes optically while Group A (Tiles 0–7) post-processes and latches results.
 * **Key Physical Benefits**:
   * **50% Reduction in $L \cdot di/dt$ Rail Bounce**: Staggering switching current across two 2.5 ps antiphase slots cuts peak transient supply noise in half ($100\text{ mA}$ vs $200\text{ mA}$), preventing inductive voltage droop.
-  * **Zero Bus Contention**: Phase 1 and Phase 2 cores interleave memory read/write cycles to the co-packaged OMI bus without arbitration stalls.
+  * **Zero Bus Contention**: Phase 1 and Phase 2 cores interleave memory read/write cycles to the on-chip memory crossbar without arbitration stalls.
 
 ### 2. Dual-Mode 3D Graphics Subsystem (Approach A & Approach B)
 * **Approach A (Neural Radiance Fields & 3D Gaussian Splatting)**:
@@ -164,7 +164,7 @@ To reconcile the frequency mismatch between the **3.125 GHz 65nm CMOS digital cl
 | **16x Vector SFU Transcendentals Array** | 65nm CMOS Base | 16 | **3.20** | 8.89% | Softmax, GELU, SiLU, RoPE, RMSNorm transcendental vector lanes |
 | **Hardware Ray-Tracing BVH Engines** | 65nm CMOS Base | 4 | **1.50** | 4.17% | 4x BVH traversal engines with 16-way AABB ray-box pipelines |
 | **Rasterizer, 16x TMUs & DisplayPort** | 65nm CMOS Base | 1 | **3.90** | 10.83% | 12.8 GTri/s barycentric rasterizer, 16x TMUs, 80 Gbps DP 2.1 PHY |
-| **Native OMI 25.6 TB/s Memory Interface** | 65nm CMOS Base | 1 | **1.50** | 4.17% | 256-pillar OMI controller, 990 ps cold access latency, Reed-Solomon ECC |
+| **Dual-LUT SRAM & Microcode Subsystem** | 65nm CMOS Base | 1 | **1.50** | 4.17% | 32x local volatile Dual-LUT SRAM macros (1.50 MB) + central ROM (320 ps access) |
 | **H-Tree Clock Mesh & Decap Whitespace** | Silicon Whitespace | 1 | **6.22** | **17.28%** | 3.125 GHz balanced clock tree, power grid decoupling, thermal buffer |
 | **Total Physical CMOS Base Die** | **Monolithic 65nm** | — | **36.00** | **100.00%** | **6.00 mm × 6.00 mm Base Die (82.72% Active Area, 17.28% Whitespace)** |
 
