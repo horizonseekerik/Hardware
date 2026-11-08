@@ -9,7 +9,7 @@ Die Dimensions : 10.00 mm x 10.00 mm (100.0 mm^2, 1:1 match with SiPh top stratu
 This script synthesizes the standalone 65nm CMOS base die mask layout:
   - StrongARM Regenerative Sensing Latch Array (1:1 vertically under APD TDVs,
     32 lanes x 16 trees x 16 leaves = 8,192 latches per tile, 131,072 total)
-  - 1:32 Polyphase Time-Interleaved Deserializers
+  - 1:64 Polyphase Time-Interleaved Deserializers (64:1 gearing)
   - 32-Lane SIMD Wallace-Tree & Kogge-Stone Parallel-Prefix Arithmetic Arrays
   - 1.5 MB Dual-LUT Volatile Local SRAM Slices (48 KB per lane)
   - 1.5 MB Central Non-Volatile ROM & JIR Epoch Sequencer FSM
@@ -237,7 +237,7 @@ def pcell_cmos_strongarm_lane() -> gf.Component:
 @gf.cell
 def pcell_cmos_deserializer_bank() -> gf.Component:
     """
-    1:32 Polyphase Time-Interleaved Deserializer Bank:
+    1:64 Polyphase Time-Interleaved Deserializer Bank (64:1 gearing):
       - 5-bit master binary ring counter & 32-phase latch clock generators
       - 32-bit register shift register array (height = 16*32 = 512 um core)
     """
@@ -446,7 +446,7 @@ def build_cmos_base_tile(tile_id: int = 0) -> gf.Component:
     matching the 6.25 mm^2 top optical tile footprint 1:1):
       1. 32 SIMD Lanes x 16 Tree Bays x 16 StrongARM Latches = 8,192 StrongARM Latches
          (1:1 aligned with APD TDVs via get_leaf_tdv_coordinate)
-      2. 1:32 Polyphase Time-Interleaved Deserializer Bank
+      2. 1:64 Polyphase Time-Interleaved Deserializer Bank (64:1 gearing)
       3. 32-Lane SIMD Wallace-Tree / Kogge-Stone Arithmetic Array
       4. 1.5 MB Dual-LUT Volatile Local SRAM Slices
       5. 1.5 MB Central Non-Volatile ROM & JIR Epoch Sequencer
@@ -659,7 +659,7 @@ def main():
     print("=" * 75)
     print("[*] Synthesizing 16x 65nm CMOS Compute Tiles (2.5x2.5 mm each)...")
     print("[*] Synthesizing StrongARM Latches (32 lanes x 16 trees x 16 leaves = 8,192 per tile)...")
-    print("[*] Synthesizing 1:32 Deserializers & SIMD Wallace-Kogge Arithmetic...")
+    print("[*] Synthesizing 1:64 Deserializers (64:1 Gearing) & SIMD Wallace-Kogge Arithmetic...")
     print("[*] Synthesizing 1.5MB Dual-LUT SRAM & Central ROM Macros...")
     print("[*] Synthesizing 160-Bit Carry-Save Accumulator & JIR Thermal Diodes...")
     print("[*] Synthesizing UBM Micro-Bump Pads, 4-Level H-Tree Clock & Power Rings...")

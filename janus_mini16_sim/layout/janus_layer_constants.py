@@ -39,7 +39,7 @@ LAYER_THERMAL_BUF     = (32, 0)   # 250 um SiO2 Monolithic Thermal Buffer Bounda
 # Architectural floorplan outlines.  No physical mask shapes go on these layers.
 # ==============================================================================
 LAYER_ARCH_STRONGARM  = (40, 0)   # StrongARM Regenerative Sense-Amp Front-End Block
-LAYER_ARCH_DESER      = (41, 0)   # 1:32 Polyphase Deserializer Block
+LAYER_ARCH_DESER      = (41, 0)   # 1:64 Polyphase Deserializer Block (64:1 Gearing)
 LAYER_ARCH_SIMD       = (42, 0)   # 32-Lane SIMD Wallace-Kogge Array Block
 LAYER_ARCH_SRAM       = (43, 0)   # 1.5 MB Dual-LUT Volatile SRAM Block
 LAYER_ARCH_ROM        = (44, 0)   # 1.5 MB Central ROM & JIR FSM Block

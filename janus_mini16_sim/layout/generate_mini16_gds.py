@@ -22,7 +22,7 @@ Architecture:
   3. Bottom 65nm LP/GP CMOS Base Stratum (1:1 Superimposed Footprint):
      Physical mask layers in 100-199 range (no GDS collision with optical 1-29):
      - 8,192 StrongARM regenerative sense amplifiers per tile matching TDVs 1:1
-     - 1:32 Polyphase Deserializer, 32-Lane SIMD Wallace-Kogge, SRAM, ROM, CSA
+     - 1:64 Polyphase Deserializer, 64-Lane SIMD Wallace-Kogge, SRAM, ROM, CSA
 
   4. Chip Perimeter & Metrology:
      - Layer 190/0: 4-Layer Concentric Moisture Barrier Chip Seal Ring

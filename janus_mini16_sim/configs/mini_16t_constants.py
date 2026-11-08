@@ -70,7 +70,7 @@ LAYER_MAP: Dict[str, str] = {
     "31": "UBM_MicroBump",        # Under-bump metallization & micro-bump pads (50 um pitch)
     "32": "Thermal_Buffer_SiO2",  # Monolithic 250 um SiO2 thermal isolation boundary
     "40": "CMOS_StrongARM",       # 65nm StrongARM regenerative sense latches
-    "41": "CMOS_Deserializer",    # 1:32 polyphase time-interleaved deserializers
+    "41": "CMOS_Deserializer",    # 1:64 polyphase time-interleaved deserializers (64:1 gearing)
     "42": "CMOS_SIMD_Unit",       # 32-lane SIMD Wallace-Kogge arithmetic unit
     "43": "CMOS_DualLUT_SRAM",    # 1.5 MB dual-LUT volatile local SRAM
     "44": "CMOS_Central_ROM",     # 1.5 MB central non-volatile ROM macro & JIR FSM
