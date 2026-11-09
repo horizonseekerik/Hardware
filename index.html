@@ -110,37 +110,37 @@
     }
 
     [data-theme="light"] {
-      /* OPTION 2: VIBRANT NORDIC MINT & EMERALD GLASS (CLEAR, NOTICEABLE EMERALD THEME) */
-      --bg-color: #e4f4ea;           /* Distinct, refreshing cool mint canvas (instantly green!) */
-      --bg-dark: #d3ebd9;
-      --header-bg: rgba(255, 255, 255, 0.94);
-      --nav-bg: #d6eedc;
-      --card-bg: #ffffff;            /* Crisp white cards with rich contrast against mint */
-      --card-sub-bg: #eaf6ee;
-      --card-border: #9ed5b5;        /* Noticeable, prominent jade border */
-      --card-border-subtle: #bfe5cf;
-      --table-header-bg: #d7f1e1;
-      --table-row-hover: rgba(5, 150, 105, 0.08);
-      --input-bg: #ffffff;
+      /* TRUE VIBRANT EMERALD LIGHT THEME (UNMISTAKABLE MINT CANVASES & JADE GLASS) */
+      --bg-color: #d6eee0;           /* Rich, visible cleanroom mint canvas - unmistakably green! */
+      --bg-dark: #c5e6d2;
+      --header-bg: rgba(235, 248, 240, 0.94);
+      --nav-bg: #cdecd8;
+      --card-bg: #f0f9f3;            /* Frosted jade porcelain cards (never plain stark white) */
+      --card-sub-bg: #e2f4e8;        /* Mint sub-card fills */
+      --card-border: #84cc9f;        /* Sharp, visible emerald border */
+      --card-border-subtle: #a2dbae;
+      --table-header-bg: #c5e8d2;
+      --table-row-hover: rgba(5, 150, 105, 0.12);
+      --input-bg: #f0f9f3;
       --accent-cyan: #059669;        /* Vibrant Emerald Laser Accent */
-      --accent-blue: #0284c7;        /* Optical Sky Blue */
+      --accent-blue: #0284c7;        /* Precision Optical Sky */
       --accent-purple: #6366f1;      /* Waveguide Indigo */
       --accent-green: #047857;       /* Deep Verification Pine */
       --accent-red: #dc2626;         /* Alert Red */
       --accent-amber: #d97706;       /* Thermal Copper / Sb2S3 / Cu TDV */
       --accent-yellow: #d97706;
-      --text-main: #062319;          /* Deep Forest Pine Ink (razor-sharp legibility) */
+      --text-main: #052217;          /* Deep Forest Pine Ink (razor-sharp legibility) */
       --text-muted: #1e4a36;         /* Muted Dark Jade */
-      --text-subtle: #41755a;
-      --card-shadow: 0 8px 30px rgba(5, 150, 105, 0.09), 0 1px 3px rgba(6, 35, 25, 0.05);
-      --glow-cyan: 0 0 24px rgba(5, 150, 105, 0.25);
-      --glow-amber: 0 0 18px rgba(217, 119, 6, 0.20);
-      --glow-purple: 0 0 18px rgba(99, 102, 241, 0.20);
-      --canvas-bg: #e4f4ea;
-      --canvas-border: #9ed5b5;
-      --hero-bg: #e4f4ea;
-      --hero-title-grad: #062319;
-      --badge-pass-bg: #d1fae5;
+      --text-subtle: #3d7054;
+      --card-shadow: 0 10px 32px rgba(5, 150, 105, 0.14), 0 1px 3px rgba(6, 35, 25, 0.08);
+      --glow-cyan: 0 0 28px rgba(5, 150, 105, 0.35);
+      --glow-amber: 0 0 20px rgba(217, 119, 6, 0.25);
+      --glow-purple: 0 0 20px rgba(99, 102, 241, 0.25);
+      --canvas-bg: #d6eee0;
+      --canvas-border: #84cc9f;
+      --hero-bg: #d6eee0;
+      --hero-title-grad: #052217;
+      --badge-pass-bg: #bbf0d0;
       --badge-pass-color: #047857;
     }
 
@@ -382,8 +382,14 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
     [data-theme="light"] .btn-primary {
-      background: #0f172a;
+      background: #059669;
       color: #ffffff;
+      border: 1px solid #047857;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+    }
+    [data-theme="light"] .btn-primary:hover {
+      background: #047857;
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.45);
     }
     .btn-primary:hover {
       opacity: 0.92;
@@ -2686,17 +2692,22 @@
       transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Option 2: Vibrant Nordic Mint & Emerald Glass Specializations */
+    /* True Vibrant Emerald Light Mode Overrides */
+    [data-theme="light"] body {
+      background-color: #d6eee0 !important;
+      background-image: radial-gradient(rgba(5, 150, 105, 0.15) 1px, transparent 1px) !important;
+    }
+
     [data-theme="light"] .header-island {
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid #9ed5b5;
-      box-shadow: 0 10px 35px rgba(5, 150, 105, 0.16), 0 1px 3px rgba(6, 35, 25, 0.06);
+      background: rgba(235, 248, 240, 0.95) !important;
+      border: 1px solid #84cc9f !important;
+      box-shadow: 0 10px 40px rgba(5, 150, 105, 0.20), 0 1px 3px rgba(6, 35, 25, 0.08) !important;
     }
 
     [data-theme="light"] .hero-tag {
-      background: #d1fae5 !important;
+      background: #bbf0d0 !important;
       color: #047857 !important;
-      border-color: #86efac !important;
+      border-color: #72c792 !important;
       font-weight: 700 !important;
     }
 
@@ -2706,28 +2717,79 @@
       -webkit-text-fill-color: transparent !important;
     }
 
+    [data-theme="light"] .btn-outline {
+      background: #e2f4e8 !important;
+      color: #047857 !important;
+      border: 1px solid #84cc9f !important;
+      font-weight: 600 !important;
+    }
+    [data-theme="light"] .btn-outline:hover {
+      background: #c5edd3 !important;
+      border-color: #059669 !important;
+    }
+
+    [data-theme="light"] .hero-link-chip {
+      background: #e2f4e8 !important;
+      border: 1px solid #84cc9f !important;
+      color: #047857 !important;
+      font-weight: 600 !important;
+    }
+    [data-theme="light"] .hero-link-chip:hover {
+      background: #c5edd3 !important;
+      border-color: #059669 !important;
+    }
+
+    [data-theme="light"] .hero-telemetry-banner {
+      background: #e8f7ee !important;
+      border: 1px solid #84cc9f !important;
+      box-shadow: 0 4px 16px rgba(5, 150, 105, 0.10) !important;
+    }
+    [data-theme="light"] .hero-telemetry-badge {
+      background: #bbf0d0 !important;
+      border: 1px solid #72c792 !important;
+      color: #047857 !important;
+    }
+
+    [data-theme="light"] .kpi-grid {
+      background: #daf1e3 !important;
+      border: 1px solid #84cc9f !important;
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.10) !important;
+    }
+    [data-theme="light"] .kpi-card {
+      border-right: 1px solid #a8dfbc !important;
+    }
+    [data-theme="light"] .kpi-val {
+      color: #047857 !important;
+      font-weight: 800 !important;
+    }
+    [data-theme="light"] .kpi-lbl {
+      color: #1e4a36 !important;
+      font-weight: 600 !important;
+    }
+
     [data-theme="light"] .card {
-      border: 1px solid #9ed5b5 !important;
-      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.08), 0 1px 3px rgba(6, 35, 25, 0.05);
+      background: #f0f9f3 !important;
+      border: 1px solid #84cc9f !important;
+      box-shadow: 0 10px 32px rgba(5, 150, 105, 0.12), 0 1px 3px rgba(6, 35, 25, 0.06) !important;
     }
 
     [data-theme="light"] .card::before {
-      background: radial-gradient(circle, rgba(5, 150, 105, 0.14) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(5, 150, 105, 0.18) 0%, transparent 70%) !important;
     }
 
     [data-theme="light"] .card:hover {
       border-color: #059669 !important;
-      box-shadow: 0 14px 40px rgba(5, 150, 105, 0.16), 0 0 18px rgba(5, 150, 105, 0.15) !important;
+      box-shadow: 0 16px 45px rgba(5, 150, 105, 0.22), 0 0 20px rgba(5, 150, 105, 0.20) !important;
     }
 
     [data-theme="light"] .hw-compare-tab-btn {
-      background: #d6eedc;
-      color: #064e3b;
-      border-color: #9ed5b5;
+      background: #cdecd8 !important;
+      color: #064e3b !important;
+      border: 1px solid #84cc9f !important;
     }
     [data-theme="light"] .hw-compare-tab-btn:hover {
-      color: #047857;
-      border-color: #059669;
+      color: #047857 !important;
+      border-color: #059669 !important;
     }
     [data-theme="light"] .hw-compare-tab-btn.active {
       background: #059669 !important;
@@ -2736,19 +2798,28 @@
       box-shadow: 0 3px 12px rgba(5, 150, 105, 0.35) !important;
     }
     [data-theme="light"] .hw-compare-bar-track {
-      background: #d3ebd9;
+      background: #c5e6d2 !important;
     }
 
     [data-theme="light"] .nav-btn.active {
-      background: rgba(5, 150, 105, 0.16) !important;
-      color: #047857 !important;
+      background: #059669 !important;
+      color: #ffffff !important;
       font-weight: 700 !important;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.30) !important;
     }
 
     [data-theme="light"] .cmd-palette-trigger {
-      background: #d6eedc !important;
-      border-color: #9ed5b5 !important;
+      background: #cdecd8 !important;
+      border: 1px solid #84cc9f !important;
       color: #064e3b !important;
+    }
+
+    [data-theme="light"] th {
+      background: #c5e8d2 !important;
+      color: #052217 !important;
+    }
+    [data-theme="light"] tr:hover td {
+      background: rgba(5, 150, 105, 0.12) !important;
     }
 </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
@@ -7219,7 +7290,7 @@
       }
       if (typeof webglScene !== 'undefined' && webglScene && typeof THREE !== 'undefined') {
         const isDark = theme === 'dark';
-        webglScene.background = new THREE.Color(isDark ? 0x040a07 : 0xe4f4ea);
+        webglScene.background = new THREE.Color(isDark ? 0x040a07 : 0xd6eee0);
       }
     }
 
@@ -8918,7 +8989,7 @@
       // 1. Scene & Background (Dark space background matching video)
       webglScene = new THREE.Scene();
       const dark = isDarkTheme();
-      webglScene.background = new THREE.Color(dark ? 0x040a07 : 0xe4f4ea);
+      webglScene.background = new THREE.Color(dark ? 0x040a07 : 0xd6eee0);
 
       // 2. Camera (Low frontal-isometric view matching CAD video demonstration)
       webglCamera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
@@ -12084,11 +12155,11 @@
 
       // Oscilloscope graticule background (theme-aware)
       var isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-      ctx.fillStyle = isDark ? '#02050b' : '#eaf7ef';
+      ctx.fillStyle = isDark ? '#02050b' : '#daf2e4';
       ctx.fillRect(0, 0, w, h);
 
       // Grid lines (8x8 divisions)
-      ctx.strokeStyle = isDark ? 'rgba(0, 245, 155, 0.08)' : 'rgba(5, 150, 105, 0.18)';
+      ctx.strokeStyle = isDark ? 'rgba(0, 245, 155, 0.08)' : 'rgba(5, 150, 105, 0.28)';
       ctx.lineWidth = 1;
       var numDivX = 10;
       var numDivY = 8;
@@ -12136,7 +12207,7 @@
         // Trace 1: Laser Eye Waveform (theme-aware)
         ctx.strokeStyle = isDark
           ? ((i % 2 === 0) ? 'rgba(0, 245, 155, 0.35)' : 'rgba(56, 189, 248, 0.20)')
-          : ((i % 2 === 0) ? 'rgba(5, 150, 105, 0.55)' : 'rgba(2, 132, 199, 0.35)');
+          : ((i % 2 === 0) ? 'rgba(5, 150, 105, 0.75)' : 'rgba(2, 132, 199, 0.45)');
         ctx.beginPath();
         for (var px = 0; px <= w; px += 4) {
           var t = (px / w) * (2 * Math.PI * 2); // 2 full eye cycles
