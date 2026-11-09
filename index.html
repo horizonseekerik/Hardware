@@ -7599,7 +7599,52 @@
     });
 
 
-    function switchPage(pageId) {
+    // --- SINGLE-PAGE APPLICATION ROUTING & BROWSER HISTORY ENGINE ---
+    const PAGE_ROUTES = {
+      'home': '/overview',
+      'paper': '/paper',
+      'simulation': '/simulation',
+      'codebase': '/codebase',
+      'roadmap': '/roadmap',
+      'hardware': '/hardware',
+      'software': '/software',
+      'about': '/about'
+    };
+
+    const ROUTE_TO_PAGE = {
+      '/': 'home',
+      '/overview': 'home',
+      '/home': 'home',
+      '/index.html': 'home',
+      '/paper': 'paper',
+      '/manuscript': 'paper',
+      '/simulation': 'simulation',
+      '/sim': 'simulation',
+      '/codebase': 'codebase',
+      '/code': 'codebase',
+      '/roadmap': 'roadmap',
+      '/hardware': 'hardware',
+      '/cmos': 'hardware',
+      '/software': 'software',
+      '/jir': 'software',
+      '/about': 'about',
+      '/creator': 'about'
+    };
+
+    const PAGE_TITLES = {
+      'home': 'JANUS | 200.0 GHz Monolithic Photonic Accelerator & Hardware Overview',
+      'paper': 'JANUS | IEEE Manuscript & Technical Reports',
+      'simulation': 'JANUS | Real-Time Hardware Co-Simulation Suite',
+      'codebase': 'JANUS | Tapeout-Ready RTL & Silicon Source Codebase',
+      'roadmap': 'JANUS | Silicon & Packaging Tapeout Roadmap',
+      'hardware': 'JANUS | 65nm CMOS Base Die & 3D Heterogeneous Stack',
+      'software': 'JANUS | Software Driver Stack & JIR Thermal Balancing',
+      'about': 'JANUS | Creator & Architectural Research Background'
+    };
+
+    function switchPage(pageId, updateHistory = true, scrollToTop = true) {
+      if (!pageId) return;
+
       // Close mobile menu on navigation
       const navBar = document.querySelector('.nav-bar');
       const menuBtn = document.querySelector('.mobile-menu-btn');
@@ -7614,6 +7659,26 @@
       if (targetPage) targetPage.classList.add('active');
       if (targetNav) targetNav.classList.add('active');
 
+      // Update Browser History & Address Bar
+      if (updateHistory && window.location.protocol.startsWith('http')) {
+        const targetPath = PAGE_ROUTES[pageId] || ('/' + pageId);
+        const currentPath = window.location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
+        const expectedPath = targetPath.toLowerCase().replace(/\/+$/, '') || '/';
+
+        if (currentPath !== expectedPath) {
+          try {
+            window.history.pushState({ pageId: pageId }, '', targetPath);
+          } catch (e) {
+            console.warn('History pushState blocked:', e);
+          }
+        }
+      }
+
+      // Update Document Title
+      if (PAGE_TITLES[pageId]) {
+        document.title = PAGE_TITLES[pageId];
+      }
+
       if (pageId === 'simulation') {
         setTimeout(() => {
           if (typeof resizeArchCanvas === 'function') resizeArchCanvas();
@@ -7624,8 +7689,68 @@
       } else if (pageId === 'codebase') {
         loadCodebaseTree();
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (scrollToTop) {
+        window.scrollTo({ top: 0, behavior: updateHistory ? 'smooth' : 'auto' });
+      }
     }
+
+    // Resolve initial page and sub-tab from URL
+    function initRouteFromLocation() {
+      let path = window.location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
+      
+      // Also check hash fallback e.g. #/simulation, #simulation, #hardware
+      if ((path === '/' || path === '/index.html') && window.location.hash) {
+        const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+        if (hash && (ROUTE_TO_PAGE['/' + hash] || PAGE_ROUTES[hash])) {
+          path = '/' + hash;
+        }
+      }
+
+      const initialPageId = ROUTE_TO_PAGE[path] || (PAGE_ROUTES[path.slice(1)] ? path.slice(1) : null);
+
+      if (initialPageId) {
+        switchPage(initialPageId, false, false);
+        // Clean up URL if opened at root or alias to canonical path
+        if (window.location.protocol.startsWith('http')) {
+          const canonicalPath = PAGE_ROUTES[initialPageId] || path;
+          try {
+            window.history.replaceState({ pageId: initialPageId }, '', canonicalPath);
+          } catch (e) {}
+        }
+      } else {
+        // Fallback default: home/overview
+        switchPage('home', false, false);
+      }
+
+      // Check URL query parameters for deep linking sub-tabs
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const simTab = urlParams.get('tab');
+        if (simTab && initialPageId === 'simulation' && typeof switchTab === 'function') {
+          setTimeout(() => switchTab(simTab), 100);
+        }
+        const paperDoc = urlParams.get('doc') || urlParams.get('paper');
+        if (paperDoc && initialPageId === 'paper' && typeof switchPaper === 'function') {
+          setTimeout(() => switchPaper(paperDoc), 100);
+        }
+      } catch (e) {}
+    }
+
+    // Listen to Browser Back / Forward buttons
+    window.addEventListener('popstate', (event) => {
+      if (event.state && event.state.pageId) {
+        switchPage(event.state.pageId, false, false);
+      } else {
+        initRouteFromLocation();
+      }
+    });
+
+    // Execute route resolution immediately and on DOM ready
+    initRouteFromLocation();
+    window.addEventListener('DOMContentLoaded', () => {
+      initRouteFromLocation();
+    });
 
     // --- Simulation Sub-Tabs Switcher ---
     function switchTab(tabId) {

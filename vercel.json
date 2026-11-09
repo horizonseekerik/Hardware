@@ -23,6 +23,14 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/index.py?__path=$1"
+    },
+    {
+      "source": "/(overview|paper|manuscript|simulation|codebase|roadmap|hardware|software|about)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/((?!api/|.*\\..*).*)",
+      "destination": "/index.html"
     }
   ]
 }
