@@ -13149,7 +13149,7 @@
 
     const COPILOT_GREETING = {
       role: 'model',
-      text: "👋 **Welcome to the Project JANUS Silicon Copilot!**\n\nI am your interactive AI architect grounded on our **200.0 GHz monolithic photonic accelerator** specifications. You can ask me about:\n- **0 W Static Hold Power** with Sb₂S₃ phase-change switches\n- **Exact INT64 Precision** via spatial Residue Number System (RNS)\n- **1:64 Polyphase Gearing** on the 65nm CMOS base die\n- **SAC²M APDs** & +8.41 dB optical link budgets\n\n*Your conversation history is automatically saved on your device.* How can I assist your deep-tech exploration?",
+      text: "👋 **Welcome to Project JANUS.**\n\nI am your interactive silicon architect grounded on our **200.0 GHz monolithic photonic accelerator** specifications. You can ask me about:\n- **0 W Static Hold Power** with Sb₂S₃ phase-change switches\n- **Exact INT64 Precision** via spatial Residue Number System (RNS)\n- **1:64 Polyphase Gearing** on the 65nm CMOS base die\n- **SAC²M APDs** & +8.41 dB optical link budgets\n\n*Your conversation history is automatically saved on your device.* How can I assist your deep-tech exploration?",
       timestamp: Date.now()
     };
 
@@ -13275,6 +13275,9 @@
 
       if (!Array.isArray(copilotHistory) || copilotHistory.length === 0) {
         copilotHistory = [COPILOT_GREETING];
+      } else if (copilotHistory[0] && copilotHistory[0].text && (copilotHistory[0].text.includes('Copilot') || copilotHistory[0].text.includes('Gemini'))) {
+        copilotHistory[0].text = COPILOT_GREETING.text;
+        saveCopilotHistory();
       }
 
       copilotHistory.forEach(item => {
@@ -13291,7 +13294,7 @@
     }
 
     function clearCopilotHistory() {
-      if (!confirm('Are you sure you want to clear your Copilot chat history?')) return;
+      if (!confirm('Are you sure you want to clear your chat history?')) return;
       try {
         localStorage.removeItem(COPILOT_STORAGE_KEY);
       } catch (e) {}
@@ -13368,7 +13371,7 @@
         const ind = document.getElementById('copilot-typing-indicator');
         if (ind) ind.remove();
 
-        const errorReply = "⚠️ **Connection Notice:** Unable to reach the silicon copilot backend. Please verify your connection or check that the `/api/chat` serverless function is deployed on Vercel.";
+        const errorReply = "⚠️ **Connection Notice:** Unable to reach the silicon architecture backend. Please verify your connection or check that the `/api/chat` serverless function is deployed on Vercel.";
         renderCopilotMessage('bot', errorReply);
         copilotHistory.push({ role: 'model', text: errorReply, timestamp: Date.now() });
         saveCopilotHistory();
@@ -13603,7 +13606,7 @@
 
   <!-- FLOATING UTILITIES (BACK TO TOP & SHORTCUTS) -->
   <div class="floating-tools-stack">
-    <button id="btn-copilot-trigger" class="floating-tool-btn copilot-trigger-btn" onclick="toggleCopilot()" title="Ask JANUS Silicon Copilot (Gemini AI)">
+    <button id="btn-copilot-trigger" class="floating-tool-btn copilot-trigger-btn" onclick="toggleCopilot()" title="Ask JANUS Silicon Architect">
       <span class="copilot-beacon"></span>
       <span style="font-size:1.15rem;">⚡</span>
     </button>
@@ -13612,20 +13615,20 @@
   </div>
 
   <!-- JANUS SILICON COPILOT (GEMINI AI) FLOATING WINDOW -->
-  <div id="copilot-window" class="copilot-window" role="dialog" aria-label="JANUS Silicon Copilot">
+  <div id="copilot-window" class="copilot-window" role="dialog" aria-label="JANUS Silicon Architect">
     <div class="copilot-header">
       <div class="copilot-header-title">
         <span class="copilot-live-dot"></span>
         <div>
           <div style="font-weight:700; font-size:0.86rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">
-            JANUS Copilot <span class="copilot-badge">GEMINI AI</span>
+            JANUS Silicon Architect
           </div>
-          <div style="font-size:0.67rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">200 GHz Silicon Architect</div>
+          <div style="font-size:0.67rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">200 GHz Monolithic Photonic Engine</div>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:6px;">
         <button class="copilot-tool-btn" onclick="clearCopilotHistory()" title="Clear Chat History (Reset)">🗑️ Clear</button>
-        <button class="copilot-tool-btn" onclick="toggleCopilot()" title="Close Copilot" style="font-size:0.9rem; padding:1px 7px;">✕</button>
+        <button class="copilot-tool-btn" onclick="toggleCopilot()" title="Close" style="font-size:0.9rem; padding:1px 7px;">✕</button>
       </div>
     </div>
 

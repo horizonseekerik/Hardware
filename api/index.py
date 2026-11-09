@@ -952,12 +952,12 @@ def handle_chat_request(data: Dict[str, Any], start_response) -> List[bytes]:
     if not api_key:
         return json_response(start_response, {
             "status": "offline_fallback",
-            "reply": offline_reply + "\n\n*(Note: Running on built-in offline knowledge. Configure `GEMINI_API_KEY` in Vercel to activate live multi-turn Gemini AI.)*",
+            "reply": offline_reply + "",
             "model": "janus-offline-knowledge"
         })
 
     system_instruction = (
-        "You are the Project JANUS Silicon Copilot, an authoritative, scientifically precise AI silicon architect for "
+        "You are the Project JANUS Silicon Architect, an authoritative, scientifically precise AI for "
         "Project JANUS (Joint Asymmetric Network for Ultra-fast Silicon-photonics).\n\n"
         "Architectural Truth & Physics Reference:\n"
         "- 200.0 GHz Monolithic Electro-Photonic Planar Accelerator with 5.0 ps carrier period.\n"
