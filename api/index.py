@@ -1228,6 +1228,31 @@ def app(environ, start_response):
                 }
                 return json_response(start_response, payload)
 
+        elif path == "/api/codebase":
+            query = urllib.parse.parse_qs(environ.get('QUERY_STRING', ''))
+            file_rel = query.get("file", [""])[0].strip()
+            # Security: prevent directory traversal, only allow paths in repository
+            if file_rel and ".." not in file_rel and not file_rel.startswith("/"):
+                cand = os.path.join(BASE_DIR, file_rel)
+                if not os.path.isfile(cand):
+                    cand = os.path.join(BASE_DIR, "janus_mini16_sim", file_rel)
+                if os.path.isfile(cand):
+                    try:
+                        with open(cand, 'r', encoding='utf-8', errors='replace') as f:
+                            content = f.read()
+                        lang = "verilog" if cand.endswith(('.v', '.sv', '.vh')) else ("python" if cand.endswith('.py') else ("json" if cand.endswith('.json') else ("markdown" if cand.endswith('.md') else "plaintext")))
+                        return json_response(start_response, {
+                            "name": os.path.basename(cand),
+                            "path": file_rel,
+                            "lines": len(content.splitlines()),
+                            "size_bytes": len(content.encode('utf-8')),
+                            "language": lang,
+                            "content": content
+                        })
+                    except Exception as e:
+                        return json_response(start_response, {"error": str(e)}, status="500 Internal Server Error")
+            return json_response(start_response, {"error": "File not found or access denied"}, status="404 Not Found")
+
         elif path in ["/api/pdf", "/api/manuscript_pdf", "/paper.pdf", "/main.pdf", "/JANUS_IEEE_Manuscript.pdf"]:
             query = urllib.parse.parse_qs(environ.get("QUERY_STRING", ""))
             is_download = query.get("download", ["0"])[0] == "1"
