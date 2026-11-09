@@ -529,9 +529,10 @@
       background: var(--card-sub-bg);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      max-width: 1200px;
-      margin: 0 auto;
+      width: 100%;
+      margin: 1.25rem 0 2.25rem 0;
       overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     }
 
     .kpi-card {
@@ -542,6 +543,10 @@
       padding: 1.25rem 0.75rem;
       text-align: center;
       box-shadow: none;
+      transition: background 0.2s ease;
+    }
+    .kpi-card:hover {
+      background: rgba(16, 185, 129, 0.05);
     }
     .kpi-card:last-child {
       border-right: none;
@@ -1368,7 +1373,19 @@
       }
 
       /* --- Grid System Collapses --- */
-      .kpi-grid,
+      .kpi-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.75rem !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .kpi-grid .kpi-card {
+        background: var(--card-sub-bg) !important;
+        border: 1px solid var(--card-border) !important;
+        border-radius: 8px !important;
+        padding: 1rem 0.5rem !important;
+      }
       .grid-6 {
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 0.75rem;
@@ -1698,7 +1715,10 @@
       }
 
       /* --- Grids go even smaller --- */
-      .kpi-grid,
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+      }
       .grid-6 {
         grid-template-columns: repeat(2, 1fr) !important;
       }
@@ -2758,6 +2778,12 @@
     [data-theme="light"] .kpi-card {
       border-right: 1px solid #a8dfbc !important;
     }
+    [data-theme="light"] .kpi-card:hover {
+      background: rgba(5, 150, 105, 0.08) !important;
+    }
+    [data-theme="light"] .kpi-card:last-child {
+      border-right: none !important;
+    }
     [data-theme="light"] .kpi-val {
       color: #047857 !important;
       font-weight: 800 !important;
@@ -2765,6 +2791,17 @@
     [data-theme="light"] .kpi-lbl {
       color: #1e4a36 !important;
       font-weight: 600 !important;
+    }
+    @media (max-width: 900px) {
+      [data-theme="light"] .kpi-grid {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      [data-theme="light"] .kpi-grid .kpi-card {
+        background: #daf1e3 !important;
+        border: 1px solid #84cc9f !important;
+      }
     }
 
     [data-theme="light"] .card {
@@ -2885,7 +2922,7 @@
 
       <!-- SPLIT HERO SECTION -->
       <div class="hero-split-container">
-        <!-- Left Column: Architectural Thesis, Actions & Spec Ticker -->
+        <!-- Left Column: Architectural Thesis, Actions & Live Telemetry -->
         <div class="hero-left">
           <div class="hero-tag" style="letter-spacing: 0.12em; color: var(--accent-cyan); font-weight: 700; font-size: 0.72rem;">
             [ BEYOND ELECTRONICS • 200.0 GHz MONOLITHIC PHOTONIC ACCELERATOR ]
@@ -2931,33 +2968,7 @@
             </div>
           </div>
 
-          <!-- Integrated Spec Ticker -->
-          <div class="kpi-grid" style="width: 100%;">
-            <div class="kpi-card">
-              <div class="kpi-val">200 GHz</div>
-              <div class="kpi-lbl">Comb Clock</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">104.8 PMAC/s</div>
-              <div class="kpi-lbl">Model 6B Peak</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">INT64 Exact</div>
-              <div class="kpi-lbl">Precision Ceiling</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">0 W</div>
-              <div class="kpi-lbl">Static Hold Power</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">≤ 10⁻¹²</div>
-              <div class="kpi-lbl">Target BER</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">+8.41 dB</div>
-              <div class="kpi-lbl">Link Margin</div>
-            </div>
-          </div>
+
         </div>
 
         <!-- Right Column: Physical Hardware Showcase Card -->
@@ -3018,6 +3029,34 @@
               Launch Full Interactive 3D WebGL Model →
             </button>
           </div>
+        </div>
+      </div>
+
+      <!-- FULL-WIDTH INTEGRATED SPEC TICKER BANNER -->
+      <div class="kpi-grid" style="width: 100%; margin: 1.25rem 0 2.25rem 0;">
+        <div class="kpi-card">
+          <div class="kpi-val">200 GHz</div>
+          <div class="kpi-lbl">Comb Clock</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">104.8 PMAC/s</div>
+          <div class="kpi-lbl">Model 6B Peak</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">INT64 Exact</div>
+          <div class="kpi-lbl">Precision Ceiling</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">0 W</div>
+          <div class="kpi-lbl">Static Hold Power</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">≤ 10⁻¹²</div>
+          <div class="kpi-lbl">Target BER</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">+8.41 dB</div>
+          <div class="kpi-lbl">Link Margin</div>
         </div>
       </div>
 
