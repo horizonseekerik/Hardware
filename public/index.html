@@ -2859,7 +2859,7 @@
       background: rgba(5, 150, 105, 0.12) !important;
     }
 
-    /* --- JANUS SILICON COPILOT (GEMINI AI) --- */
+    /* --- JANUS SILICON ARCHITECT (MULTI-CHAT & LATEX ENGINE) --- */
     .copilot-trigger-btn {
       position: relative;
       background: linear-gradient(135deg, #00f59b 0%, #059669 100%) !important;
@@ -2888,13 +2888,13 @@
       position: fixed;
       bottom: 84px;
       right: 24px;
-      width: 420px;
+      width: 440px;
       max-width: calc(100vw - 32px);
-      height: 580px;
+      height: 600px;
       max-height: calc(100vh - 120px);
       background: rgba(4, 18, 13, 0.96);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid rgba(0, 245, 155, 0.28);
       border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.70), 0 0 25px rgba(0, 245, 155, 0.12);
@@ -2902,10 +2902,26 @@
       display: none;
       flex-direction: column;
       overflow: hidden;
+      transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1), max-width 0.28s ease, max-height 0.28s ease, transform 0.25s ease;
       animation: copilotFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .copilot-window.open {
       display: flex;
+    }
+    .copilot-window.minimized {
+      height: 52px !important;
+      overflow: hidden !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.50) !important;
+    }
+    .copilot-window.minimized #copilot-chat-view,
+    .copilot-window.minimized #copilot-sessions-view {
+      display: none !important;
+    }
+    .copilot-window.maximized {
+      width: 880px !important;
+      max-width: calc(100vw - 48px) !important;
+      height: calc(100vh - 100px) !important;
+      max-height: 860px !important;
     }
 
     @keyframes copilotFadeIn {
@@ -2917,14 +2933,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
-      background: rgba(6, 26, 19, 0.90);
+      padding: 11px 15px;
+      background: rgba(6, 26, 19, 0.92);
       border-bottom: 1px solid rgba(0, 245, 155, 0.18);
+      user-select: none;
     }
     .copilot-header-title {
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
+      flex: 1;
     }
     .copilot-live-dot {
       width: 9px;
@@ -2933,16 +2952,7 @@
       background: #00f59b;
       box-shadow: 0 0 10px #00f59b;
       animation: pulseGlow 2s infinite;
-    }
-    .copilot-badge {
-      font-size: 0.62rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 9999px;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #38bdf8;
-      letter-spacing: 0.05em;
+      flex-shrink: 0;
     }
 
     .copilot-tool-btn {
@@ -2950,15 +2960,126 @@
       border: 1px solid rgba(16, 185, 129, 0.20);
       color: var(--text-muted);
       border-radius: 6px;
-      padding: 3px 8px;
+      padding: 4px 8px;
       font-size: 0.72rem;
       cursor: pointer;
       transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .copilot-tool-btn:hover {
       background: rgba(16, 185, 129, 0.15);
       color: var(--text-main);
       border-color: rgba(16, 185, 129, 0.40);
+    }
+    .copilot-tool-btn.active {
+      background: rgba(0, 245, 155, 0.18);
+      border-color: #00f59b;
+      color: #00f59b;
+    }
+
+    /* Sessions Panel Styles */
+    .copilot-sessions-view {
+      position: absolute;
+      top: 54px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(4, 18, 13, 0.98);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      animation: copilotFadeIn 0.2s ease;
+    }
+    .copilot-sessions-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(6, 26, 19, 0.85);
+      border-bottom: 1px solid rgba(0, 245, 155, 0.15);
+    }
+    .copilot-sessions-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .copilot-sessions-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .copilot-sessions-list::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.25);
+      border-radius: 3px;
+    }
+    .copilot-session-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: rgba(8, 28, 20, 0.65);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copilot-session-card:hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(0, 245, 155, 0.40);
+      transform: translateY(-1px);
+    }
+    .copilot-session-card.active {
+      background: rgba(0, 245, 155, 0.12);
+      border-color: #00f59b;
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.15);
+    }
+    .copilot-session-meta {
+      flex: 1;
+      min-width: 0;
+      margin-right: 8px;
+    }
+    .copilot-session-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .copilot-session-subtitle {
+      font-size: 0.67rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+    .copilot-session-del-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-subtle);
+      font-size: 0.85rem;
+      padding: 4px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      opacity: 0.6;
+    }
+    .copilot-session-del-btn:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      opacity: 1;
+    }
+    .copilot-sessions-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(6, 26, 19, 0.90);
+      border-top: 1px solid rgba(0, 245, 155, 0.15);
     }
 
     .copilot-messages {
@@ -2968,8 +3089,8 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      font-size: 0.85rem;
-      line-height: 1.55;
+      font-size: 0.86rem;
+      line-height: 1.58;
     }
     .copilot-messages::-webkit-scrollbar {
       width: 5px;
@@ -3010,6 +3131,26 @@
     }
     .copilot-msg.bot li {
       margin-bottom: 0.25rem;
+    }
+
+    /* LaTeX Math Renderings */
+    .copilot-math-block {
+      overflow-x: auto;
+      margin: 0.5rem 0;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 8px;
+      border-left: 3px solid #00f59b;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .katex-math {
+      font-family: KaTeX_Math, 'JetBrains Mono', monospace;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .katex {
+      font-size: 1.05em !important;
     }
 
     .copilot-code {
@@ -3163,11 +3304,6 @@
       background: #daf1e3;
       border-bottom: 1px solid #84cc9f;
     }
-    [data-theme="light"] .copilot-badge {
-      background: #bbf0d0;
-      border-color: #84cc9f;
-      color: #047857;
-    }
     [data-theme="light"] .copilot-tool-btn {
       border-color: #84cc9f;
       color: #1e4a36;
@@ -3175,6 +3311,38 @@
     [data-theme="light"] .copilot-tool-btn:hover {
       background: #bbf0d0;
       color: #064e3b;
+    }
+    [data-theme="light"] .copilot-tool-btn.active {
+      background: #bbf0d0;
+      border-color: #059669;
+      color: #047857;
+    }
+    [data-theme="light"] .copilot-sessions-view {
+      background: rgba(235, 248, 240, 0.98);
+    }
+    [data-theme="light"] .copilot-sessions-header,
+    [data-theme="light"] .copilot-sessions-footer {
+      background: #daf1e3;
+      border-color: #84cc9f;
+    }
+    [data-theme="light"] .copilot-session-card {
+      background: #f0f9f3;
+      border-color: #84cc9f;
+    }
+    [data-theme="light"] .copilot-session-card:hover {
+      background: #e2f4ea;
+      border-color: #059669;
+    }
+    [data-theme="light"] .copilot-session-card.active {
+      background: #daf1e3;
+      border-color: #059669;
+      box-shadow: 0 0 12px rgba(5, 150, 105, 0.18);
+    }
+    [data-theme="light"] .copilot-session-title {
+      color: #047857;
+    }
+    [data-theme="light"] .copilot-session-subtitle {
+      color: #1e4a36;
     }
     [data-theme="light"] .copilot-msg.user {
       background: #059669;
@@ -3185,6 +3353,13 @@
       background: #f0f9f3;
       color: #064e3b;
       border: 1px solid #a8dfbc;
+    }
+    [data-theme="light"] .copilot-math-block {
+      background: #e2f4ea;
+      border-left-color: #059669;
+    }
+    [data-theme="light"] .katex-math {
+      color: #047857;
     }
     [data-theme="light"] .copilot-code {
       background: #daf1e3;
@@ -3239,13 +3414,22 @@
 
     @media (max-width: 600px) {
       .copilot-window {
-        bottom: 0;
-        right: 0;
-        left: 0;
-        width: 100vw;
-        height: 82vh;
-        max-height: 82vh;
-        border-radius: 18px 18px 0 0;
+        bottom: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 82vh !important;
+        max-height: 82vh !important;
+        border-radius: 18px 18px 0 0 !important;
+      }
+      .copilot-window.minimized {
+        height: 52px !important;
+        bottom: 0 !important;
+      }
+      .copilot-window.maximized {
+        width: 100vw !important;
+        height: 94vh !important;
+        max-height: 94vh !important;
       }
     }
 </style>
@@ -3255,6 +3439,9 @@
   <link rel="prefetch" href="/JANUS_Mini16_CMOS_Architecture.pdf" as="fetch" crossorigin>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0284c7">
+  <!-- KaTeX Mathematical Typography Engine (LaTeX Rendering) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -13142,14 +13329,19 @@
     });
 
   
-    // --- JANUS SILICON COPILOT (GEMINI AI) CHAT ENGINE WITH LOCALSTORAGE ---
-    const COPILOT_STORAGE_KEY = 'janus_copilot_history';
-    let copilotHistory = [];
-    let isCopilotGenerating = false;
+    // --- JANUS SILICON ARCHITECT (MULTI-CHAT SESSIONS & LATEX ENGINE) ---
+    const SESSIONS_STORAGE_KEY = 'janus_architect_sessions';
+    const LEGACY_STORAGE_KEY = 'janus_copilot_history';
 
-    const COPILOT_GREETING = {
+    let architectSessions = [];
+    let currentSessionId = null;
+    let isCopilotGenerating = false;
+    let isCopilotMinimized = false;
+    let isCopilotMaximized = false;
+
+    const DEFAULT_GREETING = {
       role: 'model',
-      text: "👋 **Welcome to Project JANUS.**\n\nI am your interactive silicon architect grounded on our **200.0 GHz monolithic photonic accelerator** specifications. You can ask me about:\n- **0 W Static Hold Power** with Sb₂S₃ phase-change switches\n- **Exact INT64 Precision** via spatial Residue Number System (RNS)\n- **1:64 Polyphase Gearing** on the 65nm CMOS base die\n- **SAC²M APDs** & +8.41 dB optical link budgets\n\n*Your conversation history is automatically saved on your device.* How can I assist your deep-tech exploration?",
+      text: "👋 **Welcome to Project JANUS.**\n\nI am your interactive silicon architect grounded on our **200.0 GHz monolithic photonic accelerator** specifications. You can ask me about:\n- **0 W Static Hold Power** with Sb₂S₃ phase-change switches\n- **Exact INT64 Precision** via spatial Residue Number System (RNS)\n- **1:64 Polyphase Gearing** on the 65nm CMOS base die ($3.125\\text{ GHz}$)\n- **SAC²M APDs** & $+8.41\\text{ dB}$ optical link budgets\n\n*Your conversation history is automatically saved on your device.* How can I assist your deep-tech exploration?",
       timestamp: Date.now()
     };
 
@@ -13158,9 +13350,78 @@
       if (!win) return;
       win.classList.toggle('open');
       if (win.classList.contains('open')) {
+        if (isCopilotMinimized) toggleCopilotMinimize(false);
         const inp = document.getElementById('copilot-input');
         if (inp) setTimeout(() => inp.focus(), 150);
         scrollCopilotToBottom();
+      }
+    }
+
+    function toggleCopilotMinimize(forceState) {
+      const win = document.getElementById('copilot-window');
+      const minBtn = document.getElementById('copilot-min-btn');
+      if (!win) return;
+      
+      if (typeof forceState === 'boolean') {
+        isCopilotMinimized = forceState;
+      } else {
+        isCopilotMinimized = !isCopilotMinimized;
+      }
+
+      if (isCopilotMinimized) {
+        win.classList.add('minimized');
+        if (minBtn) minBtn.title = "Restore";
+      } else {
+        win.classList.remove('minimized');
+        if (minBtn) minBtn.title = "Minimize";
+        scrollCopilotToBottom();
+      }
+    }
+
+    function toggleCopilotMaximize(forceState) {
+      const win = document.getElementById('copilot-window');
+      const maxBtn = document.getElementById('copilot-max-btn');
+      if (!win) return;
+
+      if (typeof forceState === 'boolean') {
+        isCopilotMaximized = forceState;
+      } else {
+        isCopilotMaximized = !isCopilotMaximized;
+      }
+
+      if (isCopilotMaximized) {
+        if (isCopilotMinimized) toggleCopilotMinimize(false);
+        win.classList.add('maximized');
+        if (maxBtn) {
+          maxBtn.innerHTML = '🗗';
+          maxBtn.title = "Restore Normal Size";
+        }
+      } else {
+        win.classList.remove('maximized');
+        if (maxBtn) {
+          maxBtn.innerHTML = '🗖';
+          maxBtn.title = "Maximize";
+        }
+      }
+      scrollCopilotToBottom();
+    }
+
+    function toggleCopilotSessionsView(forceState) {
+      const view = document.getElementById('copilot-sessions-view');
+      const toggleBtn = document.getElementById('copilot-sessions-toggle-btn');
+      if (!view) return;
+
+      let show = (typeof forceState === 'boolean') ? forceState : (view.style.display === 'none' || !view.style.display);
+      view.style.display = show ? 'flex' : 'none';
+
+      if (toggleBtn) {
+        if (show) toggleBtn.classList.add('active');
+        else toggleBtn.classList.remove('active');
+      }
+
+      if (show) {
+        if (isCopilotMinimized) toggleCopilotMinimize(false);
+        renderSessionsList();
       }
     }
 
@@ -13171,28 +13432,126 @@
       }
     }
 
+    // --- LATEX & MARKDOWN FORMATTER ---
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function unescapeHtml(s) {
+      return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    }
+
+    function cleanLatexFallback(math) {
+      return math
+        .replace(/\\frac\{((?:[^{}]|\{[^{}]*\})+)\}\{((?:[^{}]|\{[^{}]*\})+)\}/g, '($1 / $2)')
+        .replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})+)\}/g, '√($1)')
+        .replace(/\\cdots\b/g, '⋯')
+        .replace(/\\cdot\b/g, '·')
+        .replace(/\\text\{([^}]+)\}/g, '$1')
+        .replace(/\\mathrm\{([^}]+)\}/g, '$1')
+        .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+        .replace(/\\mathit\{([^}]+)\}/g, '$1')
+        .replace(/\\alpha\b/g, 'α')
+        .replace(/\\beta\b/g, 'β')
+        .replace(/\\gamma\b/g, 'γ')
+        .replace(/\\delta\b/g, 'δ')
+        .replace(/\\Delta\b/g, 'Δ')
+        .replace(/\\epsilon\b/g, 'ε')
+        .replace(/\\eta\b/g, 'η')
+        .replace(/\\theta\b/g, 'θ')
+        .replace(/\\kappa\b/g, 'κ')
+        .replace(/\\lambda\b/g, 'λ')
+        .replace(/\\mu\b/g, 'µ')
+        .replace(/\\nu\b/g, 'ν')
+        .replace(/\\pi\b/g, 'π')
+        .replace(/\\rho\b/g, 'ρ')
+        .replace(/\\sigma\b/g, 'σ')
+        .replace(/\\tau\b/g, 'τ')
+        .replace(/\\phi\b/g, 'φ')
+        .replace(/\\chi\b/g, 'χ')
+        .replace(/\\psi\b/g, 'ψ')
+        .replace(/\\omega\b/g, 'ω')
+        .replace(/\\Omega\b/g, 'Ω')
+        .replace(/\\hbar\b/g, 'ℏ')
+        .replace(/\\partial\b/g, '∂')
+        .replace(/\\nabla\b/g, '∇')
+        .replace(/\\le\b/g, '≤')
+        .replace(/\\ge\b/g, '≥')
+        .replace(/\\times\b/g, '×')
+        .replace(/\\approx\b/g, '≈')
+        .replace(/\\sim\b/g, '∼')
+        .replace(/\\neq\b/g, '≠')
+        .replace(/\\pm\b/g, '±')
+        .replace(/\\mp\b/g, '∓')
+        .replace(/\\dots\b/g, '…')
+        .replace(/\\infty\b/g, '∞')
+        .replace(/\\circ\b/g, '°')
+        .replace(/\\degree\b/g, '°')
+        .replace(/\\,/g, ' ')
+        .replace(/\\;/g, ' ')
+        .replace(/\\!/g, '')
+        .replace(/\\/g, '');
+    }
+
+    function renderLatexMath(str) {
+      if (!str) return '';
+
+      function processLatex(math, isDisplay) {
+        const rawMath = unescapeHtml(math.trim());
+        if (typeof window !== 'undefined' && window.katex && typeof window.katex.renderToString === 'function') {
+          try {
+            const rendered = window.katex.renderToString(rawMath, { displayMode: isDisplay, throwOnError: false });
+            return isDisplay ? `<div class="copilot-math-block">${rendered}</div>` : rendered;
+          } catch (e) {
+            console.warn('KaTeX render warning:', e);
+          }
+        }
+        const clean = escapeHtml(cleanLatexFallback(rawMath));
+        return isDisplay ? `<div class="copilot-math-block katex-math">${clean}</div>` : `<span class="katex-math">${clean}</span>`;
+      }
+
+      // 1. Block math: $$ ... $$ or \[ ... \]
+      str = str.replace(/\$\$([\s\S]+?)\$\$/g, (m, math) => processLatex(math, true));
+      str = str.replace(/\\\[([\s\S]+?)\\\]/g, (m, math) => processLatex(math, true));
+
+      // 2. Inline math: \( ... \)
+      str = str.replace(/\\\(([\s\S]+?)\\\)/g, (m, math) => processLatex(math, false));
+
+      // 3. Inline math: $ ... $
+      str = str.replace(/(?<!\\)\$([^\$\n]+?)(?<!\\)\$/g, (m, math) => processLatex(math, false));
+
+      return str;
+    }
+
     function formatCopilotMarkdown(text) {
       if (!text) return '';
       let html = text;
 
-      // Escape HTML entities to prevent XSS
-      html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      // 1. Escape HTML
+      html = escapeHtml(html);
 
-      // Multi-line code blocks
+      // 2. Stash Code blocks to protect them from math parsing
+      const stash = [];
       html = html.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, function(match, lang, code) {
-        return `<pre class="copilot-pre"><code>${code.trim()}</code></pre>`;
+        const key = `@@@STASH_BLOCK_${stash.length}@@@`;
+        stash.push(`<pre class="copilot-pre"><code>${code.trim()}</code></pre>`);
+        return key;
       });
 
-      // Inline code
-      html = html.replace(/`([^`]+)`/g, '<code class="copilot-code">$1</code>');
+      html = html.replace(/`([^`]+)`/g, function(match, code) {
+        const key = `@@@STASH_INLINE_${stash.length}@@@`;
+        stash.push(`<code class="copilot-code">${code}</code>`);
+        return key;
+      });
 
-      // Bold text
+      // 3. Render LaTeX Math
+      html = renderLatexMath(html);
+
+      // 4. Bold & Italics
       html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-
-      // Italic text
       html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
-      // Navigation tokens: [NAV:simulation], [NAV:hardware], etc.
+      // 5. Navigation tokens: [NAV:simulation], [NAV:hardware], etc.
       html = html.replace(/\[NAV:([a-zA-Z0-9_-]+)\]/g, function(match, target) {
         const labels = {
           'simulation': '⚡ Launch Co-Simulation Suite →',
@@ -13207,7 +13566,7 @@
         return `<button type="button" class="copilot-action-chip" onclick="switchPage('${target}')">${lbl}</button>`;
       });
 
-      // Split paragraphs and bullet points
+      // 6. Split paragraphs and bullet points
       const lines = html.split('\n');
       let inList = false;
       let outLines = [];
@@ -13226,7 +13585,7 @@
             inList = false;
           }
           if (line.length > 0) {
-            if (!line.startsWith('<pre') && !line.startsWith('</pre>') && !line.startsWith('<button')) {
+            if (!line.startsWith('<pre') && !line.startsWith('</pre>') && !line.startsWith('<button') && !line.startsWith('<div') && !line.startsWith('</div') && !line.startsWith('@@@STASH')) {
               outLines.push(`<p>${line}</p>`);
             } else {
               outLines.push(line);
@@ -13236,7 +13595,15 @@
       }
       if (inList) outLines.push('</ul>');
 
-      return outLines.join('');
+      let finalHtml = outLines.join('');
+
+      // 7. Restore stashed code blocks
+      stash.forEach((block, idx) => {
+        finalHtml = finalHtml.replace(`@@@STASH_BLOCK_${idx}@@@`, block);
+        finalHtml = finalHtml.replace(`@@@STASH_INLINE_${idx}@@@`, block);
+      });
+
+      return finalHtml;
     }
 
     function renderCopilotMessage(role, text) {
@@ -13256,51 +13623,225 @@
       scrollCopilotToBottom();
     }
 
-    function loadCopilotHistory() {
+    // --- MULTI-SESSION CONTROLLERS ---
+    function generateSessionTitle(messages) {
+      if (!messages || messages.length === 0) return 'New Conversation';
+      for (let i = 0; i < messages.length; i++) {
+        if (messages[i].role === 'user' && messages[i].text) {
+          let t = messages[i].text.trim().replace(/^[^a-zA-Z0-9]+/, '');
+          return t.length > 32 ? (t.substring(0, 32) + '…') : t;
+        }
+      }
+      return 'New Conversation';
+    }
+
+    function initCopilotSessions() {
+      try {
+        const raw = localStorage.getItem(SESSIONS_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          architectSessions = parsed.sessions || [];
+          currentSessionId = parsed.activeSessionId || null;
+        } else {
+          // Check for legacy single-chat history to migrate
+          const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+          if (legacyRaw) {
+            try {
+              const legacyMsgs = JSON.parse(legacyRaw);
+              if (Array.isArray(legacyMsgs) && legacyMsgs.length > 0) {
+                const legacySession = {
+                  id: 'sess_' + Date.now(),
+                  title: generateSessionTitle(legacyMsgs),
+                  createdAt: Date.now(),
+                  updatedAt: Date.now(),
+                  messages: legacyMsgs
+                };
+                architectSessions = [legacySession];
+                currentSessionId = legacySession.id;
+              }
+            } catch (e) {}
+          }
+        }
+      } catch (e) {
+        architectSessions = [];
+      }
+
+      if (!Array.isArray(architectSessions) || architectSessions.length === 0) {
+        const firstSession = {
+          id: 'sess_' + Date.now(),
+          title: 'New Conversation',
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          messages: [{ ...DEFAULT_GREETING, timestamp: Date.now() }]
+        };
+        architectSessions = [firstSession];
+        currentSessionId = firstSession.id;
+      }
+
+      if (!currentSessionId || !architectSessions.find(s => s.id === currentSessionId)) {
+        currentSessionId = architectSessions[0].id;
+      }
+
+      saveCopilotSessions();
+      renderCurrentSession();
+      updateSessionsBadge();
+    }
+
+    function getCurrentSession() {
+      return architectSessions.find(s => s.id === currentSessionId) || architectSessions[0];
+    }
+
+    function saveCopilotSessions() {
+      try {
+        const payload = {
+          activeSessionId: currentSessionId,
+          sessions: architectSessions
+        };
+        localStorage.setItem(SESSIONS_STORAGE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.warn('LocalStorage save failed:', e);
+      }
+      updateSessionsBadge();
+    }
+
+    function updateSessionsBadge() {
+      const badge = document.getElementById('copilot-session-count-badge');
+      if (badge) {
+        badge.textContent = architectSessions.length;
+      }
+      const titleEl = document.getElementById('copilot-active-session-title');
+      const cur = getCurrentSession();
+      if (titleEl && cur) {
+        titleEl.textContent = cur.title || '200 GHz Monolithic Engine';
+      }
+    }
+
+    function renderCurrentSession() {
       const container = document.getElementById('copilot-messages');
       if (!container) return;
       container.innerHTML = '';
 
-      try {
-        const raw = localStorage.getItem(COPILOT_STORAGE_KEY);
-        if (raw) {
-          copilotHistory = JSON.parse(raw);
-        } else {
-          copilotHistory = [COPILOT_GREETING];
-          saveCopilotHistory();
-        }
-      } catch (e) {
-        copilotHistory = [COPILOT_GREETING];
+      const session = getCurrentSession();
+      if (!session || !session.messages) return;
+
+      // Sanitize old greeting if needed
+      if (session.messages[0] && session.messages[0].text && (session.messages[0].text.includes('Copilot') || session.messages[0].text.includes('Gemini'))) {
+        session.messages[0].text = DEFAULT_GREETING.text;
+        saveCopilotSessions();
       }
 
-      if (!Array.isArray(copilotHistory) || copilotHistory.length === 0) {
-        copilotHistory = [COPILOT_GREETING];
-      } else if (copilotHistory[0] && copilotHistory[0].text && (copilotHistory[0].text.includes('Copilot') || copilotHistory[0].text.includes('Gemini'))) {
-        copilotHistory[0].text = COPILOT_GREETING.text;
-        saveCopilotHistory();
-      }
-
-      copilotHistory.forEach(item => {
-        renderCopilotMessage(item.role === 'user' ? 'user' : 'bot', item.text);
+      session.messages.forEach(msg => {
+        renderCopilotMessage(msg.role === 'user' ? 'user' : 'bot', msg.text);
       });
+      updateSessionsBadge();
+      scrollCopilotToBottom();
     }
 
-    function saveCopilotHistory() {
-      try {
-        localStorage.setItem(COPILOT_STORAGE_KEY, JSON.stringify(copilotHistory));
-      } catch (e) {
-        console.warn('LocalStorage save failed:', e);
+    function startNewCopilotSession() {
+      const cur = getCurrentSession();
+      // If current session is already empty (only 1 greeting), simply switch to it
+      if (cur && cur.messages && cur.messages.length <= 1 && cur.title === 'New Conversation') {
+        toggleCopilotSessionsView(false);
+        renderCurrentSession();
+        return;
       }
+
+      const newSess = {
+        id: 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        title: 'New Conversation',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: [{ ...DEFAULT_GREETING, timestamp: Date.now() }]
+      };
+
+      architectSessions.unshift(newSess);
+      currentSessionId = newSess.id;
+      saveCopilotSessions();
+
+      toggleCopilotSessionsView(false);
+      if (isCopilotMinimized) toggleCopilotMinimize(false);
+      renderCurrentSession();
+
+      const inp = document.getElementById('copilot-input');
+      if (inp) setTimeout(() => inp.focus(), 150);
     }
 
-    function clearCopilotHistory() {
-      if (!confirm('Are you sure you want to clear your chat history?')) return;
-      try {
-        localStorage.removeItem(COPILOT_STORAGE_KEY);
-      } catch (e) {}
-      copilotHistory = [COPILOT_GREETING];
-      saveCopilotHistory();
-      loadCopilotHistory();
+    function switchCopilotSession(sessionId) {
+      if (!sessionId || sessionId === currentSessionId) {
+        toggleCopilotSessionsView(false);
+        return;
+      }
+      currentSessionId = sessionId;
+      saveCopilotSessions();
+      toggleCopilotSessionsView(false);
+      renderCurrentSession();
+    }
+
+    function deleteCopilotSession(sessionId, event) {
+      if (event) event.stopPropagation();
+      if (!confirm('Are you sure you want to delete this conversation?')) return;
+
+      architectSessions = architectSessions.filter(s => s.id !== sessionId);
+
+      if (architectSessions.length === 0) {
+        startNewCopilotSession();
+        return;
+      }
+
+      if (currentSessionId === sessionId) {
+        currentSessionId = architectSessions[0].id;
+      }
+
+      saveCopilotSessions();
+      renderSessionsList();
+      renderCurrentSession();
+    }
+
+    function clearAllCopilotSessions() {
+      if (!confirm('Are you sure you want to delete ALL saved conversations?')) return;
+      architectSessions = [];
+      const fresh = {
+        id: 'sess_' + Date.now(),
+        title: 'New Conversation',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: [{ ...DEFAULT_GREETING, timestamp: Date.now() }]
+      };
+      architectSessions = [fresh];
+      currentSessionId = fresh.id;
+      saveCopilotSessions();
+      toggleCopilotSessionsView(false);
+      renderCurrentSession();
+    }
+
+    function renderSessionsList() {
+      const listEl = document.getElementById('copilot-sessions-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      if (architectSessions.length === 0) {
+        listEl.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.8rem;">No saved conversations.</div>';
+        return;
+      }
+
+      architectSessions.forEach(sess => {
+        const card = document.createElement('div');
+        card.className = `copilot-session-card ${sess.id === currentSessionId ? 'active' : ''}`;
+        card.onclick = () => switchCopilotSession(sess.id);
+
+        const msgCount = sess.messages ? sess.messages.length : 0;
+        const d = new Date(sess.updatedAt || sess.createdAt || Date.now());
+        const timeStr = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+        card.innerHTML = `
+          <div class="copilot-session-meta">
+            <div class="copilot-session-title">${sess.title || 'Conversation'}</div>
+            <div class="copilot-session-subtitle">${msgCount} messages • ${timeStr}</div>
+          </div>
+          <button type="button" class="copilot-session-del-btn" title="Delete conversation" onclick="deleteCopilotSession('${sess.id}', event)">🗑️</button>
+        `;
+        listEl.appendChild(card);
+      });
     }
 
     function sendCopilotPrompt(text) {
@@ -13308,6 +13849,9 @@
       if (win && !win.classList.contains('open')) {
         toggleCopilot();
       }
+      if (isCopilotMinimized) toggleCopilotMinimize(false);
+      toggleCopilotSessionsView(false);
+
       const inp = document.getElementById('copilot-input');
       if (inp) {
         inp.value = text;
@@ -13331,12 +13875,21 @@
       if (sendBtn) sendBtn.disabled = true;
       isCopilotGenerating = true;
 
-      // 1. Render and persist User Message
-      renderCopilotMessage('user', userText);
-      copilotHistory.push({ role: 'user', text: userText, timestamp: Date.now() });
-      saveCopilotHistory();
+      const curSession = getCurrentSession();
 
-      // 2. Render Typing Indicator
+      // 1. Auto-generate title if currently 'New Conversation'
+      if (curSession.title === 'New Conversation') {
+        let t = userText.replace(/^[^a-zA-Z0-9]+/, '');
+        curSession.title = t.length > 32 ? (t.substring(0, 32) + '…') : t;
+      }
+
+      // 2. Append User Message
+      renderCopilotMessage('user', userText);
+      curSession.messages.push({ role: 'user', text: userText, timestamp: Date.now() });
+      curSession.updatedAt = Date.now();
+      saveCopilotSessions();
+
+      // 3. Render Typing Indicator
       const container = document.getElementById('copilot-messages');
       const typingDiv = document.createElement('div');
       typingDiv.className = 'copilot-msg bot copilot-typing';
@@ -13351,7 +13904,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: userText,
-            history: copilotHistory.slice(-8)
+            history: curSession.messages.slice(-8)
           })
         });
 
@@ -13364,8 +13917,9 @@
 
         // Render and persist Bot Message
         renderCopilotMessage('bot', replyText);
-        copilotHistory.push({ role: 'model', text: replyText, timestamp: Date.now() });
-        saveCopilotHistory();
+        curSession.messages.push({ role: 'model', text: replyText, timestamp: Date.now() });
+        curSession.updatedAt = Date.now();
+        saveCopilotSessions();
 
       } catch (err) {
         const ind = document.getElementById('copilot-typing-indicator');
@@ -13373,8 +13927,9 @@
 
         const errorReply = "⚠️ **Connection Notice:** Unable to reach the silicon architecture backend. Please verify your connection or check that the `/api/chat` serverless function is deployed on Vercel.";
         renderCopilotMessage('bot', errorReply);
-        copilotHistory.push({ role: 'model', text: errorReply, timestamp: Date.now() });
-        saveCopilotHistory();
+        curSession.messages.push({ role: 'model', text: errorReply, timestamp: Date.now() });
+        curSession.updatedAt = Date.now();
+        saveCopilotSessions();
       } finally {
         inp.disabled = false;
         if (sendBtn) sendBtn.disabled = false;
@@ -13383,9 +13938,9 @@
       }
     }
 
-    // Initialize Copilot on load
+    // Initialize Sessions on load
     window.addEventListener('DOMContentLoaded', () => {
-      loadCopilotHistory();
+      initCopilotSessions();
     });
 </script>
   <!-- FLOATING COOKIE & LOCAL STORAGE CONSENT BANNER -->
@@ -13614,40 +14169,66 @@
     <button id="btn-back-to-top" class="floating-tool-btn" onclick="scrollToTop()" title="Back to Top">▲</button>
   </div>
 
-  <!-- JANUS SILICON COPILOT (GEMINI AI) FLOATING WINDOW -->
+  <!-- JANUS SILICON ARCHITECT (MULTI-CHAT AI ENGINE) -->
   <div id="copilot-window" class="copilot-window" role="dialog" aria-label="JANUS Silicon Architect">
+    <!-- Header -->
     <div class="copilot-header">
-      <div class="copilot-header-title">
+      <div class="copilot-header-title" onclick="toggleCopilotMinimize(false)" style="cursor:pointer;" title="Click to expand/restore">
         <span class="copilot-live-dot"></span>
-        <div>
+        <div style="min-width:0;">
           <div style="font-weight:700; font-size:0.86rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">
             JANUS Silicon Architect
           </div>
-          <div style="font-size:0.67rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">200 GHz Monolithic Photonic Engine</div>
+          <div id="copilot-active-session-title" style="font-size:0.67rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace; max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            200 GHz Monolithic Engine
+          </div>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <button class="copilot-tool-btn" onclick="clearCopilotHistory()" title="Clear Chat History (Reset)">🗑️ Clear</button>
+      <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
+        <button id="copilot-sessions-toggle-btn" class="copilot-tool-btn" onclick="toggleCopilotSessionsView()" title="Saved Conversations">
+          💬 <span id="copilot-session-count-badge" style="font-size:0.65rem; background:rgba(0,245,155,0.2); padding:1px 5px; border-radius:9999px; color:#00f59b; font-weight:700;">1</span>
+        </button>
+        <button class="copilot-tool-btn" onclick="startNewCopilotSession()" title="Start New Conversation">+ New</button>
+        <button id="copilot-min-btn" class="copilot-tool-btn" onclick="toggleCopilotMinimize()" title="Minimize" style="font-weight:bold; font-size:0.82rem; padding:2px 7px;">—</button>
+        <button id="copilot-max-btn" class="copilot-tool-btn" onclick="toggleCopilotMaximize()" title="Maximize / Restore" style="font-size:0.82rem; padding:2px 7px;">🗖</button>
         <button class="copilot-tool-btn" onclick="toggleCopilot()" title="Close" style="font-size:0.9rem; padding:1px 7px;">✕</button>
       </div>
     </div>
 
-    <div id="copilot-messages" class="copilot-messages">
-      <!-- Injected from localStorage -->
+    <!-- SESSIONS LIST VIEW -->
+    <div id="copilot-sessions-view" class="copilot-sessions-view" style="display:none;">
+      <div class="copilot-sessions-header">
+        <span style="font-weight:700; font-size:0.82rem; color:var(--text-main);">Saved Conversations</span>
+        <button class="copilot-action-chip" style="margin:0; padding:3px 9px;" onclick="startNewCopilotSession()">+ New Chat</button>
+      </div>
+      <div id="copilot-sessions-list" class="copilot-sessions-list">
+        <!-- Injected dynamically from localStorage -->
+      </div>
+      <div class="copilot-sessions-footer">
+        <button class="copilot-tool-btn" style="color:#ef4444; border-color:rgba(239,68,68,0.3);" onclick="clearAllCopilotSessions()">🗑️ Delete All</button>
+        <button class="copilot-tool-btn" onclick="toggleCopilotSessionsView(false)">← Back to Chat</button>
+      </div>
     </div>
 
-    <div class="copilot-chips-container">
-      <button class="copilot-chip" onclick="sendCopilotPrompt('Explain why Sb₂S₃ PCM switches consume 0 W static hold power.')">0 W Hold Power</button>
-      <button class="copilot-chip" onclick="sendCopilotPrompt('How does the Residue Number System (RNS) achieve exact INT64 precision without analog optical noise?')">RNS INT64 Math</button>
-      <button class="copilot-chip" onclick="sendCopilotPrompt('How does 1:64 CMOS polyphase gearing down-convert 200 GHz to 3.125 GHz?')">1:64 CMOS Gearing</button>
-      <button class="copilot-chip" onclick="sendCopilotPrompt('What is the link margin and BER calculation for the receiverless SAC²M APDs?')">APD & Link Margin</button>
-      <button class="copilot-chip" onclick="sendCopilotPrompt('Take me to the interactive 3D WebGL silicon strata explorer.')">Show 3D Stack</button>
-    </div>
+    <!-- ACTIVE CHAT VIEW -->
+    <div id="copilot-chat-view" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
+      <div id="copilot-messages" class="copilot-messages">
+        <!-- Injected from active session -->
+      </div>
 
-    <form class="copilot-input-area" onsubmit="handleCopilotSubmit(event)">
-      <input type="text" id="copilot-input" placeholder="Ask about 200 GHz optics, RNS, CMOS..." autocomplete="off" />
-      <button type="submit" id="copilot-send-btn" class="copilot-send-btn" aria-label="Send Message">➤</button>
-    </form>
+      <div class="copilot-chips-container">
+        <button class="copilot-chip" onclick="sendCopilotPrompt('Explain why Sb₂S₃ PCM switches consume 0 W static hold power.')">0 W Hold Power</button>
+        <button class="copilot-chip" onclick="sendCopilotPrompt('How does the Residue Number System (RNS) achieve exact INT64 precision without analog optical noise?')">RNS INT64 Math</button>
+        <button class="copilot-chip" onclick="sendCopilotPrompt('How does 1:64 CMOS polyphase gearing down-convert 200 GHz to 3.125 GHz?')">1:64 CMOS Gearing</button>
+        <button class="copilot-chip" onclick="sendCopilotPrompt('What is the link margin and BER calculation for the receiverless SAC²M APDs?')">APD & Link Margin</button>
+        <button class="copilot-chip" onclick="sendCopilotPrompt('Take me to the interactive 3D WebGL silicon strata explorer.')">Show 3D Stack</button>
+      </div>
+
+      <form class="copilot-input-area" onsubmit="handleCopilotSubmit(event)">
+        <input type="text" id="copilot-input" placeholder="Ask about 200 GHz optics, RNS, CMOS..." autocomplete="off" />
+        <button type="submit" id="copilot-send-btn" class="copilot-send-btn" aria-label="Send Message">➤</button>
+      </form>
+    </div>
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
