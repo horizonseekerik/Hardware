@@ -11,7 +11,27 @@ import json
 import time
 import math
 import urllib.parse
+import urllib.request
+import ssl
 from typing import Any, Dict, List
+
+# Load local .env if present (for local testing without leaking credentials)
+def _load_local_env():
+    env_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".env")
+    if os.path.isfile(env_file):
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        k, v = k.strip(), v.strip().strip("'\"")
+                        if k and not os.environ.get(k):
+                            os.environ[k] = v
+        except Exception:
+            pass
+
+_load_local_env()
 
 # Ensure project and simulation directories are in sys.path
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -854,6 +874,159 @@ def normalize_request_path(environ) -> str:
     return path
 
 
+def get_offline_janus_reply(query: str) -> str:
+    q = query.lower()
+    if any(k in q for k in ["sb2s3", "pcm", "hold", "0 w", "0w", "static"]):
+        return (
+            "**Sb₂S₃ Phase-Change Material (PCM) Switches & 0 W Static Hold Power:**\n\n"
+            "- **Sub-Bandgap Transparency:** Antimony trisulfide (Sb₂S₃) has an optical bandgap of $E_g = 1.72\\text{ eV}$ "
+            "(greater than the $1.165\\text{ eV}$ photon energy at $1064\\text{ nm}$), exhibiting near-zero intrinsic absorption ($\\kappa \\approx 10^{-5}$).\n"
+            "- **Zero Static Power:** Once programmed between amorphous and crystalline states via $4.2\\text{ pJ}$ localized graphene micro-heater pulses, "
+            "the non-volatile state persists indefinitely with **0.00 W static hold power**.\n"
+            "- **Contrast with Traditional MZIs:** Eliminates the continuous thermal phase tuning (>100 kW static heater power) required by conventional optical meshes.\n\n"
+            "Explore the physical stack: [NAV:hardware]"
+        )
+    elif any(k in q for k in ["rns", "residue", "precision", "int64", "exact", "math"]):
+        return (
+            "**Deterministic Spatial Residue Number System (RNS) & INT64 Ceiling:**\n\n"
+            "- **Spatial One-Hot Permutation:** Numbers are mapped to discrete spatial waveguide indices rather than noisy analog optical amplitudes. Light presence represents exact binary state arrivals.\n"
+            "- **3-Equation Hybrid Partitioning:** Computes exact 64-bit and 128-bit products across 16 coprime spatial moduli ($\\{m_1, \\dots, m_{16}\\}$, $m_i \\le 257$) with mathematical zero-amplitude noise.\n"
+            "- **No SNR Wall:** Completely bypasses the conventional 138.4 dB SNR limit and avoids requiring unattainable 21-bit ADCs at 200 GHz.\n\n"
+            "Launch the interactive RNS simulator: [NAV:simulation]"
+        )
+    elif any(k in q for k in ["200", "ghz", "comb", "clock", "ilo", "laser"]):
+        return (
+            "**200.0 GHz Electro-Optic Comb Clock:**\n\n"
+            "- **Carrier Specifications:** Delivers $200.0\\text{ GHz}$ optical pulse trains with a $5.0\\text{ ps}$ symbol period and $< 50\\text{ fs RMS}$ phase jitter.\n"
+            "- **Injection-Locked Oscillator (ILO):** Provides optical phase lock across all 16 tiles simultaneously with wave-pipelined propagation.\n"
+            "- **Modulation:** Driven by thin-film $\\text{LiTaO}_3$ electro-optic modulators with lumped capacitive drive.\n\n"
+            "View live waveforms in the Oscilloscope: [NAV:simulation]"
+        )
+    elif any(k in q for k in ["cmos", "gearing", "1:64", "3.125", "deserializer"]):
+        return (
+            "**65nm CMOS Base Die & 1:64 Polyphase Gearing:**\n\n"
+            "- **1:64 Time-Interleaved Deserialization:** Converts ultra-fast $200.0\\text{ GHz}$ optical bitstreams into 64 parallel channels running at a manageable $3.125\\text{ GHz}$ CMOS digital clock.\n"
+            "- **3D Stacking:** Directly connected to the silicon photonic die via $4.0\\,\\mu\\text{m}$ Cu Through-Dielectric Vias (TDVs) and sub-micron landing pads.\n"
+            "- **Clock Distribution:** 4-level balanced H-tree mesh distributes $3.125\\text{ GHz}$ across the $36.00\\text{ mm}^2$ die with $< 1.5\\text{ ps}$ clock skew.\n\n"
+            "Inspect the CMOS digital floorplan: [NAV:hardware]"
+        )
+    elif any(k in q for k in ["apd", "ber", "margin", "sac2m", "detector"]):
+        return (
+            "**Receiverless Ge/Si SAC²M Avalanche Photodiodes (APDs):**\n\n"
+            "- **Separate Absorption, Charge & Multiplication:** Germanium absorption layer with sub-micron silicon avalanche zone.\n"
+            "- **Link Budget:** $+8.41\\text{ dB}$ optical link margin ensures ultra-robust regenerative 1-bit detection with target $\\text{BER} \\le 10^{-12}$ (measured $< 10^{-18}$).\n"
+            "- **Receiverless Operation:** High internal gain drives CMOS StrongARM regenerative sense latches directly without noisy external transimpedance amplifiers (TIAs).\n\n"
+            "Review full link budget: [NAV:paper]"
+        )
+    elif any(k in q for k in ["paper", "manuscript", "pdf", "report"]):
+        return (
+            "**IEEE Manuscript & Documentation Reports:**\n\n"
+            "- **IEEE Transactions Manuscript:** Complete 17-page foundational paper on deterministic spatial binary computing.\n"
+            "- **Simulation Report:** 100,000,000-run multi-physics sign-off, optical S-parameters, and thermal FEA.\n"
+            "- **CMOS Architecture Specification:** 65nm digital base die, 1:64 deserializer bank, and SIMD array.\n\n"
+            "Read full manuscripts online: [NAV:paper]"
+        )
+    else:
+        return (
+            "**Project JANUS Overview:**\n\n"
+            "Project JANUS is a **200.0 GHz monolithic electro-photonic accelerator** ($36.00\\text{ mm}^2$ die) designed to overcome the analog noise and power limits of conventional optical computing:\n\n"
+            "- **200.0 GHz Optical Comb Clock** (5.0 ps symbol period)\n"
+            "- **0 W Static Hold Power** via non-volatile Sb₂S₃ PCM switches\n"
+            "- **Exact INT64 Precision Ceiling** using spatial Residue Number System (RNS)\n"
+            "- **65nm CMOS Base Die** with 1:64 polyphase gearing at 3.125 GHz\n"
+            "- **Receiverless Ge/Si SAC²M APDs** with +8.41 dB link margin\n\n"
+            "Would you like to explore the interactive simulations [NAV:simulation] or inspect the 3D heterogeneous stack [NAV:hardware]?"
+        )
+
+
+def handle_chat_request(data: Dict[str, Any], start_response) -> List[bytes]:
+    message = str(data.get("message", "")).strip()
+    history = data.get("history", [])
+
+    if not message:
+        return json_response(start_response, {"error": "Message is required"}, status="400 Bad Request")
+
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    offline_reply = get_offline_janus_reply(message)
+
+    if not api_key:
+        return json_response(start_response, {
+            "status": "offline_fallback",
+            "reply": offline_reply + "\n\n*(Note: Running on built-in offline knowledge. Configure `GEMINI_API_KEY` in Vercel to activate live multi-turn Gemini AI.)*",
+            "model": "janus-offline-knowledge"
+        })
+
+    system_instruction = (
+        "You are the Project JANUS Silicon Copilot, an authoritative, scientifically precise AI silicon architect for "
+        "Project JANUS (Joint Asymmetric Network for Ultra-fast Silicon-photonics).\n\n"
+        "Architectural Truth & Physics Reference:\n"
+        "- 200.0 GHz Monolithic Electro-Photonic Planar Accelerator with 5.0 ps carrier period.\n"
+        "- 36.00 mm² Monolithic Die (6.00 mm × 6.00 mm), 4×4 array of 16 active tiles (1.4 mm pitch, 1.25×1.25 mm active core).\n"
+        "- 0 W Static Hold Power: Non-volatile Antimony Trisulfide (Sb₂S₃) phase-change material (PCM) switches with sub-bandgap "
+        "transparency at 1064 nm (Eg = 1.72 eV > 1.165 eV, near-zero absorption κ ≈ 10⁻⁵) and 4.2 pJ graphene micro-heaters.\n"
+        "- Exact Mathematical Precision: Spatial one-hot Residue Number System (RNS) with 3-equation Hybrid Partitioning for exact "
+        "INT64 precision without analog optical amplitude noise or ADC SNR collapse (zero amplitude degradation).\n"
+        "- 65nm Digital CMOS Base Die: Operates at 3.125 GHz base clock with 1:64 polyphase time-interleaved deserializers (64:1 gearing relative to the 200 GHz optical symbol rate).\n"
+        "- Optical Link Margin & APDs: Receiverless Ge/Si SAC²M avalanche photodiodes (APDs) with +8.41 dB link margin and ≤ 10⁻¹² bit-error rate (BER).\n"
+        "- Clock Distribution: 4-level balanced H-tree clock mesh distributing 3.125 GHz clock with < 1.5 ps skew.\n"
+        "- Memory Subsystem: 1.5 MB Dual-LUT volatile SRAM (320 ps latency) and 0.25 MB central ROM (1.500 mm² total).\n"
+        "- Thermal Management: Janus Instruction Router (JIR) dynamic antiphase dispatch and 400 W/m·K copper thermal shunt.\n\n"
+        "Guidelines:\n"
+        "- Keep answers clear, technical, concise, and structured with bold highlights and bullet points.\n"
+        "- Use standard LaTeX math notation e.g. $E_g = 1.72\\text{ eV}$ where helpful.\n"
+        "- When relevant to user exploration, suggest interactive site navigation using these exact tokens:\n"
+        "  [NAV:simulation] (Launch Co-Simulation Suite)\n"
+        "  [NAV:hardware] (Inspect CMOS & 3D Stack)\n"
+        "  [NAV:paper] (Read IEEE Manuscript & Reports)\n"
+        "  [NAV:codebase] (Browse Silicon Source Code)\n"
+        "  [NAV:roadmap] (View Tapeout Roadmap)"
+    )
+
+    contents = []
+    if isinstance(history, list):
+        for h in history[-8:]:
+            role = "user" if h.get("role") == "user" else "model"
+            txt = str(h.get("text", "")).strip()
+            if txt:
+                contents.append({"role": role, "parts": [{"text": txt}]})
+
+    contents.append({"role": "user", "parts": [{"text": message}]})
+
+    model_name = "gemini-flash-lite-latest"
+    gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+
+    payload = {
+        "system_instruction": {"parts": [{"text": system_instruction}]},
+        "contents": contents,
+        "generationConfig": {
+            "temperature": 0.35,
+            "maxOutputTokens": 800
+        }
+    }
+
+    try:
+        req = urllib.request.Request(
+            gemini_url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"}
+        )
+        context = ssl.create_default_context()
+        with urllib.request.urlopen(req, context=context, timeout=12) as resp:
+            res_obj = json.loads(resp.read().decode("utf-8"))
+            reply = res_obj["candidates"][0]["content"]["parts"][0]["text"]
+            return json_response(start_response, {
+                "status": "success",
+                "reply": reply,
+                "model": model_name
+            })
+    except Exception as e:
+        return json_response(start_response, {
+            "status": "offline_fallback",
+            "reply": offline_reply + f"\n\n*(Note: Live API request encountered a temporary network delay: {str(e)[:60]}. Displaying verified offline technical specification.)*",
+            "model": "janus-offline-knowledge"
+        })
+
+
 def app(environ, start_response):
     method = environ.get("REQUEST_METHOD", "GET").upper()
     path = normalize_request_path(environ)
@@ -1550,7 +1723,10 @@ def app(environ, start_response):
         except Exception:
             data = {}
 
-        if path == "/api/eval_val":
+        if path in ["/api/chat", "/api/agent"]:
+            return handle_chat_request(data, start_response)
+
+        elif path == "/api/eval_val":
             val_str = str(data.get("val", "0xDEADBEEFCAFEBABE")).strip()
             tile_count = int(data.get("tile_count", 16))
             dynamic_minimal = bool(data.get("dynamic_minimal", True))

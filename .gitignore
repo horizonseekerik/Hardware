@@ -100,3 +100,7 @@ scripts/run_optica_audit.py
 scripts/generate_organized_readmes.py
 
 scratch/
+.env
+.env.*
+*.env
+

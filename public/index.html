@@ -2858,6 +2858,396 @@
     [data-theme="light"] tr:hover td {
       background: rgba(5, 150, 105, 0.12) !important;
     }
+
+    /* --- JANUS SILICON COPILOT (GEMINI AI) --- */
+    .copilot-trigger-btn {
+      position: relative;
+      background: linear-gradient(135deg, #00f59b 0%, #059669 100%) !important;
+      color: #04140c !important;
+      border: 1px solid #34d399 !important;
+      box-shadow: 0 4px 20px rgba(0, 245, 155, 0.40) !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .copilot-trigger-btn:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 245, 155, 0.60) !important;
+    }
+    .copilot-beacon {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #38bdf8;
+      border: 2px solid #04140c;
+      animation: pulseGlow 1.8s infinite;
+    }
+
+    .copilot-window {
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 420px;
+      max-width: calc(100vw - 32px);
+      height: 580px;
+      max-height: calc(100vh - 120px);
+      background: rgba(4, 18, 13, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 245, 155, 0.28);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.70), 0 0 25px rgba(0, 245, 155, 0.12);
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: copilotFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .copilot-window.open {
+      display: flex;
+    }
+
+    @keyframes copilotFadeIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .copilot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(6, 26, 19, 0.90);
+      border-bottom: 1px solid rgba(0, 245, 155, 0.18);
+    }
+    .copilot-header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .copilot-live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #00f59b;
+      box-shadow: 0 0 10px #00f59b;
+      animation: pulseGlow 2s infinite;
+    }
+    .copilot-badge {
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      letter-spacing: 0.05em;
+    }
+
+    .copilot-tool-btn {
+      background: transparent;
+      border: 1px solid rgba(16, 185, 129, 0.20);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copilot-tool-btn:hover {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--text-main);
+      border-color: rgba(16, 185, 129, 0.40);
+    }
+
+    .copilot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    .copilot-messages::-webkit-scrollbar {
+      width: 5px;
+    }
+    .copilot-messages::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.25);
+      border-radius: 3px;
+    }
+
+    .copilot-msg {
+      max-width: 88%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      word-break: break-word;
+    }
+    .copilot-msg.user {
+      align-self: flex-end;
+      background: #064e3b;
+      color: #f0fdf4;
+      border: 1px solid #059669;
+      border-bottom-right-radius: 3px;
+    }
+    .copilot-msg.bot {
+      align-self: flex-start;
+      background: rgba(9, 30, 22, 0.85);
+      color: #e2f8ec;
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      border-bottom-left-radius: 3px;
+    }
+    .copilot-msg.bot p {
+      margin-bottom: 0.5rem;
+    }
+    .copilot-msg.bot p:last-child {
+      margin-bottom: 0;
+    }
+    .copilot-msg.bot ul, .copilot-msg.bot ol {
+      margin: 0.35rem 0 0.5rem 1.25rem;
+    }
+    .copilot-msg.bot li {
+      margin-bottom: 0.25rem;
+    }
+
+    .copilot-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 1px 5px;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.20);
+      color: #34d399;
+    }
+    .copilot-pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      background: #020b07;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      overflow-x: auto;
+      margin: 0.4rem 0;
+    }
+
+    .copilot-action-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+      padding: 5px 10px;
+      background: rgba(0, 245, 155, 0.12);
+      border: 1px solid rgba(0, 245, 155, 0.35);
+      border-radius: 6px;
+      color: #00f59b;
+      font-size: 0.74rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copilot-action-chip:hover {
+      background: rgba(0, 245, 155, 0.25);
+      border-color: #00f59b;
+      transform: translateY(-1px);
+    }
+
+    .copilot-chips-container {
+      display: flex;
+      gap: 6px;
+      padding: 6px 14px 8px;
+      overflow-x: auto;
+      background: rgba(4, 18, 13, 0.70);
+      border-top: 1px solid rgba(16, 185, 129, 0.10);
+    }
+    .copilot-chips-container::-webkit-scrollbar {
+      display: none;
+    }
+    .copilot-chip {
+      white-space: nowrap;
+      font-size: 0.70rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 9px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copilot-chip:hover {
+      background: rgba(16, 185, 129, 0.20);
+      color: var(--text-main);
+      border-color: #10b981;
+    }
+
+    .copilot-input-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(6, 26, 19, 0.95);
+      border-top: 1px solid rgba(0, 245, 155, 0.18);
+    }
+    .copilot-input-area input {
+      flex: 1;
+      background: rgba(2, 10, 7, 0.80);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .copilot-input-area input:focus {
+      border-color: #00f59b;
+      box-shadow: 0 0 10px rgba(0, 245, 155, 0.20);
+    }
+    .copilot-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #00f59b;
+      color: #04140c;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .copilot-send-btn:hover {
+      background: #34d399;
+      transform: scale(1.05);
+    }
+    .copilot-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .copilot-typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+    }
+    .copilot-typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00f59b;
+      animation: copilotTyping 1.4s infinite ease-in-out;
+    }
+    .copilot-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .copilot-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes copilotTyping {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* Light Theme Overrides */
+    [data-theme="light"] .copilot-window {
+      background: rgba(235, 248, 240, 0.98);
+      border: 1px solid #84cc9f;
+      box-shadow: 0 20px 60px rgba(5, 150, 105, 0.22);
+    }
+    [data-theme="light"] .copilot-header {
+      background: #daf1e3;
+      border-bottom: 1px solid #84cc9f;
+    }
+    [data-theme="light"] .copilot-badge {
+      background: #bbf0d0;
+      border-color: #84cc9f;
+      color: #047857;
+    }
+    [data-theme="light"] .copilot-tool-btn {
+      border-color: #84cc9f;
+      color: #1e4a36;
+    }
+    [data-theme="light"] .copilot-tool-btn:hover {
+      background: #bbf0d0;
+      color: #064e3b;
+    }
+    [data-theme="light"] .copilot-msg.user {
+      background: #059669;
+      color: #ffffff;
+      border-color: #047857;
+    }
+    [data-theme="light"] .copilot-msg.bot {
+      background: #f0f9f3;
+      color: #064e3b;
+      border: 1px solid #a8dfbc;
+    }
+    [data-theme="light"] .copilot-code {
+      background: #daf1e3;
+      color: #047857;
+      border-color: #84cc9f;
+    }
+    [data-theme="light"] .copilot-pre {
+      background: #e6f6ed;
+      border-color: #84cc9f;
+      color: #064e3b;
+    }
+    [data-theme="light"] .copilot-action-chip {
+      background: #daf1e3;
+      border-color: #059669;
+      color: #047857;
+    }
+    [data-theme="light"] .copilot-action-chip:hover {
+      background: #bbf0d0;
+    }
+    [data-theme="light"] .copilot-chips-container {
+      background: #daf1e3;
+      border-top-color: #a8dfbc;
+    }
+    [data-theme="light"] .copilot-chip {
+      background: #f0f9f3;
+      border-color: #84cc9f;
+      color: #047857;
+    }
+    [data-theme="light"] .copilot-chip:hover {
+      background: #bbf0d0;
+    }
+    [data-theme="light"] .copilot-input-area {
+      background: #daf1e3;
+      border-top-color: #84cc9f;
+    }
+    [data-theme="light"] .copilot-input-area input {
+      background: #ffffff;
+      border-color: #84cc9f;
+      color: #052217;
+    }
+    [data-theme="light"] .copilot-input-area input:focus {
+      border-color: #059669;
+      box-shadow: 0 0 10px rgba(5, 150, 105, 0.20);
+    }
+    [data-theme="light"] .copilot-send-btn {
+      background: #059669;
+      color: #ffffff;
+    }
+    [data-theme="light"] .copilot-send-btn:hover {
+      background: #047857;
+    }
+
+    @media (max-width: 600px) {
+      .copilot-window {
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100vw;
+        height: 82vh;
+        max-height: 82vh;
+        border-radius: 18px 18px 0 0;
+      }
+    }
 </style>
   <!-- Preload & Prefetch Critical Manuscript PDFs -->
   <link rel="preload" href="/JANUS_IEEE_Manuscript.pdf" as="fetch" crossorigin>
@@ -12751,7 +13141,250 @@
       setTimeout(initMetricCountUp, 600);
     });
 
-  </script>
+  
+    // --- JANUS SILICON COPILOT (GEMINI AI) CHAT ENGINE WITH LOCALSTORAGE ---
+    const COPILOT_STORAGE_KEY = 'janus_copilot_history';
+    let copilotHistory = [];
+    let isCopilotGenerating = false;
+
+    const COPILOT_GREETING = {
+      role: 'model',
+      text: "👋 **Welcome to the Project JANUS Silicon Copilot!**\n\nI am your interactive AI architect grounded on our **200.0 GHz monolithic photonic accelerator** specifications. You can ask me about:\n- **0 W Static Hold Power** with Sb₂S₃ phase-change switches\n- **Exact INT64 Precision** via spatial Residue Number System (RNS)\n- **1:64 Polyphase Gearing** on the 65nm CMOS base die\n- **SAC²M APDs** & +8.41 dB optical link budgets\n\n*Your conversation history is automatically saved on your device.* How can I assist your deep-tech exploration?",
+      timestamp: Date.now()
+    };
+
+    function toggleCopilot() {
+      const win = document.getElementById('copilot-window');
+      if (!win) return;
+      win.classList.toggle('open');
+      if (win.classList.contains('open')) {
+        const inp = document.getElementById('copilot-input');
+        if (inp) setTimeout(() => inp.focus(), 150);
+        scrollCopilotToBottom();
+      }
+    }
+
+    function scrollCopilotToBottom() {
+      const container = document.getElementById('copilot-messages');
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    function formatCopilotMarkdown(text) {
+      if (!text) return '';
+      let html = text;
+
+      // Escape HTML entities to prevent XSS
+      html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      // Multi-line code blocks
+      html = html.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, function(match, lang, code) {
+        return `<pre class="copilot-pre"><code>${code.trim()}</code></pre>`;
+      });
+
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code class="copilot-code">$1</code>');
+
+      // Bold text
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+      // Italic text
+      html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+      // Navigation tokens: [NAV:simulation], [NAV:hardware], etc.
+      html = html.replace(/\[NAV:([a-zA-Z0-9_-]+)\]/g, function(match, target) {
+        const labels = {
+          'simulation': '⚡ Launch Co-Simulation Suite →',
+          'hardware': '🔬 Inspect CMOS & 3D Stack →',
+          'paper': '📄 Read IEEE Manuscript →',
+          'codebase': '💻 Browse Silicon Codebase →',
+          'roadmap': '🗺️ View Tapeout Roadmap →',
+          'home': '🏠 Overview Page →',
+          'overview': '🏠 Overview Page →'
+        };
+        const lbl = labels[target.toLowerCase()] || `Go to ${target} →`;
+        return `<button type="button" class="copilot-action-chip" onclick="switchPage('${target}')">${lbl}</button>`;
+      });
+
+      // Split paragraphs and bullet points
+      const lines = html.split('\n');
+      let inList = false;
+      let outLines = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+          if (!inList) {
+            outLines.push('<ul>');
+            inList = true;
+          }
+          outLines.push(`<li>${line.substring(2)}</li>`);
+        } else {
+          if (inList) {
+            outLines.push('</ul>');
+            inList = false;
+          }
+          if (line.length > 0) {
+            if (!line.startsWith('<pre') && !line.startsWith('</pre>') && !line.startsWith('<button')) {
+              outLines.push(`<p>${line}</p>`);
+            } else {
+              outLines.push(line);
+            }
+          }
+        }
+      }
+      if (inList) outLines.push('</ul>');
+
+      return outLines.join('');
+    }
+
+    function renderCopilotMessage(role, text) {
+      const container = document.getElementById('copilot-messages');
+      if (!container) return;
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `copilot-msg ${role === 'user' ? 'user' : 'bot'}`;
+
+      if (role === 'user') {
+        msgDiv.textContent = text;
+      } else {
+        msgDiv.innerHTML = formatCopilotMarkdown(text);
+      }
+
+      container.appendChild(msgDiv);
+      scrollCopilotToBottom();
+    }
+
+    function loadCopilotHistory() {
+      const container = document.getElementById('copilot-messages');
+      if (!container) return;
+      container.innerHTML = '';
+
+      try {
+        const raw = localStorage.getItem(COPILOT_STORAGE_KEY);
+        if (raw) {
+          copilotHistory = JSON.parse(raw);
+        } else {
+          copilotHistory = [COPILOT_GREETING];
+          saveCopilotHistory();
+        }
+      } catch (e) {
+        copilotHistory = [COPILOT_GREETING];
+      }
+
+      if (!Array.isArray(copilotHistory) || copilotHistory.length === 0) {
+        copilotHistory = [COPILOT_GREETING];
+      }
+
+      copilotHistory.forEach(item => {
+        renderCopilotMessage(item.role === 'user' ? 'user' : 'bot', item.text);
+      });
+    }
+
+    function saveCopilotHistory() {
+      try {
+        localStorage.setItem(COPILOT_STORAGE_KEY, JSON.stringify(copilotHistory));
+      } catch (e) {
+        console.warn('LocalStorage save failed:', e);
+      }
+    }
+
+    function clearCopilotHistory() {
+      if (!confirm('Are you sure you want to clear your Copilot chat history?')) return;
+      try {
+        localStorage.removeItem(COPILOT_STORAGE_KEY);
+      } catch (e) {}
+      copilotHistory = [COPILOT_GREETING];
+      saveCopilotHistory();
+      loadCopilotHistory();
+    }
+
+    function sendCopilotPrompt(text) {
+      const win = document.getElementById('copilot-window');
+      if (win && !win.classList.contains('open')) {
+        toggleCopilot();
+      }
+      const inp = document.getElementById('copilot-input');
+      if (inp) {
+        inp.value = text;
+        handleCopilotSubmit(new Event('submit'));
+      }
+    }
+
+    async function handleCopilotSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (isCopilotGenerating) return;
+
+      const inp = document.getElementById('copilot-input');
+      const sendBtn = document.getElementById('copilot-send-btn');
+      if (!inp) return;
+
+      const userText = inp.value.trim();
+      if (!userText) return;
+
+      inp.value = '';
+      inp.disabled = true;
+      if (sendBtn) sendBtn.disabled = true;
+      isCopilotGenerating = true;
+
+      // 1. Render and persist User Message
+      renderCopilotMessage('user', userText);
+      copilotHistory.push({ role: 'user', text: userText, timestamp: Date.now() });
+      saveCopilotHistory();
+
+      // 2. Render Typing Indicator
+      const container = document.getElementById('copilot-messages');
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'copilot-msg bot copilot-typing';
+      typingDiv.id = 'copilot-typing-indicator';
+      typingDiv.innerHTML = '<span class="copilot-typing-dot"></span><span class="copilot-typing-dot"></span><span class="copilot-typing-dot"></span>';
+      container.appendChild(typingDiv);
+      scrollCopilotToBottom();
+
+      try {
+        const resp = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: userText,
+            history: copilotHistory.slice(-8)
+          })
+        });
+
+        const data = await resp.json();
+        const replyText = data.reply || data.error || 'No response received from silicon architect.';
+
+        // Remove typing indicator
+        const ind = document.getElementById('copilot-typing-indicator');
+        if (ind) ind.remove();
+
+        // Render and persist Bot Message
+        renderCopilotMessage('bot', replyText);
+        copilotHistory.push({ role: 'model', text: replyText, timestamp: Date.now() });
+        saveCopilotHistory();
+
+      } catch (err) {
+        const ind = document.getElementById('copilot-typing-indicator');
+        if (ind) ind.remove();
+
+        const errorReply = "⚠️ **Connection Notice:** Unable to reach the silicon copilot backend. Please verify your connection or check that the `/api/chat` serverless function is deployed on Vercel.";
+        renderCopilotMessage('bot', errorReply);
+        copilotHistory.push({ role: 'model', text: errorReply, timestamp: Date.now() });
+        saveCopilotHistory();
+      } finally {
+        inp.disabled = false;
+        if (sendBtn) sendBtn.disabled = false;
+        isCopilotGenerating = false;
+        setTimeout(() => inp.focus(), 100);
+      }
+    }
+
+    // Initialize Copilot on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadCopilotHistory();
+    });
+</script>
   <!-- FLOATING COOKIE & LOCAL STORAGE CONSENT BANNER -->
   <div id="janus-cookie-banner" class="cookie-banner-container" role="region" aria-label="Cookie and storage consent">
     <div class="cookie-banner-text">
@@ -12970,8 +13603,48 @@
 
   <!-- FLOATING UTILITIES (BACK TO TOP & SHORTCUTS) -->
   <div class="floating-tools-stack">
+    <button id="btn-copilot-trigger" class="floating-tool-btn copilot-trigger-btn" onclick="toggleCopilot()" title="Ask JANUS Silicon Copilot (Gemini AI)">
+      <span class="copilot-beacon"></span>
+      <span style="font-size:1.15rem;">⚡</span>
+    </button>
     <button id="btn-shortcuts-help" class="floating-tool-btn" onclick="openJanusModal('modal-shortcuts')" title="Keyboard Shortcuts (? or H)">⌨️</button>
     <button id="btn-back-to-top" class="floating-tool-btn" onclick="scrollToTop()" title="Back to Top">▲</button>
+  </div>
+
+  <!-- JANUS SILICON COPILOT (GEMINI AI) FLOATING WINDOW -->
+  <div id="copilot-window" class="copilot-window" role="dialog" aria-label="JANUS Silicon Copilot">
+    <div class="copilot-header">
+      <div class="copilot-header-title">
+        <span class="copilot-live-dot"></span>
+        <div>
+          <div style="font-weight:700; font-size:0.86rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+            JANUS Copilot <span class="copilot-badge">GEMINI AI</span>
+          </div>
+          <div style="font-size:0.67rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">200 GHz Silicon Architect</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button class="copilot-tool-btn" onclick="clearCopilotHistory()" title="Clear Chat History (Reset)">🗑️ Clear</button>
+        <button class="copilot-tool-btn" onclick="toggleCopilot()" title="Close Copilot" style="font-size:0.9rem; padding:1px 7px;">✕</button>
+      </div>
+    </div>
+
+    <div id="copilot-messages" class="copilot-messages">
+      <!-- Injected from localStorage -->
+    </div>
+
+    <div class="copilot-chips-container">
+      <button class="copilot-chip" onclick="sendCopilotPrompt('Explain why Sb₂S₃ PCM switches consume 0 W static hold power.')">0 W Hold Power</button>
+      <button class="copilot-chip" onclick="sendCopilotPrompt('How does the Residue Number System (RNS) achieve exact INT64 precision without analog optical noise?')">RNS INT64 Math</button>
+      <button class="copilot-chip" onclick="sendCopilotPrompt('How does 1:64 CMOS polyphase gearing down-convert 200 GHz to 3.125 GHz?')">1:64 CMOS Gearing</button>
+      <button class="copilot-chip" onclick="sendCopilotPrompt('What is the link margin and BER calculation for the receiverless SAC²M APDs?')">APD & Link Margin</button>
+      <button class="copilot-chip" onclick="sendCopilotPrompt('Take me to the interactive 3D WebGL silicon strata explorer.')">Show 3D Stack</button>
+    </div>
+
+    <form class="copilot-input-area" onsubmit="handleCopilotSubmit(event)">
+      <input type="text" id="copilot-input" placeholder="Ask about 200 GHz optics, RNS, CMOS..." autocomplete="off" />
+      <button type="submit" id="copilot-send-btn" class="copilot-send-btn" aria-label="Send Message">➤</button>
+    </form>
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
