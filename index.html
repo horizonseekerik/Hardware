@@ -75,36 +75,36 @@
        High-Contrast Foundry Slate (Light) & Obsidian (Dark)
        ========================================================= */
     :root, [data-theme="dark"] {
-      /* PHOTONIC TITANIUM (NEUTRAL OBSIDIAN & COHERENT LASER) */
-      --bg-color: #06070a;           /* Pure neutral obsidian graphite */
-      --bg-dark: #090a0e;
-      --header-bg: rgba(8, 10, 15, 0.88);
-      --nav-bg: rgba(14, 16, 23, 0.82);
-      --card-bg: #0c0e14;            /* Smoky obsidian glass */
-      --card-sub-bg: #11141c;
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-subtle: rgba(255, 255, 255, 0.04);
-      --table-header-bg: #0f1118;
-      --table-row-hover: rgba(0, 240, 255, 0.05);
-      --input-bg: #0f1118;
-      --accent-cyan: #00f0ff;        /* Coherent Laser Photonic Cyan */
-      --accent-blue: #3b82f6;        /* Precision Blue */
+      /* DEEP QUANTUM EMERALD (532nm COHERENT LASER & OBSIDIAN JADE) */
+      --bg-color: #040a07;           /* Deep obsidian jade canvas */
+      --bg-dark: #07120c;
+      --header-bg: rgba(6, 16, 11, 0.88);
+      --nav-bg: rgba(9, 22, 15, 0.82);
+      --card-bg: #08140e;            /* Smoky obsidian-emerald glass */
+      --card-sub-bg: #0d1e15;
+      --card-border: rgba(16, 185, 129, 0.16);
+      --card-border-subtle: rgba(16, 185, 129, 0.08);
+      --table-header-bg: #0c1a12;
+      --table-row-hover: rgba(0, 245, 155, 0.05);
+      --input-bg: #0c1a12;
+      --accent-cyan: #00f59b;        /* 532 nm Coherent Laser Mint / Emerald */
+      --accent-blue: #38bdf8;        /* Optical Sky */
       --accent-purple: #818cf8;      /* Waveguide Indigo */
       --accent-green: #10b981;       /* Verification Emerald */
       --accent-red: #f87171;         /* Limit Crimson */
       --accent-amber: #e5a93c;       /* Silicon Gold / Sb2S3 / Cu TDV */
       --accent-yellow: #fbbf24;
-      --text-main: #ffffff;          /* Pure Titanium Crisp White */
+      --text-main: #f0fdf4;          /* Crisp Mint-White */
       --text-muted: #94a3b8;         /* Technical Slate */
       --text-subtle: #64748b;
-      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.06);
-      --glow-cyan: 0 0 32px rgba(0, 240, 255, 0.32);
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(16, 185, 129, 0.12);
+      --glow-cyan: 0 0 32px rgba(0, 245, 155, 0.35);
       --glow-amber: 0 0 25px rgba(229, 169, 60, 0.25);
       --glow-purple: 0 0 25px rgba(129, 140, 248, 0.25);
-      --canvas-bg: #06070a;
-      --canvas-border: rgba(255, 255, 255, 0.08);
-      --hero-bg: #08090d;
-      --hero-title-grad: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+      --canvas-bg: #040a07;
+      --canvas-border: rgba(16, 185, 129, 0.16);
+      --hero-bg: #050d08;
+      --hero-title-grad: linear-gradient(135deg, #ffffff 40%, #a7f3d0 100%);
       --badge-pass-bg: rgba(16, 185, 129, 0.15);
       --badge-pass-color: #34d399;
     }
@@ -2395,7 +2395,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 240, 255, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 245, 155, 0.2);
       overflow: hidden;
       animation: cmdPop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -2449,7 +2449,7 @@
       background: var(--card-sub-bg);
       border-left: 3px solid var(--accent-cyan);
       padding-left: 11px;
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.1);
     }
     .cmd-palette-item-left {
       display: flex;
@@ -2596,7 +2596,7 @@
       align-items: center;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(16, 185, 129, 0.14);
       pointer-events: auto;
       transition: all 0.25s ease;
     }
@@ -2631,7 +2631,7 @@
       width: 450px;
       height: 450px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0, 245, 155, 0.12) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.3s ease;
@@ -2643,8 +2643,8 @@
     }
 
     .card:hover {
-      border-color: rgba(0, 240, 255, 0.28);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.12);
+      border-color: rgba(0, 245, 155, 0.32);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 245, 155, 0.16);
       transform: translateY(-2px);
     }
 
@@ -2666,10 +2666,10 @@
       border-color: var(--accent-cyan);
     }
     .hw-compare-tab-btn.active {
-      background: rgba(0, 240, 255, 0.15);
+      background: rgba(0, 245, 155, 0.15);
       color: var(--accent-cyan);
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.25);
     }
 
     .hw-compare-bar-track {
@@ -2735,7 +2735,7 @@
             title="Switch to Paper Mode">LIGHT</button>
           <button id="btn-theme-dark" onclick="applyTheme('dark')"
             style="padding:4px 10px; border-radius:9999px; border:none; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:all 0.15s; background:transparent; color:var(--text-muted);"
-            title="Switch to Photonic Titanium">DARK</button>
+            title="Switch to Deep Quantum Emerald">EMERALD</button>
         </div>
       </nav>
     </div>
@@ -2756,7 +2756,7 @@
           </div>
           <h1 class="hero-headline" style="font-size: 2.75rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin: 0.75rem 0 1.25rem;">
             Computing at the Speed of Light.<br>
-            <span style="background: linear-gradient(135deg, var(--accent-cyan) 0%, #38bdf8 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            <span style="background: linear-gradient(135deg, #00f59b 0%, #34d399 45%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
               With Exact Mathematical Precision.
             </span>
           </h1>
@@ -3433,7 +3433,7 @@
         <div class="card oscilloscope-box" style="margin-bottom: 2rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
             <div>
-              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 240, 255, 0.15); color:var(--accent-cyan); font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">
+              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 245, 155, 0.15); color:var(--accent-cyan); font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">
                 Live Optoelectronic Oscilloscope • 200.0 GHz Symbol Rate
               </div>
               <h3 style="font-size:1.25rem; color:#ffffff; margin:0.35rem 0 0;">
@@ -3839,10 +3839,10 @@
       <div id="tab-ai" class="tab-content">
 
         <!-- INTERACTIVE HARDWARE BENCHMARK COMPARATOR: JANUS vs LEADING SILICON -->
-        <div class="card" style="margin-bottom: 2rem; border: 1px solid rgba(0, 240, 255, 0.35); background: linear-gradient(180deg, rgba(0, 240, 255, 0.04) 0%, var(--card-bg) 100%);">
+        <div class="card" style="margin-bottom: 2rem; border: 1px solid rgba(0, 245, 155, 0.35); background: linear-gradient(180deg, rgba(0, 245, 155, 0.05) 0%, var(--card-bg) 100%);">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
             <div>
-              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 240, 255, 0.15); color:var(--accent-cyan); font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">
+              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 245, 155, 0.15); color:var(--accent-cyan); font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">
                 Empirical Hardware Benchmark • Physical Silicon vs. Light
               </div>
               <h3 style="font-size:1.3rem; color:var(--text-main); margin:0.35rem 0 0;">
@@ -3879,7 +3879,7 @@
                   <strong style="color:var(--accent-cyan);" id="hwcmp-lat-janus">5.0 ps (Opt)</strong>
                 </div>
                 <div class="hw-compare-bar-track">
-                  <div class="hw-compare-bar-fill" id="hwcmp-bar-lat-janus" style="width: 100%; background: linear-gradient(90deg, var(--accent-cyan), #38bdf8);"></div>
+                  <div class="hw-compare-bar-fill" id="hwcmp-bar-lat-janus" style="width: 100%; background: linear-gradient(90deg, #00f59b, #34d399);"></div>
                 </div>
               </div>
 
@@ -5574,7 +5574,7 @@
       </div>
 
       <!-- INTERACTIVE 36.00 mm² SILICON DIE FLOORPLAN INSPECTOR -->
-      <div class="card" style="margin-bottom: 2rem; border: 1px solid rgba(0, 240, 255, 0.4); background: linear-gradient(180deg, rgba(0, 240, 255, 0.03) 0%, var(--card-bg) 100%);">
+      <div class="card" style="margin-bottom: 2rem; border: 1px solid rgba(0, 245, 155, 0.35); background: linear-gradient(180deg, rgba(0, 245, 155, 0.04) 0%, var(--card-bg) 100%);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
           <div>
             <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0, 240, 255, 0.15); color:var(--accent-cyan); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:12px; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em;">
@@ -5673,7 +5673,7 @@
               <rect id="fp-block-decap2" class="floorplan-block-rect" x="20" y="440" width="180" height="140" fill="#334155" fill-opacity="0.32" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2" onmouseover="inspectFloorplanBlock('decap')" onclick="inspectFloorplanBlock('decap')" />
 
               <!-- Die Center Mark -->
-              <circle cx="300" cy="300" r="3" fill="#00f0ff" />
+              <circle cx="300" cy="300" r="3" fill="#00f59b" />
               <text x="300" y="590" fill="#64748b" font-size="9" font-family="'JetBrains Mono',monospace" text-anchor="middle">DIE X-AXIS: 6.00 mm (6000 µm)</text>
             </svg>
             <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:6px; font-family:'JetBrains Mono',monospace;">
@@ -7151,7 +7151,7 @@
       }
       if (typeof webglScene !== 'undefined' && webglScene && typeof THREE !== 'undefined') {
         const isDark = theme === 'dark';
-        webglScene.background = new THREE.Color(isDark ? 0x030712 : 0xf8fafc);
+        webglScene.background = new THREE.Color(isDark ? 0x040a07 : 0xf8fafc);
       }
     }
 
@@ -8850,7 +8850,7 @@
       // 1. Scene & Background (Dark space background matching video)
       webglScene = new THREE.Scene();
       const dark = isDarkTheme();
-      webglScene.background = new THREE.Color(dark ? 0x030712 : 0xf8fafc);
+      webglScene.background = new THREE.Color(dark ? 0x040a07 : 0xf8fafc);
 
       // 2. Camera (Low frontal-isometric view matching CAD video demonstration)
       webglCamera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
@@ -12019,7 +12019,7 @@
       ctx.fillRect(0, 0, w, h);
 
       // Grid lines (8x8 divisions)
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+      ctx.strokeStyle = 'rgba(0, 245, 155, 0.08)';
       ctx.lineWidth = 1;
       var numDivX = 10;
       var numDivY = 8;
@@ -12065,7 +12065,7 @@
         var noiseY = ((seed % 7) - 3) * 1.5;
 
         // Trace 1: Laser Cyan Eye Wave
-        ctx.strokeStyle = (i % 2 === 0) ? 'rgba(0, 240, 255, 0.28)' : 'rgba(56, 189, 248, 0.20)';
+        ctx.strokeStyle = (i % 2 === 0) ? 'rgba(0, 245, 155, 0.35)' : 'rgba(56, 189, 248, 0.20)';
         ctx.beginPath();
         for (var px = 0; px <= w; px += 4) {
           var t = (px / w) * (2 * Math.PI * 2); // 2 full eye cycles
